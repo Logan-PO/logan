@@ -4,7 +4,9 @@
   "description": "",
   "private": true,
   "scripts": {
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "lint": "eslint . --quiet -c .eslintrc.js",
+    "lint-fix": "npm run lint -- --fix"
   },
   "repository": {
     "type": "git",
