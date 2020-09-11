@@ -1,7 +1,7 @@
 module.exports = {
     root: true,
     plugins: ['prettier'],
-    extends: ['eslint:recommended', 'prettier'],
+    extends: ['eslint:recommended', 'prettier', 'plugin:jest/recommended'],
     env: {
         es6: true,
         node: true,
@@ -18,13 +18,14 @@ module.exports = {
             'warn',
             {
                 properties: 'never',
+                allow: ['__test_only__'],
             },
         ],
         'no-underscore-dangle': [
             'error',
             {
                 allowAfterThis: true,
-                allow: ['__meta__'],
+                allow: ['__test_only__', '__meta__'],
             },
         ],
     },
