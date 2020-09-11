@@ -1,0 +1,19 @@
+{
+  "name": "logan",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "jest --passWithNoTests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beasterbro/logan.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/beasterbro/logan/issues"
+  },
+  "homepage": "https://github.com/beasterbro/logan#readme"
+}
