@@ -1,0 +1,29 @@
+{
+  "name": "logan",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "test": "jest --passWithNoTests",
+    "lint": "eslint . --quiet -c .eslintrc.js",
+    "lint-fix": "npm run lint -- --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beasterbro/logan.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/beasterbro/logan/issues"
+  },
+  "homepage": "https://github.com/beasterbro/logan#readme",
+  "devDependencies": {
+    "eslint": "^7.8.1",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-jest": "^24.0.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "jest": "^26.4.2",
+    "prettier": "^2.1.1"
+  }
+}

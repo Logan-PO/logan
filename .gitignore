@@ -1,0 +1,12 @@
+node_modules/
+
+# Ignore WebStorm stuff. Reference: https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
+.idea/
+
+# Ignore VSCode stuff. Reference: https://github.com/github/gitignore/blob/master/Global/VisualStudioCode.gitignore
+.vscode/
+*.code-workspace
+.history/
+
+# Ignore MacOS files
+.DS_Store
