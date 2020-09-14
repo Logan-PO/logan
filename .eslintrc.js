@@ -11,6 +11,7 @@ module.exports = {
         sourceType: 'module',
     },
     rules: {
+        'prefer-template': 'error',
         'prettier/prettier': 'error',
         'no-await-in-loop': 'warn',
         'max-params': ['error', 6],
