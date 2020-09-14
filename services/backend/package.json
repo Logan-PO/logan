@@ -1,0 +1,13 @@
+{
+    "name": "@logan/backend",
+    "description": "The backend server for Logan",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "test": "jest --passWithNoTests"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "jest": "^24.7.1"
+    }
+}

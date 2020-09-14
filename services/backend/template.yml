@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  logan-backend
+
+Resources:
+  HelloWorldLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src/hello-world.handler
+      Runtime: nodejs12.x
+      MemorySize: 128
+      Timeout: 100
+      Description: A simple Lambda that says hello!
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /
+            Method: GET
+
+Outputs:
+  WebEndpoint:
+    Description: "API Gateway endpoint URL for Prod stage"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
