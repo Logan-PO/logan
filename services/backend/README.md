@@ -20,8 +20,8 @@ Then to deploy, do the following:
 cd services/backend
 ./scripts/build-and-deploy.sh
 
-# If you get a permissions error, you need to grant yourself
-# execution rights on the script. You can do so as follows:
+# If you get a permissions error, you need to grant yourself execution rights on the script.
+# You can do so as follows:
 chmod u+x scripts/build-and-deploy.sh
 ```
 
