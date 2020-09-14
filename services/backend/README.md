@@ -25,6 +25,29 @@ cd services/backend
 chmod u+x scripts/build-and-deploy.sh
 ```
 
+## Adding a New Route Handler
+1. Add the code somewhere in the `src` folder. Make sure you export the handler method.
+2. Add a new resource entry in `template.yml` in the following format:
+   ```
+   Resources:
+     ...
+     <LambdaName>:
+       Type: AWS::Serverless::Function
+       Properties:
+         Handler: src/<file-name>.<method-name> (ex: src/hello-world.handler)
+         Runtime: nodejs12.x
+         MemorySize: 128
+         Timeout: 100
+         Description: <A description of your lambda>
+         Events:
+           Api:
+             Type: Api
+             Properties:
+               Path: <API route>
+               Method: <HTTP method>
+   ```
+3. Deploy the backend
+
 ## Helpful Documentation
 - [What is Amazon API Gateway?](https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html)
 - [Getting started with AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/getting-started.html)
