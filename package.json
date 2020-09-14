@@ -4,6 +4,9 @@
   "description": "",
   "private": true,
   "scripts": {
+    "bootstrap": "lerna bootstrap --hoist",
+    "bootstrap:production": "lerna bootstrap --hoist -- --production --no-optional",
+    "clean-all": "lerna clean --yes && rm -rf node_modules",
     "test": "jest --passWithNoTests",
     "lint": "eslint . --quiet -c .eslintrc.js",
     "lint-fix": "npm run lint -- --fix"
@@ -23,7 +26,8 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-jest": "^24.0.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "jest": "^26.4.2",
+    "jest": "^24.7.1",
+    "lerna": "^3.22.1",
     "prettier": "^2.1.1"
   }
 }
