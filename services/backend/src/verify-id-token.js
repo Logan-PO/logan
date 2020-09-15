@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const { AWS, secretUtils } = require('@logan/aws');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
@@ -27,21 +28,20 @@ async function verifyIdToken(req, res) {
         })
         .promise();
 
-    if (response.Items.length) {
-        // User exists
-        const user = response.Items[0];
-
-        res.json({
-            exists: true,
-            user,
-            token: jwt.sign({ uid: user.uid }, authSecret),
-        });
-    } else {
+    if (_.isEmpty(response.Items)) {
         // User does not exist
         res.json({
             exists: false,
             meta: { name, email },
             token: jwt.sign({ action: 'create_user' }, authSecret),
+        });
+    } else {
+        // User exists
+        const user = _.first(response.Items);
+        res.json({
+            exists: true,
+            user,
+            token: jwt.sign({ uid: user.uid }, authSecret),
         });
     }
 }
