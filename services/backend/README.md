@@ -1,11 +1,7 @@
 # `@logan/backend`
 
-> TODO: description
+## Deployment
 
-## Usage
+From the repo root, run `./scripts/deploy-backend.sh` to deploy.
 
-```
-const backend = require('@logan/backend');
-
-// TODO: DEMONSTRATE API
-```
+After running this command all your node modules will be messed up, so you'll need to clean and re-bootstrap afterwards.
