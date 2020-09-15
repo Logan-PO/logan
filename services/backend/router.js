@@ -7,6 +7,11 @@ const handlers = {
             handler: require('./src/hello-world').rootHandler,
         },
     },
+    '/auth/verify': {
+        post: {
+            handler: require('./src/verify-id-token').verifyIdToken,
+        },
+    },
 };
 
 function route(app) {
