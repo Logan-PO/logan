@@ -1,0 +1,21 @@
+{
+  "name": "@logan/aws",
+  "version": "1.0.0",
+  "private": true,
+  "homepage": "https://github.com/beasterbro/logan/tree/master/packages/aws#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beasterbro/logan.git"
+  },
+  "scripts": {
+    "test": "jest --passWithNoTests"
+  },
+  "bugs": {
+    "url": "https://github.com/beasterbro/logan/issues"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.753.0"
+  }
+}
