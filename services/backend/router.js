@@ -20,7 +20,13 @@ function route(app) {
 
     for (const path of _.keys(handlers)) {
         for (const method of _.keys(handlers[path])) {
-            app[method](path, handlers[path][method].handler);
+            app[method](path, async (req, res, next) => {
+                try {
+                    await handlers[path][method].handler(req, res, next);
+                } catch (e) {
+                    res.status(500).json({ error: e.message });
+                }
+            });
         }
     }
 }
