@@ -1,4 +1,4 @@
 module.exports = {
-    AWS: require('aws-sdk'),
+    AWS: require('./src/base'),
     secretUtils: require('./src/secret-utils'),
 };

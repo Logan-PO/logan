@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/beasterbro/logan/issues"
   },
-  "devDependencies": {
+  "dependencies": {
     "aws-sdk": "^2.753.0"
   }
 }
