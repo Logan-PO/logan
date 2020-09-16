@@ -1,4 +1,4 @@
-#Gatsby quick guide
+#Frontene quick guide
  gatsby is a sort of _*"middleware"*_ in the sense that it runs itself in response to nodejs starting and compiles all 
  of the js before it is ready to be viewed
  
