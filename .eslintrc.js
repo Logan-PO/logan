@@ -1,7 +1,7 @@
 module.exports = {
     root: true,
     plugins: ['prettier'],
-    extends: ['eslint:recommended', 'prettier', 'plugin:jest/recommended'],
+    extends: ['eslint:recommended', 'prettier', 'plugin:jest/recommended',"plugin:react/recommended"],
     env: {
         es6: true,
         node: true,
