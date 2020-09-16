@@ -9,9 +9,21 @@ async function getAuthSecret(clientType) {
     return secret[clientType];
 }
 
-async function handleAuth(req, res, next) {
+/**
+ * Check the request's authorization header
+ * @param req
+ * @param {boolean} authRequired
+ * @returns {Promise<void>}
+ */
+async function handleAuth(req, authRequired = false) {
     const authHeader = _.get(req, ['headers', 'Authorization']);
-    if (!authHeader || !_.startsWith(authHeader, 'Bearer ')) throw new Error('Missing bearer token');
+    if (!authHeader || !_.startsWith(authHeader, 'Bearer ')) {
+        if (authRequired) throw new Error('Missing bearer token');
+        else {
+            req.auth = { authorized: false };
+            return;
+        }
+    }
 
     const authSecret = await getAuthSecret('web');
     const bearer = authHeader.split(' ')[1];
@@ -26,12 +38,11 @@ async function handleAuth(req, res, next) {
             .promise();
 
         if (response.Item) {
-            res.auth = {
+            req.auth = {
                 authorized: true,
                 ...response.Item,
             };
 
-            next();
             return;
         }
     }
@@ -40,8 +51,6 @@ async function handleAuth(req, res, next) {
         authorized: false,
         ...payload,
     };
-
-    next();
 }
 
 module.exports = {

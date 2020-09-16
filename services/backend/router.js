@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const bodyParser = require('body-parser');
+const auth = require('./utils/auth');
 
 const handlers = {
     '/': {
@@ -22,6 +23,7 @@ function route(app) {
         for (const method of _.keys(handlers[path])) {
             app[method](path, async (req, res, next) => {
                 try {
+                    await auth.handleAuth(req, handlers[path][method].authRequired);
                     await handlers[path][method].handler(req, res, next);
                 } catch (e) {
                     res.status(500).json({ error: e.message });
