@@ -1,7 +1,7 @@
-exports.handler = async (event) => {
-    console.info(`Received: ${event}`);
-    return {
-        statusCode: 200,
-        body: 'Hello world!',
-    };
+function rootHandler(req, res) {
+    res.end('Hello world!');
+}
+
+module.exports = {
+    rootHandler,
 };
