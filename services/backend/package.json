@@ -1,12 +1,28 @@
 {
-    "name": "@logan/backend",
-    "description": "The backend server for Logan",
-    "version": "0.0.1",
-    "private": true,
-    "scripts": {
-        "test": "jest --passWithNoTests"
-    },
-    "devDependencies": {
-        "jest": "^24.7.1"
-    }
+  "name": "@logan/backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "The backend server for Logan",
+  "author": "Lucas Popp",
+  "homepage": "https://github.com/beasterbro/logan/tree/master/services/backend#readme",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beasterbro/logan.git"
+  },
+  "scripts": {
+    "test": "jest --passWithNoTests",
+    "start": "node server.js"
+  },
+  "bugs": {
+    "url": "https://github.com/beasterbro/logan/issues"
+  },
+  "devDependencies": {
+    "jest": "^24.7.1"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "lodash": "^4.17.20"
+  }
 }
