@@ -2,15 +2,16 @@ const _ = require('lodash');
 const { AWS, secretUtils } = require('@logan/aws');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
+const auth = require('../utils/auth');
 
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
 async function verifyIdToken(req, res) {
     const { clientId } = await secretUtils.getSecret('logan/web-google-creds');
-    const { web: authSecret } = await secretUtils.getSecret('logan/auth-secrets');
-    const { idToken } = req.body;
+    const authSecret = await auth.getAuthSecret('web');
 
     // Verify the ID token from the request body
+    const { idToken } = req.body;
     const client = new OAuth2Client(clientId);
     const ticket = await client.verifyIdToken({
         idToken,
