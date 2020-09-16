@@ -4,4 +4,9 @@
 
 From the repo root, run `./scripts/deploy-backend.sh` to deploy.
 
-After running this command all your node modules will be messed up, so you'll need to clean and re-bootstrap afterwards.
+## Running the Backend Locally
+
+To run the backend locally, navigate to `services/backend` and run one of the following commands:
+
+- `npm run start` runs the backend normally at localhost:3000
+- `npm run debug` runs the backend at localhost:3000 with hot refresh enabled (see [nodemon](https://www.npmjs.com/package/nodemon) for more details)
