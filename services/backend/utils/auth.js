@@ -43,7 +43,7 @@ async function handleAuth(req, authRequired = false, unauthedAction) {
 
     if (payload.uid) {
         const response = await dynamo
-            .query({
+            .get({
                 TableName: 'users',
                 Key: { uid: payload.uid },
             })
