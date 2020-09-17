@@ -2,8 +2,7 @@ import React from "react"
 import classColors from "../styles/assignments.css"
 import { Link } from "gatsby"
 import Container from "../components/containter"
-import assignmentDay from "../components/assignment-day"
-//<div className={isBackgroundRed ? 'background-red' : 'background-blue'} />
+
 
 let assignmentsList = [
     {id: 35, name: 'Lab', color: 'red', class: 'PHSY 101', desc: "sad"},
