@@ -75,9 +75,44 @@ async function createUser(req, res) {
     res.json({ user, bearer });
 }
 
-async function updateUser(req, res) {}
+async function updateUser(req, res) {
+    if (req.auth.uid !== req.params.uid) throw new Error('Cannot modify another user');
 
-async function deleteUser(req, res) {}
+    const user = {
+        uid: req.auth.uid,
+        name: req.body.name || req.auth.name,
+        email: req.body.email || req.auth.email,
+        uname: req.body.username || req.auth.username,
+    };
+
+    // Check if the updated user still has a unique username and email
+    const uniquenessResponse = await dynamo
+        .scan({
+            TableName: 'users',
+            FilterExpression: '(email = :email or uname = :uname) and not uid = :uid',
+            ExpressionAttributeValues: {
+                ':uid': user.uid,
+                ':email': user.email,
+                ':uname': user.uname,
+            },
+        })
+        .promise();
+
+    if (uniquenessResponse.Count > 0) throw new Error('email and username must be unique');
+
+    // Update the user
+    await dynamo.put({ TableName: 'users', Item: user }).promise();
+    res.json(fromDbFormat(user));
+}
+
+async function deleteUser(req, res) {
+    if (req.auth.uid !== req.params.uid) throw new Error('Cannot delete another user');
+    await dynamo.delete({ TableName: 'users', Key: { uid: req.auth.uid } }).promise();
+
+    // TODO: Also delete all other objects owned by the user
+
+    res.json({ success: true });
+}
 
 module.exports = {
     getUser,
