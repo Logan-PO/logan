@@ -2,6 +2,8 @@ const _ = require('lodash');
 const bodyParser = require('body-parser');
 const auth = require('./utils/auth');
 
+// A map of routes/HTTP methods to handlers
+// Add authRequired: true to a route to indicate that the user must be logged in
 const handlers = {
     '/': {
         get: {
@@ -15,6 +17,10 @@ const handlers = {
     },
 };
 
+/**
+ * Sets up middleware and connects routes to the Express app
+ * @param app
+ */
 function route(app) {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
