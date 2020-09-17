@@ -6,6 +6,19 @@ A personal organizer designed for college students.
 
 Install lerna globally: `npm i -g lerna`
 
+## Deployment
+
+```bash
+# Deploy backend
+npm run deploy:backend
+
+# Deploy frontend
+npm run deploy:frontend
+
+# If these commands don't work, run the following command and try again
+chmod u+x scripts/deploy-<service>.sh
+```
+
 ## Development Instructions
 
 ### Node Modules
