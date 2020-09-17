@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const bodyParser = require('body-parser');
 const auth = require('./utils/auth');
+const taskController = require('./src/task-controller');
 
 // A map of routes/HTTP methods to handlers
 // Add authRequired: true to a route to indicate that the user must be logged in
@@ -13,6 +14,30 @@ const handlers = {
     '/auth/verify': {
         post: {
             handler: require('./src/verify-id-token').verifyIdToken,
+        },
+    },
+    '/tasks/:tid': {
+        get: {
+            authRequired: true,
+            handler: taskController.getTask,
+        },
+        put: {
+            authRequired: true,
+            handler: taskController.updateTask,
+        },
+        delete: {
+            authRequired: true,
+            handler: taskController.deleteTask,
+        },
+    },
+    '/tasks': {
+        get: {
+            authRequired: true,
+            handler: taskController.getTasks,
+        },
+        post: {
+            authRequired: true,
+            handler: taskController.createTask,
         },
     },
 };
