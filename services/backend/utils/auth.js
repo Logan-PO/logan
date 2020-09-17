@@ -52,7 +52,8 @@ async function handleAuth(req, authRequired = false, unauthedAction) {
         if (response.Item) {
             req.auth = {
                 authorized: true,
-                ...response.Item,
+                ..._.pick(response.Item, ['uid', 'name', 'email']),
+                username: response.Item.uname,
             };
 
             return;

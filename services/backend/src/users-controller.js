@@ -5,17 +5,47 @@ const { generateBearerToken } = require('../utils/auth');
 
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
-async function getUser(req, res) {}
+function fromDbFormat(db) {
+    return {
+        ..._.pick(db, ['uid', 'name', 'email']),
+        username: db.uname,
+    };
+}
+
+function toDbFormat(user) {
+    return {
+        ..._.pick(user, ['uid', 'name', 'email']),
+        uname: user.username,
+    };
+}
+
+async function getUser(req, res) {
+    const requestedUid = req.params.uid;
+
+    // If you request yourself, just return without querying
+    if (requestedUid === 'me') {
+        res.json(_.pick(req.auth, ['uid', 'name', 'email', 'username']));
+        return;
+    }
+
+    const dbResponse = await dynamo
+        .get({
+            TableName: 'users',
+            Key: { uid: requestedUid },
+        })
+        .promise();
+
+    if (dbResponse.Item) {
+        res.json(fromDbFormat(dbResponse.Item));
+    } else {
+        throw new Error('User does not exist');
+    }
+}
 
 async function createUser(req, res) {
     const uid = uuid();
 
-    const user = {
-        uid,
-        name: _.get(req, ['body', 'name']),
-        email: _.get(req, ['body', 'email']),
-        uname: _.get(req, ['body', 'username']),
-    };
+    const user = toDbFormat({ uid, ...req.body });
 
     // Make sure all required properties exist
     if (!user.name) throw new Error('Missing required property: name');
