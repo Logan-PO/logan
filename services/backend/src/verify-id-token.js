@@ -32,7 +32,7 @@ async function verifyIdToken(req, res) {
         res.json({
             exists: false,
             meta: { name, email },
-            token: await auth.generateBearerToken({ action: auth.UNAUTHORIZED_ACTIONS.CREATE_USER }),
+            token: await auth.generateBearerToken({ action: auth.UNAUTHORIZED_ACTIONS.CREATE_USER }, 'web'),
         });
     } else {
         // User exists
@@ -40,7 +40,7 @@ async function verifyIdToken(req, res) {
         res.json({
             exists: true,
             user,
-            token: await auth.generateBearerToken({ uid: user.uid }),
+            token: await auth.generateBearerToken({ uid: user.uid }, 'web'),
         });
     }
 }

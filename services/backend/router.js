@@ -53,7 +53,7 @@ function route(app) {
                     await auth.handleAuth(req, handlers[path][method].authRequired, handlers[path][method].action);
                     await handlers[path][method].handler(req, res, next);
                 } catch (e) {
-                    res.status(500).json({ error: e.message });
+                    res.status(500).json({ error: e.message, stack: e.stack });
                 }
             });
         }
