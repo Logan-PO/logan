@@ -26,7 +26,7 @@ async function generateBearerToken(payload, clientType) {
  * @returns {Promise<void>}
  */
 async function handleAuth(req, authRequired = false, unauthedAction) {
-    const authHeader = _.get(req, ['headers', 'Authorization']);
+    const authHeader = _.get(req, ['headers', 'authorization']);
     if (!authHeader || !_.startsWith(authHeader, 'Bearer ')) {
         if (authRequired || unauthedAction) throw new Error('Missing bearer token');
         else {
