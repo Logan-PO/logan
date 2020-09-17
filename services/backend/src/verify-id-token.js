@@ -1,14 +1,12 @@
 const _ = require('lodash');
 const { AWS, secretUtils } = require('@logan/aws');
 const { OAuth2Client } = require('google-auth-library');
-const jwt = require('jsonwebtoken');
 const auth = require('../utils/auth');
 
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
 async function verifyIdToken(req, res) {
     const { clientId } = await secretUtils.getSecret('logan/web-google-creds');
-    const authSecret = await auth.getAuthSecret('web');
 
     // Verify the ID token from the request body
     const { idToken } = req.body;
@@ -34,7 +32,7 @@ async function verifyIdToken(req, res) {
         res.json({
             exists: false,
             meta: { name, email },
-            token: jwt.sign({ action: 'create_user' }, authSecret),
+            token: await auth.generateBearerToken({ action: auth.UNAUTHORIZED_ACTIONS.CREATE_USER }),
         });
     } else {
         // User exists
@@ -42,7 +40,7 @@ async function verifyIdToken(req, res) {
         res.json({
             exists: true,
             user,
-            token: jwt.sign({ uid: user.uid }, authSecret),
+            token: await auth.generateBearerToken({ uid: user.uid }),
         });
     }
 }

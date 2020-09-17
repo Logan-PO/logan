@@ -29,7 +29,7 @@ function route(app) {
         for (const method of _.keys(handlers[path])) {
             app[method](path, async (req, res, next) => {
                 try {
-                    await auth.handleAuth(req, handlers[path][method].authRequired);
+                    await auth.handleAuth(req, handlers[path][method].authRequired, handlers[path][method].action);
                     await handlers[path][method].handler(req, res, next);
                 } catch (e) {
                     res.status(500).json({ error: e.message });
