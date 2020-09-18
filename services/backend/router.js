@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const bodyParser = require('body-parser');
 const auth = require('./utils/auth');
+const assignmentController = require('./src/assignment-controller');
 
 // A map of routes/HTTP methods to handlers
 // Add authRequired: true to a route to indicate that the user must be logged in
@@ -13,6 +14,30 @@ const handlers = {
     '/auth/verify': {
         post: {
             handler: require('./src/verify-id-token').verifyIdToken,
+        },
+    },
+    '/assignments/:aid': {
+        get: {
+            authRequired: true,
+            handler: assignmentController.getAssignment,
+        },
+        put: {
+            authRequired: true,
+            handler: assignmentController.updateAssignment,
+        },
+        delete: {
+            authRequiredL true,
+            handler: assignmentController.createAssignment,
+        },
+    },
+    '/assignments': {
+        get: {
+            authRequired: true,
+            handler: assignmentController.getAssignments,
+        },
+        post: {
+            authRequired: true,
+            handler: assignmentController.createAssignment,
         },
     },
 };
