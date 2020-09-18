@@ -23,7 +23,7 @@ class GoogleBtn extends React.Component {
         if (response.accessToken) {
             this.setState(() => ({
                 isLoggedIn: true,
-                accessToken: response.accessToken,
+                accessToken: response.googleId,
             }));
         }
     }
@@ -71,7 +71,7 @@ class GoogleBtn extends React.Component {
                 {/* Showing the access token on the page, take out in final commit */}
                 {this.state.accessToken ? (
                     <h5>
-                        Your Access Token: <br />
+                        Your Google ID Token: <br />
                         <br /> {this.state.accessToken}
                     </h5>
                 ) : null}
