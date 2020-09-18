@@ -1,5 +1,6 @@
 import React from 'react';
+import GoogleBtn from '../components/GoogleButton';
 
 export default function Home() {
-    return <div>Welcome!</div>;
+    return <GoogleBtn />;
 }
