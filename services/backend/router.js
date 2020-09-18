@@ -5,6 +5,7 @@ const assignmentController = require('./src/assignment-controller');
 
 // A map of routes/HTTP methods to handlers
 // Add authRequired: true to a route to indicate that the user must be logged in
+
 const handlers = {
     '/': {
         get: {
@@ -26,7 +27,7 @@ const handlers = {
             handler: assignmentController.updateAssignment,
         },
         delete: {
-            authRequiredL true,
+            authRequired: true,
             handler: assignmentController.createAssignment,
         },
     },
