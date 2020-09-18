@@ -6,12 +6,12 @@ const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleuserc
 class GoogleBtn extends React.Component {
     constructor(props) {
         super(props);
-
+        //Setting up state components
         this.state = {
             isLoggedIn: false,
             accessToken: '',
         };
-
+        //Binding methods
         this.login = this.login.bind(this);
         this.handleLoginFailure = this.handleLoginFailure.bind(this);
         this.logout = this.logout.bind(this);
@@ -21,7 +21,7 @@ class GoogleBtn extends React.Component {
     //On login, if there is an access token, update state appropriately
     login(response) {
         if (response.accessToken) {
-            this.setState((state) => ({
+            this.setState(() => ({
                 isLoggedIn: true,
                 accessToken: response.accessToken,
             }));
@@ -29,8 +29,8 @@ class GoogleBtn extends React.Component {
     }
 
     //Changing state to not logged in on logout
-    logout(response) {
-        this.setState((state) => ({
+    logout() {
+        this.setState(() => ({
             isLoggedIn: false,
             accessToken: '',
         }));
@@ -50,6 +50,7 @@ class GoogleBtn extends React.Component {
         return (
             <div>
                 {this.state.isLoggedIn ? (
+                    //Logout button and fields
                     <GoogleLogout
                         clientId={clientID}
                         buttonText="Logout"
@@ -57,6 +58,7 @@ class GoogleBtn extends React.Component {
                         onFailure={this.handleLogoutFailure}
                     ></GoogleLogout>
                 ) : (
+                    //Login button and fields
                     <GoogleLogin
                         clientId={clientID}
                         buttonText="Login"
@@ -78,4 +80,5 @@ class GoogleBtn extends React.Component {
     }
 }
 
+//Exporting the button to be rendered
 export default GoogleBtn;
