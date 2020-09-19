@@ -67,7 +67,20 @@ async function createTask(req, res) {
     res.json(task);
 }
 
-async function updateTask(req, res) {}
+async function updateTask(req, res) {
+    const task = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
+
+    await dynamo
+        .put({
+            TableName: 'tasks',
+            Item: toDbFormat(task),
+            ExpressionAttributeValues: { ':uid': req.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        })
+        .promise();
+
+    res.json(task);
+}
 
 async function deleteTask(req, res) {}
 
