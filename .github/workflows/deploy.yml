@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-fe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Install Dependencies & Bootstrap
+        run: |
+          npm install
+          npm run bootstrap
+      - name: Build
+        run: |
+          cd services/frontend
+          npm run build
+      - name: Upload to S3
+        run: |
+          aws s3 sync public s3://logan-frontend/ --delete
+          aws s3api put-object-acl --acl public-read --bucket logan-frontend --key index.html
