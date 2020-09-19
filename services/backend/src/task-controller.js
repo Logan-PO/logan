@@ -82,7 +82,20 @@ async function updateTask(req, res) {
     res.json(task);
 }
 
-async function deleteTask(req, res) {}
+async function deleteTask(req, res) {
+    const requestedTid = req.params.tid;
+
+    await dynamo
+        .delete({
+            TableName: 'tasks',
+            Key: { tid: requestedTid },
+            ExpressionAttributeValues: { ':uid': req.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        })
+        .promise();
+
+    res.json({ success: true });
+}
 
 module.exports = {
     getTask,
