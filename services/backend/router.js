@@ -28,7 +28,7 @@ const handlers = {
         },
         delete: {
             authRequired: true,
-            handler: assignmentController.createAssignment,
+            handler: assignmentController.deleteAssignment,
         },
     },
     '/assignments': {
