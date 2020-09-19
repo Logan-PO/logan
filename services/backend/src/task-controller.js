@@ -28,7 +28,17 @@ async function getTask(req, res) {
     }
 }
 
-async function getTasks(req, res) {}
+async function getTasks(req, res) {
+    const dbResponse = await dynamo
+        .scan({
+            TableName: 'tasks',
+            FilterExpression: 'uid = :uid',
+            ExpressionAttributeValues: { ':uid': req.auth.uid },
+        })
+        .promise();
+
+    res.json(dbResponse.Items.map(fromDbFormat()));
+}
 
 async function createTask(req, res) {}
 
