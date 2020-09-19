@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const { AWS } = require('@logan/aws');
+const { v4: uuid } = require('uuid');
 
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
@@ -10,6 +11,16 @@ function fromDbFormat(db) {
         dueDate: db.due,
         priority: db.pri,
         complete: db.cmp,
+    };
+}
+
+function toDbFormat(task) {
+    return {
+        ..._.pick(task, ['uid', 'tid', 'title', 'aid', 'cid']),
+        desc: task.description,
+        due: task.dueDate,
+        pri: task.priority,
+        cmp: task.complete,
     };
 }
 
@@ -40,7 +51,21 @@ async function getTasks(req, res) {
     res.json(dbResponse.Items.map(fromDbFormat()));
 }
 
-async function createTask(req, res) {}
+async function createTask(req, res) {
+    const tid = uuid();
+
+    const defaultValues = { complete: false };
+    const taskInput = _.merge({}, req.body, { tid }, _.pick(req.auth, ['uid']));
+    const task = _.defaults(taskInput, defaultValues);
+
+    if (!task.title) throw new Error('Missing required property: title');
+    if (task.dueDate === undefined) throw new Error('Missing required property: dueDate');
+    if (task.priority === undefined) throw new Error('Missing required property: priority');
+
+    await dynamo.put({ TableName: 'tasks', Item: toDbFormat(task) }).promise();
+
+    res.json(task);
+}
 
 async function updateTask(req, res) {}
 
