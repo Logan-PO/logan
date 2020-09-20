@@ -1,3 +1,5 @@
+import NameForm from './addAssignmentForm'
+
 /**
  * This file is used to define all of the possible actions able to be taken within the assignments page
  */
@@ -14,7 +16,8 @@ export const addAssignment = () => {
         name: 'got here',
         color: 'orange',
         class: 'ECON 102',
-        desc: 'destroy'
+        desc: 'destroy',
+        due: '9/19'
     };
 };
 

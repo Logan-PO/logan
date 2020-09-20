@@ -2,7 +2,7 @@ import React from "react"
 import {Provider, useDispatch, useSelector} from 'react-redux'
 import { Link } from "gatsby"
 import Container from "../components/containter"
-import items from "../components/assignmentDay"
+//import items from "../components/assignmentDay"
 import {addAssignment} from "../components/assignmentsActions";
 import {createStore} from "redux";
 import rootReducer from "../components/rootReducer";
@@ -18,7 +18,6 @@ import {store} from "./index";
  */
 export default function  wrapper() {
     //TODO: This is the current store being used for the assignments page as the attributes of this store cannot be generalized
-    const store = createStore(rootReducer);
 
     return (
         <Provider store = {store}>
@@ -36,17 +35,27 @@ function DisplayAssignments() {
     const assignment = useSelector(state => state.assignment)
     const assignmentDay = useSelector(state => state.assignmentDay)
     const dispatch = useDispatch();
+
+
+    let itemsOfGivenDay = assignmentDay.list.map((item) =>
+        <li key={item.id}>
+            <h3 style={{backgroundColor:item.color}}>{item.class} </h3>
+            <div>Assignment: {item.name} <div>Desc: {item.desc}</div> </div>
+        </li>)
+
+
     //get all assignment days and parse them
     //TODO: pull the color for a given assignment from its class color (classes should have color)
     return (
         <div>
             <Container>
                 <h1>Assignments</h1>
-                <ul>{items} {assignment.string} {assignmentDay.string}</ul>
+                <ul>{itemsOfGivenDay} </ul>
                 <div><Link to="../">Back to Overview</Link></div>
-                <button style={{backgroundColor:'grey'}} onClick={() => store.dispatch(addAssignment())}>
+                <button style={{backgroundColor:'grey'}} onClick={() => dispatch(addAssignment())}>
                     Add Assignment
                 </button>
+
             </Container>
         </div>
     )//The color will be stored in the course so the color would be pulled from course ID

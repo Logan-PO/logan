@@ -10,11 +10,21 @@ import React from "react"
  * @param action the inputted attributes to be added to this assignment day
  * @returns {{list: [], day: string}}
  */
-const assignmentDayReducer = (state = {list: [] , day: ''},action) => {
+let myState = { list:[{id: 1, name: 'Lab', color: 'red', class: 'CSDS 100', desc: "TBD"}]}
+
+/**
+ * A reducer for adding and removing assignments from a given assignment day
+ *
+ * @param state
+ * @param action
+ * @returns {{list: [], day: string}}
+ */
+const assignmentDayReducer = (state = {list: [] , day: 'M0nday'},action) => {
     const tempAssignmentList = state.list
     switch (action.type){
         case 'addAssignment':
-            tempAssignmentList.push({id: action.id, name: action.name, color: action.color, class: action.class, desc: action.desc})
+            const newAssignment = {id: action.id, name: action.name, color: action.color, class: action.class, desc: action.desc,due: action.due}
+            tempAssignmentList.push(newAssignment)
             return {list: tempAssignmentList, day: state.day}
         case 'deleteAssignment':
             for (let i = 0; i < tempAssignmentList.length; i++){
@@ -29,14 +39,10 @@ const assignmentDayReducer = (state = {list: [] , day: ''},action) => {
 }
 
 
+
 //Exporting the reducer so that it can be added to the root reducer (rootReducer.js)
 export default assignmentDayReducer
 
 //Exporting the current list of assignments to be displayed by the assignments page
-export const items = myState.list.map((item) =>
-    <li key={item.id}>
-        <h3 style={{backgroundColor:item.color}}>{item.class} </h3>
-        <div>Assignment: {item.name} <div>Desc: {item.desc}</div> </div>
-    </li>
-);
+
 
