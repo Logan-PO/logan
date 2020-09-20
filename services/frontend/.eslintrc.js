@@ -1,5 +1,6 @@
 module.exports = {
     extends: ['../../.eslintrc.js', 'plugin:react/recommended'],
+    ignorePatterns: ['public/**', '.cache/**'],
     parserOptions: {
         ecmaFeatures: {
             jsx: true,
