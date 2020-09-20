@@ -3,7 +3,7 @@ import {Provider, useDispatch, useSelector} from 'react-redux'
 import { Link } from "gatsby"
 import Container from "../components/containter"
 //import items from "../components/assignmentDay"
-import {addAssignment} from "../components/assignmentsActions";
+import {addAssignment, deleteAssignment} from "../components/assignmentsActions";
 import {createStore} from "redux";
 import rootReducer from "../components/rootReducer";
 import {store} from "./index";
@@ -55,7 +55,9 @@ function DisplayAssignments() {
                 <button style={{backgroundColor:'grey'}} onClick={() => dispatch(addAssignment())}>
                     Add Assignment
                 </button>
-
+                <button style={{backgroundColor:'red'}} onClick={() => dispatch(deleteAssignment())}>
+                    Delete Assignment
+                </button>
             </Container>
         </div>
     )//The color will be stored in the course so the color would be pulled from course ID

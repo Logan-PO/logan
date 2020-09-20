@@ -28,7 +28,7 @@ const assignmentDayReducer = (state = {list: [] , day: 'M0nday'},action) => {
             return {list: tempAssignmentList, day: state.day}
         case 'deleteAssignment':
             for (let i = 0; i < tempAssignmentList.length; i++){
-                if (tempAssignmentList[i].id == action.assignment.id){
+                if (tempAssignmentList[i].id == action.id){
                     tempAssignmentList.splice(i,1)
                 }
             }

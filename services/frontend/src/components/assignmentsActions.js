@@ -24,7 +24,8 @@ export const addAssignment = () => {
 //TODO: This will also take in user input and use the id of the assignment to find and remove it from a given assignment day
 export const deleteAssignment = () => {
     return{
-        type: 'deleteAssignment'
+        type: 'deleteAssignment',
+        id: 12
     };
 };
 
