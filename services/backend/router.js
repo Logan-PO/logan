@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const auth = require('./utils/auth');
 const usersController = require('./src/users-controller');
 const taskController = require('./src/task-controller');
+const assignmentController = require('./src/assignment-controller');
 
 // A map of routes/HTTP methods to handlers
 // Add authRequired: true to a route to indicate that the user must be logged in
@@ -35,6 +36,30 @@ const handlers = {
         post: {
             action: auth.UNAUTHORIZED_ACTIONS.CREATE_USER,
             handler: usersController.createUser,
+        },
+    },
+    '/assignments/:aid': {
+        get: {
+            authRequired: true,
+            handler: assignmentController.getAssignment,
+        },
+        put: {
+            authRequired: true,
+            handler: assignmentController.updateAssignment,
+        },
+        delete: {
+            authRequired: true,
+            handler: assignmentController.deleteAssignment,
+        },
+    },
+    '/assignments': {
+        get: {
+            authRequired: true,
+            handler: assignmentController.getAssignments,
+        },
+        post: {
+            authRequired: true,
+            handler: assignmentController.createAssignment,
         },
     },
     '/tasks/:tid': {
