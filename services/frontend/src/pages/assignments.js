@@ -1,6 +1,6 @@
 import React from "react"
 import {Provider, useDispatch, useSelector} from 'react-redux'
-import { Link } from "gatsby"
+import {Link, navigate} from "gatsby"
 import Container from "../components/containter"
 import {addAssignment, deleteAssignment} from "../components/assignmentsActions";
 import {store} from "./index";
@@ -50,6 +50,7 @@ function DisplayAssignments() {
                 <h1>Assignments</h1>
                 <ul>{itemsOfGivenDay} </ul>
                 <div><Link to="../">Back to Overview</Link></div>
+
                 <button style={{backgroundColor:'grey'}} onClick={() => dispatch(addAssignment())}>
                     Add Assignment
                 </button>
@@ -57,6 +58,7 @@ function DisplayAssignments() {
                     Delete Assignment
                 </button>
             </Container>
+            <div><Link to={'/FormIndex'}>Form</Link></div>
         </div>
     )//The color will be stored in the course so the color would be pulled from course ID
     //Put assignment under its due date

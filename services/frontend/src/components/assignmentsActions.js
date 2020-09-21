@@ -1,4 +1,3 @@
-import NameForm from './addAssignmentForm'
 
 /**
  * This file is used to define all of the possible actions able to be taken within the assignments page

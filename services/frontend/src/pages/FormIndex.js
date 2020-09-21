@@ -1,19 +1,20 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-//import "tachyons"
-import store from './index'
+import {store} from './index'
 import FormContainer from '../components/fieldForm/form.container';
-import configureStore from '../components/fieldForm/store';
 import {Link} from "gatsby";
+import Container from "../components/containter";
 
 export default function Form() {
+    const test = 'w'
     return(
         <div>
-            <Provider store={store}>
-                <FormContainer />
-                <Link to={'/assignments'}>Cancel</Link>
-            </Provider>
+            <Container>
+                <Provider store={store}>
+                    <FormContainer />
+                    <Link to={'/assignments'}>Cancel</Link>
+                </Provider>
+            </Container>
         </div>
     )
 }

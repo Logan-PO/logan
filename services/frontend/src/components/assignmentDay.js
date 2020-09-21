@@ -25,8 +25,6 @@ const assignmentDayReducer = (state = {list: [] , day: 'M0nday'},action) => {
     switch (action.type){
         case 'addAssignment':
 
-            navigate('/FormIndex/'); //navigate to edit page
-
             const newAssignment = {id: action.id, name: action.name, color: action.color, class: action.class, desc: action.desc,due: action.due}
             tempAssignmentList.push(newAssignment)
             return {list: tempAssignmentList, day: state.day}
