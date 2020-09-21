@@ -3,7 +3,7 @@ branch-defaults:
     environment: logan-backend-dev
     group_suffix: null
 deploy:
-  artifact: backend.zip
+  artifact: artifact.zip
 global:
   application_name: logan-backend
   branch: null
