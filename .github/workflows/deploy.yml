@@ -41,8 +41,8 @@ jobs:
           npm run bootstrap:backend
       - name: Copy local dependencies to node_modules
         run: node scripts/copy-be-dependencies.js
-      - run: cd services/backend
       - name: Deploy
+        working-directory: services/backend
         uses: hmanzur/actions-aws-eb@v1.0.0
         with:
           command: 'deploy'

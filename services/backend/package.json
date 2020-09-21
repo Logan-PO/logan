@@ -13,8 +13,7 @@
   "scripts": {
     "test": "jest --passWithNoTests",
     "start": "node server.js",
-    "debug": "nodemon server.js",
-    "list-dependencies": "lerna la --scope @logan/backend --include-dependencies --json --loglevel silent"
+    "debug": "nodemon server.js"
   },
   "bugs": {
     "url": "https://github.com/beasterbro/logan/issues"
