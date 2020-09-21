@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+  pull-request:
+    branchess:
+      - fix-cd
 
 jobs:
   deploy-fe:
