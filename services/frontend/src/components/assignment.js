@@ -18,6 +18,14 @@ const assignmentReducer = (state = {
                class: action.payload.class,
                desc: action.payload.desc
            }
+        case 'createAssignment':
+            return {
+                id: action.payload.id,
+                name: action.payload.name,
+                color: action.payload.color,
+                class: action.payload.class,
+                desc: action.payload.desc
+            }
         default:
             return state
 
