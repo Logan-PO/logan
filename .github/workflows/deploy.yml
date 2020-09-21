@@ -40,8 +40,8 @@ jobs:
       - name: Copy local dependencies to node_modules
         run: node scripts/copy-be-dependencies.js
       - name: Create artifact
-        run: cd services/backend && npm run bundle
-      - run: ls -a
+        run: npm run bundle
+        working-directory: services/backend
       - name: Deploy
         uses: hmanzur/actions-aws-eb@v1.0.0
         with:
