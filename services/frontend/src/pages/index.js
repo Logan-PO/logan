@@ -9,16 +9,16 @@ export const store = configureStore();
 store.subscribe( () => console.log(store.getState()))
 
 export const gotoAssignments = () => {
-    navigate('/Assignments/')
+    navigate('/assignments/')
 }
 
 export const gotoAssignmentsForm = () => {
-    navigate('/AssignmentForm/')
+    navigate('/assignments/form')
 }
 
-export const AssignmentsPageLocal = '/Assignments/'
+export const AssignmentsPageLocal = '/assignments/'
 export const HomePageLocal = '../'
-export const AssignmentFormLocal = '/AssignmentForm'
+export const AssignmentFormLocal = '/assignments/form'
 
 export default function Home() {
     return(

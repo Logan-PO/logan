@@ -4,7 +4,7 @@ import AssignmentFormComponent from './assignment.form.component';
 import {Provider, useDispatch} from "react-redux";
 import {addAssignment} from "./AssignmentsPageActions";
 import {AssignmentsPageLocal, store} from "../../pages";
-import {dispatch} from "../../pages/Assignments";
+import {dispatch} from "../../pages/assignments";
 import { navigate} from "gatsby"
 
 /**

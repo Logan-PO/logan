@@ -1,9 +1,9 @@
 import React from "react"
 import {Provider, useDispatch, useSelector} from 'react-redux'
 import {Link, navigate} from "gatsby"
-import Container from "../components/containter"
-import {addAssignment, deleteAssignment} from "../components/AssignmentsPageComponents/AssignmentsPageActions";
-import {AssignmentFormLocal, gotoAssignmentsForm, store,HomePageLocal} from "./index";
+import Container from "../../components/containter"
+import {addAssignment, deleteAssignment} from "../../components/AssignmentsPageComponents/AssignmentsPageActions";
+import {AssignmentFormLocal, gotoAssignmentsForm, store,HomePageLocal} from "../index";
 /**
  * The React component that shows the UI for the assignments feature
  * @type {({color: string, name: string, id: number, class: string, desc: string}|{color: string, name: string, id: number, class: string, desc: string}|{color: string, name: string, id: number, class: string, desc: string})[]}
@@ -34,7 +34,7 @@ function DisplayAssignments() {
     const assignmentDay = useSelector(state => state.assignmentDay)
 dispatch =  useDispatch();
 
-
+//TODO:extract
     let itemsOfGivenDay = assignmentDay.list.map((item) =>
         <li key={item.id}>
             <h3 style={{backgroundColor:item.color}}>{item.class} </h3>

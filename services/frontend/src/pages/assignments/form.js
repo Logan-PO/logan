@@ -1,9 +1,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import {AssignmentsPageLocal, store} from './index'
-import FormContainer from '../components/AssignmentsPageComponents/assignment.form.container';
+import {AssignmentsPageLocal, store} from '../index'
+import FormContainer from '../../components/AssignmentsPageComponents/assignment.form.container';
 import {Link} from "gatsby";
-import Container from "../components/containter";
+import Container from "../../components/containter";
 
 export default function Form() {
     const test = 'w'
