@@ -1,8 +1,8 @@
 import React from 'react';
 import { Field } from 'redux-form';
-import Text from './text';
+import Text from '../text';
 
-export const FormComponent = ({ handleSubmit, onSubmit }) => {
+export const AssignmentFormComponent = ({ handleSubmit, onSubmit }) => {
     return (
         <div className="flex flex-column justify-center items-center">
             <h1>My Very own Form</h1>
@@ -46,4 +46,4 @@ export const FormComponent = ({ handleSubmit, onSubmit }) => {
     );
 }
 
-export default FormComponent;
+export default AssignmentFormComponent;

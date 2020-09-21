@@ -2,8 +2,8 @@ import React from "react"
 import {Provider, useDispatch, useSelector} from 'react-redux'
 import {Link, navigate} from "gatsby"
 import Container from "../components/containter"
-import {addAssignment, deleteAssignment} from "../components/assignmentsActions";
-import {store} from "./index";
+import {addAssignment, deleteAssignment} from "../components/AssignmentsPageComponents/AssignmentsPageActions";
+import {AssignmentFormLocal, gotoAssignmentsForm, store,HomePageLocal} from "./index";
 /**
  * The React component that shows the UI for the assignments feature
  * @type {({color: string, name: string, id: number, class: string, desc: string}|{color: string, name: string, id: number, class: string, desc: string}|{color: string, name: string, id: number, class: string, desc: string})[]}
@@ -38,7 +38,12 @@ dispatch =  useDispatch();
     let itemsOfGivenDay = assignmentDay.list.map((item) =>
         <li key={item.id}>
             <h3 style={{backgroundColor:item.color}}>{item.class} </h3>
-            <div>Assignment: {item.name} <div>Desc: {item.desc}</div> </div>
+            <div>Assignment: {item.name}
+                <div>Desc: {item.desc} </div>
+                <div>Due: {item.due} </div>
+                <button style={{backgroundColor:'darkgreen'}}>Edit Assignment</button>
+                <button style={{backgroundColor:'red'}} >Delete Assignment</button>
+            </div>
         </li>)
 
 
@@ -49,16 +54,13 @@ dispatch =  useDispatch();
             <Container>
                 <h1>Assignments</h1>
                 <ul>{itemsOfGivenDay} </ul>
-                <div><Link to="../">Back to Overview</Link></div>
+                <div><Link to= {HomePageLocal}>Back to Overview</Link></div>
 
-                <button style={{backgroundColor:'grey'}} onClick={() => navigate('/FormIndex/')}>
+                <button style={{backgroundColor:'grey'}} onClick={() => gotoAssignmentsForm()}>
                     Add Assignment
                 </button>
-                <button style={{backgroundColor:'red'}} onClick={() => dispatch(deleteAssignment())}>
-                    Delete Assignment
-                </button>
             </Container>
-            <div><Link to={'/FormIndex'}>Form</Link></div>
+            <div><Link to={AssignmentFormLocal}>Form</Link></div>
         </div>
     )//The color will be stored in the course so the color would be pulled from course ID
     //Put assignment under its due date

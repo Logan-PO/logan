@@ -1,10 +1,10 @@
 import React from 'react';
 import { reduxForm } from 'redux-form';
-import FormComponent from './form.component';
+import AssignmentFormComponent from './assignment.form.component';
 import {Provider, useDispatch} from "react-redux";
-import {addAssignment} from "../assignmentsActions";
-import {store} from "../../pages";
-import {dispatch} from "../../pages/assignments";
+import {addAssignment} from "./AssignmentsPageActions";
+import {AssignmentsPageLocal, store} from "../../pages";
+import {dispatch} from "../../pages/Assignments";
 import { navigate} from "gatsby"
 
 /**
@@ -13,16 +13,16 @@ import { navigate} from "gatsby"
  * @returns {JSX.Element}
  * @constructor
  */
-export const FormContainer = ({ handleSubmit }) => {
+export const AssignmentFormContainer = ({ handleSubmit }) => {
 
     const submitForm = (formValues) => {
         dispatch(addAssignment(formValues))
         console.log('submitting Form: ', formValues);
-        navigate('/assignments/')
+        navigate(AssignmentsPageLocal)
     }
     return (
         <Provider store={store}>
-        <FormComponent
+        <AssignmentFormComponent
             onSubmit={submitForm}
             handleSubmit={handleSubmit}
         />
@@ -32,4 +32,4 @@ export const FormContainer = ({ handleSubmit }) => {
 const formConfiguration = {
     form: 'my-very-own-form'
 }
-export default reduxForm(formConfiguration)(FormContainer);
+export default reduxForm(formConfiguration)(AssignmentFormContainer);

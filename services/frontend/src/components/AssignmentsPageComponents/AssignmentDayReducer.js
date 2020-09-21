@@ -1,5 +1,4 @@
 import React from "react"
-import { navigate } from 'gatsby'
 /**
  * This file was made for managing redux logic needed to add an assignment day to the state
  */
@@ -11,7 +10,6 @@ import { navigate } from 'gatsby'
  * @param action the inputted attributes to be added to this assignment day
  * @returns {{list: [], day: string}}
  */
-let myState = { list:[{id: 1, name: 'Lab', color: 'red', class: 'CSDS 100', desc: "TBD"}]}
 
 /**
  * A reducer for adding and removing assignments from a given assignment day
@@ -24,7 +22,6 @@ const assignmentDayReducer = (state = {list: [] , day: 'M0nday'},action) => {
     const tempAssignmentList = state.list
     switch (action.type){
         case 'addAssignment':
-
             const newAssignment = {id: action.id, name: action.name, color: action.color, class: action.class, desc: action.desc,due: action.due}
             tempAssignmentList.push(newAssignment)
             return {list: tempAssignmentList, day: state.day}
