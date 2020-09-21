@@ -35,6 +35,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
+      - name: Install the AWS EB CLI
+        run: pip install awsebcli --upgrade --user
       - name: Install Lerna & Bootstrap
         run: |
           npm ci
@@ -42,11 +44,5 @@ jobs:
       - name: Copy local dependencies to node_modules
         run: node scripts/copy-be-dependencies.js
       - name: Deploy
-        run: cd services/backend
-        uses: hmanzur/actions-aws-eb@v1.0.0
-        with:
-          command: 'deploy'
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.EB_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.EB_ACCESS_KEY_SECRET }}
-          AWS_DEFAULT_REGION: 'us-west-2'
+        run: eb deploy
+        working-directory: services/backend
