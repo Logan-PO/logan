@@ -35,9 +35,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Install Dependencies & Bootstrap
+      - name: Install Lerna & Bootstrap
         run: |
-          npm install
+          npm i -g lerna
           npm run bootstrap:backend
       - name: Copy local dependencies to node_modules
         run: node scripts/copy-be-dependencies.js
