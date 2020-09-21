@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Install Lerna & Bootstrap
         run: |
-          npm i -g lerna
+          npm install
           npm run bootstrap:backend
       - name: Copy local dependencies to node_modules
         run: node services/backend/scripts/copy-dependencies.js
