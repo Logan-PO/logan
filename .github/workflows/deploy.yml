@@ -42,6 +42,7 @@ jobs:
       - name: Copy local dependencies to node_modules
         run: node scripts/copy-be-dependencies.js
       - name: Deploy
+        run: cd services/backend
         uses: hmanzur/actions-aws-eb@v1.0.0
         with:
           command: 'deploy'
@@ -49,4 +50,3 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.EB_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.EB_ACCESS_KEY_SECRET }}
           AWS_DEFAULT_REGION: 'us-west-2'
-        working-directory: services/backend
