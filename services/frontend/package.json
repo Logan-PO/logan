@@ -29,6 +29,8 @@
   },
   "devDependencies": {
     "@reduxjs/toolkit": "^1.4.0",
-    "eslint-plugin-react": "^7.20.6"
+    "eslint-plugin-react": "^7.20.6",
+    "gatsby-link": "^2.4.14",
+    "redux-form": "^8.3.6"
   }
 }

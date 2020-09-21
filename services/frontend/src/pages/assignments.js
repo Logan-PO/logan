@@ -2,10 +2,7 @@ import React from "react"
 import {Provider, useDispatch, useSelector} from 'react-redux'
 import { Link } from "gatsby"
 import Container from "../components/containter"
-//import items from "../components/assignmentDay"
 import {addAssignment, deleteAssignment} from "../components/assignmentsActions";
-import {createStore} from "redux";
-import rootReducer from "../components/rootReducer";
 import {store} from "./index";
 /**
  * The React component that shows the UI for the assignments feature
@@ -25,6 +22,7 @@ export default function  wrapper() {
         </Provider>
     )
 }
+
 
 /**
  * A function that displays the assignment page

@@ -4,8 +4,6 @@ import { Link } from "gatsby"
 import Container from "../components/containter"
 import {createStore} from "redux";
 import rootReducer from "../components/rootReducer";
-import {Provider} from "react-redux";
-import DisplayAssignments from './assignments'
 
 export const store = createStore(rootReducer,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
