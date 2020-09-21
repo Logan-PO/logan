@@ -2,11 +2,9 @@ import React from "react"
 import "../styles/global.css"
 import { Link } from "gatsby"
 import Container from "../components/containter"
-import {createStore} from "redux";
-import rootReducer from "../components/rootReducer";
+import configureStore from "../components/fieldForm/store";
 
-export const store = createStore(rootReducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+export const store = configureStore();
 
 store.subscribe( () => console.log(store.getState()))
 
