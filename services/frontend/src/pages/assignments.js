@@ -23,7 +23,7 @@ export default function  wrapper() {
     )
 }
 
-
+export let dispatch = []
 /**
  * A function that displays the assignment page
  * @returns {JSX.Element}
@@ -32,7 +32,7 @@ export default function  wrapper() {
 function DisplayAssignments() {
     const assignment = useSelector(state => state.assignment)
     const assignmentDay = useSelector(state => state.assignmentDay)
-    const dispatch = useDispatch();
+dispatch =  useDispatch();
 
 
     let itemsOfGivenDay = assignmentDay.list.map((item) =>
@@ -51,7 +51,7 @@ function DisplayAssignments() {
                 <ul>{itemsOfGivenDay} </ul>
                 <div><Link to="../">Back to Overview</Link></div>
 
-                <button style={{backgroundColor:'grey'}} onClick={() => dispatch(addAssignment())}>
+                <button style={{backgroundColor:'grey'}} onClick={() => navigate('/FormIndex/')}>
                     Add Assignment
                 </button>
                 <button style={{backgroundColor:'red'}} onClick={() => dispatch(deleteAssignment())}>

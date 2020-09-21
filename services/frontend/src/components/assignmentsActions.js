@@ -7,24 +7,24 @@
  * this is used to define an action that the user can take to add an assignment
  * @returns returns the attributes of the assignment that is to be created {{color: string, name: string, id: number, type: string, class: string, desc: string}}
  */
-export const addAssignment = () => {
+export const addAssignment = assignmentValues => {
     return{//TODO: the values in this return are temporary and should be filled in via user input through the addAssignmentForm.js
         //The assignment form values will probably be collected via an export from the assignments page
         type: 'addAssignment',
-        id: 12,
-        name: 'got here',
-        color: 'orange',
-        class: 'ECON 102',
-        desc: 'destroy',
-        due: '9/19'
+        id: assignmentValues.id,
+        name: assignmentValues.name,
+        color: assignmentValues.color,
+        class: assignmentValues.class,
+        desc: assignmentValues.desc,
+        due: assignmentValues.due
     };
 };
 
 //TODO: This will also take in user input and use the id of the assignment to find and remove it from a given assignment day
-export const deleteAssignment = () => {
+export const deleteAssignment = assignmentID => {
     return{
         type: 'deleteAssignment',
-        id: 12
+        id: assignmentID
     };
 };
 
