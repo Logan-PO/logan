@@ -21,6 +21,10 @@ jobs:
       - name: Build
         run: npm run build
         working-directory: ./services/frontend
+      - name: Configure the AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.EB_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.EB_ACCESS_KEY_SECRET }}
       - name: Upload to S3
         run: |
           aws s3 sync public s3://logan-frontend/ --delete
