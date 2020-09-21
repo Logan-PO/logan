@@ -48,7 +48,7 @@ async function getTasks(req, res) {
         })
         .promise();
 
-    res.json(dbResponse.Items.map(fromDbFormat()));
+    res.json(dbResponse.Items.map(fromDbFormat));
 }
 
 async function createTask(req, res) {
