@@ -11,18 +11,28 @@ export const FormComponent = ({ handleSubmit, onSubmit }) => {
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <Field
-                    name="firstName"
-                    label="First Named"
+                    name="class"
+                    label="class"
                     component={Text}
                 />
                 <Field
-                    name="lastName"
-                    label="Last Name"
+                    name="name"
+                    label="name"
                     component={Text}
                 />
                 <Field
-                    name="email"
-                    label="Email"
+                    name="desc"
+                    label="desc"
+                    component={Text}
+                />
+                <Field
+                    name="due"
+                    label="due"
+                    component={Text}
+                />
+                <Field
+                    name="color"
+                    label="color"
                     component={Text}
                 />
                 <button
