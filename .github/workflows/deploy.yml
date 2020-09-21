@@ -34,7 +34,7 @@ jobs:
       - name: Install Dependencies & Bootstrap
         run: |
           npm install
-          lerna bootstrap --scope @logan/backend --include-dependencies -- --production --no-optional
+          npm run bootstrap:backend
       - name: Copy local dependencies to node_modules
         run: node services/backend/scripts/copy-dependencies.js
       - run: cd services/backend
