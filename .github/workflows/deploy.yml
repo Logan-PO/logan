@@ -14,9 +14,9 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Install Lerna & Bootstrap
+      - name: Install Dependencies & Bootstrap
         run: |
-          npm i -g lerna
+          npm install
           npm run bootstrap
       - name: Build
         run: npm run build
