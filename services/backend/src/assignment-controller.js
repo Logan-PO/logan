@@ -14,7 +14,7 @@ function fromDbFormat(db) {
 
 function toDbFormat(assignment) {
     return {
-        ..._.pick(assignment, ['aid', 'uid', 'title', 'desc', 'due', 'cid']),
+        ..._.pick(assignment, ['aid', 'uid', 'title', 'cid']),
         desc: assignment.description,
         due: assignment.dueDate,
     };
@@ -50,18 +50,17 @@ async function getAssignments(req, res) {
         })
         .promise();
 
-    res.json(dbResponse.Items.map(fromDbFormat(dbResponse.Items)));
+    res.json(dbResponse.Items.map(fromDbFormat));
 }
 
 async function createAssignment(req, res) {
     const aid = uuid();
 
-    const assignment = toDbFormat({ aid, ...req.body });
+    const assignment = toDbFormat(_.merge({}, req.body, { aid }, _.pick(req.auth, ['uid'])));
 
     if (!assignment.title) throw new Error('Missing required property: title');
     if (!assignment.desc) throw new Error('Missing required property: description');
     if (!assignment.due) throw new Error('Missing required property: due date');
-    if (!assignment.cid) throw new Error('Missing required property: course ID');
 
     await dynamo.put({ TableName: 'assignments', Item: assignment }).promise();
 
@@ -76,7 +75,7 @@ async function updateAssignment(req, res) {
             TableName: 'assignments',
             Item: assignment,
             ExpressionAttributeValues: { ':uid': req.auth.uid },
-            ConditionalExpression: 'uid = :uid',
+            ConditionExpression: 'uid = :uid',
         })
         .promise();
 
@@ -91,7 +90,7 @@ async function deleteAssignment(req, res) {
             TableName: 'assignments',
             Key: { aid: requestedAid },
             ExpressionAttributeValues: { ':uid': req.auth.uid },
-            ConditionalExpression: 'uid = :uid',
+            ConditionExpression: 'uid = :uid',
         })
         .promise();
 
