@@ -37,10 +37,10 @@ jobs:
         uses: actions/checkout@v2
       - name: Install Lerna & Bootstrap
         run: |
-          npm install
+          npm ci
           npm run bootstrap:backend
       - name: Copy local dependencies to node_modules
-        run: node services/backend/scripts/copy-dependencies.js
+        run: node scripts/copy-be-dependencies.js
       - run: cd services/backend
       - name: Deploy
         uses: hmanzur/actions-aws-eb@v1.0.0
