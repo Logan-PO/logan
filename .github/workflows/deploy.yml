@@ -40,7 +40,7 @@ jobs:
           npm i -g lerna
           npm run bootstrap:backend
       - name: Copy local dependencies to node_modules
-        run: node scripts/copy-be-dependencies.js
+        run: node services/backend/scripts/copy-dependencies.js
       - run: cd services/backend
       - name: Deploy
         uses: hmanzur/actions-aws-eb@v1.0.0
