@@ -2,6 +2,7 @@ const _ = require('lodash');
 const bodyParser = require('body-parser');
 const auth = require('./utils/auth');
 const usersController = require('./src/users-controller');
+const taskController = require('./src/task-controller');
 const assignmentController = require('./src/assignment-controller');
 
 // A map of routes/HTTP methods to handlers
@@ -59,6 +60,30 @@ const handlers = {
         post: {
             authRequired: true,
             handler: assignmentController.createAssignment,
+        },
+    },
+    '/tasks/:tid': {
+        get: {
+            authRequired: true,
+            handler: taskController.getTask,
+        },
+        put: {
+            authRequired: true,
+            handler: taskController.updateTask,
+        },
+        delete: {
+            authRequired: true,
+            handler: taskController.deleteTask,
+        },
+    },
+    '/tasks': {
+        get: {
+            authRequired: true,
+            handler: taskController.getTasks,
+        },
+        post: {
+            authRequired: true,
+            handler: taskController.createTask,
         },
     },
 };
