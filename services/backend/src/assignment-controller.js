@@ -6,7 +6,7 @@ const dynamo = new AWS.DynamoDB.DocumentClient();
 
 function fromDbFormat(db) {
     return {
-        ..._.pick(db, ['aid', 'uid', 'title', 'desc', 'due', 'cid']),
+        ..._.pick(db, ['aid', 'uid', 'title', 'cid']),
         description: db.desc,
         dueDate: db.due,
     };
@@ -44,9 +44,7 @@ async function getAssignments(req, res) {
         .scan({
             TableName: 'assignments',
             FilterExpression: 'uid = :uid',
-            ExpressionAttributeValues: {
-                ':uid': requestedBy,
-            },
+            ExpressionAttributeValues: { ':uid': requestedBy },
         })
         .promise();
 
@@ -56,30 +54,34 @@ async function getAssignments(req, res) {
 async function createAssignment(req, res) {
     const aid = uuid();
 
-    const assignment = toDbFormat(_.merge({}, req.body, { aid }, _.pick(req.auth, ['uid'])));
+    const assignment = _.merge({}, req.body, { aid }, _.pick(req.auth, ['uid']));
 
     if (!assignment.title) throw new Error('Missing required property: title');
-    if (!assignment.desc) throw new Error('Missing required property: description');
-    if (!assignment.due) throw new Error('Missing required property: due date');
+    if (!assignment.dueDate) throw new Error('Missing required property: dueDate');
 
-    await dynamo.put({ TableName: 'assignments', Item: assignment }).promise();
+    await dynamo
+        .put({
+            TableName: 'assignments',
+            Item: toDbFormat(assignment),
+        })
+        .promise();
 
     res.json(assignment);
 }
 
 async function updateAssignment(req, res) {
-    const assignment = toDbFormat(_.merge({}, req.body, req.params, _.pick(req.auth, ['uid'])));
+    const assignment = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
 
     await dynamo
         .put({
             TableName: 'assignments',
-            Item: assignment,
+            Item: toDbFormat(assignment),
             ExpressionAttributeValues: { ':uid': req.auth.uid },
             ConditionExpression: 'uid = :uid',
         })
         .promise();
 
-    res.json(fromDbFormat(assignment));
+    res.json(assignment);
 }
 
 async function deleteAssignment(req, res) {
