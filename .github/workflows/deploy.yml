@@ -11,18 +11,18 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v2
-      - name: Install Dependencies & Bootstrap
+      - name: Install Lerna & Bootstrap
         run: |
-          npm install
+          npm i -g lerna
           npm run bootstrap
       - name: Build
-        run: |
-          cd services/frontend
-          npm run build
+        run: npm run build
+        working-directory: ./services/frontend
       - name: Upload to S3
         run: |
           aws s3 sync public s3://logan-frontend/ --delete
           aws s3api put-object-acl --acl public-read --bucket logan-frontend --key index.html
+        working-directory: ./services/frontend
   deploy-be:
     runs-on: ubuntu-latest
     steps:
