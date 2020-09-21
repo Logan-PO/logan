@@ -36,7 +36,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
       - name: Install the AWS EB CLI
-        run: pip install awsebcli --upgrade --user
+        run: pip3 install awsebcli --upgrade --user
       - name: Install Lerna & Bootstrap
         run: |
           npm ci
