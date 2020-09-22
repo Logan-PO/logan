@@ -11,7 +11,7 @@ function scan(params) {
 }
 
 function put(params) {
-    return dynamoClient.put(params).promisse();
+    return dynamoClient.put(params).promise();
 }
 
 function deleteItem(params) {
