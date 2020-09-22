@@ -121,9 +121,32 @@ describe('createUser', () => {
     });
 });
 
-// updateUser succeeds
-// Fails if modifying another usesr
-// fails if email and username are not unique
+describe('updateUser', () => {
+    it('Updating yourself succeeds', async () => {
+        const updatedUser = _.merge({}, basicUser1, { username: 'updated' });
+        const req = {
+            params: _.pick(basicUser1, ['uid']),
+            auth: basicUser1,
+            body: updatedUser,
+        };
+
+        mockDbScan.mockReturnValue({ Count: 0 });
+
+        await usersController.updateUser(req, { json: jsonMock });
+
+        expect(mockDbPut).toHaveBeenCalledTimes(1);
+        expect(jsonMock).toHaveBeenCalledWith(updatedUser);
+    });
+
+    it('Updating another user fails', async () => {
+        const req = {
+            params: _.pick(basicUser2, ['uid']),
+            auth: basicUser1,
+        };
+
+        await expect(usersController.updateUser(req)).rejects.toThrow();
+    });
+});
 
 // deleteUser succeeds
 // fails if deleting another user
