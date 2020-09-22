@@ -2,6 +2,12 @@ const AWS = require('./base');
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2020-08-10' });
 
+const TABLES = {
+    USERS: 'users',
+    TASKS: 'tasks',
+    ASSIGNMENTS: 'assignments',
+};
+
 function get(params) {
     return dynamoClient.get(params).promise();
 }
@@ -23,4 +29,5 @@ module.exports = {
     scan,
     put,
     delete: deleteItem,
+    TABLES,
 };

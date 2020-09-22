@@ -1,9 +1,7 @@
 const _ = require('lodash');
-const { AWS, secretUtils } = require('@logan/aws');
+const { dynamoUtils, secretUtils } = require('@logan/aws');
 const { OAuth2Client } = require('google-auth-library');
 const auth = require('../utils/auth');
-
-const dynamo = new AWS.DynamoDB.DocumentClient();
 
 async function verifyIdToken(req, res) {
     const { clientId } = await secretUtils.getSecret('logan/web-google-creds');
@@ -19,13 +17,11 @@ async function verifyIdToken(req, res) {
     const { name, email } = ticket.getPayload();
 
     // Check if the user already exists in DynamoDB
-    const response = await dynamo
-        .scan({
-            TableName: 'users',
-            FilterExpression: 'email = :email',
-            ExpressionAttributeValues: { ':email': email },
-        })
-        .promise();
+    const response = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.USERS,
+        FilterExpression: 'email = :email',
+        ExpressionAttributeValues: { ':email': email },
+    });
 
     if (_.isEmpty(response.Items)) {
         // User does not exist
