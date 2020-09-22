@@ -41,12 +41,12 @@ async function getUser(req, res) {
 async function createUser(req, res) {
     const uid = uuid();
 
-    const user = toDbFormat({ uid, ...req.body });
+    const user = { uid, ...req.body };
 
     // Make sure all required properties exist
     if (!user.name) throw new Error('Missing required property: name');
     if (!user.email) throw new Error('Missing required property: email');
-    if (!user.uname) throw new Error('Missing required property: username');
+    if (!user.username) throw new Error('Missing required property: username');
 
     // Make sure uid, email, and username are all unique
     const uniquenessResponse = await dynamoUtils.scan({
@@ -55,7 +55,7 @@ async function createUser(req, res) {
         ExpressionAttributeValues: {
             ':uid': uid,
             ':email': user.email,
-            ':uname': user.uname,
+            ':uname': user.username,
         },
     });
 
@@ -65,7 +65,7 @@ async function createUser(req, res) {
     const bearer = await generateBearerToken({ uid }, 'web');
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.USERS,
-        Item: user,
+        Item: toDbFormat(user),
     });
 
     // Return the new user data and a new bearer token for authorizing future requests

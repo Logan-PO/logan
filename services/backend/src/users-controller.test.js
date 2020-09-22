@@ -1,12 +1,17 @@
 const _ = require('lodash');
 
-const mockDbGet = jest.fn();
+const mockDbGet = jest.fn(() => ({}));
+const mockDbScan = jest.fn(() => ({}));
+const mockDbPut = jest.fn(() => ({}));
 const jsonMock = jest.fn();
 
 // Mock @logan/aws
 jest.doMock('@logan/aws', () => {
     const mocked = jest.requireActual('@logan/aws');
     mocked.dynamoUtils.get = mockDbGet;
+    mocked.dynamoUtils.scan = mockDbScan;
+    mocked.dynamoUtils.put = mockDbPut;
+    mocked.secretUtils.getSecret = async () => ({ web: 'mock-secret' });
     return mocked;
 });
 
@@ -27,12 +32,12 @@ const basicUser2 = {
 // Load users-controller.js after mocking everything
 const usersController = require('./users-controller');
 
-describe('getUser', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-        jest.resetAllMocks();
-    });
+beforeEach(() => {
+    jest.clearAllMocks();
+    jest.resetAllMocks();
+});
 
+describe('getUser', () => {
     it('Basic fetch returns the correct user', async () => {
         const req = {
             params: _.pick(basicUser1, ['uid']),
@@ -74,8 +79,47 @@ describe('getUser', () => {
     });
 });
 
-// createUser succeeds, and returns a good bearer token
-// createUser fails if not unique
+describe('createUser', () => {
+    it('Creating a normal user succeeds', async () => {
+        const requestBody = _.omit(basicUser1, ['uid']);
+
+        mockDbScan.mockReturnValueOnce({ Items: [], Count: 0 });
+
+        await usersController.createUser({ body: requestBody }, { json: jsonMock });
+        expect(mockDbScan).toHaveBeenCalledTimes(1);
+        expect(mockDbPut).toHaveBeenCalledTimes(1);
+        expect(jsonMock).toHaveBeenCalledWith(
+            expect.objectContaining({
+                user: {
+                    uid: expect.anything(),
+                    ...requestBody,
+                },
+                bearer: expect.anything(),
+            })
+        );
+    });
+
+    it('Missing required properties fails', async () => {
+        const baseUser = _.omit(basicUser1, ['uid']);
+
+        // Require name
+        await expect(usersController.createUser({ body: _.omit(baseUser, ['name']) })).rejects.toThrow('required');
+
+        // Require username
+        await expect(usersController.createUser({ body: _.omit(baseUser, ['username']) })).rejects.toThrow('required');
+
+        // Require email
+        await expect(usersController.createUser({ body: _.omit(baseUser, ['email']) })).rejects.toThrow('required');
+    });
+
+    it('Attempting to create a non-unique user fails', async () => {
+        const baseUser = _.omit(basicUser1, ['uid']);
+
+        mockDbScan.mockReturnValueOnce({ Count: 1 });
+
+        await expect(usersController.createUser({ body: baseUser }, { json: jsonMock })).rejects.toThrow('unique');
+    });
+});
 
 // updateUser succeeds
 // Fails if modifying another usesr
