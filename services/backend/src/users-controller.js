@@ -27,7 +27,7 @@ async function getUser(req, res) {
     }
 
     const dbResponse = await dynamoUtils.get({
-        TableName: 'users',
+        TableName: dynamoUtils.TABLES.USERS,
         Key: { uid: requestedUid },
     });
 
@@ -50,7 +50,7 @@ async function createUser(req, res) {
 
     // Make sure uid, email, and username are all unique
     const uniquenessResponse = await dynamoUtils.scan({
-        TableName: 'users',
+        TableName: dynamoUtils.TABLES.USERS,
         FilterExpression: 'uid = :uid OR email = :email OR uname = :uname',
         ExpressionAttributeValues: {
             ':uid': uid,
@@ -63,7 +63,10 @@ async function createUser(req, res) {
 
     // Create the new user
     const bearer = await generateBearerToken({ uid }, 'web');
-    await dynamoUtils.put({ TableName: 'users', Item: user });
+    await dynamoUtils.put({
+        TableName: dynamoUtils.TABLES.USERS,
+        Item: user,
+    });
 
     // Return the new user data and a new bearer token for authorizing future requests
     res.json({ user, bearer });
@@ -81,7 +84,7 @@ async function updateUser(req, res) {
 
     // Check if the updated user still has a unique username and email
     const uniquenessResponse = await dynamoUtils.scan({
-        TableName: 'users',
+        TableName: dynamoUtils.TABLES.USERS,
         FilterExpression: '(email = :email or uname = :uname) and not uid = :uid',
         ExpressionAttributeValues: {
             ':uid': user.uid,
@@ -93,13 +96,17 @@ async function updateUser(req, res) {
     if (uniquenessResponse.Count > 0) throw new Error('email and username must be unique');
 
     // Update the user
-    await dynamoUtils.put({ TableName: 'users', Item: user });
+    await dynamoUtils.put({
+        TableName: dynamoUtils.TABLES.USERS,
+        Item: user,
+    });
+
     res.json(fromDbFormat(user));
 }
 
 async function deleteUser(req, res) {
     if (req.auth.uid !== req.params.uid) throw new Error('Cannot delete another user');
-    await dynamoUtils.delete({ TableName: 'users', Key: { uid: req.auth.uid } });
+    await dynamoUtils.delete({ TableName: dynamoUtils.TABLES.USERS, Key: { uid: req.auth.uid } });
 
     // TODO: Also delete all other objects owned by the user
 

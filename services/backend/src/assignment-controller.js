@@ -22,7 +22,7 @@ async function getAssignment(req, res) {
     const requestedAid = req.params.aid;
 
     const dbResponse = await dynamoUtils.get({
-        TableName: 'assignments',
+        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
         Key: { aid: requestedAid },
     });
 
@@ -37,7 +37,7 @@ async function getAssignments(req, res) {
     const requestedBy = req.auth.uid;
 
     const dbResponse = await dynamoUtils.scan({
-        TableName: 'assignments',
+        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
         FilterExpression: 'uid = :uid',
         ExpressionAttributeValues: { ':uid': requestedBy },
     });
@@ -54,7 +54,7 @@ async function createAssignment(req, res) {
     if (!assignment.dueDate) throw new Error('Missing required property: dueDate');
 
     await dynamoUtils.put({
-        TableName: 'assignments',
+        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
         Item: toDbFormat(assignment),
     });
 
@@ -65,7 +65,7 @@ async function updateAssignment(req, res) {
     const assignment = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
 
     await dynamoUtils.put({
-        TableName: 'assignments',
+        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
         Item: toDbFormat(assignment),
         ExpressionAttributeValues: { ':uid': req.auth.uid },
         ConditionExpression: 'uid = :uid',
@@ -78,7 +78,7 @@ async function deleteAssignment(req, res) {
     const requestedAid = req.params.aid;
 
     await dynamoUtils.delete({
-        TableName: 'assignments',
+        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
         Key: { aid: requestedAid },
         ExpressionAttributeValues: { ':uid': req.auth.uid },
         ConditionExpression: 'uid = :uid',
