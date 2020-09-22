@@ -3,6 +3,7 @@ const _ = require('lodash');
 const mockDbGet = jest.fn(() => ({}));
 const mockDbScan = jest.fn(() => ({}));
 const mockDbPut = jest.fn(() => ({}));
+const mockDbDelete = jest.fn(() => ({}));
 const jsonMock = jest.fn();
 
 // Mock @logan/aws
@@ -11,6 +12,7 @@ jest.doMock('@logan/aws', () => {
     mocked.dynamoUtils.get = mockDbGet;
     mocked.dynamoUtils.scan = mockDbScan;
     mocked.dynamoUtils.put = mockDbPut;
+    mocked.dynamoUtils.delete = mockDbDelete;
     mocked.secretUtils.getSecret = async () => ({ web: 'mock-secret' });
     return mocked;
 });
@@ -148,5 +150,13 @@ describe('updateUser', () => {
     });
 });
 
-// deleteUser succeeds
-// fails if deleting another user
+describe('deleteUser', () => {
+    it('Deleting yourself should not fail', async () => {
+        await usersController.deleteUser({ auth: basicUser1, params: basicUser1 }, { json: jsonMock });
+        expect(mockDbDelete).toHaveBeenCalledTimes(1);
+    });
+
+    it('Deleting another user should fail', async () => {
+        await expect(usersController.deleteUser({ auth: basicUser1, params: basicUser2 })).rejects.toThrow();
+    });
+});
