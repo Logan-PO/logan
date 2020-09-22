@@ -1,8 +1,6 @@
 const _ = require('lodash');
-const { AWS } = require('@logan/aws');
+const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
-
-const dynamo = new AWS.DynamoDB.DocumentClient();
 
 function fromDbFormat(db) {
     return {
@@ -25,12 +23,10 @@ function toDbFormat(task) {
 }
 
 async function getTask(req, res) {
-    const dbResponse = await dynamo
-        .get({
-            TableName: 'tasks',
-            Key: { tid: req.params.tid },
-        })
-        .promise();
+    const dbResponse = await dynamoUtils.get({
+        TableName: 'tasks',
+        Key: { tid: req.params.tid },
+    });
 
     if (dbResponse.Item) {
         res.json(fromDbFormat(dbResponse.Item));
@@ -40,13 +36,11 @@ async function getTask(req, res) {
 }
 
 async function getTasks(req, res) {
-    const dbResponse = await dynamo
-        .scan({
-            TableName: 'tasks',
-            FilterExpression: 'uid = :uid',
-            ExpressionAttributeValues: { ':uid': req.auth.uid },
-        })
-        .promise();
+    const dbResponse = await dynamoUtils.scan({
+        TableName: 'tasks',
+        FilterExpression: 'uid = :uid',
+        ExpressionAttributeValues: { ':uid': req.auth.uid },
+    });
 
     res.json(dbResponse.Items.map(fromDbFormat));
 }
@@ -62,7 +56,7 @@ async function createTask(req, res) {
     if (task.dueDate === undefined) throw new Error('Missing required property: dueDate');
     if (task.priority === undefined) throw new Error('Missing required property: priority');
 
-    await dynamo.put({ TableName: 'tasks', Item: toDbFormat(task) }).promise();
+    await dynamoUtils.put({ TableName: 'tasks', Item: toDbFormat(task) });
 
     res.json(task);
 }
@@ -70,14 +64,12 @@ async function createTask(req, res) {
 async function updateTask(req, res) {
     const task = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
 
-    await dynamo
-        .put({
-            TableName: 'tasks',
-            Item: toDbFormat(task),
-            ExpressionAttributeValues: { ':uid': req.auth.uid },
-            ConditionExpression: 'uid = :uid',
-        })
-        .promise();
+    await dynamoUtils.put({
+        TableName: 'tasks',
+        Item: toDbFormat(task),
+        ExpressionAttributeValues: { ':uid': req.auth.uid },
+        ConditionExpression: 'uid = :uid',
+    });
 
     res.json(task);
 }
@@ -85,14 +77,12 @@ async function updateTask(req, res) {
 async function deleteTask(req, res) {
     const requestedTid = req.params.tid;
 
-    await dynamo
-        .delete({
-            TableName: 'tasks',
-            Key: { tid: requestedTid },
-            ExpressionAttributeValues: { ':uid': req.auth.uid },
-            ConditionExpression: 'uid = :uid',
-        })
-        .promise();
+    await dynamoUtils.delete({
+        TableName: 'tasks',
+        Key: { tid: requestedTid },
+        ExpressionAttributeValues: { ':uid': req.auth.uid },
+        ConditionExpression: 'uid = :uid',
+    });
 
     res.json({ success: true });
 }
