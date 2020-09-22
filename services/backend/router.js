@@ -8,11 +8,6 @@ const assignmentController = require('./src/assignment-controller');
 // A map of routes/HTTP methods to handlers
 // Add authRequired: true to a route to indicate that the user must be logged in
 const handlers = {
-    '/': {
-        get: {
-            handler: require('./src/hello-world').rootHandler,
-        },
-    },
     '/auth/verify': {
         post: {
             handler: require('./src/verify-id-token').verifyIdToken,
