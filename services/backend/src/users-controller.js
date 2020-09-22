@@ -78,12 +78,7 @@ async function createUser(req, res) {
 async function updateUser(req, res) {
     if (req.auth.uid !== req.params.uid) throw new Error('Cannot modify another user');
 
-    const user = {
-        uid: req.auth.uid,
-        name: req.body.name || req.auth.name,
-        email: req.body.email || req.auth.email,
-        uname: req.body.username || req.auth.username,
-    };
+    const user = _.merge({}, req.auth, req.body, req.params);
 
     // Check if the updated user still has a unique username and email
     const uniquenessResponse = await dynamo
@@ -93,7 +88,7 @@ async function updateUser(req, res) {
             ExpressionAttributeValues: {
                 ':uid': user.uid,
                 ':email': user.email,
-                ':uname': user.uname,
+                ':uname': user.username,
             },
         })
         .promise();
@@ -101,8 +96,8 @@ async function updateUser(req, res) {
     if (uniquenessResponse.Count > 0) throw new Error('email and username must be unique');
 
     // Update the user
-    await dynamo.put({ TableName: 'users', Item: user }).promise();
-    res.json(fromDbFormat(user));
+    await dynamo.put({ TableName: 'users', Item: toDbFormat(user) }).promise();
+    res.json(user);
 }
 
 async function deleteUser(req, res) {
