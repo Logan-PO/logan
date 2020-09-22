@@ -23,7 +23,7 @@ async function getUser(req, res) {
     const requestedUid = req.params.uid;
 
     // If you request yourself, just return without querying
-    if (requestedUid === 'me') {
+    if (requestedUid === 'me' || requestedUid === req.auth.uid) {
         res.json(_.pick(req.auth, ['uid', 'name', 'email', 'username']));
         return;
     }
