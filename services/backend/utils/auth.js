@@ -1,8 +1,6 @@
 const _ = require('lodash');
-const { AWS, secretUtils } = require('@logan/aws');
+const { secretUtils, dynamoUtils } = require('@logan/aws');
 const jwt = require('jsonwebtoken');
-
-const dynamo = new AWS.DynamoDB.DocumentClient();
 
 const UNAUTHORIZED_ACTIONS = {
     CREATE_USER: 'create_user',
@@ -42,12 +40,10 @@ async function handleAuth(req, authRequired = false, unauthedAction) {
     if (unauthedAction && payload.action !== unauthedAction) throw new Error('Not authorized');
 
     if (payload.uid) {
-        const response = await dynamo
-            .get({
-                TableName: 'users',
-                Key: { uid: payload.uid },
-            })
-            .promise();
+        const response = await dynamoUtils.get({
+            TableName: 'users',
+            Key: { uid: payload.uid },
+        });
 
         if (response.Item) {
             req.auth = {

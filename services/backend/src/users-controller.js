@@ -1,9 +1,7 @@
 const _ = require('lodash');
-const { AWS } = require('@logan/aws');
+const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const { generateBearerToken } = require('../utils/auth');
-
-const dynamo = new AWS.DynamoDB.DocumentClient();
 
 function fromDbFormat(db) {
     return {
@@ -28,12 +26,10 @@ async function getUser(req, res) {
         return;
     }
 
-    const dbResponse = await dynamo
-        .get({
-            TableName: 'users',
-            Key: { uid: requestedUid },
-        })
-        .promise();
+    const dbResponse = await dynamoUtils.get({
+        TableName: 'users',
+        Key: { uid: requestedUid },
+    });
 
     if (dbResponse.Item) {
         res.json(fromDbFormat(dbResponse.Item));
@@ -53,23 +49,21 @@ async function createUser(req, res) {
     if (!user.uname) throw new Error('Missing required property: username');
 
     // Make sure uid, email, and username are all unique
-    const uniquenessResponse = await dynamo
-        .scan({
-            TableName: 'users',
-            FilterExpression: 'uid = :uid OR email = :email OR uname = :uname',
-            ExpressionAttributeValues: {
-                ':uid': uid,
-                ':email': user.email,
-                ':uname': user.uname,
-            },
-        })
-        .promise();
+    const uniquenessResponse = await dynamoUtils.scan({
+        TableName: 'users',
+        FilterExpression: 'uid = :uid OR email = :email OR uname = :uname',
+        ExpressionAttributeValues: {
+            ':uid': uid,
+            ':email': user.email,
+            ':uname': user.uname,
+        },
+    });
 
     if (uniquenessResponse.Count > 0) throw new Error('uid, email, and username must all be unique');
 
     // Create the new user
     const bearer = await generateBearerToken({ uid }, 'web');
-    await dynamo.put({ TableName: 'users', Item: user }).promise();
+    await dynamoUtils.put({ TableName: 'users', Item: user });
 
     // Return the new user data and a new bearer token for authorizing future requests
     res.json({ user, bearer });
@@ -81,28 +75,26 @@ async function updateUser(req, res) {
     const user = _.merge({}, req.auth, req.body, req.params);
 
     // Check if the updated user still has a unique username and email
-    const uniquenessResponse = await dynamo
-        .scan({
-            TableName: 'users',
-            FilterExpression: '(email = :email or uname = :uname) and not uid = :uid',
-            ExpressionAttributeValues: {
-                ':uid': user.uid,
-                ':email': user.email,
-                ':uname': user.username,
-            },
-        })
-        .promise();
+    const uniquenessResponse = await dynamoUtils.scan({
+        TableName: 'users',
+        FilterExpression: '(email = :email or uname = :uname) and not uid = :uid',
+        ExpressionAttributeValues: {
+            ':uid': user.uid,
+            ':email': user.email,
+            ':uname': user.username,
+        },
+    });
 
     if (uniquenessResponse.Count > 0) throw new Error('email and username must be unique');
 
     // Update the user
-    await dynamo.put({ TableName: 'users', Item: toDbFormat(user) }).promise();
+    await dynamoUtils.put({ TableName: 'users', Item: user });
     res.json(user);
 }
 
 async function deleteUser(req, res) {
     if (req.auth.uid !== req.params.uid) throw new Error('Cannot delete another user');
-    await dynamo.delete({ TableName: 'users', Key: { uid: req.auth.uid } }).promise();
+    await dynamoUtils.delete({ TableName: 'users', Key: { uid: req.auth.uid } });
 
     // TODO: Also delete all other objects owned by the user
 
