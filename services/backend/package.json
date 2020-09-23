@@ -14,7 +14,7 @@
     "test": "jest --passWithNoTests",
     "start": "node server.js",
     "debug": "nodemon server.js",
-    "bundle": "zip -rFS ../../archive.zip * -x .DS_Store \\*.md && cd ../../ && zip -r archive.zip .elasticbeanstalk"
+    "bundle": "zip -rFS ../../artifact.zip * -x .DS_Store \\*.md && cd ../../ && zip -r artifact.zip .elasticbeanstalk"
   },
   "bugs": {
     "url": "https://github.com/beasterbro/logan/issues"
