@@ -1,8 +1,6 @@
 const _ = require('lodash');
-const { AWS } = require('@logan/aws');
+const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
-
-const dynamo = new AWS.DynamoDB.DocumentClient();
 
 function fromDbFormat(db) {
     return {
@@ -23,12 +21,10 @@ function toDbFormat(assignment) {
 async function getAssignment(req, res) {
     const requestedAid = req.params.aid;
 
-    const dbResponse = await dynamo
-        .get({
-            TableName: 'assignments',
-            Key: { aid: requestedAid },
-        })
-        .promise();
+    const dbResponse = await dynamoUtils.get({
+        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+        Key: { aid: requestedAid },
+    });
 
     if (dbResponse.Item) {
         res.json(fromDbFormat(dbResponse.Item));
@@ -40,13 +36,11 @@ async function getAssignment(req, res) {
 async function getAssignments(req, res) {
     const requestedBy = req.auth.uid;
 
-    const dbResponse = await dynamo
-        .scan({
-            TableName: 'assignments',
-            FilterExpression: 'uid = :uid',
-            ExpressionAttributeValues: { ':uid': requestedBy },
-        })
-        .promise();
+    const dbResponse = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+        FilterExpression: 'uid = :uid',
+        ExpressionAttributeValues: { ':uid': requestedBy },
+    });
 
     res.json(dbResponse.Items.map(fromDbFormat));
 }
@@ -59,12 +53,10 @@ async function createAssignment(req, res) {
     if (!assignment.title) throw new Error('Missing required property: title');
     if (!assignment.dueDate) throw new Error('Missing required property: dueDate');
 
-    await dynamo
-        .put({
-            TableName: 'assignments',
-            Item: toDbFormat(assignment),
-        })
-        .promise();
+    await dynamoUtils.put({
+        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+        Item: toDbFormat(assignment),
+    });
 
     res.json(assignment);
 }
@@ -72,14 +64,12 @@ async function createAssignment(req, res) {
 async function updateAssignment(req, res) {
     const assignment = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
 
-    await dynamo
-        .put({
-            TableName: 'assignments',
-            Item: toDbFormat(assignment),
-            ExpressionAttributeValues: { ':uid': req.auth.uid },
-            ConditionExpression: 'uid = :uid',
-        })
-        .promise();
+    await dynamoUtils.put({
+        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+        Item: toDbFormat(assignment),
+        ExpressionAttributeValues: { ':uid': req.auth.uid },
+        ConditionExpression: 'uid = :uid',
+    });
 
     res.json(assignment);
 }
@@ -87,14 +77,12 @@ async function updateAssignment(req, res) {
 async function deleteAssignment(req, res) {
     const requestedAid = req.params.aid;
 
-    await dynamo
-        .delete({
-            TableName: 'assignments',
-            Key: { aid: requestedAid },
-            ExpressionAttributeValues: { ':uid': req.auth.uid },
-            ConditionExpression: 'uid = :uid',
-        })
-        .promise();
+    await dynamoUtils.delete({
+        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+        Key: { aid: requestedAid },
+        ExpressionAttributeValues: { ':uid': req.auth.uid },
+        ConditionExpression: 'uid = :uid',
+    });
 
     res.json({ success: true });
 }
