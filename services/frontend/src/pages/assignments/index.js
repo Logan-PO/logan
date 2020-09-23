@@ -4,6 +4,7 @@ import {Link, navigate} from "gatsby"
 import Container from "../../components/containter"
 import {addAssignment, deleteAssignment} from "../../components/AssignmentsPageComponents/AssignmentsPageActions";
 import {AssignmentFormLocal, gotoAssignmentsForm, store,HomePageLocal} from "../index";
+import {formatAssignmentsForView} from "../../components/AssignmentsPageComponents/AssignmentListFormat";
 /**
  * The React component that shows the UI for the assignments feature
  * @type {({color: string, name: string, id: number, class: string, desc: string}|{color: string, name: string, id: number, class: string, desc: string}|{color: string, name: string, id: number, class: string, desc: string})[]}
@@ -32,19 +33,11 @@ export let dispatch = []
 function DisplayAssignments() {
     const assignment = useSelector(state => state.assignment)
     const assignmentDay = useSelector(state => state.assignmentDay)
-dispatch =  useDispatch();
+    dispatch =  useDispatch();
+
 
 //TODO:extract
-    let itemsOfGivenDay = assignmentDay.list.map((item) =>
-        <li key={item.id}>
-            <h3 style={{backgroundColor:item.color}}>{item.class} </h3>
-            <div>Assignment: {item.name}
-                <div>Desc: {item.desc} </div>
-                <div>Due: {item.due} </div>
-                <button style={{backgroundColor:'darkgreen'}}>Edit Assignment</button>
-                <button style={{backgroundColor:'red'}} >Delete Assignment</button>
-            </div>
-        </li>)
+    let itemsOfGivenDay = formatAssignmentsForView(assignmentDay)
 
 
     //get all assignment days and parse them
