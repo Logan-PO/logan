@@ -2,6 +2,7 @@ const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const { generateBearerToken } = require('../utils/auth');
+const requestValidator = require('../utils/request-validator');
 
 function fromDbFormat(db) {
     return {
@@ -41,12 +42,8 @@ async function getUser(req, res) {
 async function createUser(req, res) {
     const uid = uuid();
 
-    const user = { uid, ...req.body };
-
-    // Make sure all required properties exist
-    if (!user.name) throw new Error('Missing required property: name');
-    if (!user.email) throw new Error('Missing required property: email');
-    if (!user.username) throw new Error('Missing required property: username');
+    const user = requestValidator.requireBodyParams(req, ['name', 'email', 'username']);
+    user.uid = uid;
 
     // Make sure uid, email, and username are all unique
     const uniquenessResponse = await dynamoUtils.scan({
@@ -75,6 +72,7 @@ async function createUser(req, res) {
 async function updateUser(req, res) {
     if (req.auth.uid !== req.params.uid) throw new Error('Cannot modify another user');
 
+    requestValidator.requireBodyParams(req, ['name', 'email', 'username']);
     const user = _.merge({}, req.auth, req.body, req.params);
 
     // Check if the updated user still has a unique username and email
