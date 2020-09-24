@@ -10,7 +10,9 @@ const basicCourse = {
     color: '#000000',
 };
 
+// eslint-disable-next-line import/newline-after-import
 const coursesController = require('./courses-controller');
+const { toDbFormat, fromDbFormat } = coursesController.__test_only__;
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -21,17 +23,17 @@ describe('Schema conversion tests', () => {
     it('toDbFormat ignores invalid props', () => {
         const invalid = { invalidProp: 'watch out!', ...basicCourse };
 
-        const formatted = coursesController.__test_only__.toDbFormat(invalid);
+        const formatted = toDbFormat(invalid);
         expect(formatted).not.toHaveProperty('invalidProp');
     });
 
     it('fromDbFormat ignores invalid props', () => {
         const invalid = {
             invalidProp: 'watch out!',
-            ...coursesController.__test_only__.toDbFormat(basicCourse),
+            ...toDbFormat(basicCourse),
         };
 
-        const formatted = coursesController.__test_only__.fromDbFormat(invalid);
+        const formatted = fromDbFormat(invalid);
         expect(formatted).not.toHaveProperty('invalidProp');
     });
 });

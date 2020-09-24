@@ -11,7 +11,9 @@ const basicTerm = {
     endDate: dayjs().add(20, 'days'),
 };
 
+// eslint-disable-next-line import/newline-after-import
 const termsController = require('./terms-controller');
+const { toDbFormat, fromDbFormat } = termsController.__test_only__;
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -22,17 +24,17 @@ describe('Schema conversion tests', () => {
     it('toDbFormat ignores invalid props', () => {
         const invalidTerm = { invalidProp: 'watch out!', ...basicTerm };
 
-        const formatted = termsController.__test_only__.toDbFormat(invalidTerm);
+        const formatted = toDbFormat(invalidTerm);
         expect(formatted).not.toHaveProperty('invalidProp');
     });
 
     it('fromDbFormat ignores invalid props', () => {
         const invalidTerm = {
             invalidProp: 'watch out!',
-            ...termsController.__test_only__.toDbFormat(basicTerm),
+            ...toDbFormat(basicTerm),
         };
 
-        const formatted = termsController.__test_only__.fromDbFormat(invalidTerm);
+        const formatted = fromDbFormat(invalidTerm);
         expect(formatted).not.toHaveProperty('invalidProp');
     });
 });
