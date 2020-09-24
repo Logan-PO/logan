@@ -91,6 +91,7 @@ async function deleteTerm(req, res) {
 }
 
 module.exports = {
+    __test_only__: { fromDbFormat, toDbFormat },
     getTerm,
     getTerms,
     createTerm,
