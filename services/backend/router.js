@@ -5,6 +5,7 @@ const usersController = require('./src/users-controller');
 const tasksController = require('./src/tasks-controller');
 const assignmentsController = require('./src/assignments-controller');
 const termsController = require('./src/terms-controller');
+const holidaysController = require('./src/holidays-controller');
 const coursesController = require('./src/courses-controller');
 
 const unauthedRoutes = {
@@ -51,6 +52,15 @@ const authedRoutes = {
     '/terms': {
         get: termsController.getTerms,
         post: termsController.createTerm,
+    },
+    '/holidays/:hid': {
+        get: holidaysController.getHoliday,
+        put: holidaysController.updateHoliday,
+        delete: holidaysController.deleteHoliday,
+    },
+    '/holidays': {
+        get: holidaysController.getHolidays,
+        post: holidaysController.createHoliday,
     },
     '/courses/:cid': {
         get: coursesController.getCourse,

@@ -7,6 +7,7 @@ const TABLES = {
     TASKS: 'tasks',
     ASSIGNMENTS: 'assignments',
     TERMS: 'terms',
+    HOLIDAYS: 'holidays',
     COURSES: 'courses',
 };
 
