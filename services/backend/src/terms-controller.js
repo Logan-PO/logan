@@ -23,7 +23,7 @@ function toDbFormat(term) {
 }
 
 async function getTerm(req, res) {
-    const requestedTid = req.params.Tid;
+    const requestedTid = req.params.tid;
 
     const dbResponse = await dynamoUtils.get({
         TableName: dynamoUtils.TABLES.TERMS,

@@ -5,6 +5,7 @@ const usersController = require('./src/users-controller');
 const tasksController = require('./src/tasks-controller');
 const assignmentsController = require('./src/assignments-controller');
 const termsController = require('./src/terms-controller');
+const coursesController = require('./src/courses-controller');
 
 const unauthedRoutes = {
     '/auth/verify': {
@@ -50,6 +51,15 @@ const authedRoutes = {
     '/terms': {
         get: termsController.getTerms,
         post: termsController.createTerm,
+    },
+    '/courses/:cid': {
+        get: coursesController.getCourse,
+        put: coursesController.updateCourse,
+        delete: coursesController.deleteCourse,
+    },
+    '/courses': {
+        get: coursesController.getCourses,
+        post: coursesController.createCourse,
     },
 };
 
