@@ -9,6 +9,7 @@ const TABLES = {
     TERMS: 'terms',
     HOLIDAYS: 'holidays',
     COURSES: 'courses',
+    SECTIONS: 'sections',
 };
 
 function get(params) {

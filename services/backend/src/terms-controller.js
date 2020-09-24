@@ -67,6 +67,8 @@ async function createTerm(req, res) {
 async function updateTerm(req, res) {
     const term = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
 
+    requestValidator.requireBodyParams(req, ['title', 'startDate', 'endDate']);
+
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.TERMS,
         Item: toDbFormat(term),

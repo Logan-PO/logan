@@ -67,6 +67,8 @@ async function createHoliday(req, res) {
 async function updateHoliday(req, res) {
     const holiday = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
 
+    requestValidator.requireBodyParams(req, ['tid', 'title', 'startDate', 'endDate']);
+
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.HOLIDAYS,
         Item: toDbFormat(holiday),

@@ -64,6 +64,8 @@ async function createCourse(req, res) {
 async function updateCourse(req, res) {
     const course = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
 
+    requestValidator.requireBodyParams(req, ['tid', 'title', 'color']);
+
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.COURSES,
         Item: toDbFormat(course),

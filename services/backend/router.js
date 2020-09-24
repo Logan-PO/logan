@@ -7,6 +7,7 @@ const assignmentsController = require('./src/assignments-controller');
 const termsController = require('./src/terms-controller');
 const holidaysController = require('./src/holidays-controller');
 const coursesController = require('./src/courses-controller');
+const sectionsController = require('./src/sections-controller');
 
 const unauthedRoutes = {
     '/auth/verify': {
@@ -70,6 +71,15 @@ const authedRoutes = {
     '/courses': {
         get: coursesController.getCourses,
         post: coursesController.createCourse,
+    },
+    '/sections/:sid': {
+        get: sectionsController.getSection,
+        put: sectionsController.updateSection,
+        delete: sectionsController.deleteSection,
+    },
+    '/sections': {
+        get: sectionsController.getSections,
+        post: sectionsController.createSection,
     },
 };
 
