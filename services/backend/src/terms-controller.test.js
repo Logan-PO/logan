@@ -1,5 +1,5 @@
 const { v4: uuid } = require('uuid');
-const moment = require('moment');
+const dayjs = require('dayjs');
 
 const basicUser = { uid: uuid() };
 
@@ -7,8 +7,8 @@ const basicTerm = {
     tid: uuid(),
     uid: basicUser.uid,
     title: 'Basic Term 1',
-    startDate: moment(),
-    endDate: moment().add(20, 'days'),
+    startDate: dayjs(),
+    endDate: dayjs().add(20, 'days'),
 };
 
 const termsController = require('./terms-controller');

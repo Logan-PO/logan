@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const moment = require('moment');
+const dayjs = require('dayjs');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const requestValidator = require('../utils/request-validator');
@@ -9,8 +9,8 @@ const DATE_FORMAT = 'M/D/YYYY';
 function fromDbFormat(db) {
     return {
         ..._.pick(db, ['uid', 'tid', 'title']),
-        startDate: moment(db.sd, DATE_FORMAT).startOf('day'),
-        endDate: moment(db.ed, DATE_FORMAT).endOf('day'),
+        startDate: dayjs(db.sd, DATE_FORMAT).startOf('day'),
+        endDate: dayjs(db.ed, DATE_FORMAT).endOf('day'),
     };
 }
 
