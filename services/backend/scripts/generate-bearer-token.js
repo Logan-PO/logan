@@ -20,6 +20,8 @@ async function run() {
         const bearer = await generateBearerToken({ uid: user.uid }, clientType);
         execSync(`echo ${bearer} | pbcopy`);
         console.log('Bearer token copied to clipboard');
+        console.log();
+        console.log(bearer);
     } else {
         throw new Error('User not found');
     }
