@@ -2,17 +2,12 @@ const _ = require('lodash');
 const bodyParser = require('body-parser');
 const auth = require('./utils/auth');
 const usersController = require('./src/users-controller');
-const taskController = require('./src/task-controller');
-const assignmentController = require('./src/assignment-controller');
+const tasksController = require('./src/tasks-controller');
+const assignmentsController = require('./src/assignments-controller');
 
 // A map of routes/HTTP methods to handlers
 // Add authRequired: true to a route to indicate that the user must be logged in
 const handlers = {
-    '/': {
-        get: {
-            handler: require('./src/hello-world').rootHandler,
-        },
-    },
     '/auth/verify': {
         post: {
             handler: require('./src/verify-id-token').verifyIdToken,
@@ -41,49 +36,49 @@ const handlers = {
     '/assignments/:aid': {
         get: {
             authRequired: true,
-            handler: assignmentController.getAssignment,
+            handler: assignmentsController.getAssignment,
         },
         put: {
             authRequired: true,
-            handler: assignmentController.updateAssignment,
+            handler: assignmentsController.updateAssignment,
         },
         delete: {
             authRequired: true,
-            handler: assignmentController.deleteAssignment,
+            handler: assignmentsController.deleteAssignment,
         },
     },
     '/assignments': {
         get: {
             authRequired: true,
-            handler: assignmentController.getAssignments,
+            handler: assignmentsController.getAssignments,
         },
         post: {
             authRequired: true,
-            handler: assignmentController.createAssignment,
+            handler: assignmentsController.createAssignment,
         },
     },
     '/tasks/:tid': {
         get: {
             authRequired: true,
-            handler: taskController.getTask,
+            handler: tasksController.getTask,
         },
         put: {
             authRequired: true,
-            handler: taskController.updateTask,
+            handler: tasksController.updateTask,
         },
         delete: {
             authRequired: true,
-            handler: taskController.deleteTask,
+            handler: tasksController.deleteTask,
         },
     },
     '/tasks': {
         get: {
             authRequired: true,
-            handler: taskController.getTasks,
+            handler: tasksController.getTasks,
         },
         post: {
             authRequired: true,
-            handler: taskController.createTask,
+            handler: tasksController.createTask,
         },
     },
 };
