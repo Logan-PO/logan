@@ -4,6 +4,7 @@ const auth = require('./utils/auth');
 const usersController = require('./src/users-controller');
 const tasksController = require('./src/tasks-controller');
 const assignmentsController = require('./src/assignments-controller');
+const termsController = require('./src/terms-controller');
 
 // A map of routes/HTTP methods to handlers
 // Add authRequired: true to a route to indicate that the user must be logged in
@@ -79,6 +80,30 @@ const handlers = {
         post: {
             authRequired: true,
             handler: tasksController.createTask,
+        },
+    },
+    '/terms/:tid': {
+        get: {
+            authRequired: true,
+            handler: termsController.getTerm,
+        },
+        put: {
+            authRequired: true,
+            handler: termsController.updateTerm,
+        },
+        delete: {
+            authRequired: true,
+            handler: termsController.deleteTerm,
+        },
+    },
+    '/terms': {
+        get: {
+            authRequired: true,
+            handler: termsController.getTerms,
+        },
+        post: {
+            authRequired: true,
+            handler: termsController.createTerm,
         },
     },
 };

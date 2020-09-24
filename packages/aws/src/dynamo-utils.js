@@ -6,6 +6,7 @@ const TABLES = {
     USERS: 'users',
     TASKS: 'tasks',
     ASSIGNMENTS: 'assignments',
+    TERMS: 'terms',
 };
 
 function get(params) {
