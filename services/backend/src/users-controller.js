@@ -21,7 +21,7 @@ async function getUser(req, res) {
     const requestedUid = req.params.uid;
 
     // If you request yourself, just return without querying
-    if (requestedUid === 'me') {
+    if (requestedUid === 'me' || requestedUid === req.auth.uid) {
         res.json(_.pick(req.auth, ['uid', 'name', 'email', 'username']));
         return;
     }
@@ -41,12 +41,12 @@ async function getUser(req, res) {
 async function createUser(req, res) {
     const uid = uuid();
 
-    const user = toDbFormat({ uid, ...req.body });
+    const user = { uid, ...req.body };
 
     // Make sure all required properties exist
     if (!user.name) throw new Error('Missing required property: name');
     if (!user.email) throw new Error('Missing required property: email');
-    if (!user.uname) throw new Error('Missing required property: username');
+    if (!user.username) throw new Error('Missing required property: username');
 
     // Make sure uid, email, and username are all unique
     const uniquenessResponse = await dynamoUtils.scan({
@@ -55,7 +55,7 @@ async function createUser(req, res) {
         ExpressionAttributeValues: {
             ':uid': uid,
             ':email': user.email,
-            ':uname': user.uname,
+            ':uname': user.username,
         },
     });
 
@@ -65,7 +65,7 @@ async function createUser(req, res) {
     const bearer = await generateBearerToken({ uid }, 'web');
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.USERS,
-        Item: user,
+        Item: toDbFormat(user),
     });
 
     // Return the new user data and a new bearer token for authorizing future requests
@@ -75,12 +75,7 @@ async function createUser(req, res) {
 async function updateUser(req, res) {
     if (req.auth.uid !== req.params.uid) throw new Error('Cannot modify another user');
 
-    const user = {
-        uid: req.auth.uid,
-        name: req.body.name || req.auth.name,
-        email: req.body.email || req.auth.email,
-        uname: req.body.username || req.auth.username,
-    };
+    const user = _.merge({}, req.auth, req.body, req.params);
 
     // Check if the updated user still has a unique username and email
     const uniquenessResponse = await dynamoUtils.scan({
@@ -89,7 +84,7 @@ async function updateUser(req, res) {
         ExpressionAttributeValues: {
             ':uid': user.uid,
             ':email': user.email,
-            ':uname': user.uname,
+            ':uname': user.username,
         },
     });
 
@@ -98,10 +93,10 @@ async function updateUser(req, res) {
     // Update the user
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.USERS,
-        Item: user,
+        Item: toDbFormat(user),
     });
 
-    res.json(fromDbFormat(user));
+    res.json(user);
 }
 
 async function deleteUser(req, res) {
@@ -114,6 +109,7 @@ async function deleteUser(req, res) {
 }
 
 module.exports = {
+    __test_only__: { toDbFormat, fromDbFormat },
     getUser,
     createUser,
     updateUser,
