@@ -18,7 +18,8 @@
     "gatsby": "^2.24.60",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-google-login": "^5.1.21"
+    "react-google-login": "^5.1.21",
+    "redux": "^4.0.5"
   },
   "repository": {
     "type": "git",
