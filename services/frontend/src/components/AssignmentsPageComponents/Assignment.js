@@ -36,10 +36,10 @@ class Assignment extends React.Component {
                 <div>Desc: {this.state.desc} </div>
                 <div>Day: {this.state.day} </div>
                 <button style={{backgroundColor: 'darkgreen'}}
-                        onClick={/*this.editAssignment(get the info from the form state)*/}>Edit Assignment
+                        >Edit Assignment
                 </button>
                 <button style={{backgroundColor: 'red'}}
-                        onClick={/*AssignmentDay.deleteAssignment(this.state.id)*/}>Delete Assignment
+                        >Delete Assignment
                 </button>
             </div>
         );

@@ -9,7 +9,6 @@ const composeEnhancers =
 /**
  * ACTIONS
  */
-import NameForm from './addAssignmentForm'
 import Assignment from "./Assignment";
 
 /**
@@ -51,7 +50,7 @@ export const editAssignment = (assignment,args) => {
  * @param action
  * @returns {{assignmentCatalog: AssignmentCatalog}}
  */
-const reducer = (state = {assignmentCatalog:new AssignmentCatalog({list: []}) },action) => {
+const reducer = (state = {assignmentCatalog:{list: []} },action) => {
     const tempAssignmentCatalog = state.assignmentCatalog
     switch (action.type){
         case 'addAssignment':
