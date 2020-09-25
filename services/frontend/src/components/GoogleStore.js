@@ -1,4 +1,5 @@
 import { createStore } from 'redux';
+import { devToolsEnhancer } from 'redux-devtools-extension';
 
 //A login action
 export const login = () => ({ type: 'login' });
@@ -22,4 +23,4 @@ export const loginReducer = (state = { isLoggedIn: false }, action) => {
 };
 
 //Creating the store
-export const googleStore = createStore(loginReducer);
+export const googleStore = createStore(loginReducer, devToolsEnhancer(undefined));
