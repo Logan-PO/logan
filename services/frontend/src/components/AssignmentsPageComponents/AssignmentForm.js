@@ -1,20 +1,22 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
+import {myInput} from "../Field";
 
 class AssignmentForm extends Component {
+
     render () {
         const {handleSubmit} = this.props;
         return (
             <form onSubmit={handleSubmit}>
                 <Field
                     name="username"
-                    component="input"
+                    component={myInput}
                     type="text"
                     placeholder="Username"
                 />
                 <Field
                     name="password"
-                    component="input"
+                    component={myInput}
                     type="password"
                     placeholder="Password"
                 />
@@ -25,7 +27,7 @@ class AssignmentForm extends Component {
 }
 
 AssignmentForm = reduxForm ({
-    form: 'assignmentform',
+    form: 'assignmentForm',
 }) (AssignmentForm);
 
 export default AssignmentForm;

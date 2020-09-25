@@ -1,8 +1,5 @@
 import React from "react"
 import {Provider} from 'react-redux'
-import {Link, navigate} from "gatsby"
-import Container from "../../components/containter"
-import {AssignmentFormLocal, gotoAssignmentsForm, HomePageLocal} from "../index";
 import {store} from "../../components/AssignmentsPageComponents/store";
 import AssignmentCatalog from "../../components/AssignmentsPageComponents/AssignmentCatalog";
 /**
