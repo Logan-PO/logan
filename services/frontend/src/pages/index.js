@@ -2,11 +2,8 @@ import React from "react"
 import "../styles/global.css"
 import { Link,navigate } from "gatsby"
 import Container from "../components/containter"
-import configureStore from "../components/store";
 
-export const store = configureStore();
 
-store.subscribe( () => console.log(store.getState()))
 
 export const gotoAssignments = () => {
     navigate('/assignments/')

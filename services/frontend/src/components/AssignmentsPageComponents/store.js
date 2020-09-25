@@ -1,5 +1,4 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import createReducer from './reducers';
 
 const composeEnhancers =
     typeof window === 'object' &&
@@ -7,10 +6,13 @@ const composeEnhancers =
         ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
         : compose);
 
+export const store = createStore()
+
+/*
 export function configureStore() {
     const middlewares = [];
     const store = createStore(
-        createReducer(),
+        null,
         {},
         composeEnhancers(applyMiddleware(...middlewares))
     );
@@ -18,3 +20,4 @@ export function configureStore() {
 }
 
 export default configureStore;
+*/
