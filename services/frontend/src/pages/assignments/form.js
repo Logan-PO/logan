@@ -3,10 +3,10 @@ import {Provider} from 'react-redux';
 import {AssignmentsPageLocal, gotoAssignments} from '../index'
 import {Link} from "gatsby";
 import Container from "../../components/containter";
-import {addAssignment, store} from '../../components/AssignmentsPageComponents/store'
+import { store} from '../../components/AssignmentsPageComponents/store'
 import AssignmentForm from "../../components/AssignmentsPageComponents/AssignmentForm";
 
-
+export let newFormValues
 export default function Form() {
 
 
@@ -16,7 +16,7 @@ export default function Form() {
             <Provider store={store}>
                 <Container>
                     <AssignmentForm onSubmit = {(formValues) => {
-                        addAssignment(formValues)
+                       newFormValues = formValues
                         gotoAssignments()
                     }}/>
                     <Link to={AssignmentsPageLocal}>Cancel</Link>

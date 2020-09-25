@@ -1,4 +1,5 @@
-import {createStore, applyMiddleware, compose, combineReducers} from 'redux';
+import {createStore, compose, combineReducers} from 'redux';
+import { reducer as formReducer } from 'redux-form';
 import AssignmentCatalog from "./AssignmentCatalog";
 
 const composeEnhancers =
@@ -50,7 +51,7 @@ export const editAssignment = (assignment,args) => {
  * @param action
  * @returns {{assignmentCatalog: AssignmentCatalog}}
  */
-const reducer = (state = {assignmentCatalog:{list: []} },action) => {
+const assignmentCatalogReducer = (state = {assignmentCatalog:{list: []} },action) => {
     const tempAssignmentCatalog = state.assignmentCatalog
     switch (action.type){
         case 'addAssignment':
@@ -74,7 +75,7 @@ const reducer = (state = {assignmentCatalog:{list: []} },action) => {
     }
 }
 
-export const store = createStore(combineReducers({ AssignmentCatalog : reducer}))
+export const store = createStore(combineReducers({ assignmentCatalog : assignmentCatalogReducer, form: formReducer}))
 
 
 

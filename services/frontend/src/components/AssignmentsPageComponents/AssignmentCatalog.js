@@ -22,7 +22,7 @@ class AssignmentCatalog extends React.Component {
             <Container>
                 <h1>Assignments</h1>
                 <div><Link to= {HomePageLocal}>Back to Overview</Link></div>
-                {assignmentCatalog}
+                {assignmentCatalog.list}
                 <button style={{backgroundColor:'grey'}} onClick={() => gotoAssignmentsForm()}>
                     Add Assignment
                 </button>

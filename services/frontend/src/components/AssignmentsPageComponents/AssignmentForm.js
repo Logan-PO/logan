@@ -17,7 +17,31 @@ class AssignmentForm extends Component {
                 <Field
                     name="password"
                     component={myInput}
-                    type="password"
+                    type="text"
+                    placeholder="Password"
+                />
+                <Field
+                    name="password"
+                    component={myInput}
+                    type="text"
+                    placeholder="Password"
+                />
+                <Field
+                    name="password"
+                    component={myInput}
+                    type="text"
+                    placeholder="Password"
+                />
+                <Field
+                    name="password"
+                    component={myInput}
+                    type="text"
+                    placeholder="Password"
+                />
+                <Field
+                    name="password"
+                    component={myInput}
+                    type="text"
                     placeholder="Password"
                 />
                 <button type="submit" label="submit">Submit</button>
