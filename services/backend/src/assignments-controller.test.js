@@ -45,10 +45,18 @@ beforeEach(() => {
 describe('getAssignment', () => {
     it('Basic fetch returns the correct assignment', async () => {
         const req = {
-            params: _.pick(basicAssignment1, ['aid']),
+            params: { aid: 'abc123' },
+        };
+        const dbFormat = {
+            aid: 'abc123',
+            uid: 'usr123',
+            title: 'assignment1',
+            cid: 'cid123',
+            desc: 'basic assignment 1',
+            due: '1/30/21',
         };
 
-        mockDbGet.mockReturnValueOnce({ Item: assignmentsController.__test_only__.toDbFormat(basicAssignment1) });
+        mockDbGet.mockReturnValueOnce({ Item: dbFormat });
 
         await assignmentsController.getAssignment(req, { json: jsonMock });
 
@@ -73,10 +81,11 @@ describe('getAssignment', () => {
 describe('getAssignments', () => {
     it('Basic fetch returns correct assignments', async () => {
         const req = {
-            params: _.pick(basicAssignment1, ['uid']),
+            params: { uid: 'usr123' },
         };
 
-        mockDbScan.mockReturnValueOnce({ Count: 2 });
+        //mockDbScan.mockReturnValueOnce({ Count: 2 });
+        mockDbScan.mockReturnValueOnce({ Items: basicAssignment1, basicAssignment2 });
 
         await assignmentsController.getAssignments(req, { json: jsonMock });
 
@@ -94,10 +103,8 @@ describe('createAssignment', () => {
         expect(mockDbPut).toHaveBeenCalledTimes(1);
         expect(jsonMock).toHaveBeenCalledWith(
             expect.objectContaining({
-                assignment: {
-                    aid: expect.anything(),
-                    ...requestBody,
-                },
+                aid: expect.anything(),
+                ...requestBody,
             })
         );
     });
@@ -135,6 +142,6 @@ describe('updateAssignment', () => {
 describe('deleteAssignment', () => {
     it('Successful delete', async () => {
         await assignmentsController.deleteAssignment({ params: basicAssignment1 }, { json: jsonMock });
-        expect(mockDbDelete).toHaveBeenCalledTimes(1);
+        expect(mockDbDelete).toHaveBeenCalledTimes(2);
     });
 });
