@@ -34,7 +34,7 @@ async function getAssignment(req, res) {
 }
 
 async function getAssignments(req, res) {
-    const requestedBy = req.auth.uid;
+    const requestedBy = req.params.uid;
 
     const dbResponse = await dynamoUtils.scan({
         TableName: dynamoUtils.TABLES.ASSIGNMENTS,
@@ -62,12 +62,12 @@ async function createAssignment(req, res) {
 }
 
 async function updateAssignment(req, res) {
-    const assignment = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
+    const assignment = _.merge({}, req.body, req.params, _.pick(req.params, ['uid']));
 
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.ASSIGNMENTS,
         Item: toDbFormat(assignment),
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
+        ExpressionAttributeValues: { ':uid': req.params.uid },
         ConditionExpression: 'uid = :uid',
     });
 
@@ -80,7 +80,14 @@ async function deleteAssignment(req, res) {
     await dynamoUtils.delete({
         TableName: dynamoUtils.TABLES.ASSIGNMENTS,
         Key: { aid: requestedAid },
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
+        ExpressionAttributeValues: { ':uid': req.params.uid },
+        ConditionExpression: 'uid = :uid',
+    });
+
+    await dynamoUtils.delete({
+        TableName: dynamoUtils.TABLES.TASKS,
+        Key: { aid: requestedAid },
+        ExpressionAttributeValues: { ':uid': req.params.uid },
         ConditionExpression: 'uid = :uid',
     });
 
