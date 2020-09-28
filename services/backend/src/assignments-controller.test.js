@@ -37,6 +37,8 @@ const basicAssignment2 = {
 
 const assignmentsController = require('./assignments-controller');
 
+const { toDbFormat } = assignmentsController.__test_only__;
+
 beforeEach(() => {
     jest.clearAllMocks();
     jest.resetAllMocks();
@@ -47,16 +49,8 @@ describe('getAssignment', () => {
         const req = {
             params: { aid: 'abc123' },
         };
-        const dbFormat = {
-            aid: 'abc123',
-            uid: 'usr123',
-            title: 'assignment1',
-            cid: 'cid123',
-            desc: 'basic assignment 1',
-            due: '1/30/21',
-        };
 
-        mockDbGet.mockReturnValueOnce({ Item: dbFormat });
+        mockDbGet.mockReturnValueOnce({ Item: toDbFormat(basicAssignment1) });
 
         await assignmentsController.getAssignment(req, { json: jsonMock });
 
@@ -81,16 +75,15 @@ describe('getAssignment', () => {
 describe('getAssignments', () => {
     it('Basic fetch returns correct assignments', async () => {
         const req = {
-            params: { uid: 'usr123' },
+            auth: { uid: 'usr123' },
         };
 
-        //mockDbScan.mockReturnValueOnce({ Count: 2 });
-        mockDbScan.mockReturnValueOnce({ Items: basicAssignment1, basicAssignment2 });
+        mockDbScan.mockReturnValueOnce({ Items: [toDbFormat(basicAssignment1), toDbFormat(basicAssignment2)] });
 
         await assignmentsController.getAssignments(req, { json: jsonMock });
 
         expect(mockDbScan).toHaveBeenCalledTimes(1);
-        expect(jsonMock).toHaveBeenCalledWith(basicAssignment1, basicAssignment2);
+        expect(jsonMock).toHaveBeenCalledWith([basicAssignment1, basicAssignment2]);
     });
 });
 
@@ -130,6 +123,7 @@ describe('updateAssignment', () => {
         const req = {
             params: _.pick(basicAssignment1, ['aid']),
             body: updatedAssignment,
+            auth: { uid: 'usr123' },
         };
 
         await assignmentsController.updateAssignment(req, { json: jsonMock });
@@ -141,7 +135,7 @@ describe('updateAssignment', () => {
 
 describe('deleteAssignment', () => {
     it('Successful delete', async () => {
-        await assignmentsController.deleteAssignment({ params: basicAssignment1 }, { json: jsonMock });
-        expect(mockDbDelete).toHaveBeenCalledTimes(2);
+        await assignmentsController.deleteAssignment({ params: basicAssignment1, auth: 'usr123' }, { json: jsonMock });
+        expect(mockDbDelete).toHaveBeenCalledTimes(1);
     });
 });
