@@ -91,6 +91,7 @@ async function deleteTask(req, res) {
 }
 
 module.exports = {
+    __test_only__: { toDbFormat, fromDbFormat },
     getTask,
     getTasks,
     createTask,
