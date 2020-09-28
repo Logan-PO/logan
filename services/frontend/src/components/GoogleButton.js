@@ -29,7 +29,7 @@ class GoogleBtn extends React.Component {
                         onSuccess={login}
                         onFailure={handleLoginFailure}
                         cookiePolicy={'single_host_origin'}
-                        responseType="code,token"
+                        //responseType="code,token"
                     >
                         {}
                     </GoogleLogin>
