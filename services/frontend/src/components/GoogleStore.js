@@ -13,7 +13,7 @@ export function login(response) {
     //console.log(response.hasOwnProperty('tokenId'));
     let newType = 'do nothing';
     axios
-        .post(authURI, { tokenID: response.tokenId })
+        .post(authURI, { idToken: response.tokenId })
         .then((res) => {
             newType = 'login';
             console.log(res);
