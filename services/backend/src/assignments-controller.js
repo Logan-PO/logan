@@ -93,6 +93,7 @@ async function deleteAssignment(req, res) {
 }
 
 module.exports = {
+    __test_only__: { toDbFormat, fromDbFormat },
     getAssignment,
     getAssignments,
     createAssignment,
