@@ -4,28 +4,14 @@ const auth = require('./utils/auth');
 const usersController = require('./src/users-controller');
 const tasksController = require('./src/tasks-controller');
 const assignmentsController = require('./src/assignments-controller');
+const termsController = require('./src/terms-controller');
+const holidaysController = require('./src/holidays-controller');
+const coursesController = require('./src/courses-controller');
+const sectionsController = require('./src/sections-controller');
 
-// A map of routes/HTTP methods to handlers
-// Add authRequired: true to a route to indicate that the user must be logged in
-const handlers = {
+const unauthedRoutes = {
     '/auth/verify': {
-        post: {
-            handler: require('./src/verify-id-token').verifyIdToken,
-        },
-    },
-    '/users/:uid': {
-        get: {
-            authRequired: true,
-            handler: usersController.getUser,
-        },
-        put: {
-            authRequired: true,
-            handler: usersController.updateUser,
-        },
-        delete: {
-            authRequired: true,
-            handler: usersController.deleteUser,
-        },
+        post: require('./src/verify-id-token').verifyIdToken,
     },
     '/users': {
         post: {
@@ -33,53 +19,67 @@ const handlers = {
             handler: usersController.createUser,
         },
     },
+};
+
+const authedRoutes = {
+    '/users/:uid': {
+        get: usersController.getUser,
+        put: usersController.updateUser,
+        delete: usersController.deleteUser,
+    },
     '/assignments/:aid': {
-        get: {
-            authRequired: true,
-            handler: assignmentsController.getAssignment,
-        },
-        put: {
-            authRequired: true,
-            handler: assignmentsController.updateAssignment,
-        },
-        delete: {
-            authRequired: true,
-            handler: assignmentsController.deleteAssignment,
-        },
+        get: assignmentsController.getAssignment,
+        put: assignmentsController.updateAssignment,
+        delete: assignmentsController.deleteAssignment,
     },
     '/assignments': {
-        get: {
-            authRequired: true,
-            handler: assignmentsController.getAssignments,
-        },
-        post: {
-            authRequired: true,
-            handler: assignmentsController.createAssignment,
-        },
+        get: assignmentsController.getAssignments,
+        post: assignmentsController.createAssignment,
     },
     '/tasks/:tid': {
-        get: {
-            authRequired: true,
-            handler: tasksController.getTask,
-        },
-        put: {
-            authRequired: true,
-            handler: tasksController.updateTask,
-        },
-        delete: {
-            authRequired: true,
-            handler: tasksController.deleteTask,
-        },
+        get: tasksController.getTask,
+        put: tasksController.updateTask,
+        delete: tasksController.deleteTask,
     },
     '/tasks': {
-        get: {
-            authRequired: true,
-            handler: tasksController.getTasks,
-        },
-        post: {
-            authRequired: true,
-            handler: tasksController.createTask,
-        },
+        get: tasksController.getTasks,
+        post: tasksController.createTask,
+    },
+    '/terms/:tid': {
+        get: termsController.getTerm,
+        put: termsController.updateTerm,
+        delete: termsController.deleteTerm,
+    },
+    '/terms': {
+        get: termsController.getTerms,
+        post: termsController.createTerm,
+    },
+    '/holidays/:hid': {
+        get: holidaysController.getHoliday,
+        put: holidaysController.updateHoliday,
+        delete: holidaysController.deleteHoliday,
+    },
+    '/holidays': {
+        get: holidaysController.getHolidays,
+        post: holidaysController.createHoliday,
+    },
+    '/courses/:cid': {
+        get: coursesController.getCourse,
+        put: coursesController.updateCourse,
+        delete: coursesController.deleteCourse,
+    },
+    '/courses': {
+        get: coursesController.getCourses,
+        post: coursesController.createCourse,
+    },
+    '/sections/:sid': {
+        get: sectionsController.getSection,
+        put: sectionsController.updateSection,
+        delete: sectionsController.deleteSection,
+    },
+    '/sections': {
+        get: sectionsController.getSections,
+        post: sectionsController.createSection,
     },
 };
 
@@ -90,6 +90,22 @@ const handlers = {
 function route(app) {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
+
+    const handlers = _.merge(
+        {},
+        _.mapValues(unauthedRoutes, (methodMap) =>
+            _.mapValues(methodMap, (value) => {
+                if (typeof value === 'function') return { handler: value };
+                return value;
+            })
+        ),
+        _.mapValues(authedRoutes, (methodMap) =>
+            _.mapValues(methodMap, (value) => {
+                if (typeof value === 'function') return { authRequired: true, handler: value };
+                return { authRequired: true, ...value };
+            })
+        )
+    );
 
     for (const path of _.keys(handlers)) {
         for (const method of _.keys(handlers[path])) {

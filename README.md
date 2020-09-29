@@ -2,6 +2,12 @@
 
 A personal organizer designed for college students.
 
+## URLs
+
+Frontend: http://logan-frontend.s3-website-us-west-2.amazonaws.com
+
+Backend: http://logan-backend-dev.us-west-2.elasticbeanstalk.com
+
 ## Setup
 
 Install lerna globally: `npm i -g lerna`
