@@ -1,6 +1,7 @@
 import React from 'react';
+import {Assignment} from "./Assignment";
 
-class Assignment extends React.Component {
+export class AssignmentDay extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -12,16 +13,16 @@ class Assignment extends React.Component {
     }
 
     addAssignment(args) {
-        this.state.assignments.push(new Assignment(args))
+        this.props.assignments.push(new Assignment(args))
     }
 
     deleteAssignment(id) {
-        this.state.assignments.splice(this.state.assignments.indexOf(assignment => assignment.id === id),1)
+        this.props.assignments.splice(this.props.assignments.indexOf(assignment => assignment.id === id),1)
     }
 
     render() {
         return (
-        this.state.assignments.map((item) =>
+        this.props.assignments.map((item) =>
             <li key={item.id}>
                 <h3 style={{backgroundColor:item.color}}>{item.class} </h3>
                 {item}

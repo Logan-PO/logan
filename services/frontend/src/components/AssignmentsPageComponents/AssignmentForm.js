@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
-import {myInput} from "../Field";
+import {field} from "../Field";
 
 class AssignmentForm extends Component {
 
@@ -9,40 +9,40 @@ class AssignmentForm extends Component {
         return (
             <form onSubmit={handleSubmit}>
                 <Field
-                    name="username"
-                    component={myInput}
+                    name="class"
+                    component={field}
                     type="text"
-                    placeholder="Username"
+                    placeholder="class"
                 />
                 <Field
-                    name="password"
-                    component={myInput}
+                    name="name"
+                    component={field}
                     type="text"
-                    placeholder="Password"
+                    placeholder="name"
                 />
                 <Field
-                    name="password"
-                    component={myInput}
+                    name="desc"
+                    component={field}
                     type="text"
-                    placeholder="Password"
+                    placeholder="desc"
                 />
                 <Field
-                    name="password"
-                    component={myInput}
+                    name="day"
+                    component={field}
                     type="text"
-                    placeholder="Password"
+                    placeholder="day"
                 />
                 <Field
-                    name="password"
-                    component={myInput}
+                    name="color"
+                    component={field}
                     type="text"
-                    placeholder="Password"
+                    placeholder="color"
                 />
                 <Field
-                    name="password"
-                    component={myInput}
+                    name="id"
+                    component={field}
                     type="text"
-                    placeholder="Password"
+                    placeholder="id"
                 />
                 <button type="submit" label="submit">Submit</button>
             </form>

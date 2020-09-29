@@ -1,6 +1,6 @@
 import {createStore, compose, combineReducers} from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import AssignmentCatalog from "./AssignmentCatalog";
+import {AssignmentCatalog} from "./AssignmentCatalog";
 
 const composeEnhancers =
     typeof window === 'object' &&
@@ -24,7 +24,7 @@ export const addAssignment = assignment => {
     return{//TODO: the values in this return are temporary and should be filled in via user input through the addAssignmentForm.js
         //The assignment form values will probably be collected via an export from the assignments page
         type: 'addAssignment',
-       assignment: assignment
+        assignment: assignment
     };
 };
 
@@ -51,7 +51,9 @@ export const editAssignment = (assignment,args) => {
  * @param action
  * @returns {{assignmentCatalog: AssignmentCatalog}}
  */
-const assignmentCatalogReducer = (state = {assignmentCatalog:{list: []} },action) => {
+const assignmentCatalogReducer = (state = {
+    assignmentCatalog: new AssignmentCatalog({assignmentDayList: [] } ) },action) => {
+
     const tempAssignmentCatalog = state.assignmentCatalog
     switch (action.type){
         case 'addAssignment':
@@ -75,7 +77,9 @@ const assignmentCatalogReducer = (state = {assignmentCatalog:{list: []} },action
     }
 }
 
-export const store = createStore(combineReducers({ assignmentCatalog : assignmentCatalogReducer, form: formReducer}))
+export const store = createStore(
+    combineReducers({ AssignmentCatalog : assignmentCatalogReducer, form: formReducer}),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 
 

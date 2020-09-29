@@ -3,26 +3,35 @@ import Container from "../containter";
 import {Link} from "gatsby";
 import {AssignmentFormLocal, gotoAssignmentsForm, HomePageLocal} from "../../pages";
 import {addAssignment, deleteAssignment} from "./store";
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
+import {AssignmentDay} from "./AssignmentDay";
 
-class AssignmentCatalog extends React.Component {
-
+export class AssignmentCatalog extends React.Component {
+    assignmentDayList ;
+    constructor(props) {
+        super(props);
+        this.assignmentDayList = props.assignmentDayList
+    }
     addAssignment(args){
-        let assignmentDay =  this.state.assignmentCatalog.find(ad => ad.day === args.day)
+        let assignmentDay =
+            new AssignmentDay({assignments: [],day: args.day})
+
         assignmentDay.addAssignment(args)
+        this.assignmentDayList.push(assignmentDay)
     }
     deleteAssignment(args){
-        let assignmentDay =  this.state.assignmentCatalog.find(ad => ad.day === args.day)
+        let assignmentDay =  this.props.assignmentCatalog.find(ad => ad.day === args.day)
         assignmentDay.deleteAssignment(args.id)
     }
 
     render() {
-        let { assignmentCatalog, addAssignment, deleteAssignment } = this.props;
+
+        let { assignmentCatalog, addAssignment, deleteAssignment , formValues} = this.props;
        return ( <div>
             <Container>
                 <h1>Assignments</h1>
                 <div><Link to= {HomePageLocal}>Back to Overview</Link></div>
-                {assignmentCatalog.list}
+                {assignmentCatalog.assignmentDayList}
                 <button style={{backgroundColor:'grey'}} onClick={() => gotoAssignmentsForm()}>
                     Add Assignment
                 </button>
@@ -34,7 +43,8 @@ class AssignmentCatalog extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    assignmentCatalog: state.assignmentCatalog,
+    assignmentCatalog: state.AssignmentCatalog,
+    formValues: state.form
 });
 
 const mapDispatchToProps = {

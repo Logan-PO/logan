@@ -22,9 +22,4 @@ export default function  wrapper() {
     )
 }
 
-/**
- * A function that displays the assignment page
- * @returns {JSX.Element}
- * @constructor
- */
 

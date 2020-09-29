@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Assignment extends React.Component {
+export class Assignment extends React.Component {
     constructor(props) {
         super(props);
         //Setting up state components
