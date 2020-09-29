@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
+const requestValidator = require('../utils/request-validator');
 
 function fromDbFormat(db) {
     return {
@@ -48,6 +49,8 @@ async function getAssignments(req, res) {
 async function createAssignment(req, res) {
     const aid = uuid();
 
+    requestValidator.requireBodyParams(req, ['title', 'dueDate']);
+
     const assignment = _.merge({}, req.body, { aid }, _.pick(req.auth, ['uid']));
 
     if (!assignment.title) throw new Error('Missing required property: title');
@@ -63,6 +66,8 @@ async function createAssignment(req, res) {
 
 async function updateAssignment(req, res) {
     const assignment = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
+
+    requestValidator.requireBodyParams(req, ['title', 'dueDate']);
 
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.ASSIGNMENTS,
