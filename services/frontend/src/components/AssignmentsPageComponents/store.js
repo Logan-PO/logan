@@ -20,11 +20,16 @@ import Assignment from "./Assignment";
  * this is used to define an action that the user can take to add an assignment
  * @returns returns the attributes of the assignment that is to be created {{color: string, name: string, id: number, type: string, class: string, desc: string}}
  */
-export const addAssignment = assignment => {
+export const addAssignment = assignmentVals => {
     return{//TODO: the values in this return are temporary and should be filled in via user input through the addAssignmentForm.js
         //The assignment form values will probably be collected via an export from the assignments page
         type: 'addAssignment',
-        assignment: assignment
+        id: assignmentVals.id,
+        name: assignmentVals.name,
+        class: assignmentVals.class,
+        desc: assignmentVals.desc,
+        day: assignmentVals.day,
+        color: assignmentVals.color
     };
 };
 

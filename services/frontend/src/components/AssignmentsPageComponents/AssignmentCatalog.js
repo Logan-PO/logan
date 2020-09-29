@@ -7,16 +7,18 @@ import {connect} from 'react-redux';
 import {AssignmentDay} from "./AssignmentDay";
 
 export class AssignmentCatalog extends React.Component {
-    assignmentDayList ;
+    assignmentDayList = [];
     constructor(props) {
         super(props);
-        this.assignmentDayList = props.assignmentDayList
+       // this.assignmentDayList = props.assignmentDayList
     }
-    addAssignment(args){
+    addAssignment(assignmentObj){
         let assignmentDay =
-            new AssignmentDay({assignments: [],day: args.day})
+            new AssignmentDay()
+        assignmentDay.day = assignmentObj.state.day
+        console.log('day val: ', assignmentDay.day);
 
-        assignmentDay.addAssignment(args)
+        assignmentDay.addAssignment(assignmentObj)
         this.assignmentDayList.push(assignmentDay)
     }
     deleteAssignment(args){
