@@ -89,17 +89,21 @@ async function deleteAssignment(req, res) {
         ConditionExpression: 'uid = :uid',
     });
 
+    await handleCascadingDeletes(requestedAid);
+
+    res.json({ success: true });
+}
+
+async function handleCascadingDeletes(aid) {
     const { Items: subtasks } = await dynamoUtils.scan({
         TableName: dynamoUtils.TABLES.TASKS,
-        ExpressionAttributeValues: { ':aid': requestedAid },
+        ExpressionAttributeValues: { ':aid': aid },
         FilterExpression: ':aid = aid',
         AutoPaginate: true,
     });
 
     const deleteRequests = subtasks.map(task => ({ DeleteRequest: { Key: _.pick(task, 'tid') } }));
     await dynamoUtils.batchWrite(dynamoUtils.TABLES.TASKS, deleteRequests, true);
-
-    res.json({ success: true });
 }
 
 module.exports = {
@@ -109,4 +113,5 @@ module.exports = {
     createAssignment,
     updateAssignment,
     deleteAssignment,
+    handleCascadingDeletes,
 };

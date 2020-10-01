@@ -78,16 +78,20 @@ function deleteItem(params) {
     return dynamoClient.delete(params).promise();
 }
 
+function makeDeleteRequests(items, key) {
+    return items.map(item => ({ DeleteRequest: { Key: _.pick(item, key) } }));
+}
+
 /**
  * Perform a batchWrite on a single table
  * For info on requests formatting,
  * see: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#batchWrite-property
  * @param {string} tableName
  * @param {Object[]} requests
- * @param {boolean} [autoPaginate = false]
+ * @param {boolean} [autoPaginate = true]
  * @returns {Promise<*>}
  */
-async function batchWrite(tableName, requests, autoPaginate = false) {
+async function batchWrite(tableName, requests, autoPaginate = true) {
     if (!autoPaginate) {
         return dynamoClient
             .batchWrite({
@@ -115,4 +119,5 @@ module.exports = {
     delete: deleteItem,
     batchWrite,
     TABLES,
+    makeDeleteRequests,
 };
