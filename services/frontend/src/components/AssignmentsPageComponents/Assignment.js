@@ -1,45 +1,50 @@
 import React from 'react';
 
 export class Assignment extends React.Component {
+    class ;
+    name;
+    desc;
+    day;
+    color;
+    id;
     constructor(props) {
         super(props);
         //Setting up state components
-        this.state = {
-            class: props.class,
-            name: props.name,
-            desc: props.desc,
-            day: props.day,
-            color: props.color,
-            id: props.id
-        };
-        //Binding methods
-        this.editAssignment = this.editAssignment.bind(this);
 
+      this.updateFields(props)
+
+        //Binding methods
     }
 
     //On login, if there is an access token, update state appropriately
-    editAssignment(args) {
-        this.setState(() => ({
-            class: args.class,
-            name: args.name,
-            desc: args.desc,
-            day: args.day,
-            color: args.color,
-            id: args.id
-        }));
+    updateFields(args) {
 
+        this.class = args.class;
+        this.name = args.name;
+        this.desc = args.desc;
+        this.day = args.day;
+        this.color = args.color;
+        this.id = args.id;
+
+    }
+    editAssignment(args){
+        this.updateFields(args);
     }
 
     render() {
+        console.log('Ass: ', this)
         return (
-            <div>Assignment: {this.state.name}
-                <div>Desc: {this.state.desc} </div>
-                <div>Day: {this.state.day} </div>
+
+            <div>
+                 <h1  style={{backgroundColor: this.color}}/>
+                Assignment: {this.name}
+                <div>Desc: {this.desc} </div>
+                <div>Day: {this.day} </div>
                 <button style={{backgroundColor: 'darkgreen'}}
-                        >Edit Assignment
+                >Edit Assignment
                 </button>
                 <button style={{backgroundColor: 'red'}}
-                        >Delete Assignment
+                >Delete Assignment
                 </button>
             </div>
         );

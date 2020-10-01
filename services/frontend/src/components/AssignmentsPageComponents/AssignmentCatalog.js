@@ -15,7 +15,7 @@ export class AssignmentCatalog extends React.Component {
     addAssignment(assignmentObj){
         let assignmentDay =
             new AssignmentDay()
-        assignmentDay.day = assignmentObj.state.day
+        assignmentDay.day = assignmentObj.day
         console.log('day val: ', assignmentDay.day);
 
         assignmentDay.addAssignment(assignmentObj)
@@ -28,12 +28,19 @@ export class AssignmentCatalog extends React.Component {
 
     render() {
 
-        let { assignmentCatalog, addAssignment, deleteAssignment , formValues} = this.props;
+        function renderAssignmentDayList(){
+           return  assignmentCatalog.assignmentCatalog.assignmentDayList.map( (assDay) =>
+            assDay.render()
+            )
+        }
+
+        let { assignmentCatalog } = this.props;
+        console.log('Cat: ', assignmentCatalog.assignmentCatalog.assignmentDayList);
        return ( <div>
             <Container>
                 <h1>Assignments</h1>
                 <div><Link to= {HomePageLocal}>Back to Overview</Link></div>
-                {assignmentCatalog.assignmentDayList}
+                {renderAssignmentDayList()}
                 <button style={{backgroundColor:'grey'}} onClick={() => gotoAssignmentsForm()}>
                     Add Assignment
                 </button>
