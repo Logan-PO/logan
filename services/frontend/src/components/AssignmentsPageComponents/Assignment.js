@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { deleteAssignment, editAssignment } from './store';
 
 export class Assignment extends React.Component {
     class;
@@ -31,17 +33,32 @@ export class Assignment extends React.Component {
 
     render() {
         console.log('Ass: ', this);
+        let { editAssignment, deleteAssignment } = this.props;
+
         return (
             <div>
                 <h1 style={{ backgroundColor: this.color }}> {this.class} </h1>
                 Assignment: {this.name}
                 <div>Desc: {this.desc} </div>
                 <div>Day: {this.day} </div>
-                <button style={{ backgroundColor: 'darkgreen' }}>Edit Assignment</button>
-                <button style={{ backgroundColor: 'red' }}>Delete Assignment</button>
+                <button style={{ backgroundColor: 'darkgreen' }} onClick={editAssignment(this)}>
+                    Edit Assignment
+                </button>
+                <button style={{ backgroundColor: 'red' }} onClick={deleteAssignment(this)}>
+                    Delete Assignment
+                </button>
             </div>
         );
     }
 } //TODO: Connect this with the store to allow edit  functionality
+const mapStateToProps = (state) => ({
+    assignmentCatalog: state.AssignmentCatalog,
+    formValues: state.form,
+});
 
-export default Assignment;
+const mapDispatchToProps = {
+    editAssignment,
+    deleteAssignment,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Assignment);

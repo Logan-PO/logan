@@ -1,8 +1,7 @@
 import React from 'react';
 import Container from '../containter';
 import { Link } from 'gatsby';
-import { AssignmentFormLocal, gotoAssignmentsForm, HomePageLocal } from '../../pages';
-import { addAssignment, deleteAssignment } from './store';
+import {  gotoAssignmentsForm, HomePageLocal } from '../../pages';
 import { connect } from 'react-redux';
 import { AssignmentDay } from './AssignmentDay';
 
@@ -20,8 +19,8 @@ export class AssignmentCatalog extends React.Component {
         assignmentDay.addAssignment(assignmentObj);
         this.assignmentDayList.push(assignmentDay);
     }
-    deleteAssignment(args) {
-        let assignmentDay = this.props.assignmentCatalog.find((ad) => ad.day === args.day);
+    deleteAssignment(args) {//TODO: Check if assignmentDay exists?
+        let assignmentDay = this.assignmentCatalog.find((ad) => ad.day === args.day);
         assignmentDay.deleteAssignment(args.id);
     }
 
@@ -55,8 +54,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = {
-    addAssignment,
-    deleteAssignment,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AssignmentCatalog);

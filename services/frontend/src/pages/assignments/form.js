@@ -1,12 +1,10 @@
 import React from 'react';
 import { Provider, useDispatch } from 'react-redux';
 import { AssignmentsPageLocal, gotoAssignments } from '../index';
-import { Link, navigate } from 'gatsby';
+import { Link } from 'gatsby';
 import Container from '../../components/containter';
 import { addAssignment, store } from '../../components/AssignmentsPageComponents/store';
 import AssignmentForm from '../../components/AssignmentsPageComponents/AssignmentForm';
-
-export let newFormValues;
 
 export default function wrapper() {
     return (
