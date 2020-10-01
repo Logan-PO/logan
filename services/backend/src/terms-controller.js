@@ -2,7 +2,9 @@ const _ = require('lodash');
 const dayjs = require('dayjs');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
+const Promise = require('bluebird');
 const requestValidator = require('../utils/request-validator');
+const coursesController = require('./courses-controller');
 
 const DATE_FORMAT = 'M/D/YYYY';
 
@@ -89,7 +91,35 @@ async function deleteTerm(req, res) {
         ConditionExpression: 'uid = :uid',
     });
 
+    await handleCascadingDeletes(requestedTid);
+
     res.json({ success: true });
+}
+
+async function handleCascadingDeletes(tid) {
+    // Delete courses
+    const { Items: courses } = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.COURSES,
+        ExpressionAttributeValues: { ':tid': tid },
+        FilterExpression: ':tid = tid',
+        AutoPaginate: true,
+    });
+
+    const courseDeletes = dynamoUtils.makeDeleteRequests(courses, 'cid');
+    await dynamoUtils.batchWrite(dynamoUtils.TABLES.COURSES, courseDeletes);
+
+    await Promise.map(courses, ({ cid }) => coursesController.handleCascadingDeletes(cid), { concurrency: 3 });
+
+    // Delete holidays
+    const { Items: holidays } = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.HOLIDAYS,
+        ExpressionAttributeValues: { ':tid': tid },
+        FilterExpression: ':tid = tid',
+        AutoPaginate: true,
+    });
+
+    const holidayDeletes = dynamoUtils.makeDeleteRequests(holidays, 'aid');
+    await dynamoUtils.batchWrite(dynamoUtils.TABLES.HOLIDAYS, holidayDeletes);
 }
 
 module.exports = {
