@@ -135,7 +135,7 @@ describe('updateAssignment', () => {
 
 describe('deleteAssignment', () => {
     it('Successful delete', async () => {
-        await assignmentsController.deleteAssignment({ params: basicAssignment1, auth: 'usr123' }, { json: jsonMock });
+        await assignmentsController.deleteAssignmentHandler({ params: basicAssignment1, auth: 'usr123' }, { json: jsonMock });
         expect(mockDbDelete).toHaveBeenCalledTimes(1);
     });
 });
