@@ -13,6 +13,16 @@ const TABLES = {
     SECTIONS: 'sections',
 };
 
+const PKEYS = {
+    [TABLES.USERS]: 'uid',
+    [TABLES.TASKS]: 'tid',
+    [TABLES.ASSIGNMENTS]: 'aid',
+    [TABLES.TERMS]: 'tid',
+    [TABLES.HOLIDAYS]: 'hid',
+    [TABLES.COURSES]: 'cid',
+    [TABLES.SECTIONS]: 'sid',
+};
+
 /**
  * @param {Object} params
  * @param {string} params.TableName
@@ -118,6 +128,7 @@ module.exports = {
     put,
     delete: deleteItem,
     batchWrite,
-    TABLES,
     makeDeleteRequests,
+    TABLES,
+    PKEYS,
 };
