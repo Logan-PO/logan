@@ -89,6 +89,15 @@ async function deleteAssignment(req, res) {
         ConditionExpression: 'uid = :uid',
     });
 
+    await dynamoUtils.batchDeleteFromScan(
+        {
+            TableName: dynamoUtils.TABLES.TASKS,
+            ExpressionAttributeValues: { ':aid': requestedAid },
+            FilterExpression: ':aid = aid',
+        },
+        'tid'
+    );
+
     res.json({ success: true });
 }
 
