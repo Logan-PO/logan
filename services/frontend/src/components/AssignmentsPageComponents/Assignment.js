@@ -36,7 +36,7 @@ export class Assignment extends React.Component {
         return (
 
             <div>
-                 <h1  style={{backgroundColor: this.color}}/>
+                 <h1  style={{backgroundColor: this.color}}> {this.class} </h1>
                 Assignment: {this.name}
                 <div>Desc: {this.desc} </div>
                 <div>Day: {this.day} </div>
