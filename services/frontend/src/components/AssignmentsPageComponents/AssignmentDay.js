@@ -27,5 +27,5 @@ export class AssignmentDay extends React.Component {
             assignment.render()
         );
 
-    }
+    }//TODO: Connect this with the store to allow delete functionality
 }

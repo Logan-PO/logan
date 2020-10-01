@@ -1,7 +1,7 @@
 import React from 'react';
 
 export class Assignment extends React.Component {
-    class ;
+    class;
     name;
     desc;
     day;
@@ -49,7 +49,7 @@ export class Assignment extends React.Component {
             </div>
         );
     }
-}
+}//TODO: Connect this with the store to allow edit  functionality
 
 export default Assignment;
 

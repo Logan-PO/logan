@@ -11,3 +11,6 @@ The rest of the commands are commands included in the default gatsby package cal
  if you want to compile and test the frontend simply call the `npm start` command in **services/frontend** and after
  ~10 seconds you will be provided with the link required the website can be found at in the chat. After the first build 
  and compile it is **not** necessary to call `npm start` after every change and all you need to do is refresh the page.
+ 
+ ##Accessing the store with react-redux and redux-toolkit
+ first create a slice of the state for your part of the frontend using the `createSlice` function from redux-toolkit

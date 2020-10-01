@@ -14,11 +14,7 @@
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
   "dependencies": {
-    "gatsby": "^2.24.60",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-redux": "^7.2.1",
-    "redux": "^4.0.5"
+    "gatsby": "^2.24.60"
   },
   "repository": {
     "type": "git",
@@ -31,6 +27,9 @@
     "@reduxjs/toolkit": "^1.4.0",
     "eslint-plugin-react": "^7.20.6",
     "gatsby-link": "^2.4.14",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-redux": "^7.2.1",
     "redux-form": "^8.3.6"
   }
 }
