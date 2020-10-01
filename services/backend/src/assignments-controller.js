@@ -89,14 +89,15 @@ async function deleteAssignment(req, res) {
         ConditionExpression: 'uid = :uid',
     });
 
-    await dynamoUtils.batchDeleteFromScan(
-        {
-            TableName: dynamoUtils.TABLES.TASKS,
-            ExpressionAttributeValues: { ':aid': requestedAid },
-            FilterExpression: ':aid = aid',
-        },
-        'tid'
-    );
+    const { Items: subtasks } = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.TASKS,
+        ExpressionAttributeValues: { ':aid': requestedAid },
+        FilterExpression: ':aid = aid',
+        AutoPaginate: true,
+    });
+
+    const deleteRequests = subtasks.map(task => ({ DeleteRequest: { Key: _.pick(task, 'tid') } }));
+    await dynamoUtils.batchWrite(dynamoUtils.TABLES.TASKS, deleteRequests, true);
 
     res.json({ success: true });
 }
