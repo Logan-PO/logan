@@ -1,27 +1,27 @@
-import React from "react"
-import "../styles/global.css"
-import { Link,navigate } from "gatsby"
-import Container from "../components/containter"
-
+import React from 'react';
+import '../styles/global.css';
+import { Link, navigate } from 'gatsby';
+import Container from '../components/containter';
 
 export const gotoAssignmentsForm = () => {
-    navigate('/assignments/form')
-}
+    navigate('/assignments/form');
+};
 
 export const gotoAssignments = () => {
-    navigate('/assignments/')
-}
+    navigate('/assignments/');
+};
 
-export const AssignmentsPageLocal = '/assignments/'
-export const HomePageLocal = '../'
-export const AssignmentFormLocal = '/assignments/form'
+export const AssignmentsPageLocal = '/assignments/';
+export const HomePageLocal = '../';
+export const AssignmentFormLocal = '/assignments/form';
 
 export default function Home() {
-    return(
+    return (
+        <Container>
             <Container>
-                <Container>
-                    <h1>Overview Page (WIP)</h1><Link to={AssignmentsPageLocal}>Assignments</Link>
-                </Container>
+                <h1>Overview Page (WIP)</h1>
+                <Link to={AssignmentsPageLocal}>Assignments</Link>
             </Container>
-    )
+        </Container>
+    );
 }

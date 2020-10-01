@@ -1,31 +1,29 @@
 import React from 'react';
 
 export class AssignmentDay extends React.Component {
-    assignments = []
-    day = ''
+    assignments = [];
+    day = '';
     constructor(props) {
         super(props);
-        this.state = {
-
-        };
+        this.state = {};
         this.addAssignment = this.addAssignment.bind(this);
         this.deleteAssignment = this.deleteAssignment.bind(this);
     }
 
     addAssignment(assignmentObj) {
-        this.assignments.push(assignmentObj)
+        this.assignments.push(assignmentObj);
     }
 
     deleteAssignment(id) {
-        this.assignments.splice(this.assignments.indexOf(assignment => assignment.id === id),1)
+        this.assignments.splice(
+            this.assignments.indexOf((assignment) => assignment.id === id),
+            1
+        );
     }
 
     render() {
         console.log('AssDay Rend: ', this.assignments);
 
-      return this.assignments.map((assignment) =>
-            assignment.render()
-        );
-
-    }//TODO: Connect this with the store to allow delete functionality
+        return this.assignments.map((assignment) => assignment.render());
+    } //TODO: Connect this with the store to allow delete functionality
 }

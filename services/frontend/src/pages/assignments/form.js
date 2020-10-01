@@ -1,34 +1,34 @@
 import React from 'react';
-import {Provider, useDispatch} from 'react-redux';
-import {AssignmentsPageLocal, gotoAssignments} from '../index'
-import {Link, navigate} from "gatsby";
-import Container from "../../components/containter";
-import {addAssignment, store} from '../../components/AssignmentsPageComponents/store'
-import AssignmentForm from "../../components/AssignmentsPageComponents/AssignmentForm";
+import { Provider, useDispatch } from 'react-redux';
+import { AssignmentsPageLocal, gotoAssignments } from '../index';
+import { Link, navigate } from 'gatsby';
+import Container from '../../components/containter';
+import { addAssignment, store } from '../../components/AssignmentsPageComponents/store';
+import AssignmentForm from '../../components/AssignmentsPageComponents/AssignmentForm';
 
-export let newFormValues
+export let newFormValues;
 
-export default function wrapper(){
-    return(
+export default function wrapper() {
+    return (
         <Provider store={store}>
-            <Form/>
+            <Form />
         </Provider>
-    )
+    );
 }
 function Form() {
-    let dispatch = useDispatch()
+    let dispatch = useDispatch();
     const submitForm = (formValues) => {
-        dispatch(addAssignment(formValues))
+        dispatch(addAssignment(formValues));
         console.log('submitting Form: ', formValues);
-        navigate(AssignmentsPageLocal)
-    }
+        gotoAssignments();
+    };
 
-    return(
+    return (
         <div>
             <Container>
-                <AssignmentForm onSubmit = {submitForm}/>
+                <AssignmentForm onSubmit={submitForm} />
                 <Link to={AssignmentsPageLocal}>Cancel</Link>
             </Container>
         </div>
-    )
+    );
 }
