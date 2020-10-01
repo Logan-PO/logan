@@ -30,7 +30,7 @@ const authedRoutes = {
     '/assignments/:aid': {
         get: assignmentsController.getAssignment,
         put: assignmentsController.updateAssignment,
-        delete: assignmentsController.deleteAssignmentHandler,
+        delete: assignmentsController.deleteAssignment,
     },
     '/assignments': {
         get: assignmentsController.getAssignments,

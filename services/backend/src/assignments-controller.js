@@ -79,7 +79,7 @@ async function updateAssignment(req, res) {
     res.json(assignment);
 }
 
-async function deleteAssignmentHandler(req, res) {
+async function deleteAssignment(req, res) {
     const requestedAid = req.params.aid;
 
     await dynamoUtils.delete({
@@ -107,5 +107,5 @@ module.exports = {
     getAssignments,
     createAssignment,
     updateAssignment,
-    deleteAssignmentHandler,
+    deleteAssignment,
 };
