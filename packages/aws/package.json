@@ -16,6 +16,7 @@
     "url": "https://github.com/beasterbro/logan/issues"
   },
   "dependencies": {
-    "aws-sdk": "^2.753.0"
+    "aws-sdk": "^2.753.0",
+    "lodash": "^4.17.20"
   }
 }
