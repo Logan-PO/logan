@@ -29,11 +29,27 @@ function get(params) {
  * @param {string} params.FilterExpression
  * @param {Object} [params.ExpressionAttributeNames]
  * @param {Object} params.ExpressionAttributeValues
- * @param {number} [params.Limit]
- * @returns {Promise<{Items:Object[]}>}
+ * @param {boolean} [params.AutoPaginate = false]
+ * @param [params.ExclusiveStartKey] - Used in pagination
+ * @returns {Promise<{Items:Object[],[LastEvaluatedKey]}>}
  */
-function scan(params) {
-    return dynamoClient.scan(params).promise();
+async function scan(params) {
+    const shouldPaginate = params.AutoPaginate;
+    if (shouldPaginate) {
+        params = _.omit(params, ['AutoPaginate']);
+
+        const items = [];
+        let response;
+        do {
+            if (_.get(response, 'LastEvaluatedKey')) params.ExclusiveStartKey = response.LastEvaluatedKey;
+            response = await scan(params);
+            items.push(...response.Items);
+        } while (response.LastEvaluatedKey);
+
+        return { Items: items };
+    } else {
+        return dynamoClient.scan(params).promise();
+    }
 }
 
 /**
@@ -63,54 +79,33 @@ function deleteItem(params) {
 }
 
 /**
- * @param {Object} params
- * @param {string} params.TableName
- * @param {string} params.FilterExpression
- * @param {Object} [params.ExpressionAttributeNames]
- * @param {Object} params.ExpressionAttributeValues
- * @param {string} deleteKey - The primary key for the table you're deleting from
- * @returns {Promise<void>}
+ * Perform a batchWrite on a single table
+ * For info on requests formatting,
+ * see: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#batchWrite-property
+ * @param {string} tableName
+ * @param {Object[]} requests
+ * @param {boolean} [autoPaginate = false]
+ * @returns {Promise<*>}
  */
-async function batchDeleteFromScan(params, deleteKey) {
-    const itemsToDelete = [];
-
-    // Fetch all the items to delete with a paginated scan
-    let scanResponse;
-    do {
-        const scanParams = { ...params };
-
-        if (scanResponse && scanResponse.LastEvaluatedKey) scanParams.ExclusiveStartKey = scanResponse.LastEvaluatedKey;
-
-        scanResponse = await scan(scanParams);
-        itemsToDelete.push(...scanResponse.Items);
-    } while (scanResponse.LastEvaluatedKey);
-
-    // If there are no items to delete, return
-    if (!itemsToDelete.length) return;
-
-    // Map to the actual delete requests
-    const deleteRequests = itemsToDelete.map(item => ({
-        DeleteRequest: {
-            Key: _.pick(item, [deleteKey]),
-        },
-    }));
-
-    // Delete
-    let currentIndex = 0;
-    do {
-        // You can only make a maximum of 25 batchWrite requests at once
-        const currentRequests = _.slice(deleteRequests, currentIndex, currentIndex + 25);
-        const writeResponse = await dynamoClient
+async function batchWrite(tableName, requests, autoPaginate = false) {
+    if (!autoPaginate) {
+        return dynamoClient
             .batchWrite({
                 RequestItems: {
-                    [params.TableName]: currentRequests,
+                    [tableName]: requests,
                 },
             })
             .promise();
+    } else {
+        let currentIndex = 0;
+        do {
+            const currentRequests = _.slice(requests, currentIndex, currentIndex + 25);
+            const response = await batchWrite(tableName, currentRequests, false);
 
-        const unprocessedItems = _.get(writeResponse.UnprocessedItems, [params.TableName], []);
-        currentIndex += currentRequests.length - unprocessedItems.length;
-    } while (currentIndex < deleteRequests.length);
+            const unprocessedItems = _.get(response.UnprocessedItems, [tableName], []);
+            currentIndex += currentRequests.length - unprocessedItems.length;
+        } while (currentIndex < requests.length);
+    }
 }
 
 module.exports = {
@@ -118,6 +113,6 @@ module.exports = {
     scan,
     put,
     delete: deleteItem,
-    batchDeleteFromScan,
+    batchWrite,
     TABLES,
 };
