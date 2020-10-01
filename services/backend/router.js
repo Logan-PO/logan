@@ -93,14 +93,14 @@ function route(app) {
 
     const handlers = _.merge(
         {},
-        _.mapValues(unauthedRoutes, (methodMap) =>
-            _.mapValues(methodMap, (value) => {
+        _.mapValues(unauthedRoutes, methodMap =>
+            _.mapValues(methodMap, value => {
                 if (typeof value === 'function') return { handler: value };
                 return value;
             })
         ),
-        _.mapValues(authedRoutes, (methodMap) =>
-            _.mapValues(methodMap, (value) => {
+        _.mapValues(authedRoutes, methodMap =>
+            _.mapValues(methodMap, value => {
                 if (typeof value === 'function') return { authRequired: true, handler: value };
                 return { authRequired: true, ...value };
             })
