@@ -1,5 +1,3 @@
-import { createStore, combineReducers } from 'redux';
-import { reducer as formReducer } from 'redux-form';
 import { AssignmentCatalog } from './AssignmentCatalog';
 import { Assignment } from './Assignment';
 
