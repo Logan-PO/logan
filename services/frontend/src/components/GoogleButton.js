@@ -3,6 +3,7 @@ import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import { connect } from 'react-redux';
 import * as PropTypes from 'prop-types';
 import axios from 'axios';
+import { navigate } from 'gatsby';
 import { login, logout } from './GoogleStore';
 
 //Necessary to use the google button
@@ -29,6 +30,7 @@ class GoogleBtn extends React.Component {
             .then((res) => {
                 console.log(res);
                 login();
+                navigate('../');
             })
             .catch((error) => {
                 console.log(error);
