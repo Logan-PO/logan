@@ -24,6 +24,6 @@ export class AssignmentDay extends React.Component {
     render() {
         console.log('AssDay Rend: ', this.assignments);
 
-        return this.assignments.map((assignment) => assignment.render());
+        return <div>{this.assignments.map((assignment) => assignment.render())}</div>;
     } //TODO: Connect this with the store to allow delete functionality
 }

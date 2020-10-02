@@ -6,7 +6,7 @@ import Container from '../../components/containter';
 import { addAssignment, store } from '../../components/AssignmentsPageComponents/store';
 import AssignmentForm from '../../components/AssignmentsPageComponents/AssignmentForm';
 
-export default function wrapper() {
+export default function Wrapper() {
     return (
         <Provider store={store}>
             <Form />

@@ -1,11 +1,11 @@
 import { createStore, combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import { AssignmentCatalog } from './AssignmentCatalog';
+import { Assignment } from './Assignment';
 
 /**
  * ACTIONS
  */
-import Assignment from './Assignment';
 
 /**
  * This file is used to define all of the possible actions able to be taken within the assignments page
@@ -50,8 +50,25 @@ export const editAssignment = (assignment, args) => {
  * REDUXERS
  * @param state
  * @param action
- * @returns {{assignmentCatalog: AssignmentCatalog}}
+ * @returns {{shown: boolean}}
  */
+const shownReducer = (
+    state = {
+        shown: false,
+    },
+    action
+) => {
+    switch (action.type) {
+        case 'hideForm':
+            return { shown: false };
+
+        case 'showForm':
+            return { shown: true };
+        default:
+            return state;
+    }
+};
+
 const assignmentCatalogReducer = (
     state = {
         assignmentCatalog: new AssignmentCatalog({ assignmentDayList: [] }),
@@ -83,7 +100,7 @@ const assignmentCatalogReducer = (
 };
 
 export const store = createStore(
-    combineReducers({ AssignmentCatalog: assignmentCatalogReducer, form: formReducer }),
+    combineReducers({ AssignmentCatalog: assignmentCatalogReducer, form: formReducer, isFormShown: shownReducer }),
     // eslint-disable-next-line no-undef
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );

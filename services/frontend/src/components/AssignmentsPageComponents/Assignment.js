@@ -41,10 +41,10 @@ export class Assignment extends React.Component {
                 Assignment: {this.name}
                 <div>Desc: {this.desc} </div>
                 <div>Day: {this.day} </div>
-                <button style={{ backgroundColor: 'darkgreen' }} onClick={editAssignment(this)}>
+                <button style={{ backgroundColor: 'darkgreen' }} onClick={editAssignment}>
                     Edit Assignment
                 </button>
-                <button style={{ backgroundColor: 'red' }} onClick={deleteAssignment(this)}>
+                <button style={{ backgroundColor: 'red' }} onClick={deleteAssignment}>
                     Delete Assignment
                 </button>
             </div>

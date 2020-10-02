@@ -1,9 +1,12 @@
 import React from 'react';
 import Container from '../containter';
 import { Link } from 'gatsby';
-import {  gotoAssignmentsForm, HomePageLocal } from '../../pages';
+import { HomePageLocal} from '../../pages';
 import { connect } from 'react-redux';
 import { AssignmentDay } from './AssignmentDay';
+import AssignmentForm from "./AssignmentForm";
+import {addAssignment, editAssignment} from "./store";
+import AssignmentList from './AssignmentList'
 
 export class AssignmentCatalog extends React.Component {
     assignmentDayList = [];
@@ -26,20 +29,29 @@ export class AssignmentCatalog extends React.Component {
 
     render() {
         function renderAssignmentDayList() {
-            return assignmentCatalog.assignmentCatalog.assignmentDayList.map((assDay) => assDay.render());
+            return
         }
 
-        let { assignmentCatalog } = this.props;
+
+        let { assignmentCatalog,addAssignment,showForm,hideForm,isFormShown } = this.props;
+        const submitForm = (formValues) => {
+            addAssignment(formValues);
+            console.log('submitting Form: ', formValues);
+            hideForm()
+        };
+
         console.log('Cat: ', assignmentCatalog.assignmentCatalog.assignmentDayList);
         return (
             <div>
+
+                {isFormShown.shown ? (<AssignmentForm onSubmit = {submitForm}/>) : null}
                 <Container>
                     <h1>Assignments</h1>
                     <div>
                         <Link to={HomePageLocal}>Back to Overview</Link>
                     </div>
-                    {renderAssignmentDayList()}
-                    <button style={{ backgroundColor: 'grey' }} onClick={() => gotoAssignmentsForm()}>
+                    <AssignmentList assignmentDayList = {assignmentCatalog.assignmentCatalog.assignmentDayList}/>
+                    <button style={{ backgroundColor: 'grey' }} onClick={showForm}>
                         Add Assignment
                     </button>
                 </Container>
@@ -51,9 +63,35 @@ export class AssignmentCatalog extends React.Component {
 const mapStateToProps = (state) => ({
     assignmentCatalog: state.AssignmentCatalog,
     formValues: state.form,
+    isFormShown: state.isFormShown,
 });
 
-const mapDispatchToProps = {
+const mapDispatchToProps = (dispatch) => {
+    return {
+        addAssignment: (assignment) => {
+            dispatch({
+                type: 'addAssignment',
+                id: assignment.id,
+                name: assignment.name,
+                class: assignment.class,
+                desc: assignment.desc,
+                day: assignment.day,
+                color: assignment.color,
+            })
+        },
+        showForm: () => {
+            dispatch( {
+                type: 'showForm'
+            })
+        },
+        hideForm: () => {
+            dispatch( {
+                type: 'hideForm',
+            })
+        },
+
+
+    }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AssignmentCatalog);
