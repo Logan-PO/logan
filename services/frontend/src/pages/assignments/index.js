@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { store } from '../../components/AssignmentsPageComponents/store';
+import { store } from '../../store';
 import AssignmentCatalog from '../../components/AssignmentsPageComponents/AssignmentCatalog';
 /**
  * The React component that shows the UI for the assignments feature
@@ -13,7 +13,7 @@ import AssignmentCatalog from '../../components/AssignmentsPageComponents/Assign
  */
 
 export default function wrapper() {
-    //TODO: This is the current store being used for the assignments page as the attributes of this store cannot be generalized
+    //TODO: This is the current assignmentReducers being used for the assignments page as the attributes of this assignmentReducers cannot be generalized
 
     return (
         <Provider store={store}>

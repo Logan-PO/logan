@@ -31,5 +31,5 @@ export class AssignmentDay extends React.Component {
                     {this.assignments.map((assignment) => assignment.render())}
                 </div>
         );
-    } //TODO: Connect this with the store to allow delete functionality
+    } //TODO: Connect this with the assignmentReducers to allow delete functionality
 }

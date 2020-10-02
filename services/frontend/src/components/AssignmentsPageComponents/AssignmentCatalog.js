@@ -5,7 +5,7 @@ import { HomePageLocal} from '../../pages';
 import { connect } from 'react-redux';
 import { AssignmentDay } from './AssignmentDay';
 import AssignmentForm from "./AssignmentForm";
-import {addAssignment} from "./store";
+import {addAssignment} from "./AssignmentReducers";
 
 export class AssignmentCatalog extends React.Component {
     assignmentDayList = [];

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {deleteAssignment, editAssignment} from './store';
+import {deleteAssignment, editAssignment} from './AssignmentReducers';
 
 
 export class Assignment extends React.Component {
@@ -74,5 +74,5 @@ export class Assignment extends React.Component {
     }
 }
 
-//TODO: Connect this with the store to allow edit  functionality
+//TODO: Connect this with the assignmentReducers to allow edit  functionality
 

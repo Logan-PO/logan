@@ -53,7 +53,7 @@ export const editAssignment = (assignment, args) => {
  * @returns {{shown: boolean}}
  */
 //A reducer for showing and hiding the addAssignment form
-const shownReducer = (
+export const shownReducer = (
     state = {
         shown: false,
     },
@@ -70,7 +70,7 @@ const shownReducer = (
     }
 };
 //A reducer for showing and hiding the editAssignment form
-const editShownReducer = (
+export const editShownReducer = (
     state = {
         shown: false,
     },
@@ -87,7 +87,7 @@ const editShownReducer = (
     }
 };
 //a reducer for possible assignmentCatalog actions
-const assignmentCatalogReducer = (
+export const assignmentCatalogReducer = (
     state = {
         assignmentCatalog: new AssignmentCatalog({ assignmentDayList: [] }),
     },
@@ -116,14 +116,3 @@ const assignmentCatalogReducer = (
             return state;
     }
 };
-
-export const store = createStore(
-    combineReducers({
-        AssignmentCatalog: assignmentCatalogReducer, //represents the assignment catalog in the store
-        form: formReducer, //represents the form values in the store
-        isFormShown: shownReducer, //keeps tack of whether or not the addAssignment form is being shown
-        isEditFormShown: editShownReducer, //keeps tack of whether or not the editAssignment form is being shown
-    }),
-    //Required line of text so that I can use the browser dev tools
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
