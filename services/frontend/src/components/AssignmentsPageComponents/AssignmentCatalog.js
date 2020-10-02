@@ -5,8 +5,7 @@ import { HomePageLocal} from '../../pages';
 import { connect } from 'react-redux';
 import { AssignmentDay } from './AssignmentDay';
 import AssignmentForm from "./AssignmentForm";
-import {addAssignment, editAssignment} from "./store";
-import AssignmentList from './AssignmentList'
+import {addAssignment} from "./store";
 
 export class AssignmentCatalog extends React.Component {
     assignmentDayList = [];
@@ -14,6 +13,8 @@ export class AssignmentCatalog extends React.Component {
         super(props);
         // this.assignmentDayList = props.assignmentDayList
     }
+
+    //creates and assignmentday and adds the created assignment to it
     addAssignment(assignmentObj) {
         let assignmentDay = new AssignmentDay();
         assignmentDay.day = assignmentObj.day;
@@ -22,9 +23,10 @@ export class AssignmentCatalog extends React.Component {
         assignmentDay.addAssignment(assignmentObj);
         this.assignmentDayList.push(assignmentDay);
     }
+    //A method to delete a given assignment from this
     deleteAssignment(args) {//TODO: Check if assignmentDay exists?
         let assignmentDay = this.assignmentDayList.find((ad) => ad.day === args.day);
-        assignmentDay.deleteAssignment(args.id);
+        assignmentDay.deleteAssignment(args);
     }
 
     render() {
@@ -32,7 +34,7 @@ export class AssignmentCatalog extends React.Component {
             return
         }
 
-
+        //Taking the props mapped from the state for use
         let { assignmentCatalog,addAssignment,showForm,hideForm,isFormShown } = this.props;
         const submitForm = (formValues) => {
             addAssignment(formValues);
@@ -40,7 +42,6 @@ export class AssignmentCatalog extends React.Component {
             hideForm()
         };
 
-        //let assignmentDayList = assignmentCatalog.assignmentCatalog.assignmentDayList
         console.log('Cat: ', assignmentCatalog.assignmentCatalog.assignmentDayList);
         return (
             <div>
@@ -61,12 +62,14 @@ export class AssignmentCatalog extends React.Component {
     }
 }
 
+//Defining the props that the state will be mapped to for the render method
 const mapStateToProps = (state) => ({
     assignmentCatalog: state.AssignmentCatalog,
     formValues: state.form,
     isFormShown: state.isFormShown,
 });
 
+//Defining the functions and what actions they will dispatch
 const mapDispatchToProps = (dispatch) => {
     return {
         addAssignment: (assignment) => {

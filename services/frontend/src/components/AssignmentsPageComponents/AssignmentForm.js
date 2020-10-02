@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { field } from '../Field';
 
+//Represents a form to submit the info required to create a given assignment
 class AssignmentForm extends Component {
     render() {
-        // eslint-disable-next-line react/prop-types
         const { handleSubmit } = this.props;
         return (
             <form onSubmit={handleSubmit}>
@@ -21,7 +21,7 @@ class AssignmentForm extends Component {
         );
     }
 }
-
+//necessary calls so that redux-form works properly
 AssignmentForm = reduxForm({
     form: 'assignmentForm',
 })(AssignmentForm);

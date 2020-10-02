@@ -1,6 +1,4 @@
 import React from 'react';
-import {store} from "./store";
-import { Provider } from 'react-redux';
 
 export class AssignmentDay extends React.Component {
     assignments = [];
@@ -12,11 +10,13 @@ export class AssignmentDay extends React.Component {
         this.deleteAssignment = this.deleteAssignment.bind(this);
     }
 
+    //Adds an assignment to this
     addAssignment(assignmentObj) {
         assignmentObj.setAssignmentDay(this)
         this.assignments.push(assignmentObj);
     }
 
+    //Deletes specified assignment from this
     deleteAssignment(assignment) {
         console.log('del executed')
         const index = this.assignments.indexOf(assignment)
@@ -25,13 +25,11 @@ export class AssignmentDay extends React.Component {
 
     render() {
         console.log('AssDay Rend: ', this.assignments);
-
+        //Map the assignments stored in this assignment day to their render functions and display it
         return (
-            <Provider store={store}>
                 <div>
                     {this.assignments.map((assignment) => assignment.render())}
                 </div>
-            </Provider>
         );
     } //TODO: Connect this with the store to allow delete functionality
 }

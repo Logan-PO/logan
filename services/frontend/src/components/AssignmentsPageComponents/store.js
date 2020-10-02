@@ -52,6 +52,7 @@ export const editAssignment = (assignment, args) => {
  * @param action
  * @returns {{shown: boolean}}
  */
+//A reducer for showing and hiding the addAssignment form
 const shownReducer = (
     state = {
         shown: false,
@@ -68,7 +69,7 @@ const shownReducer = (
             return state;
     }
 };
-
+//A reducer for showing and hiding the editAssignment form
 const editShownReducer = (
     state = {
         shown: false,
@@ -85,7 +86,7 @@ const editShownReducer = (
             return state;
     }
 };
-
+//a reducer for possible assignmentCatalog actions
 const assignmentCatalogReducer = (
     state = {
         assignmentCatalog: new AssignmentCatalog({ assignmentDayList: [] }),
@@ -103,13 +104,13 @@ const assignmentCatalogReducer = (
                 day: action.day,
                 color: action.color,
             });
-            tempAssignmentCatalog.addAssignment(newAssignment);
+            tempAssignmentCatalog.addAssignment(newAssignment); //calls addAssignment which delegates it to an assignmentDay
             return { assignmentCatalog: tempAssignmentCatalog };
         case 'deleteAssignment':
-            tempAssignmentCatalog.deleteAssignment(action.assignment);
+            tempAssignmentCatalog.deleteAssignment(action.assignment); //calls deleteAssignment which delegates it to an assignmentDay
             return { assignmentCatalog: tempAssignmentCatalog };
         case 'editAssignment':
-            action.assignment.editAssignment(action.args);
+            action.assignment.editAssignment(action.args); //calls editAssignment which delegates it to an assignment
             return { assignmentCatalog: tempAssignmentCatalog };
         default:
             return state;
@@ -118,11 +119,11 @@ const assignmentCatalogReducer = (
 
 export const store = createStore(
     combineReducers({
-        AssignmentCatalog: assignmentCatalogReducer,
-        form: formReducer,
-        isFormShown: shownReducer,
-        isEditFormShown: editShownReducer,
+        AssignmentCatalog: assignmentCatalogReducer, //represents the assignment catalog in the store
+        form: formReducer, //represents the form values in the store
+        isFormShown: shownReducer, //keeps tack of whether or not the addAssignment form is being shown
+        isEditFormShown: editShownReducer, //keeps tack of whether or not the editAssignment form is being shown
     }),
-    // eslint-disable-next-line no-undef
+    //Required line of text so that I can use the browser dev tools
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );

@@ -4,7 +4,7 @@ import {deleteAssignment, editAssignment} from './store';
 
 
 export class Assignment extends React.Component {
-    class;
+    class;//Naming the base properties of an assignment
     name;
     desc;
     day;
@@ -20,12 +20,13 @@ export class Assignment extends React.Component {
         //Binding methods
         this.deleteAssignment = this.deleteAssignment.bind(this)
     }
+    //A method to set the assignmentDay of this assignment
     setAssignmentDay(assignmentDay){
         this.assignmentDay = assignmentDay
 
     }
 
-    //On login, if there is an access token, update state appropriately
+    //Updates the fields of this assignment
     updateFields(args) {
         this.class = args.class;
         this.name = args.name;
@@ -34,9 +35,11 @@ export class Assignment extends React.Component {
         this.color = args.color;
         this.id = args.id;
     }
+    //Edit's the fields of the current assignment
     editAssignment(args) {
         this.updateFields(args);
     }
+    //Deletes this assignment from its assignmentday
     deleteAssignment() {
         this.assignmentDay.deleteAssignment(this)
         console.log('Del Called')
@@ -45,13 +48,13 @@ export class Assignment extends React.Component {
     render() {
         console.log('Ass: ', this);
 
+        //TODO: placeholder for fully implemented edit form
         const submitEditForm = (formValues) => {
             editAssignment(this,formValues);
             console.log('submitting Form: ', formValues);
             //hideEditForm()
         };
 
-        let {} = this.props
         return (
 
                 <div>
