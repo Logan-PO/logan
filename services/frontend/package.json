@@ -16,7 +16,9 @@
   "dependencies": {
     "gatsby": "^2.24.60",
     "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react-dom": "^16.12.0",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8"
   },
   "repository": {
     "type": "git",
