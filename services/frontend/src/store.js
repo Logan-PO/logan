@@ -1,4 +1,5 @@
 import { createStore, combineReducers } from 'redux';
+import { devToolsEnhancer } from 'redux-devtools-extension';
 /**
  *The store to be used globally by the frontend
  */
@@ -9,5 +10,5 @@ export const store = createStore(
         /*This is where you will put your reducer functions from your separate reducer files*/
     }),
     //Required line of text so that you can use the browser dev tools
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    devToolsEnhancer(undefined)
 );
