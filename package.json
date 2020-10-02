@@ -6,7 +6,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --hoist",
     "bootstrap:backend": "lerna bootstrap --scope @logan/backend --include-dependencies -- --production --no-optional",
-    "clean-all": "lerna clean --yes && rm -rf node_modules && find . -name 'package-lock.json' -delete",
+    "clean-all": "lerna clean --yes",
+    "rebootstrap": "bash scripts/fix-node-modules.sh",
     "test": "jest --passWithNoTests",
     "lint": "eslint . --quiet -c .eslintrc.js",
     "lint-fix": "npm run lint -- --fix",
