@@ -5,9 +5,12 @@ import * as PropTypes from 'prop-types';
 import axios from 'axios';
 import { login, logout } from './GoogleStore';
 
+//Necessary to use the google button
 const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
+//URI for the backend
 const authURI = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com/auth/verify';
 
+//A component for the google sign in button
 class GoogleBtn extends React.Component {
     constructor(props) {
         super(props);
@@ -15,21 +18,26 @@ class GoogleBtn extends React.Component {
         this.onLogin = this.onLogin.bind(this);
     }
 
+    /*
+     When we successfully login with the button, make a call to the backend.
+     If all conditions are met, then create a login action and update the state
+     */
     async onLogin(response) {
         let login = this.props.login;
         axios
             .post(authURI, { idToken: response.tokenId })
             .then((res) => {
                 console.log(res);
-                console.log('successful');
                 login();
             })
             .catch((error) => {
                 console.log(error);
-                console.log('errored out');
             });
     }
 
+    /*
+    Rendering the button and giving appropriate methods to be called on success and failure
+     */
     render() {
         let isLoggedIn = this.props.isLoggedIn;
         let logout = this.props.logout;
@@ -79,13 +87,23 @@ function handleLogoutFailure(response) {
     console.log(response);
 }
 
+/*
+This is from react-redux
+When the state gets updated, so do the props
+ */
 const mapStateToProps = (state) => ({
     isLoggedIn: state.isLoggedIn,
 });
 
+/*
+When we update the props, dispatch to the state
+ */
 const mapDispatchToProps = {
     login,
     logout,
 };
 
+/*
+Connecting the button to the state and exporting the button
+ */
 export default connect(mapStateToProps, mapDispatchToProps)(GoogleBtn);
