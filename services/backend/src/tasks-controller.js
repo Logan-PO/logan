@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
+const requestValidator = require('../utils/request-validator');
 
 function fromDbFormat(db) {
     return {
@@ -48,13 +49,11 @@ async function getTasks(req, res) {
 async function createTask(req, res) {
     const tid = uuid();
 
+    requestValidator.requireBodyParams(req, ['title', 'dueDate', 'priority']);
+
     const defaultValues = { complete: false };
     const taskInput = _.merge({}, req.body, { tid }, _.pick(req.auth, ['uid']));
     const task = _.defaults(taskInput, defaultValues);
-
-    if (!task.title) throw new Error('Missing required property: title');
-    if (task.dueDate === undefined) throw new Error('Missing required property: dueDate');
-    if (task.priority === undefined) throw new Error('Missing required property: priority');
 
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.TASKS,
@@ -66,6 +65,8 @@ async function createTask(req, res) {
 
 async function updateTask(req, res) {
     const task = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
+
+    requestValidator.requireBodyParams(req, ['title', 'dueDate', 'priority']);
 
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.TASKS,
@@ -91,6 +92,7 @@ async function deleteTask(req, res) {
 }
 
 module.exports = {
+    __test_only__: { toDbFormat, fromDbFormat },
     getTask,
     getTasks,
     createTask,
