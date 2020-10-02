@@ -14,6 +14,7 @@
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.4.0",
     "gatsby": "^2.24.60",
     "gatsby-plugin-sass": "^2.3.14",
     "node-sass": "^4.14.1",
