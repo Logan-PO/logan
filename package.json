@@ -5,11 +5,13 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap --hoist",
-    "bootstrap:production": "lerna bootstrap --hoist -- --production --no-optional",
+    "bootstrap:backend": "lerna bootstrap --scope @logan/backend --include-dependencies -- --production --no-optional",
     "clean-all": "lerna clean --yes && rm -rf node_modules && find . -name 'package-lock.json' -delete",
     "test": "jest --passWithNoTests",
     "lint": "eslint . --quiet -c .eslintrc.js",
-    "lint-fix": "npm run lint -- --fix"
+    "lint-fix": "npm run lint -- --fix",
+    "deploy:backend": "./scripts/deploy-backend.sh",
+    "deploy:frontend": "./scripts/deploy-frontend.sh"
   },
   "repository": {
     "type": "git",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "eslint": "^7.9.0",
     "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jest": "^24.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^24.7.1",

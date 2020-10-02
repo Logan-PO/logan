@@ -1,0 +1,51 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-fe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Install Dependencies & Bootstrap
+        run: |
+          npm install
+          npm run bootstrap
+      - name: Build
+        run: npm run build
+        working-directory: ./services/frontend
+      - name: Configure the AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.EB_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.EB_ACCESS_KEY_SECRET }}
+      - name: Upload to S3
+        run: |
+          aws s3 sync public s3://logan-frontend/ --delete
+          aws s3api put-object-acl --acl public-read --bucket logan-frontend --key index.html
+        working-directory: ./services/frontend
+  deploy-be:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+      - name: Install Lerna & Bootstrap
+        run: |
+          npm ci
+          npm run bootstrap:backend
+      - name: Copy local dependencies to node_modules
+        run: node scripts/copy-be-dependencies.js
+      - name: Create artifact
+        run: npm run bundle
+        working-directory: services/backend
+      - name: Deploy
+        uses: hmanzur/actions-aws-eb@v1.0.0
+        with:
+          command: deploy logan-backend-dev
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.EB_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.EB_ACCESS_KEY_SECRET }}
+          AWS_DEFAULT_REGION: 'us-west-2'

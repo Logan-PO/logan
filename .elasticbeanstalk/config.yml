@@ -2,6 +2,8 @@ branch-defaults:
   default:
     environment: logan-backend-dev
     group_suffix: null
+deploy:
+  artifact: artifact.zip
 global:
   application_name: logan-backend
   branch: null
