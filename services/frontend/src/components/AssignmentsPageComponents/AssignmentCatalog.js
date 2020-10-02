@@ -23,7 +23,7 @@ export class AssignmentCatalog extends React.Component {
         this.assignmentDayList.push(assignmentDay);
     }
     deleteAssignment(args) {//TODO: Check if assignmentDay exists?
-        let assignmentDay = this.assignmentCatalog.find((ad) => ad.day === args.day);
+        let assignmentDay = this.assignmentDayList.find((ad) => ad.day === args.day);
         assignmentDay.deleteAssignment(args.id);
     }
 
@@ -40,6 +40,7 @@ export class AssignmentCatalog extends React.Component {
             hideForm()
         };
 
+        //let assignmentDayList = assignmentCatalog.assignmentCatalog.assignmentDayList
         console.log('Cat: ', assignmentCatalog.assignmentCatalog.assignmentDayList);
         return (
             <div>
@@ -50,10 +51,10 @@ export class AssignmentCatalog extends React.Component {
                     <div>
                         <Link to={HomePageLocal}>Back to Overview</Link>
                     </div>
-                    <AssignmentList assignmentDayList = {assignmentCatalog.assignmentCatalog.assignmentDayList}/>
+                    {assignmentCatalog.assignmentCatalog.assignmentDayList.map((assDay) => assDay.render())}
                     <button style={{ backgroundColor: 'grey' }} onClick={showForm}>
-                        Add Assignment
-                    </button>
+                    Add Assignment
+                </button>
                 </Container>
             </div>
         );

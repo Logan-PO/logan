@@ -69,6 +69,23 @@ const shownReducer = (
     }
 };
 
+const editShownReducer = (
+    state = {
+        shown: false,
+    },
+    action
+) => {
+    switch (action.type) {
+        case 'hideEditForm':
+            return { shown: false };
+
+        case 'showEditForm':
+            return { shown: true };
+        default:
+            return state;
+    }
+};
+
 const assignmentCatalogReducer = (
     state = {
         assignmentCatalog: new AssignmentCatalog({ assignmentDayList: [] }),
@@ -100,7 +117,12 @@ const assignmentCatalogReducer = (
 };
 
 export const store = createStore(
-    combineReducers({ AssignmentCatalog: assignmentCatalogReducer, form: formReducer, isFormShown: shownReducer }),
+    combineReducers({
+        AssignmentCatalog: assignmentCatalogReducer,
+        form: formReducer,
+        isFormShown: shownReducer,
+        isEditFormShown: editShownReducer,
+    }),
     // eslint-disable-next-line no-undef
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { deleteAssignment, editAssignment } from './store';
+import {deleteAssignment, editAssignment} from './store';
+
 
 export class Assignment extends React.Component {
     class;
@@ -9,6 +10,7 @@ export class Assignment extends React.Component {
     day;
     color;
     id;
+    assignmentDay;
     constructor(props) {
         super(props);
         //Setting up state components
@@ -16,6 +18,11 @@ export class Assignment extends React.Component {
         this.updateFields(props);
 
         //Binding methods
+        this.deleteAssignment = this.deleteAssignment.bind(this)
+    }
+    setAssignmentDay(assignmentDay){
+        this.assignmentDay = assignmentDay
+
     }
 
     //On login, if there is an access token, update state appropriately
@@ -30,35 +37,39 @@ export class Assignment extends React.Component {
     editAssignment(args) {
         this.updateFields(args);
     }
+    deleteAssignment() {
+        this.assignmentDay.deleteAssignment(this)
+        console.log('Del Called')
+    }
 
     render() {
         console.log('Ass: ', this);
-        let { editAssignment, deleteAssignment } = this.props;
 
+        const submitEditForm = (formValues) => {
+            editAssignment(this,formValues);
+            console.log('submitting Form: ', formValues);
+            //hideEditForm()
+        };
+
+        let {} = this.props
         return (
-            <div>
-                <h1 style={{ backgroundColor: this.color }}> {this.class} </h1>
-                Assignment: {this.name}
-                <div>Desc: {this.desc} </div>
-                <div>Day: {this.day} </div>
-                <button style={{ backgroundColor: 'darkgreen' }} onClick={editAssignment}>
-                    Edit Assignment
-                </button>
-                <button style={{ backgroundColor: 'red' }} onClick={deleteAssignment}>
-                    Delete Assignment
-                </button>
-            </div>
+
+                <div>
+
+                    <h1 style={{ backgroundColor: this.color }}> {this.class} </h1>
+                    Assignment: {this.name}
+                    <div>Desc: {this.desc} </div>
+                    <div>Day: {this.day} </div>
+                    <button style={{ backgroundColor: 'darkgreen' }} >
+                        Edit Assignment
+                    </button>
+                    <button style={{ backgroundColor: 'red' }} onClick={this.deleteAssignment} >
+                        Delete Assignment
+                    </button>
+                </div>
         );
     }
-} //TODO: Connect this with the store to allow edit  functionality
-const mapStateToProps = (state) => ({
-    assignmentCatalog: state.AssignmentCatalog,
-    formValues: state.form,
-});
+}
 
-const mapDispatchToProps = {
-    editAssignment,
-    deleteAssignment,
-};
+//TODO: Connect this with the store to allow edit  functionality
 
-export default connect(mapStateToProps, mapDispatchToProps)(Assignment);
