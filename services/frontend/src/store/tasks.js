@@ -21,7 +21,7 @@ const { slice, asyncActions } = createAsyncSlice({
     asyncReducers: {
         fetchTasks: {
             fn: api.getTasks,
-            handler(state, action) {
+            success(state, action) {
                 state.tasks = action.payload;
             },
         },
