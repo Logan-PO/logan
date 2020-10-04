@@ -1,11 +1,12 @@
 import _ from 'lodash';
-import { createSlice } from '@reduxjs/toolkit';
+import createAsyncSlice from '../utils/slice-maker';
+import api from '../utils/api';
 
 const initialState = {
     tasks: [],
 };
 
-const slice = createSlice({
+const { slice, asyncActions } = createAsyncSlice({
     name: 'tasks',
     initialState,
     reducers: {
@@ -17,7 +18,16 @@ const slice = createSlice({
             _.remove(state.tasks, (task) => task.tid === action.payload.tid);
         },
     },
+    asyncReducers: {
+        fetchTasks: {
+            fn: api.getTasks,
+            handler(state, action) {
+                state.tasks = action.payload;
+            },
+        },
+    },
 });
 
 export const { createTask, deleteTask } = slice.actions;
+export const { fetchTasks } = asyncActions;
 export default slice.reducer;
