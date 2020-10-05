@@ -9,13 +9,10 @@ const client = axios.create({
 let bearer;
 
 function setBearerToken(token) {
-    bearer = token;
+    if (token) bearer = `Bearer ${token}`;
+    else bearer = undefined;
 
-    if (bearer) {
-        _.set(client, 'defaults.headers.common.Authorization', `Bearer ${bearer}`);
-    } else {
-        _.set(client, 'defaults.headers.common.Authorization', undefined);
-    }
+    _.set(client, 'defaults.headers.common.Authorization', bearer);
 }
 
 async function getTasks() {

@@ -4,13 +4,16 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 /**
  * The configuration for an async reducer
  * @typedef {Object} AsyncReducerConfig
- * @property {function} fn - The body of the async thunk
- * @property {function} [begin] - Called when execution begins
- * @property {function} [success] - Called if the promise resolves
- * @property {function} [failure] - Called if the promise rejects
+ * @property {function} fn - The body of the async thunk. This is what actually gets converted into the thunk
+ * @property {function} [begin] - Called when execution begins. This gets converted to an extraReducer
+ * @property {function} [success] - Called if the promise resolves. This gets converted to an extraReducer
+ * @property {function} [failure] - Called if the promise rejects. This gets converted to an extraReducer
  */
 
 /**
+ * This function simplifies the use of createSlice and createAsyncThunk by allowing you to create everything in one
+ * method call. Using the asyncReducers property, this function will automatically create async thunks for you, and
+ * create extraReducer handlers for them. See the above documentation for how to pass asyncReducers in
  * @param {Object} config
  * @param {string} config.name
  * @param config.initialState
@@ -19,8 +22,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
  * @param {Object.<string, AsyncReducerConfig>} [config.asyncReducers]
  */
 export default function createAsyncSlice(config) {
-    // Create any thunks necesssary
     const asyncReducers = {};
+
+    // Create any async thunks necessary, and store their extraReducer handler for later
     if (config.asyncReducers) {
         for (const [name, { fn, ...handlers }] of _.entries(config.asyncReducers)) {
             asyncReducers[name] = {
@@ -30,22 +34,23 @@ export default function createAsyncSlice(config) {
         }
     }
 
-    const sliceParams = {
+    const sliceConfig = {
         name: config.name,
         initialState: config.initialState,
         reducers: config.reducers || {},
         extraReducers: config.extraReducers || {},
     };
 
-    // Set up their handlers as extraReducers
+    // Set up thunk handlers as extraReducers
     for (const { thunk, handlers } of _.values(asyncReducers)) {
-        if (handlers.begin) sliceParams.extraReducers[thunk.pending] = handlers.begin;
-        if (handlers.success) sliceParams.extraReducers[thunk.fulfilled] = handlers.success;
-        if (handlers.failure) sliceParams.extraReducers[thunk.rejected] = handlers.failure;
+        if (handlers.begin) sliceConfig.extraReducers[thunk.pending] = handlers.begin;
+        if (handlers.success) sliceConfig.extraReducers[thunk.fulfilled] = handlers.success;
+        if (handlers.failure) sliceConfig.extraReducers[thunk.rejected] = handlers.failure;
     }
 
+    // Return asyncActions as its own property for easy exporting later
     return {
-        slice: createSlice(sliceParams),
+        slice: createSlice(sliceConfig),
         asyncActions: _.mapValues(asyncReducers, 'thunk'),
     };
 }
