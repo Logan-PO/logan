@@ -1,7 +1,15 @@
 const _ = require('lodash');
 const AWS = require('./base');
 
-const dynamoClient = new AWS.DynamoDB.DocumentClient({ apiVersion: '2020-08-10' });
+const config = { apiVersion: '2020-08-10' };
+
+if (process.env.MOCK_DYNAMODB_ENDPOINT) {
+    config.endpoint = process.env.MOCK_DYNAMODB_ENDPOINT;
+    config.sslEnabled = false;
+    config.region = 'local';
+}
+
+const dynamoClient = new AWS.DynamoDB.DocumentClient(config);
 
 const TABLES = {
     USERS: 'users',

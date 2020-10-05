@@ -6,8 +6,9 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --hoist",
     "bootstrap:backend": "lerna bootstrap --scope @logan/backend --include-dependencies -- --production --no-optional",
-    "clean-all": "lerna clean --yes && rm -rf node_modules && find . -name 'package-lock.json' -delete",
-    "test": "jest --passWithNoTests",
+    "clean-all": "lerna clean --yes",
+    "rebootstrap": "bash scripts/fix-node-modules.sh",
+    "test": "jest -c jest.config.js",
     "lint": "eslint . --quiet -c .eslintrc.js",
     "lint-fix": "npm run lint -- --fix",
     "deploy:backend": "./scripts/deploy-backend.sh",
@@ -30,6 +31,7 @@
     "eslint-plugin-jest": "^24.0.0",
     "eslint-plugin-prettier": "^3.1.4",
     "jest": "^24.7.1",
+    "jest-dynalite": "^3.0.0",
     "lerna": "^3.22.1",
     "prettier": "^2.1.1"
   }
