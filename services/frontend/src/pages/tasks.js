@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchTasks } from '../store/tasks';
-import { createTask, deleteTask } from '../store/tasks';
+import { fetchTasks, createTask, deleteTask } from '../store/tasks';
 import api from '../utils/api';
 
 class TasksPage extends React.Component {
@@ -13,14 +12,22 @@ class TasksPage extends React.Component {
         this.props.fetchTasks();
     }
 
+    randomTask() {
+        return {
+            title: 'Random task',
+            dueDate: 'asap',
+            priority: 1,
+        };
+    }
+
     render() {
         return (
             <div>
                 <h1>Tasks Page</h1>
                 <button onClick={this.props.fetchTasks}>Fetch</button>
-                <button onClick={() => this.props.createTask({ tid: Math.random() })}>Create Task</button>
+                <button onClick={() => this.props.createTask(this.randomTask())}>Create Task</button>
                 <ul>
-                    {this.props.tasks.map((task) => (
+                    {this.props.tasks.map(task => (
                         <li key={task.tid}>
                             {task.tid}
                             <button onClick={() => this.props.deleteTask(task)}>-</button>
@@ -39,7 +46,7 @@ TasksPage.propTypes = {
     deleteTask: PropTypes.func,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     tasks: state.tasks.tasks,
 });
 

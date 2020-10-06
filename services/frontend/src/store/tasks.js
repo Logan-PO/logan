@@ -10,12 +10,12 @@ const { slice, asyncActions } = createAsyncSlice({
     name: 'tasks',
     initialState,
     reducers: {
-        createTask(state, action) {
-            const task = action.payload;
-            state.tasks.push(task);
+        getTasksForAssignment(state, action) {
+            const { aid } = action.payload;
+            return _.filter(state.tasks, task => task.aid === aid);
         },
-        deleteTask(state, action) {
-            _.remove(state.tasks, (task) => task.tid === action.payload.tid);
+        deleteTaskLocal(state, action) {
+            _.remove(state.tasks, task => task.tid === action.payload.tid);
         },
     },
     asyncReducers: {
@@ -25,9 +25,25 @@ const { slice, asyncActions } = createAsyncSlice({
                 state.tasks = action.payload;
             },
         },
+        createTask: {
+            fn: api.createTask,
+            success(state, action) {
+                state.tasks.push(action.payload);
+            },
+        },
+        updateTask: {
+            fn: api.updateTask,
+        },
+        deleteTask: {
+            fn: api.deleteTask,
+            begin(state, action) {
+                const { tid } = action.meta.arg;
+                _.remove(state.tasks, task => task.tid === tid);
+            },
+        },
     },
 });
 
-export const { createTask, deleteTask } = slice.actions;
-export const { fetchTasks } = asyncActions;
+export const { getTasksForAssignment, deleteTaskLocal } = slice.actions;
+export const { fetchTasks, createTask, updateTask, deleteTask } = asyncActions;
 export default slice.reducer;
