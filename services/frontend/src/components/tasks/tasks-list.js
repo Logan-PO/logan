@@ -6,12 +6,26 @@ import styles from './tasks-list.module.scss';
 import TaskCell from './task-cell';
 
 class TasksList extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.didSelectTask = this.didSelectTask.bind(this);
+
+        this.state = {
+            selectedTask: undefined,
+        };
+    }
+
     randomTask() {
         return {
             title: 'Random task',
             dueDate: 'asap',
             priority: 1,
         };
+    }
+
+    didSelectTask(task) {
+        this.setState(() => ({ selectedTask: task }));
     }
 
     render() {
@@ -24,7 +38,12 @@ class TasksList extends React.Component {
                             <React.Fragment key={section[0]}>
                                 <div className={styles.heading}>{dueDate}</div>
                                 {tasks.map(task => (
-                                    <TaskCell key={task.tid} task={task} />
+                                    <TaskCell
+                                        key={task.tid}
+                                        task={task}
+                                        onSelect={this.didSelectTask}
+                                        selected={this.state.selectedTask && this.state.selectedTask.tid === task.tid}
+                                    />
                                 ))}
                             </React.Fragment>
                         );
