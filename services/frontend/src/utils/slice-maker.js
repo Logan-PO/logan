@@ -37,15 +37,15 @@ export default function createAsyncSlice(config) {
     const sliceConfig = {
         name: config.name,
         initialState: config.initialState,
-        reducers: config.reducers || {},
-        extraReducers: config.extraReducers || {},
+        reducers: config.reducers,
+        extraReducers: config.extraReducers,
     };
 
     // Set up thunk handlers as extraReducers
     for (const { thunk, handlers } of _.values(asyncReducers)) {
-        if (handlers.begin) sliceConfig.extraReducers[thunk.pending] = handlers.begin;
-        if (handlers.success) sliceConfig.extraReducers[thunk.fulfilled] = handlers.success;
-        if (handlers.failure) sliceConfig.extraReducers[thunk.rejected] = handlers.failure;
+        if (handlers.begin) _.set(sliceConfig, ['extraReducers', thunk.pending], handlers.begin);
+        if (handlers.success) _.set(sliceConfig, ['extraReducers', thunk.fulfilled], handlers.success);
+        if (handlers.failure) _.set(sliceConfig, ['extraReducers', thunk.rejected], handlers.failure);
     }
 
     // Return asyncActions as its own property for easy exporting later

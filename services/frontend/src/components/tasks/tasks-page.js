@@ -4,14 +4,29 @@ import { connect } from 'react-redux';
 import api from '../../utils/api';
 import { fetchTasks } from '../../store/tasks';
 import TasksList from './tasks-list';
+import TaskEditor from './task-editor';
 import styles from './tasks-page.module.scss';
 
 class TasksPage extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            selectedTask: undefined,
+        };
+
+        this.didSelectTask = this.didSelectTask.bind(this);
+    }
+
     componentDidMount() {
         api.setBearerToken(
             'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJmYWJiMDQyZi05NjU2LTRjMjAtYmYzMy1hZmM5MDMzN2E1ZTEiLCJpYXQiOjE2MDE4NDM3OTB9.oaMx3ATdIOYikkdMPI4f8lnAIcS0z5hAaP6hODOQUC8'
         );
         this.props.fetchTasks();
+    }
+
+    didSelectTask(task) {
+        this.setState({ selectedTask: task });
     }
 
     render() {
@@ -22,8 +37,8 @@ class TasksPage extends React.Component {
                 </div>
                 <div className={styles.tasksPage}>
                     <div className={styles.sidebar}></div>
-                    <TasksList />
-                    <div className={styles.taskEditor}></div>
+                    <TasksList onTaskSelected={this.didSelectTask} />
+                    <TaskEditor tid={this.state.selectedTask} />
                 </div>
             </div>
         );
@@ -31,16 +46,11 @@ class TasksPage extends React.Component {
 }
 
 TasksPage.propTypes = {
-    tasks: PropTypes.arrayOf(PropTypes.object),
     fetchTasks: PropTypes.func,
     createTask: PropTypes.func,
     deleteTask: PropTypes.func,
 };
 
-const mapStateToProps = state => ({
-    tasks: state.tasks.tasks,
-});
-
 const mapDispatchToProps = { fetchTasks };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TasksPage);
+export default connect(null, mapDispatchToProps)(TasksPage);

@@ -10,7 +10,6 @@
     .button-bar {
         display: flex;
         flex-direction: row;
-
         justify-content: flex-end;
         align-items: stretch;
         height: 40px;
@@ -31,8 +30,8 @@
     }
 
     .scrollview {
-        overflow-y: scroll;
         flex-grow: 1;
+        overflow-y: scroll;
         border-right: solid 1px $border;
 
         .heading {

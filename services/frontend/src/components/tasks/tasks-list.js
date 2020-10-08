@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -25,7 +26,8 @@ class TasksList extends React.Component {
     }
 
     didSelectTask(task) {
-        this.setState(() => ({ selectedTask: task }));
+        this.setState(() => ({ selectedTask: task.tid }));
+        this.props.onTaskSelected(task.tid);
     }
 
     render() {
@@ -42,7 +44,7 @@ class TasksList extends React.Component {
                                         key={task.tid}
                                         task={task}
                                         onSelect={this.didSelectTask}
-                                        selected={this.state.selectedTask && this.state.selectedTask.tid === task.tid}
+                                        selected={this.state.selectedTask === task.tid}
                                     />
                                 ))}
                             </React.Fragment>
@@ -62,11 +64,12 @@ TasksList.propTypes = {
     sections: PropTypes.arrayOf(PropTypes.array),
     fetchTasks: PropTypes.func,
     createTask: PropTypes.func,
+    onTaskSelected: PropTypes.func,
 };
 
 const mapStateToProps = state => {
     const sections = {};
-    for (const task of state.tasks.tasks) {
+    for (const task of _.values(state.tasks.entities)) {
         if (sections[task.dueDate]) sections[task.dueDate].push(task);
         else sections[task.dueDate] = [task];
     }
