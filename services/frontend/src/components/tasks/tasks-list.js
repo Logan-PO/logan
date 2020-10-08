@@ -25,9 +25,9 @@ class TasksList extends React.Component {
         };
     }
 
-    didSelectTask(task) {
-        this.setState(() => ({ selectedTask: task.tid }));
-        this.props.onTaskSelected(task.tid);
+    didSelectTask(tid) {
+        this.setState(() => ({ selectedTid: tid }));
+        this.props.onTaskSelected(tid);
     }
 
     render() {
@@ -42,7 +42,7 @@ class TasksList extends React.Component {
                                 {tasks.map(task => (
                                     <TaskCell
                                         key={task.tid}
-                                        task={task}
+                                        tid={task.tid}
                                         onSelect={this.didSelectTask}
                                         selected={this.state.selectedTask === task.tid}
                                     />

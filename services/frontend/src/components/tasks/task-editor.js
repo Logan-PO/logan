@@ -77,7 +77,6 @@ class TaskEditor extends React.Component {
 
 TaskEditor.propTypes = {
     tid: PropTypes.string,
-    tasks: PropTypes.object,
     updateTaskLocal: PropTypes.func,
     selectTask: PropTypes.func,
     updateTask: PropTypes.func,
