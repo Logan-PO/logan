@@ -2,8 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import makeSelectors from '../../utils/selectors-helper';
-import { adapter, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
+import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
 import styles from './task-editor.module.scss';
 
 class TaskEditor extends React.Component {
@@ -57,10 +56,8 @@ TaskEditor.propTypes = {
 };
 
 const mapStateToProps = state => {
-    const selectors = makeSelectors(adapter, state.tasks);
-
     return {
-        selectTask: selectors.selectById,
+        selectTask: getTasksSelectors(state.tasks).selectById,
     };
 };
 

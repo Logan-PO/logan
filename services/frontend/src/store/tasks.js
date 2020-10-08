@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import createAsyncSlice from '../utils/slice-maker';
+import { createAsyncSlice, wrapAdapter } from '../utils/redux-utils';
 import api from '../utils/api';
 
-export const adapter = createEntityAdapter({
+const adapter = createEntityAdapter({
     selectId: task => task.tid,
     sortComparer: (a, b) => a.title < b.title,
 });
@@ -41,6 +41,7 @@ const { slice, asyncActions } = createAsyncSlice({
     },
 });
 
+export const getTasksSelectors = wrapAdapter(adapter);
 export const { getTasksForAssignment, updateTaskLocal, deleteTaskLocal } = slice.actions;
 export const { fetchTasks, createTask, updateTask, deleteTask } = asyncActions;
 export default slice.reducer;

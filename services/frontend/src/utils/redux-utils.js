@@ -2,6 +2,14 @@ import _ from 'lodash';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 /**
+ * @param adapter
+ * @returns {function(*=): {selectIds: Function, selectEntities: Function, selectAll: Function, selectTotal: Function, selectById: Function}}
+ */
+export function wrapAdapter(adapter) {
+    return state => _.mapValues(adapter.getSelectors(), selector => (...params) => selector(state, ...params));
+}
+
+/**
  * The configuration for an async reducer
  * @typedef {Object} AsyncReducerConfig
  * @property {function} fn - The body of the async thunk. This is what actually gets converted into the thunk
@@ -21,7 +29,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
  * @param {Object} [config.extraReducers]
  * @param {Object.<string, AsyncReducerConfig>} [config.asyncReducers]
  */
-export default function createAsyncSlice(config) {
+export function createAsyncSlice(config) {
     const asyncReducers = {};
 
     // Create any async thunks necessary, and store their extraReducer handler for later
