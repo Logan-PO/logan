@@ -51,7 +51,25 @@ class TaskEditor extends React.Component {
 
         return (
             <div className={styles.taskEditor}>
-                <input type="text" onChange={this.handleChange.bind(this, 'title')} value={_.get(task, 'title', '')} />
+                <div className={styles.row}>
+                    <div className={styles.cell}>
+                        <input
+                            type="text"
+                            className={styles.titleInput}
+                            onChange={this.handleChange.bind(this, 'title')}
+                            value={_.get(task, 'title', '')}
+                        />
+                    </div>
+                </div>
+                <div className={styles.row}>
+                    <div className={styles.cell}>
+                        <textarea
+                            className={styles.descriptionInput}
+                            onChange={this.handleChange.bind(this, 'description')}
+                            value={_.get(task, 'description', '')}
+                        />
+                    </div>
+                </div>
             </div>
         );
     }
