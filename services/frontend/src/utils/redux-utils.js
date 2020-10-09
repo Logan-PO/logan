@@ -2,6 +2,14 @@ import _ from 'lodash';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 /**
+ * @param adapter
+ * @returns {function(*=): {selectIds: Function, selectEntities: Function, selectAll: Function, selectTotal: Function, selectById: Function}}
+ */
+export function wrapAdapter(adapter) {
+    return state => _.mapValues(adapter.getSelectors(), selector => (...params) => selector(state, ...params));
+}
+
+/**
  * The configuration for an async reducer
  * @typedef {Object} AsyncReducerConfig
  * @property {function} fn - The body of the async thunk. This is what actually gets converted into the thunk
@@ -21,7 +29,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
  * @param {Object} [config.extraReducers]
  * @param {Object.<string, AsyncReducerConfig>} [config.asyncReducers]
  */
-export default function createAsyncSlice(config) {
+export function createAsyncSlice(config) {
     const asyncReducers = {};
 
     // Create any async thunks necessary, and store their extraReducer handler for later
@@ -37,15 +45,15 @@ export default function createAsyncSlice(config) {
     const sliceConfig = {
         name: config.name,
         initialState: config.initialState,
-        reducers: config.reducers || {},
-        extraReducers: config.extraReducers || {},
+        reducers: config.reducers,
+        extraReducers: config.extraReducers,
     };
 
     // Set up thunk handlers as extraReducers
     for (const { thunk, handlers } of _.values(asyncReducers)) {
-        if (handlers.begin) sliceConfig.extraReducers[thunk.pending] = handlers.begin;
-        if (handlers.success) sliceConfig.extraReducers[thunk.fulfilled] = handlers.success;
-        if (handlers.failure) sliceConfig.extraReducers[thunk.rejected] = handlers.failure;
+        if (handlers.begin) _.set(sliceConfig, ['extraReducers', thunk.pending], handlers.begin);
+        if (handlers.success) _.set(sliceConfig, ['extraReducers', thunk.fulfilled], handlers.success);
+        if (handlers.failure) _.set(sliceConfig, ['extraReducers', thunk.rejected], handlers.failure);
     }
 
     // Return asyncActions as its own property for easy exporting later
