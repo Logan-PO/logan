@@ -1,0 +1,10 @@
+@import '../../global';
+
+.task-cell {
+    padding: 12px;
+    border-bottom: solid 1px $border;
+
+    &.selected {
+        background: #f7f7f7;
+    }
+}
