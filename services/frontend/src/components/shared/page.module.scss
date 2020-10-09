@@ -25,6 +25,7 @@
 }
 
 .root-container {
+    height: 100vh;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -38,9 +39,10 @@
     flex-direction: row;
     align-items: stretch;
     justify-content: stretch;
+    flex-wrap: nowrap;
 }
 
 .content {
-    height: 100%;
+    height: calc(100vh - 64px);
     flex-grow: 1;
 }
