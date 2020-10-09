@@ -58,7 +58,6 @@ class TaskCell extends React.Component {
                             edge="start"
                             checked={_.get(this.state, 'task.complete', false)}
                             onChange={this.handleChange}
-                            disableRipple
                         />
                     </ListItemIcon>
                     <ListItemText
