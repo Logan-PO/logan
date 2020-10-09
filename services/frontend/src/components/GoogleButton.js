@@ -4,12 +4,15 @@ import { connect } from 'react-redux';
 import * as PropTypes from 'prop-types';
 import axios from 'axios';
 import { navigate } from 'gatsby';
+import { setBearerToken } from '../utils/api';
 import { login, logout } from './GoogleStore';
 
 //Necessary to use the google button
 const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
 //URI for the backend
-const authURI = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com/auth/verify';
+const BASE_URI = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
+const AUTH_ROUTE = '/auth/verify';
+const USER_ROUTE = '/users';
 
 //A component for the google sign in button
 class GoogleBtn extends React.Component {
@@ -17,6 +20,16 @@ class GoogleBtn extends React.Component {
         super(props);
 
         this.onLogin = this.onLogin.bind(this);
+        this.handleBearer = this.handleBearer.bind(this);
+    }
+
+    async handleBearer(res) {
+        if (res.exists) {
+            setBearerToken(res.token);
+        } else {
+            //await axios.post(BASE_URI + USER_ROUTE, { res.token });
+            console.log('gotta make a user now');
+        }
     }
 
     /*
@@ -26,9 +39,10 @@ class GoogleBtn extends React.Component {
     async onLogin(response) {
         let login = this.props.login;
         axios
-            .post(authURI, { idToken: response.tokenId })
+            .post(BASE_URI + AUTH_ROUTE, { idToken: response.tokenId })
             .then(res => {
                 console.log(res);
+                this.handleBearer(res);
                 login();
                 navigate('../');
             })
