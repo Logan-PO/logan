@@ -34,8 +34,7 @@ const { slice, asyncActions } = createAsyncSlice({
         deleteTask: {
             fn: api.deleteTask,
             begin(state, action) {
-                const { tid } = action.meta.arg;
-                _.remove(state.tasks, task => task.tid === tid);
+                adapter.removeOne(state, { payload: action.meta.arg });
             },
         },
     },

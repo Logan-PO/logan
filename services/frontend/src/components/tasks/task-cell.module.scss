@@ -1,10 +1,13 @@
 @import '../../global';
 
 .task-cell {
-    padding: 12px;
-    border-bottom: solid 1px $border;
+    .actions {
+        display: none;
+    }
 
-    &.selected {
-        background: #f7f7f7;
+    &:hover {
+        .actions {
+            display: initial;
+        }
     }
 }

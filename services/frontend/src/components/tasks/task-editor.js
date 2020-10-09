@@ -10,7 +10,13 @@ class TaskEditor extends React.Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
-        this.updateTimer = new UpdateTimer(1000, () => this.props.updateTask(this.state.task));
+
+        this.changesExist = false;
+        this.updateTimer = new UpdateTimer(1000, () => {
+            this.props.updateTask(this.state.task);
+            this.changesExist = false;
+        });
+
         this.state = {
             task: undefined,
         };
@@ -18,8 +24,13 @@ class TaskEditor extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.tid !== prevProps.tid) {
-            if (prevProps.tid) {
-                this.updateTimer.fire();
+            if (prevProps.tid && this.changesExist) {
+                const prevTask = this.props.selectTask(prevProps.tid);
+
+                if (prevTask) {
+                    this.updateTimer.fire();
+                }
+
                 this.updateTimer.stop();
             }
 
@@ -30,6 +41,8 @@ class TaskEditor extends React.Component {
     }
 
     handleChange(prop, e) {
+        this.changesExist = true;
+
         const changes = {};
 
         changes[prop] = e.target.value;

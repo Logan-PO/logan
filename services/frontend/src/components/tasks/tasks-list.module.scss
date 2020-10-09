@@ -6,6 +6,7 @@
     flex-direction: column;
     align-items: stretch;
     flex-grow: 1;
+    background: white;
 
     .button-bar {
         display: flex;
@@ -35,16 +36,7 @@
         border-right: solid 1px $border;
 
         .heading {
-            padding: 0.5rem 0.5rem 0.2rem;
-            font-family: $heading-font;
-            font-weight: bold;
-            text-transform: uppercase;
-            border-bottom: solid 1px $border;
-            background: $border;
-
-            h1, h2, h3, h4, h5, h6 {
-                margin: 0;
-            }
+            background: white;
         }
     }
 }
