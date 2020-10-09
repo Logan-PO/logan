@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Page } from '../shared';
 import { fetchTasks } from '../../store/tasks';
 import TasksList from './tasks-list';
 import TaskEditor from './task-editor';
@@ -27,16 +28,13 @@ class TasksPage extends React.Component {
 
     render() {
         return (
-            <div className={styles.page}>
-                <div className={styles.navbar}>
-                    <h2>Logan / Tasks</h2>
-                </div>
+            <Page title="Tasks">
                 <div className={styles.tasksPage}>
                     <div className={styles.sidebar}></div>
                     <TasksList onTaskSelected={this.didSelectTask} />
                     <TaskEditor tid={this.state.selectedTid} />
                 </div>
-            </div>
+            </Page>
         );
     }
 }

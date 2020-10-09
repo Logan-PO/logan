@@ -1,0 +1,29 @@
+@import '../../global';
+
+.page {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.navbar {
+    padding: 0.5rem 0.8rem;
+    background: $logan-bg;
+    color: white;
+
+    h2 {
+        margin: 0px;
+    }
+}
+
+.sidebar {
+    width: 40px;
+    background: $logan-bg;
+}
+
+.content {
+    height: 100%;
+    flex-grow: 1;
+}
