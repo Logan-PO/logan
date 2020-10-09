@@ -6,6 +6,7 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    justify-content: space-evenly;
 }
 
 .navbar {
@@ -24,15 +25,19 @@
 }
 
 .root-container {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    justify-content: stretch;
 }
 
 .content-container {
+    flex-grow: 1;
     display: flex;
     flex-direction: row;
     align-items: stretch;
+    justify-content: stretch;
 }
 
 .content {
