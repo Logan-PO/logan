@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Toolbar, Box, Grid } from '@material-ui/core';
-import Navbar from './navbar';
-import Sidebar from './sidebar';
+import { Toolbar } from '@material-ui/core';
 import styles from './page.module.scss';
+import { Navbar, Sidebar } from '.';
 
 class Page extends React.Component {
     constructor(props) {
