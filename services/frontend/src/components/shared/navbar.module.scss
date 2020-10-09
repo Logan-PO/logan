@@ -1,0 +1,5 @@
+@import './sidebar.module';
+
+.navbar {
+    z-index: $sidebar-z-index + 1 !important;
+}

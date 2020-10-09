@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Toolbar, Box, Grid } from '@material-ui/core';
+import Navbar from './navbar';
+import Sidebar from './sidebar';
 import styles from './page.module.scss';
 
 class Page extends React.Component {
@@ -10,10 +13,14 @@ class Page extends React.Component {
     render() {
         return (
             <div className={styles.page}>
-                <div className={styles.navbar}>
-                    <h2>Logan / {this.props.title}</h2>
+                <Navbar title={this.props.title} buttons={this.props.buttons} />
+                <div className={styles.rootContainer}>
+                    <Toolbar />
+                    <div className={styles.contentContainer}>
+                        <Sidebar currentPage={this.props.title} />
+                        <div className={styles.content}>{this.props.children}</div>
+                    </div>
                 </div>
-                <div className={styles.content}>{this.props.children}</div>
             </div>
         );
     }
@@ -22,7 +29,7 @@ class Page extends React.Component {
 Page.propTypes = {
     title: PropTypes.string,
     buttons: PropTypes.array,
-    children: PropTypes.oneOf(PropTypes.array, PropTypes.object),
+    children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
 };
 
 export default Page;
