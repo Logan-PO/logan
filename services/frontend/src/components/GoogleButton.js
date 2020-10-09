@@ -27,12 +27,12 @@ class GoogleBtn extends React.Component {
         let login = this.props.login;
         axios
             .post(authURI, { idToken: response.tokenId })
-            .then((res) => {
+            .then(res => {
                 console.log(res);
                 login();
                 navigate('../');
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
             });
     }
@@ -93,7 +93,7 @@ function handleLogoutFailure(response) {
 This is from react-redux
 When the state gets updated, so do the props
  */
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
     isLoggedIn: state.isLoggedIn,
 });
 
