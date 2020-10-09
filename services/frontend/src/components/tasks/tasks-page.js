@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import api from '../../utils/api';
 import { fetchTasks } from '../../store/tasks';
 import TasksList from './tasks-list';
 import TaskEditor from './task-editor';
@@ -12,21 +11,18 @@ class TasksPage extends React.Component {
         super(props);
 
         this.state = {
-            selectedTask: undefined,
+            selectedTid: undefined,
         };
 
         this.didSelectTask = this.didSelectTask.bind(this);
     }
 
     componentDidMount() {
-        api.setBearerToken(
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJmYWJiMDQyZi05NjU2LTRjMjAtYmYzMy1hZmM5MDMzN2E1ZTEiLCJpYXQiOjE2MDE4NDM3OTB9.oaMx3ATdIOYikkdMPI4f8lnAIcS0z5hAaP6hODOQUC8'
-        );
         this.props.fetchTasks();
     }
 
-    didSelectTask(task) {
-        this.setState({ selectedTask: task });
+    didSelectTask(tid) {
+        this.setState({ selectedTid: tid });
     }
 
     render() {
@@ -38,7 +34,7 @@ class TasksPage extends React.Component {
                 <div className={styles.tasksPage}>
                     <div className={styles.sidebar}></div>
                     <TasksList onTaskSelected={this.didSelectTask} />
-                    <TaskEditor tid={this.state.selectedTask} />
+                    <TaskEditor tid={this.state.selectedTid} />
                 </div>
             </div>
         );
