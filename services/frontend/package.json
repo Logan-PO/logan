@@ -19,6 +19,7 @@
     "@reduxjs/toolkit": "^1.4.0",
     "axios": "^0.20.0",
     "classnames": "^2.2.6",
+    "dayjs": "^1.9.1",
     "gatsby": "^2.24.60",
     "gatsby-plugin-sass": "^2.3.14",
     "lodash": "^4.17.20",

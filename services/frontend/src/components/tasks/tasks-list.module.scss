@@ -2,14 +2,20 @@
 
 .tasks-list {
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
     flex-grow: 1;
     background: white;
+    overflow: hidden;
+
+    .add-button {
+        position: relative;
+        left: calc(100% - 1.5em);
+        bottom: 1.5em;
+        transform: translate(-100%, -100%);
+        z-index: 10000;
+    }
 
     .scrollview {
-        flex-grow: 1;
+        height: 100%;
         overflow-y: scroll;
         border-right: solid 1px $border;
 

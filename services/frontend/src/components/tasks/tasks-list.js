@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader } from '@material-ui/core';
-import { getTasksSelectors, fetchTasks, createTask, deleteTask } from '../../store/tasks';
-import styles from './tasks-list.module.scss';
+import { List, ListSubheader, Fab } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import { getTasksSelectors, fetchTasks, createTask, deleteTask, compareDueDates } from '../../store/tasks';
 import TaskCell from './task-cell';
+import styles from './tasks-list.module.scss';
 
 class TasksList extends React.Component {
     constructor(props) {
@@ -62,6 +63,9 @@ class TasksList extends React.Component {
                         })}
                     </List>
                 </div>
+                <Fab className={styles.addButton} color="secondary">
+                    <AddIcon />
+                </Fab>
             </div>
         );
     }
@@ -84,7 +88,7 @@ const mapStateToProps = state => {
     }
 
     return {
-        sections: Object.entries(sections),
+        sections: Object.entries(sections).sort((a, b) => compareDueDates(a[0], b[0])),
     };
 };
 
