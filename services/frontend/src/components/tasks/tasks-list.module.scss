@@ -8,28 +8,6 @@
     flex-grow: 1;
     background: white;
 
-    .button-bar {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-end;
-        align-items: stretch;
-        height: 40px;
-        background: teal;
-        flex-grow: 0;
-        flex-shrink: 0;
-        padding: 0.5rem;
-        background: $logan-bg;
-
-        button {
-            appearance: none;
-            background: white;
-            border: none;
-            border-radius: 2px;
-            margin-left: 0.5rem;
-            font-weight: bold;
-        }
-    }
-
     .scrollview {
         flex-grow: 1;
         overflow-y: scroll;

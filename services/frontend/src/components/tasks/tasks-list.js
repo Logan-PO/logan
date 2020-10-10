@@ -62,10 +62,6 @@ class TasksList extends React.Component {
                         })}
                     </List>
                 </div>
-                <div className={styles.buttonBar}>
-                    <button onClick={this.props.fetchTasks}>Fetch</button>
-                    <button onClick={() => this.props.createTask(this.randomTask())}>New</button>
-                </div>
             </div>
         );
     }
