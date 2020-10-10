@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Page } from '../shared';
 import { fetchTasks } from '../../store/tasks';
-import api from '../../utils/api';
 import TasksList from './tasks-list';
 import TaskEditor from './task-editor';
 import styles from './tasks-page.module.scss';
@@ -17,9 +16,6 @@ class TasksPage extends React.Component {
     }
 
     componentDidMount() {
-        api.setBearerToken(
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJmYWJiMDQyZi05NjU2LTRjMjAtYmYzMy1hZmM5MDMzN2E1ZTEiLCJpYXQiOjE2MDE4NDM3OTB9.oaMx3ATdIOYikkdMPI4f8lnAIcS0z5hAaP6hODOQUC8'
-        );
         this.props.fetchTasks();
     }
 
