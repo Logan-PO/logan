@@ -29,7 +29,7 @@ class TaskCell extends React.Component {
     componentDidUpdate() {
         const storeTask = this.props.selectTaskFromStore(this.props.tid);
 
-        if (this.state.task !== storeTask) {
+        if (!_.isEqual(storeTask, this.state.task)) {
             this.setState({ task: storeTask });
         }
     }

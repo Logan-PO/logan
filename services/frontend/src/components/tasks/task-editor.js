@@ -23,8 +23,8 @@ class TaskEditor extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        // If the user has selected a new task and updates to the existing task haven't been saved yet, save them
         if (this.props.tid !== prevProps.tid) {
+            // If the user has selected a new task and updates to the existing task haven't been saved yet, save them
             if (prevProps.tid && this.changesExist) {
                 const prevTask = this.props.selectTask(prevProps.tid);
 
@@ -36,6 +36,12 @@ class TaskEditor extends React.Component {
             this.setState({
                 task: this.props.selectTask(this.props.tid),
             });
+        } else {
+            // Also if the task has been updated somewhere else, make sure the state reflects that
+            const storeTask = this.props.selectTask(this.props.tid);
+            if (!_.isEqual(storeTask, this.state.task)) {
+                this.setState({ task: storeTask });
+            }
         }
     }
 
