@@ -63,7 +63,11 @@ class TasksList extends React.Component {
                         })}
                     </List>
                 </div>
-                <Fab className={styles.addButton} color="secondary">
+                <Fab
+                    className={styles.addButton}
+                    color="secondary"
+                    onClick={() => this.props.createTask(this.randomTask())}
+                >
                     <AddIcon />
                 </Fab>
             </div>
