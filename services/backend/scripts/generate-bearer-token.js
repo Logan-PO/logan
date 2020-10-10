@@ -7,6 +7,13 @@ const { generateBearerToken } = require('../utils/auth');
 async function run() {
     const { username, clientType = 'web' } = argv;
 
+    if (!username) {
+        console.log('  No username provided.');
+        console.log('  Valid usages: node generate-bearer-token.js --username <uname>');
+        console.log('                node generate-bearer-token.js --username <uname> --client-type web');
+        return;
+    }
+
     console.log(`Searching for user: ${username}`);
     const response = await dynamoUtils.scan({
         TableName: 'users',
@@ -21,6 +28,7 @@ async function run() {
         execSync(`echo ${bearer} | pbcopy`);
         console.log('Bearer token copied to clipboard');
         console.log();
+        console.log('\nToken:');
         console.log(bearer);
     } else {
         throw new Error('User not found');
