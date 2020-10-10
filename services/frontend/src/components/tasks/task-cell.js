@@ -26,11 +26,11 @@ class TaskCell extends React.Component {
         this.props.onDelete(this.state.task);
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.tid !== prevProps.tid) {
-            this.setState({
-                task: this.props.selectTaskFromStore(this.props.tid),
-            });
+    componentDidUpdate() {
+        const storeTask = this.props.selectTaskFromStore(this.props.tid);
+
+        if (this.state.task !== storeTask) {
+            this.setState({ task: storeTask });
         }
     }
 
