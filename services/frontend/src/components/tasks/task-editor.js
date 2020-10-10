@@ -23,13 +23,12 @@ class TaskEditor extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
+        // If the user has selected a new task and updates to the existing task haven't been saved yet, save them
         if (this.props.tid !== prevProps.tid) {
             if (prevProps.tid && this.changesExist) {
                 const prevTask = this.props.selectTask(prevProps.tid);
 
-                if (prevTask) {
-                    this.updateTimer.fire();
-                }
+                if (prevTask) this.updateTimer.fire();
 
                 this.updateTimer.stop();
             }
@@ -60,8 +59,6 @@ class TaskEditor extends React.Component {
     }
 
     render() {
-        const task = this.props.selectTask(this.props.tid);
-
         return (
             <div className={styles.taskEditor}>
                 <div className={styles.row}>
@@ -70,7 +67,7 @@ class TaskEditor extends React.Component {
                             type="text"
                             className={styles.titleInput}
                             onChange={this.handleChange.bind(this, 'title')}
-                            value={_.get(task, 'title', '')}
+                            value={_.get(this.state.task, 'title', '')}
                         />
                     </div>
                 </div>
@@ -79,7 +76,7 @@ class TaskEditor extends React.Component {
                         <textarea
                             className={styles.descriptionInput}
                             onChange={this.handleChange.bind(this, 'description')}
-                            value={_.get(task, 'description', '')}
+                            value={_.get(this.state.task, 'description', '')}
                         />
                     </div>
                 </div>
