@@ -1,9 +1,8 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, ListSubheader } from '@material-ui/core';
-import { fetchTasks, createTask, deleteTask } from '../../store/tasks';
+import { getTasksSelectors, fetchTasks, createTask, deleteTask } from '../../store/tasks';
 import styles from './tasks-list.module.scss';
 import TaskCell from './task-cell';
 
@@ -45,17 +44,17 @@ class TasksList extends React.Component {
                 <div className={styles.scrollview}>
                     <List>
                         {this.props.sections.map(section => {
-                            const [dueDate, tasks] = section;
+                            const [dueDate, tids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
                                     <ListSubheader className={styles.heading}>{dueDate}</ListSubheader>
-                                    {tasks.map(task => (
+                                    {tids.map(tid => (
                                         <TaskCell
-                                            key={task.tid}
-                                            tid={task.tid}
+                                            key={tid}
+                                            tid={tid}
                                             onSelect={this.didSelectTask}
                                             onDelete={this.didDeleteTask}
-                                            selected={this.state.selectedTid === task.tid}
+                                            selected={this.state.selectedTid === tid}
                                         />
                                     ))}
                                 </React.Fragment>
@@ -81,10 +80,11 @@ TasksList.propTypes = {
 };
 
 const mapStateToProps = state => {
+    const selectors = getTasksSelectors(state.tasks);
     const sections = {};
-    for (const task of _.values(state.tasks.entities)) {
-        if (sections[task.dueDate]) sections[task.dueDate].push(task);
-        else sections[task.dueDate] = [task];
+    for (const task of selectors.selectAll()) {
+        if (sections[task.dueDate]) sections[task.dueDate].push(task.tid);
+        else sections[task.dueDate] = [task.tid];
     }
 
     return {
