@@ -119,6 +119,8 @@ function route(app) {
                     await handlers[path][method].handler(req, res, next);
                 } catch (e) {
                     if (e instanceof LoganError) {
+                        res.statusMessage = e.constructor.name;
+
                         res.status(e.code).json({
                             type: e.constructor.name,
                             error: e.message,
