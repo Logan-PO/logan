@@ -25,7 +25,7 @@ async function searchForLocalBackend() {
     } catch (e) {}
 }
 
-searchForLocalBackend();
+if (process.env.NODE_ENV === 'development') searchForLocalBackend();
 
 function setBearerToken(token) {
     if (token) bearer = `Bearer ${token}`;
