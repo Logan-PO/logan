@@ -23,7 +23,7 @@ function requireQueryParams(req, params) {
 }
 
 function requireBodyParams(req, params) {
-    requireParams(req, params, 'body');
+    return requireParams(req, params, 'body');
 }
 
 module.exports = {
