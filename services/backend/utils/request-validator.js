@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const { MissingPropertyError } = require('./errors');
 
 function requireQueryParams(req, params) {
     const missingParams = [];
@@ -12,11 +13,7 @@ function requireQueryParams(req, params) {
         }
     }
 
-    if (missingParams.length === 1) {
-        throw new Error(`Missing required property in query: ${missingParams[0]}`);
-    } else if (missingParams.length) {
-        throw new Error(`Missing required properties in query: ${missingParams.join(', ')}`);
-    }
+    if (missingParams.length) throw new MissingPropertyError(missingParams, 'query');
 
     return out;
 }
@@ -33,11 +30,7 @@ function requireBodyParams(req, params) {
         }
     }
 
-    if (missingParams.length === 1) {
-        throw new Error(`Missing required property in body: ${missingParams[0]}`);
-    } else if (missingParams.length) {
-        throw new Error(`Missing required properties in body: ${missingParams.join(', ')}`);
-    }
+    if (missingParams.length) throw new MissingPropertyError(missingParams, 'body');
 
     return out;
 }

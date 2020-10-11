@@ -3,6 +3,7 @@ const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const { generateBearerToken } = require('../utils/auth');
 const requestValidator = require('../utils/request-validator');
+const { NotFoundError, ValidationError, PermissionDeniedError } = require('../utils/errors');
 
 function fromDbFormat(db) {
     return {
@@ -35,7 +36,7 @@ async function getUser(req, res) {
     if (dbResponse.Item) {
         res.json(fromDbFormat(dbResponse.Item));
     } else {
-        throw new Error('User does not exist');
+        throw new NotFoundError('User does not exist');
     }
 }
 
@@ -56,7 +57,7 @@ async function createUser(req, res) {
         },
     });
 
-    if (uniquenessResponse.Count > 0) throw new Error('uid, email, and username must all be unique');
+    if (uniquenessResponse.Count > 0) throw new ValidationError('uid, email, and username must all be unique');
 
     // Create the new user
     const bearer = await generateBearerToken({ uid }, 'web');
@@ -70,7 +71,7 @@ async function createUser(req, res) {
 }
 
 async function updateUser(req, res) {
-    if (req.auth.uid !== req.params.uid) throw new Error('Cannot modify another user');
+    if (req.auth.uid !== req.params.uid) throw new PermissionDeniedError('Cannot modify another user');
 
     requestValidator.requireBodyParams(req, ['name', 'email', 'username']);
     const user = _.merge({}, req.auth, req.body, req.params);
@@ -86,7 +87,7 @@ async function updateUser(req, res) {
         },
     });
 
-    if (uniquenessResponse.Count > 0) throw new Error('email and username must be unique');
+    if (uniquenessResponse.Count > 0) throw new ValidationError('email and username must be unique');
 
     // Update the user
     await dynamoUtils.put({
@@ -98,7 +99,7 @@ async function updateUser(req, res) {
 }
 
 async function deleteUser(req, res) {
-    if (req.auth.uid !== req.params.uid) throw new Error('Cannot delete another user');
+    if (req.auth.uid !== req.params.uid) throw new PermissionDeniedError('Cannot delete another user');
     await dynamoUtils.delete({ TableName: dynamoUtils.TABLES.USERS, Key: { uid: req.auth.uid } });
 
     // TODO: Also delete all other objects owned by the user

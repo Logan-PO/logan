@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const { secretUtils, dynamoUtils } = require('@logan/aws');
 const jwt = require('jsonwebtoken');
+const { AuthorizationError, PermissionDeniedError } = require('./errors');
 
 const UNAUTHORIZED_ACTIONS = {
     CREATE_USER: 'create_user',
@@ -26,7 +27,7 @@ async function generateBearerToken(payload, clientType) {
 async function handleAuth(req, authRequired = false, unauthedAction) {
     const authHeader = _.get(req, ['headers', 'authorization']);
     if (!authHeader || !_.startsWith(authHeader, 'Bearer ')) {
-        if (authRequired || unauthedAction) throw new Error('Missing bearer token');
+        if (authRequired || unauthedAction) throw new AuthorizationError('Missing bearer token');
         else {
             req.auth = { authorized: false };
             return;
@@ -37,7 +38,7 @@ async function handleAuth(req, authRequired = false, unauthedAction) {
     const bearer = authHeader.split(' ')[1];
     const payload = jwt.verify(bearer, authSecret);
 
-    if (unauthedAction && payload.action !== unauthedAction) throw new Error('Not authorized');
+    if (unauthedAction && payload.action !== unauthedAction) throw new PermissionDeniedError('Not authorized');
 
     if (payload.uid) {
         const response = await dynamoUtils.get({
