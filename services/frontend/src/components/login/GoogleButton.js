@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import * as PropTypes from 'prop-types';
 import axios from 'axios';
 import { navigate } from 'gatsby';
-import { setBearerToken } from '../utils/api';
+import api from '../../utils/api';
 import { login, logout } from './GoogleStore';
 
 //Necessary to use the google button
 const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
 //URI for the backend
-const BASE_URI = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
+const BASE_URL = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
 const AUTH_ROUTE = '/auth/verify';
 const USER_ROUTE = '/users';
 
@@ -23,11 +23,13 @@ class GoogleBtn extends React.Component {
         this.handleBearer = this.handleBearer.bind(this);
     }
 
+    //TODO: When we want to make a user, get name, email, and username
     async handleBearer(res) {
+        api.setBearerToken(res.token);
         if (res.exists) {
-            setBearerToken(res.token);
+            console.log('user exists');
         } else {
-            //await axios.post(BASE_URI + USER_ROUTE, { res.token });
+            //await axios.post(BASE_URL + USER_ROUTE, { res.token });
             console.log('gotta make a user now');
         }
     }
@@ -35,14 +37,16 @@ class GoogleBtn extends React.Component {
     /*
      When we successfully login with the button, make a call to the backend.
      If all conditions are met, then create a login action and update the state
+
+     TODO: when we sign out, set bearer token to undefined (connect to global state first)
      */
     async onLogin(response) {
         let login = this.props.login;
         axios
-            .post(BASE_URI + AUTH_ROUTE, { idToken: response.tokenId })
+            .post(BASE_URL + AUTH_ROUTE, { idToken: response.tokenId })
             .then(res => {
                 console.log(res);
-                this.handleBearer(res);
+                //this.handleBearer(res);
                 login();
                 navigate('../');
             })
