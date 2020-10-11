@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const bodyParser = require('body-parser');
 const auth = require('./utils/auth');
+const { LoganError } = require('./utils/errors');
 const usersController = require('./src/users-controller');
 const tasksController = require('./src/tasks-controller');
 const assignmentsController = require('./src/assignments-controller');
@@ -117,7 +118,17 @@ function route(app) {
                     await auth.handleAuth(req, handlers[path][method].authRequired, handlers[path][method].action);
                     await handlers[path][method].handler(req, res, next);
                 } catch (e) {
-                    res.status(500).json({ error: e.message, stack: e.stack });
+                    if (e instanceof LoganError) {
+                        res.status(e.code).json({
+                            type: e.constructor.name,
+                            error: e.message,
+                        });
+                    } else {
+                        res.status(e.code).json({
+                            error: e.message,
+                            stack: e.stack,
+                        });
+                    }
                 }
             });
         }
