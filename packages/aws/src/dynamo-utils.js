@@ -100,33 +100,34 @@ function makeDeleteRequests(items, key) {
     return items.map(item => ({ DeleteRequest: { Key: _.pick(item, key) } }));
 }
 
-/**
- * Perform a batchWrite on a single table
- * For info on requests formatting,
- * see: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#batchWrite-property
- * @param {string} tableName
- * @param {Object[]} requests
- * @param {boolean} [autoPaginate = true]
- * @returns {Promise<*>}
- */
-async function batchWrite(tableName, requests, autoPaginate = true) {
-    if (!autoPaginate) {
-        return dynamoClient
-            .batchWrite({
-                RequestItems: {
-                    [tableName]: requests,
-                },
-            })
-            .promise();
-    } else {
-        let currentIndex = 0;
-        do {
-            const currentRequests = _.slice(requests, currentIndex, currentIndex + 25);
-            const response = await batchWrite(tableName, currentRequests, false);
+function flattenRequestItems(requestItems) {
+    return _.chain(requestItems)
+        .entries()
+        .flatMap(([tableName, requests]) => requests.map(request => ({ TableName: tableName, ...request })))
+        .value();
+}
 
-            const unprocessedItems = _.get(response.UnprocessedItems, [tableName], []);
-            currentIndex += currentRequests.length - unprocessedItems.length;
-        } while (currentIndex < requests.length);
+function unflattenRequestItems(flattened) {
+    const grouped = _.groupBy(flattened, 'TableName');
+    return _.mapValues(grouped, requests => requests.map(request => _.omit(request, 'TableName')));
+}
+
+async function batchWrite(requestItems, { autoPaginate = true, expectFlat = false } = {}) {
+    if (!autoPaginate) {
+        if (expectFlat) return dynamoClient.batchWrite({ RequestItems: unflattenRequestItems(requestItems) }).promise();
+        return dynamoClient.batchWrite({ RequestItems: requestItems }).promise();
+    } else {
+        let flat = expectFlat ? requestItems : flattenRequestItems(requestItems);
+
+        do {
+            const currentRequests = _.slice(flat, 0, 25);
+            const response = await batchWrite(currentRequests, { autoPaginate: false, expectFlat: true });
+            flat = _.drop(flat, 25);
+
+            if (response.UnprocessedItems) {
+                flat.push(...flattenRequestItems(response.UnprocessedItems));
+            }
+        } while (flat.length);
     }
 }
 

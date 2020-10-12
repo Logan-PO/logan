@@ -21,7 +21,7 @@ async function clearTable(table) {
     const { Items: toDelete } = await dynamoUtils.scan({ TableName: table, AutoPaginate: true });
     if (!toDelete.length) return;
     const deleteRequests = toDelete.map(item => ({ DeleteRequest: { Key: { [pk]: item[pk] } } }));
-    await dynamoUtils.batchWrite(table, deleteRequests);
+    await dynamoUtils.batchWrite({ [table]: deleteRequests });
 }
 
 module.exports = {

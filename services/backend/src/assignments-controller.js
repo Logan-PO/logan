@@ -103,7 +103,7 @@ async function handleCascadingDeletes(aid) {
     });
 
     const deleteRequests = subtasks.map(task => ({ DeleteRequest: { Key: _.pick(task, 'tid') } }));
-    await dynamoUtils.batchWrite(dynamoUtils.TABLES.TASKS, deleteRequests, true);
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.TASKS]: deleteRequests });
 }
 
 module.exports = {

@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const { v4: uuid } = require('uuid');
 const dayjs = require('dayjs');
 
@@ -11,21 +12,9 @@ jest.doMock('@logan/aws', () => {
 
 const { dynamoUtils } = require('@logan/aws');
 const testUtils = require('../utils/test-utils');
-const usersController = require('./users-controller');
-const tasksController = require('./tasks-controller');
-const assignmentsController = require('./assignments-controller');
-const termsController = require('./terms-controller');
-const holidaysController = require('./holidays-controller');
-const coursesController = require('./courses-controller');
-const sectionsController = require('./sections-controller');
+const controllers = require('./controllers');
 
-const assignment = assignmentsController.__test_only__;
-const task = tasksController.__test_only__;
-const course = coursesController.__test_only__;
-const section = sectionsController.__test_only__;
-const term = termsController.__test_only__;
-const holiday = holidaysController.__test_only__;
-const user = usersController.__test_only__;
+const formatting = _.mapValues(controllers, controller => _.pick(controller, '__test_only__'));
 
 beforeAll(async () => testUtils.clearAllTables());
 
@@ -53,14 +42,10 @@ describe('Assignments', () => {
             due: '1/31/21',
         };
 
-        await dynamoUtils.batchWrite(
-            dynamoUtils.TABLES.ASSIGNMENTS,
-            [basicAssignment1, basicAssignment2].map(a => ({ PutRequest: { Item: a } }))
-        );
-
         // Create 100 tasks for the assignment to delete (this also checks that batchWrite is paginating correctly)
+        const numTasks = 10;
         tasks = [];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < numTasks; i++) {
             tasks.push({
                 uid: 'usr123',
                 tid: uuid(),
@@ -86,10 +71,12 @@ describe('Assignments', () => {
 
         tasks.push(basicTask1);
 
-        await dynamoUtils.batchWrite(
-            dynamoUtils.TABLES.TASKS,
-            tasks.map(task => ({ PutRequest: { Item: task } }))
-        );
+        await dynamoUtils.batchWrite({
+            [dynamoUtils.TABLES.ASSIGNMENTS]: [basicAssignment1, basicAssignment2].map(a => ({
+                PutRequest: { Item: a },
+            })),
+            [dynamoUtils.TABLES.TASKS]: tasks.map(task => ({ PutRequest: { Item: task } })),
+        });
     });
 
     afterAll(async () => {
@@ -99,7 +86,7 @@ describe('Assignments', () => {
 
     // Delete assignment
     it('Successful delete', async () => {
-        await assignmentsController.deleteAssignment(
+        await controllers.assignments.deleteAssignment(
             { params: { aid: basicAssignment1.aid }, auth: { uid: basicAssignment1.uid } },
             { json: jsonMock }
         );
@@ -284,7 +271,7 @@ describe('Courses', () => {
 
     // Delete one of the courses
     it('Successful delete', async () => {
-        await coursesController.deleteCourse({ params: basicCourse1, auth: { uid: 'usr123' } }, { json: jsonMock });
+        await controllers.courses.deleteCourse({ params: basicCourse1, auth: { uid: 'usr123' } }, { json: jsonMock });
 
         // Check that all the entities for that course are gone
         const { Items, Count } = await dynamoUtils.scan({ TableName: 'courses' });
@@ -452,7 +439,7 @@ describe('Terms', () => {
 
     // Delete one of the terms, and ensure only the other term's entities remain
     it('Successful delete', async () => {
-        await termsController.deleteTerm({ params: basicTerm1, auth: { uid: 'usr123' } }, { json: jsonMock });
+        await controllers.terms.deleteTerm({ params: basicTerm1, auth: { uid: 'usr123' } }, { json: jsonMock });
 
         const { Items, Count } = await dynamoUtils.scan({ TableName: 'terms' });
         expect(Count).toEqual(1);
@@ -518,7 +505,7 @@ describe('Users', () => {
 
     // Delete one user
     it('Successful delete', async () => {
-        await usersController.deleteUser({ params: basicUser1, auth: { uid: 'usr123' } }, { json: jsonMock });
+        await controllers.users.deleteUser({ params: basicUser1, auth: { uid: 'usr123' } }, { json: jsonMock });
 
         // Check that all the entities for that course are gone
         const { Items, Count } = await dynamoUtils.scan({ TableName: 'users' });
