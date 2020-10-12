@@ -1,4 +1,5 @@
 const { dynamoUtils } = require('@logan/aws');
+const Promise = require('bluebird');
 
 const tableKeyMap = {
     users: 'uid',
@@ -10,6 +11,11 @@ const tableKeyMap = {
     tasks: 'tid',
 };
 
+async function clearAll(tables = undefined) {
+    if (!tables) tables = Object.values(dynamoUtils.TABLES);
+    await Promise.map(tables, tableName => clearTable(tableName));
+}
+
 async function clearTable(table) {
     const pk = tableKeyMap[table];
     const { Items: toDelete } = await dynamoUtils.scan({ TableName: table, AutoPaginate: true });
@@ -19,5 +25,6 @@ async function clearTable(table) {
 }
 
 module.exports = {
+    clearAll,
     clearTable,
 };
