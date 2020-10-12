@@ -10,6 +10,9 @@ const coursesController = require('./src/courses-controller');
 const sectionsController = require('./src/sections-controller');
 
 const unauthedRoutes = {
+    '/ping': {
+        get: require('./src/ping').ping,
+    },
     '/auth/verify': {
         post: require('./src/verify-id-token').verifyIdToken,
     },

@@ -2,6 +2,8 @@ import _ from 'lodash';
 import axios from 'axios';
 
 const BASE_URL = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
+const LOCAL_URL = 'http://localhost:3000';
+
 const client = axios.create({
     baseURL: BASE_URL,
     headers: {
@@ -10,6 +12,20 @@ const client = axios.create({
 });
 
 let bearer;
+
+// If the backend is running locally, use that instead of the base URL
+async function searchForLocalBackend() {
+    try {
+        const { data } = await axios.get(`${LOCAL_URL}/ping`);
+        if (data.success) {
+            console.log(`Using local backend at ${LOCAL_URL}`);
+            client.defaults.baseURL = LOCAL_URL;
+        }
+        // eslint-disable-next-line no-empty
+    } catch (e) {}
+}
+
+if (process.env.NODE_ENV === 'development') searchForLocalBackend();
 
 function setBearerToken(token) {
     if (token) bearer = `Bearer ${token}`;

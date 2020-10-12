@@ -7,19 +7,6 @@ const requestValidator = require('../utils/request-validator');
 const DATE_FORMAT = 'M/D/YYYY';
 const TIME_FORMAT = 'H:mm';
 
-// uid
-// cid
-// sid
-// title
-// sd (start date)
-// st (start time)
-// ed (end date)
-// et (end time)
-// dow (days of week)
-// wr (weekly repeat interval)
-// loc (location)
-// inst (instructor)
-
 function fromDbFormat(db) {
     return {
         ..._.pick(db, ['uid', 'cid', 'sid', 'title']),
