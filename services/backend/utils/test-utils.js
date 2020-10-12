@@ -11,7 +11,7 @@ const tableKeyMap = {
     tasks: 'tid',
 };
 
-async function clearAllTables(tables = undefined) {
+async function clearTables(tables = undefined) {
     if (!tables) tables = Object.values(dynamoUtils.TABLES);
     await Promise.map(tables, tableName => clearTable(tableName));
 }
@@ -25,6 +25,6 @@ async function clearTable(table) {
 }
 
 module.exports = {
-    clearAllTables,
+    clearTables,
     clearTable,
 };

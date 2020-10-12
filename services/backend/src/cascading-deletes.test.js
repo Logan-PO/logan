@@ -16,7 +16,7 @@ const controllers = require('./controllers');
 
 const formatting = _.mapValues(controllers, controller => _.pick(controller, '__test_only__'));
 
-beforeAll(async () => testUtils.clearAllTables());
+beforeAll(async () => testUtils.clearTables());
 
 describe('Assignments', () => {
     let basicAssignment1, basicAssignment2;
