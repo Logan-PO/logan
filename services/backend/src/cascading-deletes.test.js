@@ -80,8 +80,7 @@ describe('Assignments', () => {
     });
 
     afterAll(async () => {
-        await testUtils.clearTable(dynamoUtils.TABLES.TASKS);
-        await testUtils.clearTable(dynamoUtils.TABLES.ASSIGNMENTS);
+        await testUtils.clearTables(['tasks', 'assignments']);
     });
 
     // Delete assignment
@@ -222,52 +221,33 @@ describe('Courses', () => {
     };
 
     beforeAll(async () => {
-        await dynamoUtils.put({
-            TableName: 'courses',
-            Item: course.toDbFormat(basicCourse1),
-        });
-        await dynamoUtils.put({
-            TableName: 'courses',
-            Item: course.toDbFormat(basicCourse2),
-        });
-        await dynamoUtils.put({
-            TableName: 'sections',
-            Item: section.toDbFormat(basicSection1),
-        });
-        await dynamoUtils.put({
-            TableName: 'sections',
-            Item: section.toDbFormat(basicSection2),
-        });
-        await dynamoUtils.put({
-            TableName: 'assignments',
-            Item: assignment.toDbFormat(basicAssignment1),
-        });
-        await dynamoUtils.put({
-            TableName: 'assignments',
-            Item: assignment.toDbFormat(basicAssignment2),
-        });
-        await dynamoUtils.put({
-            TableName: 'tasks',
-            Item: task.toDbFormat(basicTask1),
-        });
-        await dynamoUtils.put({
-            TableName: 'tasks',
-            Item: task.toDbFormat(basicTask2),
-        });
-        await dynamoUtils.put({
-            TableName: 'tasks',
-            Item: task.toDbFormat(basicTask3),
-        });
-        await dynamoUtils.put({
-            TableName: 'tasks',
-            Item: task.toDbFormat(basicTask4),
+        await dynamoUtils.batchWrite({
+            courses: [basicCourse1, basicCourse2].map(course => ({
+                PutRequest: {
+                    Item: formatting.courses.toDbFormat(course),
+                },
+            })),
+            sections: [basicSection1, basicSection2].map(section => ({
+                PutRequest: {
+                    Item: formatting.sections.toDbFormat(section),
+                },
+            })),
+            assignments: [basicAssignment1, basicAssignment2].map(a => ({
+                PutRequest: {
+                    Item: formatting.assignments.toDbFormat(a),
+                },
+            })),
+            tasks: [basicTask1, basicTask2, basicTask3, basicTask4].map(t => ({
+                PutRequest: {
+                    Item: formatting.tasks.toDbFormat(t),
+                },
+            })),
         });
     });
 
-    afterAll(async () => testUtils.clearTable('courses'));
-    afterAll(async () => testUtils.clearTable('sections'));
-    afterAll(async () => testUtils.clearTable('assignments'));
-    afterAll(async () => testUtils.clearTable('tasks'));
+    afterAll(async () => {
+        await testUtils.clearTables(['courses', 'sections', 'assignments', 'tasks']);
+    });
 
     // Delete one of the courses
     it('Successful delete', async () => {
