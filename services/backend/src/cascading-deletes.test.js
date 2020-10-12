@@ -10,7 +10,7 @@ jest.doMock('@logan/aws', () => {
     return mocked;
 });
 
-const { dynamoUtils } = require('logan/packages/aws');
+const { dynamoUtils } = require('@logan/aws');
 const testUtils = require('../utils/test-utils');
 const usersController = require('./users-controller');
 const tasksController = require('./tasks-controller');
