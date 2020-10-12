@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const { v4: uuid } = require('uuid');
 const dayjs = require('dayjs');
 
@@ -28,87 +27,92 @@ const term = termsController.__test_only__;
 const holiday = holidaysController.__test_only__;
 const user = usersController.__test_only__;
 
+beforeAll(async () => testUtils.clearAllTables());
+
 describe('Assignments', () => {
-    // Create two assignments
-    const basicAssignment1 = {
-        aid: 'abc123',
-        uid: 'usr123',
-        title: 'assignment1',
-        cid: 'cid123',
-        description: 'basic assignment 1',
-        dueDate: '1/30/21',
-    };
-
-    const basicAssignment2 = {
-        aid: 'abc321',
-        uid: 'usr123',
-        title: 'assignment2',
-        cid: 'cid321',
-        description: 'basic assignment 2',
-        dueDate: '1/31/21',
-    };
-
-    // Create 100 tasks for the assignment to delete (this also checks that batchWrite is paginating correctly)
-    const tasks = [];
-    for (var i = 0; i < 100; i++) {
-        tasks.push({
-            PutRequest: {
-                Item: {
-                    uid: 'usr123',
-                    tid: uuid(),
-                    title: 'task 1',
-                    aid: 'abc123',
-                    cid: 'cid123',
-                    desc: 'problem 1',
-                    due: '1/30/21',
-                    pri: 'high',
-                },
-            },
-        });
-    }
-
-    // Create 1 task for the other assignment
-    const basicTask1 = {
-        uid: 'usr123',
-        tid: 'tid123',
-        title: 'task 1',
-        aid: 'abc321',
-        cid: 'cid123',
-        description: 'problem 1',
-        dueDate: '1/30/21',
-        priority: 'high',
-        complete: 'no',
-    };
+    let basicAssignment1, basicAssignment2;
+    let tasks, basicTask1;
 
     beforeAll(async () => {
-        await dynamoUtils.put({
-            TableName: 'assignments',
-            Item: assignment.toDbFormat(basicAssignment1),
-        });
-        await dynamoUtils.put({
-            TableName: 'assignments',
-            Item: assignment.toDbFormat(basicAssignment2),
-        });
-        await dynamoUtils.put({
-            TableName: 'tasks',
-            Item: task.toDbFormat(basicTask1),
-        });
-        await dynamoUtils.batchWrite('tasks', tasks, true);
+        // Create two assignments
+        basicAssignment1 = {
+            aid: 'abc123',
+            uid: 'usr123',
+            title: 'assignment1',
+            cid: 'cid123',
+            desc: 'basic assignment 1',
+            due: '1/30/21',
+        };
+
+        basicAssignment2 = {
+            aid: 'abc321',
+            uid: 'usr123',
+            title: 'assignment2',
+            cid: 'cid321',
+            desc: 'basic assignment 2',
+            due: '1/31/21',
+        };
+
+        await dynamoUtils.batchWrite(
+            dynamoUtils.TABLES.ASSIGNMENTS,
+            [basicAssignment1, basicAssignment2].map(a => ({ PutRequest: { Item: a } })),
+        );
+
+        // Create 100 tasks for the assignment to delete (this also checks that batchWrite is paginating correctly)
+        tasks = [];
+        for (let i = 0; i < 100; i++) {
+            tasks.push({
+                uid: 'usr123',
+                tid: uuid(),
+                title: 'task 1',
+                aid: basicAssignment1.aid,
+                desc: 'problem 1',
+                due: '1/30/21',
+                pri: 2,
+            });
+        }
+
+        // Create 1 task for the other assignment
+        basicTask1 = {
+            uid: 'usr123',
+            tid: 'tid123',
+            title: 'task 1',
+            aid: basicAssignment2.aid,
+            desc: 'problem 1',
+            due: '1/30/21',
+            pri: 2,
+            cmp: false,
+        };
+
+        tasks.push(basicTask1);
+
+        await dynamoUtils.batchWrite(
+            dynamoUtils.TABLES.TASKS,
+            tasks.map(task => ({ PutRequest: { Item: task } }))
+        );
     });
 
-    afterAll(async () => testUtils.clearTable('assignments'));
-    afterAll(async () => testUtils.clearTable('tasks'));
+    afterAll(async () => {
+        await testUtils.clearTable(dynamoUtils.TABLES.TASKS);
+        await testUtils.clearTable(dynamoUtils.TABLES.ASSIGNMENTS);
+    });
 
     // Delete assignment
     it('Successful delete', async () => {
+        const { Items: remainingAssignments1 } = await dynamoUtils.scan({ TableName: dynamoUtils.TABLES.ASSIGNMENTS });
+
         await assignmentsController.deleteAssignment(
-            { params: basicAssignment1, auth: { uid: 'usr123' } },
+            { params: { aid: basicAssignment1.aid }, auth: { uid: basicAssignment1.uid } },
             { json: jsonMock }
         );
         // Check that only the other assignment's task remains
-        const { Items, Count } = await dynamoUtils.scan({ TableName: 'tasks' });
-        expect(Count).toEqual(1);
-        expect(Items[0]).toEqual(task.toDbFormat(basicTask1));
+        const { Items: remainingAssignments } = await dynamoUtils.scan({ TableName: dynamoUtils.TABLES.ASSIGNMENTS });
+        expect(remainingAssignments).toHaveLength(1);
+        expect(remainingAssignments[0]).toEqual(basicAssignment2);
+
+        const { Items: remainingTasks } = await dynamoUtils.scan({ TableName: dynamoUtils.TABLES.TASKS });
+        expect(remainingTasks).toHaveLength(1);
+        expect(remainingTasks[0]).toEqual(basicTask1);
     });
 });
 
