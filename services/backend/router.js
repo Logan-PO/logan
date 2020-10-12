@@ -1,13 +1,7 @@
 const _ = require('lodash');
 const bodyParser = require('body-parser');
 const auth = require('./utils/auth');
-const usersController = require('./src/users-controller');
-const tasksController = require('./src/tasks-controller');
-const assignmentsController = require('./src/assignments-controller');
-const termsController = require('./src/terms-controller');
-const holidaysController = require('./src/holidays-controller');
-const coursesController = require('./src/courses-controller');
-const sectionsController = require('./src/sections-controller');
+const controllers = require('./src/controllers');
 
 const unauthedRoutes = {
     '/auth/verify': {
@@ -16,70 +10,70 @@ const unauthedRoutes = {
     '/users': {
         post: {
             action: auth.UNAUTHORIZED_ACTIONS.CREATE_USER,
-            handler: usersController.createUser,
+            handler: controllers.users.createUser,
         },
     },
 };
 
 const authedRoutes = {
     '/users/:uid': {
-        get: usersController.getUser,
-        put: usersController.updateUser,
-        delete: usersController.deleteUser,
+        get: controllers.users.getUser,
+        put: controllers.users.updateUser,
+        delete: controllers.users.deleteUser,
     },
     '/assignments/:aid': {
-        get: assignmentsController.getAssignment,
-        put: assignmentsController.updateAssignment,
-        delete: assignmentsController.deleteAssignment,
+        get: controllers.assignments.getAssignment,
+        put: controllers.assignments.updateAssignment,
+        delete: controllers.assignments.deleteAssignment,
     },
     '/assignments': {
-        get: assignmentsController.getAssignments,
-        post: assignmentsController.createAssignment,
+        get: controllers.assignments.getAssignments,
+        post: controllers.assignments.createAssignment,
     },
     '/tasks/:tid': {
-        get: tasksController.getTask,
-        put: tasksController.updateTask,
-        delete: tasksController.deleteTask,
+        get: controllers.tasks.getTask,
+        put: controllers.tasks.updateTask,
+        delete: controllers.tasks.deleteTask,
     },
     '/tasks': {
-        get: tasksController.getTasks,
-        post: tasksController.createTask,
+        get: controllers.tasks.getTasks,
+        post: controllers.tasks.createTask,
     },
     '/terms/:tid': {
-        get: termsController.getTerm,
-        put: termsController.updateTerm,
-        delete: termsController.deleteTerm,
+        get: controllers.terms.getTerm,
+        put: controllers.terms.updateTerm,
+        delete: controllers.terms.deleteTerm,
     },
     '/terms': {
-        get: termsController.getTerms,
-        post: termsController.createTerm,
+        get: controllers.terms.getTerms,
+        post: controllers.terms.createTerm,
     },
     '/holidays/:hid': {
-        get: holidaysController.getHoliday,
-        put: holidaysController.updateHoliday,
-        delete: holidaysController.deleteHoliday,
+        get: controllers.holidays.getHoliday,
+        put: controllers.holidays.updateHoliday,
+        delete: controllers.holidays.deleteHoliday,
     },
     '/holidays': {
-        get: holidaysController.getHolidays,
-        post: holidaysController.createHoliday,
+        get: controllers.holidays.getHolidays,
+        post: controllers.holidays.createHoliday,
     },
     '/courses/:cid': {
-        get: coursesController.getCourse,
-        put: coursesController.updateCourse,
-        delete: coursesController.deleteCourse,
+        get: controllers.courses.getCourse,
+        put: controllers.courses.updateCourse,
+        delete: controllers.courses.deleteCourse,
     },
     '/courses': {
-        get: coursesController.getCourses,
-        post: coursesController.createCourse,
+        get: controllers.courses.getCourses,
+        post: controllers.courses.createCourse,
     },
     '/sections/:sid': {
-        get: sectionsController.getSection,
-        put: sectionsController.updateSection,
-        delete: sectionsController.deleteSection,
+        get: controllers.sections.getSection,
+        put: controllers.sections.updateSection,
+        delete: controllers.sections.deleteSection,
     },
     '/sections': {
-        get: sectionsController.getSections,
-        post: sectionsController.createSection,
+        get: controllers.sections.getSections,
+        post: controllers.sections.createSection,
     },
 };
 
