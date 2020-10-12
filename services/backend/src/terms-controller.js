@@ -106,7 +106,7 @@ async function handleCascadingDeletes(tid) {
     });
 
     const courseDeletes = dynamoUtils.makeDeleteRequests(courses, 'cid');
-    await dynamoUtils.batchWrite(dynamoUtils.TABLES.COURSES, courseDeletes);
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.COURSES]: courseDeletes });
 
     await Promise.map(courses, ({ cid }) => coursesController.handleCascadingDeletes(cid), { concurrency: 3 });
 
@@ -119,7 +119,7 @@ async function handleCascadingDeletes(tid) {
     });
 
     const holidayDeletes = dynamoUtils.makeDeleteRequests(holidays, 'aid');
-    await dynamoUtils.batchWrite(dynamoUtils.TABLES.HOLIDAYS, holidayDeletes);
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.HOLIDAYS]: holidayDeletes });
 }
 
 module.exports = {

@@ -118,7 +118,7 @@ async function handleCascadingDeletes(uid) {
         });
 
         const deletes = dynamoUtils.makeDeleteRequests(items, dynamoUtils.PKEYS[tableName]);
-        await dynamoUtils.batchWrite(tableName, deletes);
+        await dynamoUtils.batchWrite({ [tableName]: deletes });
     }
 }
 

@@ -97,7 +97,7 @@ async function deleteCourse(req, res) {
     });
 
     const sectionDeletes = dynamoUtils.makeDeleteRequests(sections, 'sid');
-    await dynamoUtils.batchWrite(dynamoUtils.TABLES.SECTIONS, sectionDeletes);
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.SECTIONS]: sectionDeletes });
 
     // Delete sub-assignments
     const { Items: assignments } = await dynamoUtils.scan({
@@ -108,7 +108,7 @@ async function deleteCourse(req, res) {
     });
 
     const assignmentDeletes = dynamoUtils.makeDeleteRequests(assignments, 'aid');
-    await dynamoUtils.batchWrite(dynamoUtils.TABLES.ASSIGNMENTS, assignmentDeletes);
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.ASSIGNMENTS]: assignmentDeletes });
 
     // Delete sub-tasks
     const { Items: tasks } = await dynamoUtils.scan({
@@ -119,7 +119,7 @@ async function deleteCourse(req, res) {
     });
 
     const taskDeletes = dynamoUtils.makeDeleteRequests(tasks, 'tid');
-    await dynamoUtils.batchWrite(dynamoUtils.TABLES.TASKS, taskDeletes);
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.TASKS]: taskDeletes });
 
     await handleCascadingDeletes(requestedCid);
 
@@ -136,7 +136,7 @@ async function handleCascadingDeletes(cid) {
     });
 
     const sectionDeletes = dynamoUtils.makeDeleteRequests(sections, 'sid');
-    await dynamoUtils.batchWrite(dynamoUtils.TABLES.SECTIONS, sectionDeletes);
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.SECTIONS]: sectionDeletes });
 
     // Delete sub-assignments
     const { Items: assignments } = await dynamoUtils.scan({
@@ -147,7 +147,7 @@ async function handleCascadingDeletes(cid) {
     });
 
     const assignmentDeletes = dynamoUtils.makeDeleteRequests(assignments, 'aid');
-    await dynamoUtils.batchWrite(dynamoUtils.TABLES.ASSIGNMENTS, assignmentDeletes);
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.ASSIGNMENTS]: assignmentDeletes });
 
     // Delete sub-tasks for sub-assignments
     await Promise.map(assignments, ({ aid }) => assignmentsController.handleCascadingDeletes(aid), { concurrency: 10 });
@@ -161,7 +161,7 @@ async function handleCascadingDeletes(cid) {
     });
 
     const taskDeletes = dynamoUtils.makeDeleteRequests(tasks, 'tid');
-    await dynamoUtils.batchWrite(dynamoUtils.TABLES.TASKS, taskDeletes);
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.TASKS]: taskDeletes });
 }
 
 module.exports = {
