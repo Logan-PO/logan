@@ -113,6 +113,9 @@ function unflattenRequestItems(flattened) {
 }
 
 async function batchWrite(requestItems, { autoPaginate = true, expectFlat = false } = {}) {
+    // Exit if empty request items
+    if (!(expectFlat ? requestItems : _.flatten(_.values(requestItems))).length) return;
+
     if (!autoPaginate) {
         if (expectFlat) return dynamoClient.batchWrite({ RequestItems: unflattenRequestItems(requestItems) }).promise();
         return dynamoClient.batchWrite({ RequestItems: requestItems }).promise();
