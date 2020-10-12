@@ -44,9 +44,9 @@ function get(params) {
 /**
  * @param {Object} params
  * @param {string} params.TableName
- * @param {string} params.FilterExpression
+ * @param {string} [params.FilterExpression]
  * @param {Object} [params.ExpressionAttributeNames]
- * @param {Object} params.ExpressionAttributeValues
+ * @param {Object} [params.ExpressionAttributeValues]
  * @param {boolean} [params.AutoPaginate = false]
  * @param [params.ExclusiveStartKey] - Used in pagination
  * @returns {Promise<{Items:Object[],[LastEvaluatedKey]}>}

@@ -55,7 +55,7 @@ describe('Assignments', () => {
 
         await dynamoUtils.batchWrite(
             dynamoUtils.TABLES.ASSIGNMENTS,
-            [basicAssignment1, basicAssignment2].map(a => ({ PutRequest: { Item: a } })),
+            [basicAssignment1, basicAssignment2].map(a => ({ PutRequest: { Item: a } }))
         );
 
         // Create 100 tasks for the assignment to delete (this also checks that batchWrite is paginating correctly)
@@ -99,8 +99,6 @@ describe('Assignments', () => {
 
     // Delete assignment
     it('Successful delete', async () => {
-        const { Items: remainingAssignments1 } = await dynamoUtils.scan({ TableName: dynamoUtils.TABLES.ASSIGNMENTS });
-
         await assignmentsController.deleteAssignment(
             { params: { aid: basicAssignment1.aid }, auth: { uid: basicAssignment1.uid } },
             { json: jsonMock }
