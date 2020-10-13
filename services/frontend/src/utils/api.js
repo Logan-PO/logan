@@ -2,6 +2,8 @@ import _ from 'lodash';
 import axios from 'axios';
 
 const BASE_URL = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
+const LOCAL_URL = 'http://localhost:3000';
+
 const client = axios.create({
     baseURL: BASE_URL,
     headers: {
@@ -10,6 +12,43 @@ const client = axios.create({
 });
 
 let bearer;
+
+// If the backend is running locally, use that instead of the base URL
+async function searchForLocalBackend() {
+    try {
+        const { data } = await axios.get(`${LOCAL_URL}/ping`);
+        if (data.success) {
+            console.log(`Using local backend at ${LOCAL_URL}`);
+            client.defaults.baseURL = LOCAL_URL;
+        }
+        // eslint-disable-next-line no-empty
+    } catch (e) {}
+}
+
+if (process.env.NODE_ENV === 'development') searchForLocalBackend();
+
+/**
+ * Wraps a function with improved error logging
+ * @param {function} fn - The function to wrap with error handling
+ * @returns {function}
+ */
+function wrapWithErrorHandling(fn) {
+    return async (...params) => {
+        try {
+            return await fn(...params);
+        } catch (err) {
+            if (err.response.status >= 600) {
+                const method = err.response.config.method.toUpperCase();
+                const route = err.response.config.url;
+                const errName = err.response.data.type;
+                const message = err.response.data.error;
+                console.error(`${method} ${route}\n${errName}: ${message}\n`);
+            }
+
+            throw err;
+        }
+    };
+}
 
 function setBearerToken(token) {
     if (token) bearer = `Bearer ${token}`;
@@ -48,8 +87,8 @@ async function deleteTask(task) {
 
 export default {
     setBearerToken,
-    getTasks,
-    createTask,
-    updateTask,
-    deleteTask,
+    getTasks: wrapWithErrorHandling(getTasks),
+    createTask: wrapWithErrorHandling(createTask),
+    updateTask: wrapWithErrorHandling(updateTask),
+    deleteTask: wrapWithErrorHandling(deleteTask),
 };

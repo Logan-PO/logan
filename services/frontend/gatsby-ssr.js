@@ -1,3 +1,3 @@
-import './src/global.scss';
+import './src/globals/global.scss';
 
-export { default as wrapRootElement } from './src/store/StoreWrapper';
+export { default as wrapRootElement } from './src/globals/RootWrapper';
