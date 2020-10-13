@@ -1,0 +1,51 @@
+@import '../../global';
+
+.assignments-list {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    flex-grow: 1;
+
+    .button-bar {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: stretch;
+        height: 40px;
+        background: teal;
+        flex-grow: 0;
+        flex-shrink: 0;
+        padding: 0.5rem;
+        background: $logan-bg;
+
+        button {
+            appearance: none;
+            background: white;
+            border: none;
+            border-radius: 2px;
+            margin-left: 0.5rem;
+            font-weight: bold;
+        }
+    }
+
+    .scrollview {
+        flex-grow: 1;
+        overflow-y: scroll;
+        border-right: solid 1px $border;
+
+        .heading {
+            padding: 0.5rem 0.5rem 0.2rem;
+            font-family: $heading-font;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-bottom: solid 1px $border;
+            background: $border;
+
+            h1, h2, h3, h4, h5, h6 {
+                margin: 0;
+            }
+        }
+    }
+}
+

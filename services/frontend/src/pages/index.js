@@ -9,13 +9,19 @@ export const gotoAssignments = () => {
 
 export const AssignmentsPageLocal = '/assignments/';
 export const HomePageLocal = '../';
+export const TasksPageLocal = '/tasks/';
 
 export default function Home() {
     return (
         <Container>
             <Container>
                 <h1>Overview Page (WIP)</h1>
-                <Link to={AssignmentsPageLocal}>Assignments</Link>
+                <div>
+                    <Link to={AssignmentsPageLocal}>Assignments</Link>
+                    <div>
+                        <Link to={TasksPageLocal}>Tasks</Link>
+                    </div>
+                </div>
             </Container>
         </Container>
     );
