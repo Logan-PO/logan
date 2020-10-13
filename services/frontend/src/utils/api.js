@@ -12,6 +12,7 @@ const client = axios.create({
 });
 
 let bearer;
+
 // If the backend is running locally, use that instead of the base URL
 async function searchForLocalBackend() {
     try {
@@ -24,7 +25,7 @@ async function searchForLocalBackend() {
     } catch (e) {}
 }
 
-searchForLocalBackend();
+if (process.env.NODE_ENV === 'development') searchForLocalBackend();
 
 /**
  * Wraps a function with improved error logging
@@ -48,20 +49,6 @@ function wrapWithErrorHandling(fn) {
         }
     };
 }
-
-// If the backend is running locally, use that instead of the base URL
-async function searchForLocalBackend() {
-    try {
-        const { data } = await axios.get(`${LOCAL_URL}/ping`);
-        if (data.success) {
-            console.log(`Using local backend at ${LOCAL_URL}`);
-            client.defaults.baseURL = LOCAL_URL;
-        }
-        // eslint-disable-next-line no-empty
-    } catch (e) {}
-}
-
-if (process.env.NODE_ENV === 'development') searchForLocalBackend();
 
 function setBearerToken(token) {
     if (token) bearer = `Bearer ${token}`;
