@@ -1,52 +1,23 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchTasks } from '../../store/tasks';
-import TasksList from './tasks-list';
-import TaskEditor from './task-editor';
-import styles from './tasks-page.module.scss';
+import { createTask } from '../../store/tasks';
 
-class TasksPage extends React.Component {
-    constructor(props) {
-        super(props);
+const TasksPage = ({ tasks, createTask }) => (
+    <div>
+        <h1>Tasks Page</h1>
+        <button onClick={() => createTask({ id: Math.random() })}>Create Task</button>
+        <ul>
+            {tasks.map((task) => (
+                <li key={task.id}>{task.id}</li>
+            ))}
+        </ul>
+    </div>
+);
 
-        this.state = {
-            selectedTid: undefined,
-        };
+const mapStateToProps = (state) => ({
+    tasks: state.tasks,
+});
 
-        this.didSelectTask = this.didSelectTask.bind(this);
-    }
+const mapDispatchToProps = { createTask };
 
-    componentDidMount() {
-        this.props.fetchTasks();
-    }
-
-    didSelectTask(tid) {
-        this.setState({ selectedTid: tid });
-    }
-
-    render() {
-        return (
-            <div className={styles.page}>
-                <div className={styles.navbar}>
-                    <h2>Logan / Tasks</h2>
-                </div>
-                <div className={styles.tasksPage}>
-                    <div className={styles.sidebar}></div>
-                    <TasksList onTaskSelected={this.didSelectTask} />
-                    <TaskEditor tid={this.state.selectedTid} />
-                </div>
-            </div>
-        );
-    }
-}
-
-TasksPage.propTypes = {
-    fetchTasks: PropTypes.func,
-    createTask: PropTypes.func,
-    deleteTask: PropTypes.func,
-};
-
-const mapDispatchToProps = { fetchTasks };
-
-export default connect(null, mapDispatchToProps)(TasksPage);
+export default connect(mapStateToProps, mapDispatchToProps)(TasksPage);
