@@ -2,14 +2,16 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import { ListItem, ListItemText, ListItemIcon, Checkbox, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
-import style from './task-cell.module.scss';
+import styles from './task-cell.module.scss';
 
 class TaskCell extends React.Component {
     constructor(props) {
         super(props);
         this.select = this.select.bind(this);
+        this.deleted = this.deleted.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.state = {
             task: this.props.selectTaskFromStore(this.props.tid),
@@ -20,11 +22,15 @@ class TaskCell extends React.Component {
         this.props.onSelect(this.props.tid);
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.tid !== prevProps.tid) {
-            this.setState({
-                task: this.props.selectTaskFromStore(this.props.tid),
-            });
+    deleted() {
+        this.props.onDelete(this.state.task);
+    }
+
+    componentDidUpdate() {
+        const storeTask = this.props.selectTaskFromStore(this.props.tid);
+
+        if (!_.isEqual(storeTask, this.state.task)) {
+            this.setState({ task: storeTask });
         }
     }
 
@@ -45,18 +51,25 @@ class TaskCell extends React.Component {
 
     render() {
         return (
-            <div
-                className={classNames(style.taskCell, { [style.selected]: this.props.selected })}
-                onClick={this.select}
-            >
-                <input type="checkbox" value={_.get(this.state, 'task.complete', false)} onChange={this.handleChange} />
-                <span>{_.get(this.state, 'task.title')}</span>
-                {!_.isEmpty(_.get(this.state, 'task.description')) && (
-                    <React.Fragment>
-                        <br />
-                        <span style={{ color: 'gray' }}>{this.state.task.description}</span>
-                    </React.Fragment>
-                )}
+            <div className={styles.taskCell}>
+                <ListItem selected={this.props.selected} onClick={this.select}>
+                    <ListItemIcon>
+                        <Checkbox
+                            edge="start"
+                            checked={_.get(this.state, 'task.complete', false)}
+                            onChange={this.handleChange}
+                        />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={_.get(this.state, 'task.title')}
+                        secondary={_.get(this.state, 'task.description')}
+                    />
+                    <ListItemSecondaryAction className={styles.actions}>
+                        <IconButton edge="end" onClick={this.deleted}>
+                            <DeleteIcon color="error" />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
             </div>
         );
     }
@@ -68,6 +81,7 @@ TaskCell.propTypes = {
     selectTaskFromStore: PropTypes.func,
     selected: PropTypes.bool,
     onSelect: PropTypes.func,
+    onDelete: PropTypes.func,
 };
 
 const mapStateToProps = state => {

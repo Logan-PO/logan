@@ -1,7 +1,8 @@
 module.exports = {
     root: true,
-    plugins: ['prettier'],
-    extends: ['eslint:recommended', 'prettier', 'plugin:jest/recommended',"plugin:react/recommended"],
+    plugins: ['prettier', 'import'],
+    extends: ['eslint:recommended', 'prettier', 'plugin:jest/recommended'],
+    ignorePatterns: ['**/node_modules/**'],
     env: {
         es6: true,
         node: true,
@@ -11,6 +12,10 @@ module.exports = {
         sourceType: 'module',
     },
     rules: {
+        'import/no-unresolved': 'error',
+        'import/no-extraneous-dependencies': 'error',
+        'import/newline-after-import': 'error',
+        'import/order': 'error',
         'prefer-template': 'error',
         'prettier/prettier': 'error',
         'no-await-in-loop': 'warn',

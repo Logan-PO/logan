@@ -37,40 +37,12 @@ async function updateTask(task) {
 }
 
 /**
- * @param assignment
- * @returns {Promise<{ success:boolean }>}
- */
-async function deleteTask(assignment) {
-    const { aid } = assignment;
-    const response = await client.delete(`/assignments/${aid}`);
-    return response.data;
-}
-
-async function getAssignments() {
-    const response = await client.get('/assignments');
-    return response.data;
-}
-
-// Returns the new task
-async function createAssignment(assignment) {
-    const response = await client.post('/assignments', assignment);
-    return response.data;
-}
-
-// Returns the updated task
-async function updateAssignment(assignment) {
-    const { aid } = assignment;
-    const response = await client.put(`/assignments/${aid}`, assignment);
-    return response.data;
-}
-
-/**
  * @param task
  * @returns {Promise<{ success:boolean }>}
  */
-async function deleteAssignment(assignment) {
-    const { aid } = assignment;
-    const response = await client.delete(`/assignments/${aid}`);
+async function deleteTask(task) {
+    const { tid } = task;
+    const response = await client.delete(`/tasks/${tid}`);
     return response.data;
 }
 
@@ -80,8 +52,4 @@ export default {
     createTask,
     updateTask,
     deleteTask,
-    getAssignments,
-    createAssignment,
-    updateAssignment,
-    deleteAssignment,
 };

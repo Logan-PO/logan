@@ -72,7 +72,7 @@ If you are **not** using a react component you will need to use the `useDispatch
   ```
   //Defining the props that the state will be mapped to for the render method
   const mapStateToProps = (state) => ({
-      assignmentCatalog: state.AssignmentsPage,
+      assignmentCatalog: state.AssignmentCatalog,
       formValues: state.form,
       isFormShown: state.isFormShown,
   });
@@ -103,5 +103,5 @@ If you are **not** using a react component you will need to use the `useDispatch
           },
       }
   };
-  export default connect(mapStateToProps, mapDispatchToProps)(AssignmentsPage);
+  export default connect(mapStateToProps, mapDispatchToProps)(AssignmentCatalog);
 ```

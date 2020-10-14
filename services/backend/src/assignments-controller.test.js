@@ -64,7 +64,7 @@ describe('getAssignment', () => {
         };
 
         await expect(assignmentsController.getAssignment(req, { json: jsonMock })).rejects.toThrowError(
-            'AssignmentCell does not exist'
+            'Assignment does not exist'
         );
     });
 });
