@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import UpdateTimer from '../../utils/update-timer';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import styles from './assignment-editor.module.scss';
+import { Grid, TextField } from '@material-ui/core';
+import UpdateTimer from '../../utils/update-timer';
+
 import {
     deleteAssignment,
     getAssignmentsSelectors,
     updateAssignment,
     updateAssignmentLocal,
 } from '../../store/assignments';
+import styles from './assignment-editor.module.scss';
 
 //Represents a form to submit the info required to create a given assignment
 class AssignmentEditor extends Component {
@@ -24,18 +26,29 @@ class AssignmentEditor extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.aid !== prevProps.aid) {
-            if (prevProps.aid) {
-                this.updateTimer.fire();
+            if (prevProps.aid && this.changesExist) {
+                const prevAssignment = this.props.selectAssignment(prevProps.aid);
+
+                if (prevAssignment) this.updateTimer.fire();
+
                 this.updateTimer.stop();
             }
 
             this.setState({
                 assignment: this.props.selectAssignment(this.props.aid),
             });
+        } else {
+            // Also if the task has been updated somewhere else, make sure the state reflects that
+            const storeAssignment = this.props.selectAssignment(this.props.aid);
+            if (!_.isEqual(storeAssignment, this.state.assignment)) {
+                this.setState({ assignment: storeAssignment });
+            }
         }
     }
 
     handleChange(prop, e) {
+        this.changesExist = true;
+
         const changes = {};
 
         changes[prop] = e.target.value;
@@ -51,73 +64,61 @@ class AssignmentEditor extends Component {
 
         this.updateTimer.reset();
     }
-    /*render() {
-        const { handleSubmit } = this.props;
-        return (
-            <form onSubmit={handleSubmit}>
-                <Field name="class" component={field} type="text" placeholder="class" />
-                <Field name="name" component={field} type="text" placeholder="name" />
-                <Field name="desc" component={field} type="text" placeholder="desc" />
-                <Field name="day" component={field} type="text" placeholder="day" />
-                <Field name="color" component={field} type="text" placeholder="color" />
-                <Field name="id" component={field} type="text" placeholder="id" />
-                <button type="submit" label="submit">
-                    Submit
-                </button>
-            </form>
-        );
-    }*/
-    render() {
-        const assignment = this.props.selectAssignment(this.props.aid);
 
+    render() {
         return (
             <div className={styles.assignmentEditor}>
-                <div className={styles.row}>
-                    <div className={styles.cell}>
-                        <input
-                            type="text"
-                            className={styles.titleInput}
+                <Grid container spacing={1}>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Class"
+                            fullWidth
                             onChange={this.handleChange.bind(this, 'class')}
-                            value={_.get(assignment, 'class', '')}
+                            value={_.get(this.state.assignment, 'class', '')}
                         />
-                        <input
-                            type="text"
-                            className={styles.titleInput}
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Name"
+                            fullWidth
                             onChange={this.handleChange.bind(this, 'name')}
-                            value={_.get(assignment, 'name', '')}
+                            value={_.get(this.state.assignment, 'name', '')}
                         />
-                    </div>
-                </div>
-                <div className={styles.row}>
-                    <div className={styles.cell}>
-                        <textarea
-                            className={styles.descriptionInput}
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Description"
+                            fullWidth
                             onChange={this.handleChange.bind(this, 'desc')}
-                            value={_.get(assignment, 'desc', '')}
+                            value={_.get(this.state.assignment, 'desc', '')}
                         />
-                        <div className={styles.cell}>
-                            <textarea
-                                className={styles.descriptionInput}
-                                onChange={this.handleChange.bind(this, 'day')}
-                                value={_.get(assignment, 'day', '')}
-                            />
-                            <div className={styles.cell}>
-                                <textarea
-                                    className={styles.descriptionInput}
-                                    onChange={this.handleChange.bind(this, 'color')}
-                                    value={_.get(assignment, 'color', '')}
-                                />
-                                <div className={styles.cell}>
-                                    <textarea
-                                        className={styles.descriptionInput}
-                                        onChange={this.handleChange.bind(this, 'id')}
-                                        value={_.get(assignment, 'id', '')}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Due"
+                            fullWidth
+                            onChange={this.handleChange.bind(this, 'dueDate')}
+                            value={_.get(this.state.assignment, 'dueDate', '')}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Color"
+                            fullWidth
+                            onChange={this.handleChange.bind(this, 'color')}
+                            value={_.get(this.state.assignment, 'color', '')}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="ID"
+                            fullWidth
+                            multiline
+                            onChange={this.handleChange.bind(this, 'id')}
+                            value={_.get(this.state.assignment, 'id', '')}
+                        />
+                    </Grid>
+                </Grid>
             </div>
         );
     }

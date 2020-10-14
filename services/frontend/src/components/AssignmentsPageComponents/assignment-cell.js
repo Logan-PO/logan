@@ -2,14 +2,16 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
+import { ListItem, ListItemText, ListItemIcon, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '../../store/assignments';
-import style from './assignment-cell.module.scss';
+import styles from './assignment-cell.module.scss';
 
 export class AssignmentCell extends React.Component {
     constructor(props) {
         super(props);
         this.select = this.select.bind(this);
+        this.deleted = this.deleted.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.state = {
             assignment: this.props.selectAssignmentFromStore(this.props.aid),
@@ -20,17 +22,21 @@ export class AssignmentCell extends React.Component {
         this.props.onSelect(this.props.aid);
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.aid !== prevProps.aid) {
-            this.setState({
-                assignment: this.props.selectAssignmentFromStore(this.props.aid),
-            });
+    deleted() {
+        this.props.onDelete(this.state.assignment);
+    }
+
+    componentDidUpdate() {
+        const storeAssignment = this.props.selectAssignmentFromStore(this.props.aid);
+
+        if (!_.isEqual(storeAssignment, this.state.assignment)) {
+            this.setState({ assignment: storeAssignment });
         }
     }
 
     handleChange() {
         const changes = {
-            color: 'red',
+            color: 'green',
         };
 
         this.props.updateAssignmentLocal({
@@ -47,20 +53,19 @@ export class AssignmentCell extends React.Component {
         console.log('Ass: ', this);
 
         return (
-            <div
-                className={classNames(style.assignmentCell, { [style.selected]: this.props.selected })}
-                onClick={this.select}
-            >
-                <span>{_.get(this.state, 'assignment.name')}</span>
-                {!_.isEmpty(_.get(this.state, 'assignment.desc')) && (
-                    <React.Fragment>
-                        <br />
-                        <span style={{ color: 'gray' }}>
-                            {this.state.assignment.name}
-                            {this.state.assignment.desc}
-                        </span>
-                    </React.Fragment>
-                )}
+            <div className={styles.assignmentCell}>
+                <ListItem selected={this.props.selected} onClick={this.select}>
+                    <ListItemIcon>A</ListItemIcon>
+                    <ListItemText
+                        primary={_.get(this.state, 'assignment.name')}
+                        secondary={_.get(this.state, 'assignment.desc')}
+                    />
+                    <ListItemSecondaryAction className={styles.actions}>
+                        <IconButton edge="end" onClick={this.deleted}>
+                            <DeleteIcon color="error" />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
             </div>
         );
     }
@@ -71,6 +76,7 @@ AssignmentCell.propTypes = {
     selectAssignmentFromStore: PropTypes.func,
     selected: PropTypes.bool,
     onSelect: PropTypes.func,
+    onDelete: PropTypes.func,
 };
 
 const mapStateToProps = state => {

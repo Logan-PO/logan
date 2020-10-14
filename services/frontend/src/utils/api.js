@@ -46,10 +46,41 @@ async function deleteTask(task) {
     return response.data;
 }
 
+async function getAssignments() {
+    const response = await client.get('/assignments');
+    return response.data;
+}
+
+// Returns the new assignment
+async function createAssignment(assignment) {
+    const response = await client.post('/assignments', assignment);
+    return response.data;
+}
+
+// Returns the updated assigment
+async function updateAssignment(assignment) {
+    const { aid } = assignment;
+    const response = await client.put(`/assignments/${aid}`, assignment);
+    return response.data;
+}
+/**
+ * @param task
+ * @returns {Promise<{ success:boolean }>}
+ */
+async function deleteAssignment(assignment) {
+    const { aid } = assignment;
+    const response = await client.delete(`/assignments/${aid}`);
+    return response.data;
+}
+
 export default {
     setBearerToken,
     getTasks,
     createTask,
     updateTask,
     deleteTask,
+    getAssignments,
+    createAssignment,
+    updateAssignment,
+    deleteAssignment,
 };

@@ -7,6 +7,14 @@
     align-items: stretch;
     flex-grow: 1;
 
+    .add-button {
+        position: relative;
+        left: calc(100% - 1.5em);
+        bottom: 1.5em;
+        transform: translate(-100%, -100%);
+        z-index: 10000;
+    }
+
     .button-bar {
         display: flex;
         flex-direction: row;

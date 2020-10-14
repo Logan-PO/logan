@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Page } from '../shared';
 import { fetchAssignments } from '../../store/assignments';
+import api from '../../utils/api';
 import AssignmentsList from './assignments-list';
 import AssignmentEditor from './assignment-editor';
 import styles from './assignments-page.module.scss';
@@ -10,14 +11,17 @@ import styles from './assignments-page.module.scss';
 export class AssignmentsPage extends React.Component {
     constructor(props) {
         super(props);
+        this.didSelectAssignment = this.didSelectAssignment.bind(this);
 
         this.state = {
             selectedAid: undefined,
         };
-        this.didSelectAssignment = this.didSelectAssignment.bind(this);
     }
 
     componentDidMount() {
+        api.setBearerToken(
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJmYWJiMDQyZi05NjU2LTRjMjAtYmYzMy1hZmM5MDMzN2E1ZTEiLCJpYXQiOjE2MDE4NDM3OTB9.oaMx3ATdIOYikkdMPI4f8lnAIcS0z5hAaP6hODOQUC8'
+        );
         this.props.fetchAssignments();
     }
 

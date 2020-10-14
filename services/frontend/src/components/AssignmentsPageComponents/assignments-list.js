@@ -1,8 +1,15 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchAssignments, createAssignment } from '../../store/assignments';
+import AddIcon from '@material-ui/icons/Add';
+import { List, ListSubheader, Fab } from '@material-ui/core';
+import {
+    fetchAssignments,
+    createAssignment,
+    getAssignmentsSelectors,
+    deleteAssignment,
+    compareDueDates,
+} from '../../store/assignments';
 import styles from './assignments-list.module.scss';
 import AssignmentCell from './assignment-cell';
 
@@ -11,6 +18,7 @@ class AssignmentsList extends React.Component {
         super(props);
 
         this.didSelectAssignment = this.didSelectAssignment.bind(this);
+        this.didDeleteAssignment = this.didDeleteAssignment.bind(this);
 
         this.state = {
             selectedAssignment: undefined,
@@ -22,7 +30,7 @@ class AssignmentsList extends React.Component {
             class: 'PHYS',
             name: 'Random Assignment',
             desc: 'test',
-            day: 'soon',
+            dueDate: 'soon',
             color: 'orange',
             id: 1,
         };
@@ -32,32 +40,44 @@ class AssignmentsList extends React.Component {
         this.setState(() => ({ selectedAid: aid }));
         this.props.onAssignmentSelected(aid);
     }
+    didDeleteAssignment(assignment) {
+        this.props.deleteAssignment(assignment);
+        // TODO: Select next assignment
+        this.setState(() => ({ selectedAid: undefined }));
+        this.props.onAssignmentSelected(undefined);
+    }
 
     render() {
         return (
             <div className={styles.assignmentsList}>
                 <div className={styles.scrollview}>
-                    {this.props.sections.map(section => {
-                        const [day, assignments] = section;
-                        return (
-                            <React.Fragment key={section[0]}>
-                                <div className={styles.heading}>{day}</div>
-                                {assignments.map(assignment => (
-                                    <AssignmentCell
-                                        key={assignment.aid}
-                                        aid={assignment.aid}
-                                        onSelect={this.didSelectAssignment}
-                                        selected={this.state.selectedAssignment === assignment.aid}
-                                    />
-                                ))}
-                            </React.Fragment>
-                        );
-                    })}
+                    <List>
+                        {this.props.sections.map(section => {
+                            const [dueDate, aids] = section;
+                            return (
+                                <React.Fragment key={section[0]}>
+                                    <ListSubheader className={styles.heading}>{dueDate}</ListSubheader>
+                                    {aids.map(aid => (
+                                        <AssignmentCell
+                                            key={aid}
+                                            aid={aid}
+                                            onSelect={this.didSelectAssignment}
+                                            onDelete={this.didDeleteAssignment}
+                                            selected={this.state.selectedAid === aid}
+                                        />
+                                    ))}
+                                </React.Fragment>
+                            );
+                        })}
+                    </List>
                 </div>
-                <div className={styles.buttonBar}>
-                    <button onClick={this.props.fetchAssignments}>Fetch</button>
-                    <button onClick={() => this.props.createAssignment(this.randomAssignment())}>New</button>
-                </div>
+                <Fab
+                    className={styles.addButton}
+                    color="secondary"
+                    onClick={() => this.props.createAssignment(this.randomAssignment())}
+                >
+                    <AddIcon />
+                </Fab>
             </div>
         );
     }
@@ -66,21 +86,23 @@ AssignmentsList.propTypes = {
     sections: PropTypes.arrayOf(PropTypes.array),
     fetchAssignments: PropTypes.func,
     createAssignment: PropTypes.func,
+    deleteAssignment: PropTypes.func,
     onAssignmentSelected: PropTypes.func,
 };
 
 const mapStateToProps = state => {
+    const selectors = getAssignmentsSelectors(state.assignments);
     const sections = {};
-    for (const assignment of _.values(state.assignments.entities)) {
-        if (sections[assignment.day]) sections[assignment.day].push(assignment);
-        else sections[assignment.day] = [assignment];
+    for (const assignment of selectors.selectAll()) {
+        if (sections[assignment.dueDate]) sections[assignment.dueDate].push(assignment.aid);
+        else sections[assignment.dueDate] = [assignment.aid];
     }
 
     return {
-        sections: Object.entries(sections),
+        sections: Object.entries(sections).sort((a, b) => compareDueDates(a[0], b[0])),
     };
 };
 
-const mapDispatchToProps = { fetchAssignments, createAssignment };
+const mapDispatchToProps = { fetchAssignments, createAssignment, deleteAssignment };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AssignmentsList);
