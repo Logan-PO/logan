@@ -1,10 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { Page } from '../shared';
+import { fetchAssignments } from '../../store/assignments';
 import AssignmentsList from './assignments-list';
 import AssignmentEditor from './assignment-editor';
-import { connect } from 'react-redux';
 import styles from './assignments-page.module.scss';
-import { fetchAssignments } from '../../store/assignments';
-import PropTypes from 'prop-types';
 
 export class AssignmentsPage extends React.Component {
     constructor(props) {
@@ -26,16 +27,13 @@ export class AssignmentsPage extends React.Component {
     render() {
         //possible source of error here
         return (
-            <div className={styles.page}>
-                <div className={styles.navbar}>
-                    <h2>Logan / Assignments</h2>
-                </div>
+            <Page title="Assignments">
                 <div className={styles.assignmentsPage}>
                     <div className={styles.sidebar}></div>
                     <AssignmentsList onAssignmentSelected={this.didSelectAssignment} />
                     <AssignmentEditor aid={this.state.selectedAid} />
                 </div>
-            </div>
+            </Page>
         );
     }
 }
@@ -48,4 +46,4 @@ AssignmentsPage.propTypes = {
 
 const mapDispatchToProps = { fetchAssignments };
 
-export default connect(null, mapDispatchToProps)(fetchAssignments);
+export default connect(null, mapDispatchToProps)(AssignmentsPage);
