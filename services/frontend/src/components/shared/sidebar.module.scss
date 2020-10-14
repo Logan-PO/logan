@@ -1,0 +1,16 @@
+$sidebar-width: 240px;
+$sidebar-z-index: 2000;
+
+.sidebar {
+    width: $sidebar-width;
+    flex-shrink: 0;
+    z-index: $sidebar-z-index;
+}
+
+.sidebar-paper {
+    width: $sidebar-width;
+}
+
+.sidebar-container {
+    overflow: auto;
+}
