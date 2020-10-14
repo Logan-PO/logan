@@ -1,45 +1,29 @@
 const _ = require('lodash');
+const { MissingPropertyError } = require('./errors');
 
-function requireQueryParams(req, params) {
+function requireParams(req, params, location) {
     const missingParams = [];
     const out = {};
 
     for (const param of params) {
-        if (_.has(req, ['query', param])) {
-            _.set(out, param, _.get(req, ['query', param]));
+        if (_.has(req, [location, param])) {
+            _.set(out, param, _.get(req, [location, param]));
         } else {
             missingParams.push(param);
         }
     }
 
-    if (missingParams.length === 1) {
-        throw new Error(`Missing required property in query: ${missingParams[0]}`);
-    } else if (missingParams.length) {
-        throw new Error(`Missing required properties in query: ${missingParams.join(', ')}`);
-    }
+    if (missingParams.length) throw new MissingPropertyError(missingParams, location);
 
     return out;
 }
 
+function requireQueryParams(req, params) {
+    return requireParams(req, params, 'query');
+}
+
 function requireBodyParams(req, params) {
-    const missingParams = [];
-    const out = {};
-
-    for (const param of params) {
-        if (_.has(req, ['body', param])) {
-            _.set(out, param, _.get(req, ['body', param]));
-        } else {
-            missingParams.push(param);
-        }
-    }
-
-    if (missingParams.length === 1) {
-        throw new Error(`Missing required property in body: ${missingParams[0]}`);
-    } else if (missingParams.length) {
-        throw new Error(`Missing required properties in body: ${missingParams.join(', ')}`);
-    }
-
-    return out;
+    return requireParams(req, params, 'body');
 }
 
 module.exports = {

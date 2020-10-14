@@ -17,7 +17,7 @@ class Sidebar extends React.Component {
                 <div className={styles.sidebarContainer}>
                     <List>
                         {pages.map(name => (
-                            <ListItem button key={name} selected={this.props.currentPage === name} onClick={null}>
+                            <ListItem button key={name} selected={this.props.currentPage === name}>
                                 <ListItemText primary={name} />
                             </ListItem>
                         ))}

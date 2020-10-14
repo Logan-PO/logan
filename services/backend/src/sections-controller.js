@@ -3,22 +3,10 @@ const dayjs = require('dayjs');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const requestValidator = require('../utils/request-validator');
+const { NotFoundError } = require('../utils/errors');
 
 const DATE_FORMAT = 'M/D/YYYY';
 const TIME_FORMAT = 'H:mm';
-
-// uid
-// cid
-// sid
-// title
-// sd (start date)
-// st (start time)
-// ed (end date)
-// et (end time)
-// dow (days of week)
-// wr (weekly repeat interval)
-// loc (location)
-// inst (instructor)
 
 function fromDbFormat(db) {
     return {
@@ -59,7 +47,7 @@ async function getSection(req, res) {
     if (dbResponse.Item) {
         res.json(fromDbFormat(dbResponse.Item));
     } else {
-        throw new Error('Section does not exist');
+        throw new NotFoundError('Section does not exist');
     }
 }
 
