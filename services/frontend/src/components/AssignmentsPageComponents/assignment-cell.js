@@ -57,7 +57,7 @@ export class AssignmentCell extends React.Component {
                 <ListItem selected={this.props.selected} onClick={this.select}>
                     <ListItemIcon>A</ListItemIcon>
                     <ListItemText
-                        primary={_.get(this.state, 'assignment.name')}
+                        primary={_.get(this.state, 'assignment.title')}
                         secondary={_.get(this.state, 'assignment.desc')}
                     />
                     <ListItemSecondaryAction className={styles.actions}>

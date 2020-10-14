@@ -81,8 +81,8 @@ class AssignmentEditor extends Component {
                         <TextField
                             label="Name"
                             fullWidth
-                            onChange={this.handleChange.bind(this, 'name')}
-                            value={_.get(this.state.assignment, 'name', '')}
+                            onChange={this.handleChange.bind(this, 'title')}
+                            value={_.get(this.state.assignment, 'title', '')}
                         />
                     </Grid>
                     <Grid item xs={12}>

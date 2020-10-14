@@ -28,7 +28,7 @@ class AssignmentsList extends React.Component {
     randomAssignment() {
         return {
             class: 'PHYS',
-            name: 'Random Assignment',
+            title: 'Random Assignment',
             desc: 'test',
             dueDate: 'soon',
             color: 'orange',
