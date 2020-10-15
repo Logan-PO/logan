@@ -27,6 +27,12 @@ function humanReadableDate(date) {
     else return date.format('MMM Do, YYYY');
 }
 
+function readableDueDate(dueDate) {
+    if (dueDate === 'asap') return 'ASAP';
+    else if (dueDate === 'eventually') return 'Eventually';
+    else return humanReadableDate(dayjs(dueDate));
+}
+
 // Constants
 const DB_DATE_FORMAT = 'YYYY-M-D';
 const DB_TIME_FORMAT = 'H:m';
@@ -36,4 +42,5 @@ module.exports = {
     dayjs,
     constants: { DB_DATE_FORMAT, DB_TIME_FORMAT, DB_DATETIME_FORMAT },
     humanReadableDate,
+    readableDueDate,
 };
