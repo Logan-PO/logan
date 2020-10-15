@@ -3,7 +3,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { Grid, TextField, FormControl, FormLabel, FormControlLabel, RadioGroup, Radio } from '@material-ui/core';
+import {
+    Grid,
+    TextField,
+    Checkbox,
+    FormControl,
+    FormLabel,
+    FormControlLabel,
+    RadioGroup,
+    Radio,
+} from '@material-ui/core';
 import UpdateTimer from '../../utils/update-timer';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
 import styles from './task-editor.module.scss';
@@ -97,7 +106,9 @@ class TaskEditor extends React.Component {
 
         const changes = {};
 
-        if (prop === 'dueDate') {
+        if (prop === 'complete') {
+            changes[prop] = e.target.checked;
+        } else if (prop === 'dueDate') {
             const dateString = e.target.value;
             const dateObj = dayjs(dateString, 'YYYY-MM-DD');
             this.setState({ lastDueDate: dateObj });
@@ -123,16 +134,29 @@ class TaskEditor extends React.Component {
     render() {
         return (
             <div className={styles.taskEditor}>
-                <Grid container spacing={1}>
+                <Grid container spacing={2} direction="column">
                     <Grid item xs={12}>
-                        <TextField
-                            label="Title"
-                            fullWidth
-                            onChange={this.handleChange.bind(this, 'title')}
-                            value={_.get(this.state.task, 'title', '')}
-                            color="secondary"
-                            disabled={this.isEmpty()}
-                        />
+                        <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">
+                            <Grid item>
+                                <Checkbox
+                                    style={{ padding: 0 }}
+                                    disabled={this.isEmpty()}
+                                    checked={_.get(this.state.task, 'complete', false)}
+                                    onChange={this.handleChange.bind(this, 'complete')}
+                                />
+                            </Grid>
+                            <Grid item style={{ flexGrow: 1 }}>
+                                <TextField
+                                    label="Title"
+                                    fullWidth
+                                    onChange={this.handleChange.bind(this, 'title')}
+                                    value={_.get(this.state.task, 'title', '')}
+                                    color="secondary"
+                                    placeholder="Untitled task"
+                                    disabled={this.isEmpty()}
+                                />
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
@@ -142,6 +166,7 @@ class TaskEditor extends React.Component {
                             onChange={this.handleChange.bind(this, 'description')}
                             value={_.get(this.state.task, 'description', '')}
                             color="secondary"
+                            placeholder="Task description"
                             disabled={this.isEmpty()}
                         />
                     </Grid>
@@ -185,7 +210,7 @@ class TaskEditor extends React.Component {
                             <FormLabel color="secondary">Priority</FormLabel>
                             <RadioGroup
                                 name="priority"
-                                value={_.get(this.state.task, 'priority')}
+                                value={_.get(this.state.task, 'priority', '')}
                                 onChange={this.handleChange.bind(this, 'priority')}
                             >
                                 {_.entries(priorities).map(([pName, p]) => (
