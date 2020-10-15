@@ -70,6 +70,22 @@ const { slice, asyncActions } = createAsyncSlice({
     },
 });
 
-export const selectors = _.mapValues(adapters, wrapAdapter);
+export function getScheduleSelectors(state) {
+    const baseSelectors = _.mapValues(adapters, (adapter, name) => wrapAdapter(adapter)(state[name]));
+
+    return {
+        baseSelectors,
+        getHolidaysForTerm({ tid }) {
+            return _.filter(baseSelectors.holidays.selectAll(), holiday => holiday.tid === tid);
+        },
+        getCoursesForTerm({ tid }) {
+            return _.filter(baseSelectors.courses.selectAll(), course => course.tid === tid);
+        },
+        getSectionsForCourse({ cid }) {
+            return _.filter(baseSelectors.sections.selectAll(), section => section.cid === cid);
+        },
+    };
+}
+
 export const { fetchSchedule } = asyncActions;
 export default slice.reducer;
