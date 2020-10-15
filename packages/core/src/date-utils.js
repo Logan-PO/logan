@@ -19,6 +19,15 @@ for (const plugin of Object.values(plugins)) {
     dayjs.extend(plugin);
 }
 
+function compareDates(d1, d2, format, granularity = 'day') {
+    const date1 = dayjs(d1, format);
+    const date2 = dayjs(d2, format);
+
+    if (date1.isSame(date2, granularity)) return 0;
+    else if (date1.isBefore(date2, granularity)) return -1;
+    else return 1;
+}
+
 function humanReadableDate(date) {
     if (date.isToday()) return 'Today';
     else if (date.isTomorrow()) return 'Tomorrow';
@@ -45,6 +54,7 @@ const DB_DATETIME_FORMAT = 'YYYY-M-D H:m';
 module.exports = {
     dayjs,
     constants: { DB_DATE_FORMAT, DB_TIME_FORMAT, DB_DATETIME_FORMAT },
+    compareDates,
     humanReadableDate,
     dueDateIsDate,
     readableDueDate,

@@ -46,7 +46,7 @@ const { slice, asyncActions } = createAsyncSlice({
         fetchSchedule: {
             async fn() {
                 const requests = {
-                    terms: api.getTasks,
+                    terms: api.getTerms,
                     holidays: api.getHolidays,
                     courses: api.getCourses,
                     sections: api.getSections,
@@ -61,7 +61,10 @@ const { slice, asyncActions } = createAsyncSlice({
                 return responses;
             },
             success(state, action) {
-                console.log(action);
+                const responses = action.payload;
+                for (const [entityType, response] of _.entries(responses)) {
+                    adapters[entityType].setAll(state[entityType], response);
+                }
             },
         },
     },
