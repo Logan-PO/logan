@@ -1,9 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { navigate } from 'gatsby';
 import { Drawer, Toolbar, List, ListItem, ListItemText } from '@material-ui/core';
 import styles from './sidebar.module.scss';
 
-const pages = ['Overview', 'Tasks', 'Assignments', 'Schedule', 'Settings'];
+const pages = {
+    Overview: '/overview',
+    Tasks: '/tasks',
+    Assignments: '/assignments',
+    Schedule: '/schedule',
+    Settings: '/settings',
+};
 
 class Sidebar extends React.Component {
     constructor(props) {
@@ -16,8 +23,13 @@ class Sidebar extends React.Component {
                 <Toolbar />
                 <div className={styles.sidebarContainer}>
                     <List>
-                        {pages.map(name => (
-                            <ListItem button key={name} selected={this.props.currentPage === name}>
+                        {Object.entries(pages).map(([name, url]) => (
+                            <ListItem
+                                button
+                                key={name}
+                                selected={this.props.currentPage === name}
+                                onClick={() => navigate(url)}
+                            >
                                 <ListItemText primary={name} />
                             </ListItem>
                         ))}
