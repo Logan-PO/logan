@@ -1,20 +1,19 @@
 const _ = require('lodash');
-const dayjs = require('dayjs');
 const { dynamoUtils } = require('@logan/aws');
+const {
+    dateUtils: { dayjs, constants: dateConstants },
+} = require('@logan/core');
 const { v4: uuid } = require('uuid');
 const requestValidator = require('../utils/request-validator');
 const { NotFoundError } = require('../utils/errors');
 
-const DATE_FORMAT = 'M/D/YYYY';
-const TIME_FORMAT = 'H:mm';
-
 function fromDbFormat(db) {
     return {
         ..._.pick(db, ['uid', 'cid', 'sid', 'title']),
-        startDate: dayjs(db.sd, DATE_FORMAT).startOf('day'),
-        endDate: dayjs(db.ed, DATE_FORMAT).endOf('day'),
-        startTime: dayjs(db.st, TIME_FORMAT),
-        endTime: dayjs(db.et, TIME_FORMAT),
+        startDate: dayjs(db.sd, dateConstants.DB_DATE_FORMAT).startOf('day'),
+        endDate: dayjs(db.ed, dateConstants.DB_DATE_FORMAT).endOf('day'),
+        startTime: dayjs(db.st, dateConstants.DB_TIME_FORMAT),
+        endTime: dayjs(db.et, dateConstants.DB_TIME_FORMAT),
         daysOfWeek: db.dow,
         weeklyRepeat: db.wr,
         location: db.loc,
@@ -25,10 +24,10 @@ function fromDbFormat(db) {
 function toDbFormat(section) {
     return {
         ..._.pick(section, ['uid', 'cid', 'sid', 'title']),
-        sd: section.startDate.format(DATE_FORMAT),
-        ed: section.endDate.format(DATE_FORMAT),
-        st: section.startTime.format(TIME_FORMAT),
-        et: section.endTime.format(TIME_FORMAT),
+        sd: dayjs(section.startDate).format(dateConstants.DB_DATE_FORMAT),
+        ed: dayjs(section.endDate).format(dateConstants.DB_DATE_FORMAT),
+        st: dayjs(section.startTime).format(dateConstants.DB_TIME_FORMAT),
+        et: dayjs(section.endTime).format(dateConstants.DB_TIME_FORMAT),
         dow: section.daysOfWeek,
         wr: section.weeklyRepeat,
         loc: section.location,
