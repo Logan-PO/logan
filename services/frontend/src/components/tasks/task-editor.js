@@ -31,6 +31,10 @@ class TaskEditor extends React.Component {
         this.state = {};
     }
 
+    isEmpty() {
+        return _.isEmpty(this.props.tid);
+    }
+
     updateCurrentTask(task) {
         let dueDateType = _.get(task, 'dueDate');
         if (dueDateType !== 'asap' && dueDateType !== 'eventually') {
@@ -122,6 +126,7 @@ class TaskEditor extends React.Component {
                             onChange={this.handleChange.bind(this, 'title')}
                             value={_.get(this.state.task, 'title', '')}
                             color="secondary"
+                            disabled={this.isEmpty()}
                         />
                     </Grid>
                     <Grid item xs={12}>
@@ -132,10 +137,11 @@ class TaskEditor extends React.Component {
                             onChange={this.handleChange.bind(this, 'description')}
                             value={_.get(this.state.task, 'description', '')}
                             color="secondary"
+                            disabled={this.isEmpty()}
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <FormControl component="fieldset">
+                        <FormControl disabled={this.isEmpty()}>
                             <FormLabel color="secondary">Due Date</FormLabel>
                             <RadioGroup
                                 name="dueDateType"
@@ -170,11 +176,11 @@ class TaskEditor extends React.Component {
                                 />
                             </RadioGroup>
                         </FormControl>
-                        <FormControl component="fieldset">
+                        <FormControl disabled={this.isEmpty()}>
                             <FormLabel color="secondary">Priority</FormLabel>
                             <RadioGroup
                                 name="priority"
-                                value={_.get(this.state.task, 'priority', 0)}
+                                value={_.get(this.state.task, 'priority')}
                                 onChange={this.handleChange.bind(this, 'priority')}
                             >
                                 {_.entries(priorities).map(([pName, p]) => (
