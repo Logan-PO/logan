@@ -1,8 +1,10 @@
 import _ from 'lodash';
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import dayjs from 'dayjs';
+import { dateUtils } from '@logan/core';
 import { createAsyncSlice, wrapAdapter } from '../utils/redux-utils';
 import api from '../utils/api';
+
+const { dayjs } = dateUtils;
 
 export function compareTasks(task1, task2) {
     const dueDateComparison = compareDueDates(task1.dueDate, task2.dueDate);
@@ -23,8 +25,9 @@ export function compareDueDates(dueDate1, dueDate2) {
     } else if (dueDate2 === 'eventually') {
         return -1;
     } else {
-        const date1 = dayjs(dueDate1, 'M/D/YYYY');
-        const date2 = dayjs(dueDate2, 'M/D/YYYY');
+        const date1 = dayjs(dueDate1);
+        const date2 = dayjs(dueDate2);
+
         if (date1.isBefore(date2)) return -1;
         else if (date1.isAfter(date2)) return 1;
         else return 0;

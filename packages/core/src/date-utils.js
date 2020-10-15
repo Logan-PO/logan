@@ -23,8 +23,12 @@ function humanReadableDate(date) {
     if (date.isToday()) return 'Today';
     else if (date.isTomorrow()) return 'Tomorrow';
     else if (date.isYesterday()) return 'Yesterday';
-    else if (date.year() === dayjs().year()) return date.format('MMM Do');
-    else return date.format('MMM Do, YYYY');
+    else if (date.year() === dayjs().year()) return date.format('MMMM Do');
+    else return date.format('MMMM Do, YYYY');
+}
+
+function dueDateIsDate(dueDate) {
+    return dueDate !== 'asap' && dueDate !== 'eventually';
 }
 
 function readableDueDate(dueDate) {
@@ -42,5 +46,6 @@ module.exports = {
     dayjs,
     constants: { DB_DATE_FORMAT, DB_TIME_FORMAT, DB_DATETIME_FORMAT },
     humanReadableDate,
+    dueDateIsDate,
     readableDueDate,
 };
