@@ -57,6 +57,8 @@ function setBearerToken(token) {
     _.set(client, 'defaults.headers.common.Authorization', bearer);
 }
 
+/* --- TASKS --- */
+
 async function getTasks() {
     const response = await client.get('/tasks');
     return response.data;
@@ -85,10 +87,130 @@ async function deleteTask(task) {
     return response.data;
 }
 
+/* --- TERMS --- */
+
+async function getTerms() {
+    const response = await client.get('/terms');
+    return response.data;
+}
+
+// Returns the new term
+async function createTerm(term) {
+    const response = await client.post('/terms', term);
+    return response.data;
+}
+
+// Returns the updated term
+async function updateTerm(term) {
+    const { tid } = term;
+    const response = await client.put(`/terms/${tid}`, term);
+    return response.data;
+}
+
+async function deleteTerm(term) {
+    const { tid } = term;
+    const response = await client.delete(`/terms/${tid}`);
+    return response.data;
+}
+
+/* --- HOLIDAYS --- */
+
+async function getHolidays() {
+    const response = await client.get('/holidays');
+    return response.data;
+}
+
+// Returns the new holiday
+async function createHoliday(holiday) {
+    const response = await client.post('/holidays', holiday);
+    return response.data;
+}
+
+// Returns the updated holiday
+async function updateHoliday(holiday) {
+    const { hid } = holiday;
+    const response = await client.put(`/holidays/${hid}`, holiday);
+    return response.data;
+}
+
+async function deleteHoliday(holiday) {
+    const { hid } = holiday;
+    const response = await client.delete(`/holidays/${hid}`);
+    return response.data;
+}
+
+/* --- COURSES --- */
+
+async function getCourses() {
+    const response = await client.get('/courses');
+    return response.data;
+}
+
+// Returns the new course
+async function createCourse(course) {
+    const response = await client.post('/courses', course);
+    return response.data;
+}
+
+// Returns the updated course
+async function updateCourse(course) {
+    const { cid } = course;
+    const response = await client.put(`/courses/${cid}`, course);
+    return response.data;
+}
+
+async function deleteCourse(course) {
+    const { cid } = course;
+    const response = await client.delete(`/courses/${cid}`);
+    return response.data;
+}
+
+/* --- SECTIONS --- */
+
+async function getSections() {
+    const response = await client.get('/sections');
+    return response.data;
+}
+
+// Returns the new course
+async function createSection(section) {
+    const response = await client.post('/sections', section);
+    return response.data;
+}
+
+// Returns the updated course
+async function updateSection(section) {
+    const { sid } = section;
+    const response = await client.put(`/sections/${sid}`, section);
+    return response.data;
+}
+
+async function deleteSection(section) {
+    const { sid } = section;
+    const response = await client.delete(`/sections/${sid}`);
+    return response.data;
+}
+
 export default {
     setBearerToken,
     getTasks: wrapWithErrorHandling(getTasks),
     createTask: wrapWithErrorHandling(createTask),
     updateTask: wrapWithErrorHandling(updateTask),
     deleteTask: wrapWithErrorHandling(deleteTask),
+    getTerms: wrapWithErrorHandling(getTerms),
+    createTerm: wrapWithErrorHandling(createTerm),
+    updateTerm: wrapWithErrorHandling(updateTerm),
+    deleteTerm: wrapWithErrorHandling(deleteTerm),
+    getHolidays: wrapWithErrorHandling(getHolidays),
+    createHoliday: wrapWithErrorHandling(createHoliday),
+    updateHoliday: wrapWithErrorHandling(updateHoliday),
+    deleteHoliday: wrapWithErrorHandling(deleteHoliday),
+    getCourses: wrapWithErrorHandling(getCourses),
+    createCourse: wrapWithErrorHandling(createCourse),
+    updateCourse: wrapWithErrorHandling(updateCourse),
+    deleteCourse: wrapWithErrorHandling(deleteCourse),
+    getSections: wrapWithErrorHandling(getSections),
+    createSection: wrapWithErrorHandling(createSection),
+    updateSection: wrapWithErrorHandling(updateSection),
+    deleteSection: wrapWithErrorHandling(deleteSection),
 };
