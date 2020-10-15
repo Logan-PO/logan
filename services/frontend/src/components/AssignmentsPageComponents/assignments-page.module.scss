@@ -1,4 +1,4 @@
-@import '../../global';
+@import '../../globals/global';
 
 .page {
     width: 100vw;
@@ -8,20 +8,6 @@
     align-items: stretch;
 }
 
-.navbar {
-    padding: 0.5rem 0.8rem;
-    background: $logan-bg;
-    color: white;
-
-    h2 {
-        margin: 0px;
-    }
-}
-
-.sidebar {
-    width: 40px;
-    background: $logan-bg;
-}
 
 .assignments-page {
     height: 100%;

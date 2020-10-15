@@ -118,8 +118,8 @@ export default {
     createTask: wrapWithErrorHandling(createTask),
     updateTask: wrapWithErrorHandling(updateTask),
     deleteTask: wrapWithErrorHandling(deleteTask),
-    getAssignments,
-    createAssignment,
-    updateAssignment,
-    deleteAssignment,
+    getAssignments: wrapWithErrorHandling(getAssignments),
+    createAssignment: wrapWithErrorHandling(createAssignment),
+    updateAssignment: wrapWithErrorHandling(updateAssignment),
+    deleteAssignment: wrapWithErrorHandling(deleteAssignment),
 };
