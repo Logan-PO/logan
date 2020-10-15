@@ -126,7 +126,7 @@ function route(app) {
                             error: e.message,
                         });
                     } else {
-                        res.status(e.code).json({
+                        res.status(500).json({
                             error: e.message,
                             stack: e.stack,
                         });
