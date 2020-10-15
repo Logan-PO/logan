@@ -2,11 +2,13 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { dateUtils } from '@logan/core';
 import { Grid, TextField, FormControl, FormLabel, FormControlLabel, RadioGroup, Radio } from '@material-ui/core';
-import dayjs from 'dayjs';
 import UpdateTimer from '../../utils/update-timer';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
 import styles from './task-editor.module.scss';
+
+const { dayjs, constants: dateConstants } = dateUtils;
 
 const priorities = {
     'Very low': -2,
@@ -81,7 +83,7 @@ class TaskEditor extends React.Component {
                 this.setState({ lastDueDate });
             }
 
-            this.makeChanges({ dueDate: lastDueDate.format('M/D/YYYY') });
+            this.makeChanges({ dueDate: lastDueDate.format(dateConstants.DB_DATE_FORMAT) });
         } else {
             this.makeChanges({ dueDate: newType });
         }
@@ -96,7 +98,7 @@ class TaskEditor extends React.Component {
             const dateString = e.target.value;
             const dateObj = dayjs(dateString, 'YYYY-MM-DD');
             this.setState({ lastDueDate: dateObj });
-            changes[prop] = dateObj.format('M/D/YYYY');
+            changes[prop] = dateObj.format(dateConstants.DB_DATE_FORMAT);
         } else {
             changes[prop] = e.target.value;
         }
