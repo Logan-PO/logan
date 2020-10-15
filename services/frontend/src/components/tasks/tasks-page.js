@@ -15,10 +15,6 @@ class TasksPage extends React.Component {
         this.state = { selectedTid: undefined };
     }
 
-    componentDidMount() {
-        this.props.fetchTasks();
-    }
-
     didSelectTask(tid) {
         this.setState({ selectedTid: tid });
     }
