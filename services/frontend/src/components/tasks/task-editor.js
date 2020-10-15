@@ -58,10 +58,13 @@ class TaskEditor extends React.Component {
                 if (prevTask) this.updateTimer.fire();
 
                 this.updateTimer.stop();
-                this.setState({ lastDueDate: dayjs() });
             }
 
-            this.updateCurrentTask(this.props.selectTask(this.props.tid));
+            const currentTask = this.props.selectTask(this.props.tid);
+            this.updateCurrentTask(currentTask);
+            if (currentTask.dueDate !== 'asap' && currentTask.dueDate !== 'eventually') {
+                this.setState({ lastDueDate: dayjs(currentTask.dueDate, dateConstants.DB_DATE_FORMAT) });
+            }
         } else {
             // Also if the task has been updated somewhere else, make sure the state reflects that
             const storeTask = this.props.selectTask(this.props.tid);
