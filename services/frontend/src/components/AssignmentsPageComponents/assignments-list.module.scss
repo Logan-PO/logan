@@ -2,10 +2,9 @@
 
 .assignments-list {
     height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
     flex-grow: 1;
+    background: white;
+    overflow: hidden;
 
     .add-button {
         position: relative;
@@ -15,14 +14,14 @@
         z-index: 10000;
     }
 
-
-
     .scrollview {
-        flex-grow: 1;
+        height: 100%;
         overflow-y: scroll;
         border-right: solid 1px $border;
 
-
+        .heading {
+            background: white;
+        }
     }
 }
 
