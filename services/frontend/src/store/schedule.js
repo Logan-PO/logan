@@ -41,7 +41,12 @@ const adapters = {
 const { slice, asyncActions } = createAsyncSlice({
     name: 'schedule',
     initialState: _.mapValues(adapters, adapter => adapter.getInitialState()),
-    reducers: {},
+    reducers: {
+        updateTermLocal: termsAdapter.updateOne,
+        updateHolidayLocal: holidaysAdapter.updateOne,
+        updateCourseLocal: coursesAdapter.updateOne,
+        updateSectionLocal: sectionsAdapter.updateOne,
+    },
     asyncReducers: {
         fetchSchedule: {
             async fn() {
@@ -67,6 +72,58 @@ const { slice, asyncActions } = createAsyncSlice({
                 }
             },
         },
+        createTerm: {
+            fn: api.createTerm,
+            success: termsAdapter.addOne,
+        },
+        createHoliday: {
+            fn: api.createHoliday,
+            success: holidaysAdapter.addOne,
+        },
+        createCourse: {
+            fn: api.createCourse,
+            success: coursesAdapter.addOne,
+        },
+        createSection: {
+            fn: api.createSection,
+            success: sectionsAdapter.addOne,
+        },
+        updateTerm: {
+            fn: api.updateTerm,
+        },
+        updateHoliday: {
+            fn: api.updateHoliday,
+        },
+        updateCourse: {
+            fn: api.updateCourse,
+        },
+        updateSection: {
+            fn: api.updateSection,
+        },
+        deleteTerm: {
+            fn: api.deleteTerm,
+            begin(state, action) {
+                termsAdapter.removeOne(state, action.meta.arg);
+            },
+        },
+        deleteHoliday: {
+            fn: api.deleteHoliday,
+            begin(state, action) {
+                holidaysAdapter.removeOne(state, action.meta.arg);
+            },
+        },
+        deleteCourse: {
+            fn: api.deleteCourse,
+            begin(state, action) {
+                coursesAdapter.removeOne(state, action.meta.arg);
+            },
+        },
+        deleteSection: {
+            fn: api.deleteSection,
+            begin(state, action) {
+                sectionsAdapter.removeOne(state, action.meta.arg);
+            },
+        },
     },
 });
 
@@ -87,5 +144,19 @@ export function getScheduleSelectors(state) {
     };
 }
 
-export const { fetchSchedule } = asyncActions;
+export const {
+    fetchSchedule,
+    createTerm,
+    createHoliday,
+    createCourse,
+    createSection,
+    updateTerm,
+    updateHoliday,
+    updateCourse,
+    updateSection,
+    deleteTerm,
+    deleteHoliday,
+    deleteCourse,
+    deleteSection,
+} = asyncActions;
 export default slice.reducer;
