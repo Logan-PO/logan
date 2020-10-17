@@ -10,10 +10,10 @@ const { NotFoundError } = require('../utils/errors');
 function fromDbFormat(db) {
     return {
         ..._.pick(db, ['uid', 'cid', 'sid', 'title']),
-        startDate: dayjs(db.sd, dateConstants.DB_DATE_FORMAT).startOf('day'),
-        endDate: dayjs(db.ed, dateConstants.DB_DATE_FORMAT).endOf('day'),
-        startTime: dayjs(db.st, dateConstants.DB_TIME_FORMAT),
-        endTime: dayjs(db.et, dateConstants.DB_TIME_FORMAT),
+        startDate: db.sd,
+        endDate: db.ed,
+        startTime: db.st,
+        endTime: db.et,
         daysOfWeek: db.dow,
         weeklyRepeat: db.wr,
         location: db.loc,
@@ -26,8 +26,8 @@ function toDbFormat(section) {
         ..._.pick(section, ['uid', 'cid', 'sid', 'title']),
         sd: dayjs(section.startDate).format(dateConstants.DB_DATE_FORMAT),
         ed: dayjs(section.endDate).format(dateConstants.DB_DATE_FORMAT),
-        st: dayjs(section.startTime).format(dateConstants.DB_TIME_FORMAT),
-        et: dayjs(section.endTime).format(dateConstants.DB_TIME_FORMAT),
+        st: dayjs(section.startTime, 'HH:mm').format(dateConstants.DB_TIME_FORMAT),
+        et: dayjs(section.endTime, 'HH:mm').format(dateConstants.DB_TIME_FORMAT),
         dow: section.daysOfWeek,
         wr: section.weeklyRepeat,
         loc: section.location,
@@ -63,6 +63,8 @@ async function getSections(req, res) {
 }
 
 async function createSection(req, res) {
+    console.log(req.body);
+
     const sid = uuid();
 
     const section = _.merge({}, req.body, { sid }, _.pick(req.auth, ['uid']));

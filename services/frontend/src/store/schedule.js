@@ -119,25 +119,26 @@ const { slice, asyncActions } = createAsyncSlice({
         deleteTerm: {
             fn: api.deleteTerm,
             begin(state, action) {
-                termsAdapter.removeOne(state.terms, action.meta.arg);
+                termsAdapter.removeOne(state.terms, action.meta.arg.tid);
             },
         },
         deleteHoliday: {
             fn: api.deleteHoliday,
             begin(state, action) {
-                holidaysAdapter.removeOne(state.holidays, action.meta.arg);
+                holidaysAdapter.removeOne(state.holidays, action.meta.arg.hid);
             },
         },
         deleteCourse: {
             fn: api.deleteCourse,
             begin(state, action) {
-                coursesAdapter.removeOne(state.courses, action.meta.arg);
+                coursesAdapter.removeOne(state.courses, action.meta.arg.cid);
             },
         },
         deleteSection: {
             fn: api.deleteSection,
             begin(state, action) {
-                sectionsAdapter.removeOne(state.sections, action.meta.arg);
+                console.log(action);
+                sectionsAdapter.removeOne(state.sections, action.meta.arg.sid);
             },
         },
     },

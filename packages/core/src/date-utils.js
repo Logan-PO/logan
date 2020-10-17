@@ -3,6 +3,7 @@ const dayjs = require('dayjs');
 // See: https://day.js.org/docs/en/plugin/plugin
 const plugins = {
     weekday: require('dayjs/plugin/weekday'),
+    customParseFormat: require('dayjs/plugin/customParseFormat'),
     advancedFormat: require('dayjs/plugin/advancedFormat'),
     duration: require('dayjs/plugin/duration'),
     minMax: require('dayjs/plugin/minMax'),
@@ -48,7 +49,7 @@ function readableDueDate(dueDate) {
 
 // Constants
 const DB_DATE_FORMAT = 'YYYY-M-D';
-const DB_TIME_FORMAT = 'H:m';
+const DB_TIME_FORMAT = 'HH:mm';
 const DB_DATETIME_FORMAT = 'YYYY-M-D H:m';
 
 module.exports = {
