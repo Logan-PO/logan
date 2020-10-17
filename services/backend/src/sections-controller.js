@@ -63,8 +63,6 @@ async function getSections(req, res) {
 }
 
 async function createSection(req, res) {
-    console.log(req.body);
-
     const sid = uuid();
 
     const section = _.merge({}, req.body, { sid }, _.pick(req.auth, ['uid']));
