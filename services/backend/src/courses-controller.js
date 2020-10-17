@@ -2,7 +2,7 @@ const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const requestValidator = require('../utils/request-validator');
-const { NotFoundError } = require('../utils/errors');
+const { NotFoundError, ValidationError } = require('../utils/errors');
 
 function fromDbFormat(db) {
     return {
@@ -18,6 +18,10 @@ function toDbFormat(course) {
         nn: course.nickname,
         col: course.color,
     };
+}
+
+function isValidHexString(str) {
+    return /^#(?:[0-9a-fA-F]{3}){1,2}$/.test(str);
 }
 
 async function getCourse(req, res) {
@@ -54,6 +58,8 @@ async function createCourse(req, res) {
 
     requestValidator.requireBodyParams(req, ['tid', 'title', 'color']);
 
+    if (!isValidHexString(course.color)) throw new ValidationError(`${course.color} is not a valid hex string`);
+
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.COURSES,
         Item: toDbFormat(course),
@@ -66,6 +72,8 @@ async function updateCourse(req, res) {
     const course = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
 
     requestValidator.requireBodyParams(req, ['tid', 'title', 'color']);
+
+    if (!isValidHexString(course.color)) throw new ValidationError(`${course.color} is not a valid hex string`);
 
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.COURSES,
