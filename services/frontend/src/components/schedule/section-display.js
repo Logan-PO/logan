@@ -37,9 +37,7 @@ class SectionDisplay extends React.Component {
             changes[prop] = dateObj.format(dateConstants.DB_DATE_FORMAT);
         } else if (prop === 'startTime' || prop === 'endTime') {
             const dateString = e.target.value;
-            console.log(dateString);
             const dateObj = dayjs(dateString, 'HH:mm');
-            console.log(dateObj);
             changes[prop] = dateObj.format(dateConstants.DB_TIME_FORMAT);
         } else {
             changes[prop] = e.target.value;
