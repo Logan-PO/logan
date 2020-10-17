@@ -118,7 +118,7 @@ async function handleCascadingDeletes(tid) {
         AutoPaginate: true,
     });
 
-    const holidayDeletes = dynamoUtils.makeDeleteRequests(holidays, 'aid');
+    const holidayDeletes = dynamoUtils.makeDeleteRequests(holidays, 'hid');
     await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.HOLIDAYS]: holidayDeletes });
 }
 

@@ -127,7 +127,7 @@ async function batchWrite(requestItems, { autoPaginate = true, expectFlat = fals
             const response = await batchWrite(currentRequests, { autoPaginate: false, expectFlat: true });
             flat = _.drop(flat, 25);
 
-            if (response.UnprocessedItems) {
+            if (!_.isEmpty(response.UnprocessedItems)) {
                 flat.push(...flattenRequestItems(response.UnprocessedItems));
             }
         } while (flat.length);
