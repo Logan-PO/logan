@@ -137,7 +137,6 @@ const { slice, asyncActions } = createAsyncSlice({
         deleteSection: {
             fn: api.deleteSection,
             begin(state, action) {
-                console.log(action);
                 sectionsAdapter.removeOne(state.sections, action.meta.arg.sid);
             },
         },

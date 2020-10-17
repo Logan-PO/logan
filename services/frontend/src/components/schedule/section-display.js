@@ -70,9 +70,6 @@ class SectionDisplay extends React.Component {
     render() {
         const changesExist = !_.isEmpty(getChanges(this.props.getEntity(this.props.eid), this.state.entity));
 
-        console.log(this.state.entity.startTime);
-        console.log(this.state.entity.endTime);
-
         return (
             <li>
                 <input
