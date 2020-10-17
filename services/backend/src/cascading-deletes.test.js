@@ -101,145 +101,150 @@ describe('Assignments', () => {
 });
 
 describe('Courses', () => {
-    // Create two courses
-    const basicCourse1 = {
-        uid: 'usr123',
-        tid: 'term1',
-        cid: 'cid123',
-        title: 'course 1',
-        nickname: 'nickname1',
-        color: 'blue',
-    };
-
-    const basicCourse2 = {
-        uid: 'usr123',
-        tid: 'term2',
-        cid: 'cid321',
-        title: 'course 2',
-        nickname: 'nickname2',
-        color: 'red',
-    };
-
-    // Create one section in each
-    const basicSection1 = {
-        uid: 'usr123',
-        cid: 'cid123',
-        sid: 'sid123',
-        title: 'section 1',
-        startDate: dayjs('Jan 1 2020'),
-        endDate: dayjs('Jan 2 2020'),
-        startTime: dayjs('Jan 1 2020'),
-        endTime: dayjs('Jan 1 2020'),
-        daysOfWeek: 'mwf',
-        weeklyRepeat: 'tbd',
-        location: 'tbd',
-        instructor: 'Connamacher',
-    };
-
-    const basicSection2 = {
-        uid: 'usr123',
-        cid: 'cid321',
-        sid: 'sid321',
-        title: 'section 2',
-        startDate: dayjs('Jan 1 2020'),
-        endDate: dayjs('Jan 2 2020'),
-        startTime: dayjs('Jan 1 2020'),
-        endTime: dayjs('Jan 1 2020'),
-        daysOfWeek: 'mwf',
-        weeklyRepeat: 'tbd',
-        location: 'tbd',
-        instructor: 'Connamacher',
-    };
-
-    // Create one assignment in each
-    const basicAssignment1 = {
-        aid: 'aid123',
-        uid: 'usr123',
-        title: 'assignment1',
-        cid: 'cid123',
-        description: 'basic assignment 1',
-        dueDate: '1/30/21',
-    };
-
-    const basicAssignment2 = {
-        aid: 'aid321',
-        uid: 'usr123',
-        title: 'assignment2',
-        cid: 'cid321',
-        description: 'basic assignment 2',
-        dueDate: '1/31/21',
-    };
-
-    // Create a task for each of those assignments
-    const basicTask1 = {
-        uid: 'usr123',
-        tid: 'tid292309432',
-        title: 'task 1',
-        aid: 'aid123',
-        cid: 'cid123',
-        description: 'problem 1',
-        dueDate: '1/30/21',
-        priority: 'high',
-        complete: 'no',
-    };
-
-    const basicTask2 = {
-        uid: 'usr123',
-        tid: 'tid391230912',
-        title: 'task 1',
-        aid: 'aid321',
-        cid: 'cid321',
-        description: 'problem 2',
-        dueDate: '1/30/21',
-        priority: 'high',
-        complete: 'no',
-    };
-
-    // Create a task for each course unrelated to an assignment
-    const basicTask3 = {
-        uid: 'usr123',
-        tid: 'tid9423023',
-        title: 'task 1',
-        aid: null,
-        cid: 'cid123',
-        description: 'unrelated',
-        dueDate: '1/30/21',
-        priority: 'high',
-        complete: 'no',
-    };
-
-    const basicTask4 = {
-        uid: 'usr123',
-        tid: 'tid204324854',
-        title: 'task 1',
-        aid: null,
-        cid: 'cid321',
-        description: 'unrelated',
-        dueDate: '1/30/21',
-        priority: 'high',
-        complete: 'no',
-    };
+    let basicCourse1, basicCourse2;
+    let basicSection1, basicSection2;
+    let basicAssignment1, basicAssignment2;
+    let basicTask1, basicTask2, basicTask3, basicTask4;
 
     beforeAll(async () => {
+        // Create two courses
+        basicCourse1 = {
+            uid: 'usr123',
+            tid: 'term1',
+            cid: 'cid123',
+            title: 'course 1',
+            nickname: 'nickname1',
+            color: 'blue',
+        };
+
+        basicCourse2 = {
+            uid: 'usr123',
+            tid: 'term2',
+            cid: 'cid321',
+            title: 'course 2',
+            nickname: 'nickname2',
+            color: 'red',
+        };
+
+        // Create one section in each
+        basicSection1 = {
+            uid: 'usr123',
+            cid: 'cid123',
+            sid: 'sid123',
+            title: 'section 1',
+            startDate: dayjs('Jan 1 2020'),
+            endDate: dayjs('Jan 2 2020'),
+            startTime: dayjs('Jan 1 2020'),
+            endTime: dayjs('Jan 1 2020'),
+            daysOfWeek: 'mwf',
+            weeklyRepeat: 'tbd',
+            location: 'tbd',
+            instructor: 'Connamacher',
+        };
+
+        basicSection2 = {
+            uid: 'usr123',
+            cid: 'cid321',
+            sid: 'sid321',
+            title: 'section 2',
+            startDate: dayjs('Jan 1 2020'),
+            endDate: dayjs('Jan 2 2020'),
+            startTime: dayjs('Jan 1 2020'),
+            endTime: dayjs('Jan 1 2020'),
+            daysOfWeek: 'mwf',
+            weeklyRepeat: 'tbd',
+            location: 'tbd',
+            instructor: 'Connamacher',
+        };
+
+        // Create one assignment in each
+        basicAssignment1 = {
+            aid: 'aid123',
+            uid: 'usr123',
+            title: 'assignment1',
+            cid: 'cid123',
+            description: 'basic assignment 1',
+            dueDate: '1/30/21',
+        };
+
+        basicAssignment2 = {
+            aid: 'aid321',
+            uid: 'usr123',
+            title: 'assignment2',
+            cid: 'cid321',
+            description: 'basic assignment 2',
+            dueDate: '1/31/21',
+        };
+
+        // Create a task for each of those assignments
+        basicTask1 = {
+            uid: 'usr123',
+            tid: 'tid292309432',
+            title: 'task 1',
+            aid: 'aid123',
+            cid: 'cid123',
+            description: 'problem 1',
+            dueDate: '1/30/21',
+            priority: 'high',
+            complete: 'no',
+        };
+
+        basicTask2 = {
+            uid: 'usr123',
+            tid: 'tid391230912',
+            title: 'task 1',
+            aid: 'aid321',
+            cid: 'cid321',
+            description: 'problem 2',
+            dueDate: '1/30/21',
+            priority: 'high',
+            complete: 'no',
+        };
+
+        // Create a task for each course unrelated to an assignment
+        basicTask3 = {
+            uid: 'usr123',
+            tid: 'tid9423023',
+            title: 'task 1',
+            aid: null,
+            cid: 'cid123',
+            description: 'unrelated',
+            dueDate: '1/30/21',
+            priority: 'high',
+            complete: 'no',
+        };
+
+        basicTask4 = {
+            uid: 'usr123',
+            tid: 'tid204324854',
+            title: 'task 1',
+            aid: null,
+            cid: 'cid321',
+            description: 'unrelated',
+            dueDate: '1/30/21',
+            priority: 'high',
+            complete: 'no',
+        };
+
         await dynamoUtils.batchWrite({
             courses: [basicCourse1, basicCourse2].map(course => ({
                 PutRequest: {
-                    Item: formatting.courses.toDbFormat(course),
+                    Item: formatting.courses.__test_only__.toDbFormat(course),
                 },
             })),
             sections: [basicSection1, basicSection2].map(section => ({
                 PutRequest: {
-                    Item: formatting.sections.toDbFormat(section),
+                    Item: formatting.sections.__test_only__.toDbFormat(section),
                 },
             })),
             assignments: [basicAssignment1, basicAssignment2].map(a => ({
                 PutRequest: {
-                    Item: formatting.assignments.toDbFormat(a),
+                    Item: formatting.assignments.__test_only__.toDbFormat(a),
                 },
             })),
             tasks: [basicTask1, basicTask2, basicTask3, basicTask4].map(t => ({
                 PutRequest: {
-                    Item: formatting.tasks.toDbFormat(t),
+                    Item: formatting.tasks.__test_only__.toDbFormat(t),
                 },
             })),
         });
@@ -254,176 +259,157 @@ describe('Courses', () => {
         await controllers.courses.deleteCourse({ params: basicCourse1, auth: { uid: 'usr123' } }, { json: jsonMock });
 
         // Check that all the entities for that course are gone
-        const { Items, Count } = await dynamoUtils.scan({ TableName: 'courses' });
-        expect(Count).toEqual(1);
-        expect(Items[0]).toEqual(course.toDbFormat(basicCourse2));
+        const { Items: remainingCourses, Count: courseCount } = await dynamoUtils.scan({ TableName: 'courses' });
+        expect(courseCount).toEqual(1);
+        expect(remainingCourses[0]).toEqual(formatting.courses.__test_only__.toDbFormat(basicCourse2));
     });
 
     // Check that all the entities for the other course remain
 });
 
 describe('Terms', () => {
-    // Create two terms
-    const basicTerm1 = {
-        uid: 'usr123',
-        tid: 'term1',
-        title: 'fall',
-        startDate: dayjs(),
-        endDate: dayjs(),
-    };
-
-    const basicTerm2 = {
-        uid: 'usr123',
-        tid: 'term2',
-        title: 'spring',
-        startDate: dayjs(),
-        endDate: dayjs(),
-    };
-
-    // Create one course in each
-    const basicCourse1 = {
-        uid: 'usr123',
-        tid: 'term1',
-        cid: 'cid123',
-        title: 'course 1',
-        nickname: 'nickname1',
-        color: 'blue',
-    };
-
-    const basicCourse2 = {
-        uid: 'usr123',
-        tid: 'term2',
-        cid: 'cid321',
-        title: 'course 2',
-        nickname: 'nickname2',
-        color: 'red',
-    };
-
-    // Create one holiday in each
-    const basicHoliday1 = {
-        uid: 'usr123',
-        tid: 'term1',
-        hid: 'hid123',
-        title: 'term holiday',
-        startDate: dayjs(),
-        endDate: dayjs(),
-    };
-
-    const basicHoliday2 = {
-        uid: 'usr123',
-        tid: 'term2',
-        hid: 'hid321',
-        title: 'term holiday',
-        startDate: dayjs(),
-        endDate: dayjs(),
-    };
-
-    // Create one section in each course
-    const basicSection1 = {
-        uid: 'usr123',
-        cid: 'cid123',
-        sid: 'sid123',
-        title: 'section 1',
-        startDate: dayjs('Jan 1 2020'),
-        endDate: dayjs('Jan 2 2020'),
-        startTime: dayjs('Jan 1 2020'),
-        endTime: dayjs('Jan 1 2020'),
-        daysOfWeek: 'mwf',
-        weeklyRepeat: 'tbd',
-        location: 'tbd',
-        instructor: 'Connamacher',
-    };
-
-    const basicSection2 = {
-        uid: 'usr123',
-        cid: 'cid321',
-        sid: 'sid321',
-        title: 'section 2',
-        startDate: dayjs('Jan 1 2020'),
-        endDate: dayjs('Jan 2 2020'),
-        startTime: dayjs('Jan 1 2020'),
-        endTime: dayjs('Jan 1 2020'),
-        daysOfWeek: 'mwf',
-        weeklyRepeat: 'tbd',
-        location: 'tbd',
-        instructor: 'Connamacher',
-    };
-
-    // Create one assignment in each course
-    const basicAssignment1 = {
-        aid: 'aid123',
-        uid: 'usr123',
-        title: 'assignment1',
-        cid: 'cid123',
-        description: 'basic assignment 1',
-        dueDate: '1/30/21',
-    };
-
-    const basicAssignment2 = {
-        aid: 'aid321',
-        uid: 'usr123',
-        title: 'assignment2',
-        cid: 'cid321',
-        description: 'basic assignment 2',
-        dueDate: '1/31/21',
-    };
+    let basicTerm1, basicTerm2;
+    let basicCourse1, basicCourse2;
+    let basicHoliday1, basicHoliday2;
+    let basicSection1, basicSection2;
+    let basicAssignment1, basicAssignment2;
 
     beforeAll(async () => {
-        await dynamoUtils.put({
-            TableName: 'terms',
-            Item: term.toDbFormat(basicTerm1),
-        });
-        await dynamoUtils.put({
-            TableName: 'terms',
-            Item: term.toDbFormat(basicTerm2),
-        });
-        await dynamoUtils.put({
-            TableName: 'courses',
-            Item: course.toDbFormat(basicCourse1),
-        });
-        await dynamoUtils.put({
-            TableName: 'courses',
-            Item: course.toDbFormat(basicCourse2),
-        });
-        await dynamoUtils.put({
-            TableName: 'holidays',
-            Item: holiday.toDbFormat(basicHoliday1),
-        });
-        await dynamoUtils.put({
-            TableName: 'holidays',
-            Item: holiday.toDbFormat(basicHoliday2),
-        });
-        await dynamoUtils.put({
-            TableName: 'sections',
-            Item: section.toDbFormat(basicSection1),
-        });
-        await dynamoUtils.put({
-            TableName: 'sections',
-            Item: section.toDbFormat(basicSection2),
-        });
-        await dynamoUtils.put({
-            TableName: 'assignments',
-            Item: assignment.toDbFormat(basicAssignment1),
-        });
-        await dynamoUtils.put({
-            TableName: 'assignments',
-            Item: assignment.toDbFormat(basicAssignment2),
+        // Create two terms
+        basicTerm1 = {
+            uid: 'usr123',
+            tid: 'tid123',
+            title: 'fall',
+            startDate: dayjs('Jan 1 2020'),
+            endDate: dayjs('Jan 30 2020'),
+        };
+
+        basicTerm2 = {
+            uid: 'usr123',
+            tid: 'tid321',
+            title: 'spring',
+            startDate: dayjs('Jan 1 2020'),
+            endDate: dayjs('Jan 30 2020'),
+        };
+
+        // Create one course in each
+        basicCourse1 = {
+            uid: 'usr123',
+            tid: 'tid123',
+            cid: 'cid123',
+            title: 'course 1',
+            nickname: 'nickname1',
+            color: 'blue',
+        };
+
+        basicCourse2 = {
+            uid: 'usr123',
+            tid: 'tid321',
+            cid: 'cid321',
+            title: 'course 2',
+            nickname: 'nickname2',
+            color: 'red',
+        };
+
+        // Create one holiday in each
+        basicHoliday1 = {
+            uid: 'usr123',
+            tid: 'tid123',
+            hid: 'hid123',
+            title: 'term holiday',
+            startDate: dayjs('Jan 1 2020'),
+            endDate: dayjs('Jan 1 2020'),
+        };
+
+        basicHoliday2 = {
+            uid: 'usr123',
+            tid: 'tid321',
+            hid: 'hid321',
+            title: 'term holiday',
+            startDate: dayjs('Jan 1 2020'),
+            endDate: dayjs('Jan 1 2020'),
+        };
+
+        // Create one section in each course
+        basicSection1 = {
+            uid: 'usr123',
+            cid: 'cid123',
+            sid: 'sid123',
+            title: 'section 1',
+            startDate: dayjs('Jan 1 2020'),
+            endDate: dayjs('Jan 2 2020'),
+            startTime: dayjs('Jan 1 2020'),
+            endTime: dayjs('Jan 1 2020'),
+            daysOfWeek: 'mwf',
+            weeklyRepeat: 'tbd',
+            location: 'tbd',
+            instructor: 'Connamacher',
+        };
+
+        basicSection2 = {
+            uid: 'usr123',
+            cid: 'cid321',
+            sid: 'sid321',
+            title: 'section 2',
+            startDate: dayjs('Jan 1 2020'),
+            endDate: dayjs('Jan 2 2020'),
+            startTime: dayjs('Jan 1 2020'),
+            endTime: dayjs('Jan 1 2020'),
+            daysOfWeek: 'mwf',
+            weeklyRepeat: 'tbd',
+            location: 'tbd',
+            instructor: 'Connamacher',
+        };
+
+        // Create one assignment in each course
+        basicAssignment1 = {
+            aid: 'aid123',
+            uid: 'usr123',
+            title: 'assignment1',
+            cid: 'cid123',
+            description: 'basic assignment 1',
+            dueDate: '1/30/21',
+        };
+
+        basicAssignment2 = {
+            aid: 'aid321',
+            uid: 'usr123',
+            title: 'assignment2',
+            cid: 'cid321',
+            description: 'basic assignment 2',
+            dueDate: '1/31/21',
+        };
+
+        await dynamoUtils.batchWrite({
+            [dynamoUtils.TABLES.TERMS]: [basicTerm1, basicTerm2].map(term => ({
+                PutRequest: { Item: formatting.terms.__test_only__.toDbFormat(term) },
+            })),
+            [dynamoUtils.TABLES.COURSES]: [basicCourse1, basicCourse2].map(course => ({
+                PutRequest: { Item: formatting.courses.__test_only__.toDbFormat(course) },
+            })),
+            [dynamoUtils.TABLES.HOLIDAYS]: [basicHoliday1, basicHoliday2].map(holiday => ({
+                PutRequest: { Item: formatting.holidays.__test_only__.toDbFormat(holiday) },
+            })),
+            [dynamoUtils.TABLES.SECTIONS]: [basicSection1, basicSection2].map(section => ({
+                PutRequest: { Item: formatting.sections.__test_only__.toDbFormat(section) },
+            })),
+            [dynamoUtils.TABLES.ASSIGNMENTS]: [basicAssignment1, basicAssignment2].map(assignment => ({
+                PutRequest: { Item: formatting.assignments.__test_only__.toDbFormat(assignment) },
+            })),
         });
     });
 
-    afterAll(async () => testUtils.clearTable('courses'));
-    afterAll(async () => testUtils.clearTable('sections'));
-    afterAll(async () => testUtils.clearTable('assignments'));
-    afterAll(async () => testUtils.clearTable('terms'));
-    afterAll(async () => testUtils.clearTable('holidays'));
+    afterAll(async () => {
+        await testUtils.clearTables(['courses', 'sections', 'assignments', 'terms', 'holidays']);
+    });
 
     // Delete one of the terms, and ensure only the other term's entities remain
     it('Successful delete', async () => {
         await controllers.terms.deleteTerm({ params: basicTerm1, auth: { uid: 'usr123' } }, { json: jsonMock });
 
-        const { Items, Count } = await dynamoUtils.scan({ TableName: 'terms' });
-        expect(Count).toEqual(1);
-        expect(Items[0]).toEqual(course.toDbFormat(basicTerm2));
+        const { Items: termsLeft, Count: termCount } = await dynamoUtils.scan({ TableName: 'terms' });
+        expect(termCount).toEqual(1);
+        expect(termsLeft[0]).toEqual(formatting.terms.__test_only__.toDbFormat(basicTerm2));
     });
 });
 
@@ -448,40 +434,37 @@ describe('Users', () => {
         uid: 'usr123',
         tid: 'term1',
         title: 'fall',
-        startDate: dayjs(),
-        endDate: dayjs(),
+        startDate: dayjs('Jan 1 2020'),
+        endDate: dayjs('Jan 30 2020'),
     };
 
     const basicTerm2 = {
         uid: 'usr321',
         tid: 'term2',
         title: 'spring',
-        startDate: dayjs(),
-        endDate: dayjs(),
+        startDate: dayjs('Jan 1 2020'),
+        endDate: dayjs('Jan 30 2020'),
     };
 
     // Create some courses, holidays, sections, assignments, tasks for each
     beforeAll(async () => {
-        await dynamoUtils.put({
-            TableName: 'users',
-            Item: user.toDbFormat(basicUser1),
-        });
-        await dynamoUtils.put({
-            TableName: 'users',
-            Item: user.toDbFormat(basicUser2),
-        });
-        await dynamoUtils.put({
-            TableName: 'terms',
-            Item: term.toDbFormat(basicTerm1),
-        });
-        await dynamoUtils.put({
-            TableName: 'terms',
-            Item: term.toDbFormat(basicTerm2),
+        await dynamoUtils.batchWrite({
+            users: [basicUser1, basicUser2].map(user => ({
+                PutRequest: {
+                    Item: formatting.users.__test_only__.toDbFormat(user),
+                },
+            })),
+            terms: [basicTerm1, basicTerm2].map(term => ({
+                PutRequest: {
+                    Item: formatting.terms.__test_only__.toDbFormat(term),
+                },
+            })),
         });
     });
 
-    afterAll(async () => testUtils.clearTable('users'));
-    afterAll(async () => testUtils.clearTable('terms'));
+    afterAll(async () => {
+        await testUtils.clearTables(['users', 'terms']);
+    });
 
     // Delete one user
     it('Successful delete', async () => {
@@ -490,7 +473,7 @@ describe('Users', () => {
         // Check that all the entities for that course are gone
         const { Items, Count } = await dynamoUtils.scan({ TableName: 'users' });
         expect(Count).toEqual(1);
-        expect(Items[0]).toEqual(user.toDbFormat(basicUser2));
+        expect(Items[0]).toEqual(formatting.users.__test_only__.toDbFormat(basicUser2));
     });
     // Check that only the other user's stuff remains
 });
