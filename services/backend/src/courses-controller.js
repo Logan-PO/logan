@@ -3,6 +3,7 @@ const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const Promise = require('bluebird');
 const requestValidator = require('../utils/request-validator');
+const { NotFoundError } = require('../utils/errors');
 const assignmentsController = require('./assignments-controller');
 
 function fromDbFormat(db) {
@@ -32,7 +33,7 @@ async function getCourse(req, res) {
     if (dbResponse.Item) {
         res.json(fromDbFormat(dbResponse.Item));
     } else {
-        throw new Error('Course does not exist');
+        throw new NotFoundError('Course does not exist');
     }
 }
 

@@ -2,6 +2,7 @@ const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const requestValidator = require('../utils/request-validator');
+const { NotFoundError } = require('../utils/errors');
 
 function fromDbFormat(db) {
     return {
@@ -32,7 +33,7 @@ async function getTask(req, res) {
     if (dbResponse.Item) {
         res.json(fromDbFormat(dbResponse.Item));
     } else {
-        throw new Error('Task does not exist');
+        throw new NotFoundError('Task does not exist');
     }
 }
 

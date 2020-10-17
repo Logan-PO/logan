@@ -2,6 +2,7 @@ const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const requestValidator = require('../utils/request-validator');
+const { NotFoundError } = require('../utils/errors');
 
 function fromDbFormat(db) {
     return {
@@ -30,7 +31,7 @@ async function getAssignment(req, res) {
     if (dbResponse.Item) {
         res.json(fromDbFormat(dbResponse.Item));
     } else {
-        throw new Error('Assignment does not exist');
+        throw new NotFoundError('Assignment does not exist');
     }
 }
 
@@ -52,9 +53,6 @@ async function createAssignment(req, res) {
     requestValidator.requireBodyParams(req, ['title', 'dueDate']);
 
     const assignment = _.merge({}, req.body, { aid }, _.pick(req.auth, ['uid']));
-
-    if (!assignment.title) throw new Error('Missing required property: title');
-    if (!assignment.dueDate) throw new Error('Missing required property: dueDate');
 
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.ASSIGNMENTS,

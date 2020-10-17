@@ -1,0 +1,10 @@
+@import '../../globals/global';
+
+.tasks-page {
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: stretch;
+}

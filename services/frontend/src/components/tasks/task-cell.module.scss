@@ -1,0 +1,13 @@
+@import '../../globals/global';
+
+.task-cell {
+    .actions {
+        display: none;
+    }
+
+    &:hover {
+        .actions {
+            display: initial;
+        }
+    }
+}

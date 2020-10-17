@@ -1,0 +1,9 @@
+@import './sidebar.module';
+
+.navbar {
+    z-index: $sidebar-z-index + 1 !important;
+}
+
+.flexible-space {
+    flex-grow: 1;
+}

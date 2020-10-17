@@ -3,6 +3,7 @@ const dayjs = require('dayjs');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const requestValidator = require('../utils/request-validator');
+const { NotFoundError } = require('../utils/errors');
 
 const DATE_FORMAT = 'M/D/YYYY';
 
@@ -33,7 +34,7 @@ async function getHoliday(req, res) {
     if (dbResponse.Item) {
         res.json(fromDbFormat(dbResponse.Item));
     } else {
-        throw new Error('Holiday does not exist');
+        throw new NotFoundError('Holiday does not exist');
     }
 }
 

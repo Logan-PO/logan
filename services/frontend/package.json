@@ -14,9 +14,18 @@
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
   },
   "dependencies": {
+    "@logan/core": "^1.0.0",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@reduxjs/toolkit": "^1.4.0",
+    "axios": "^0.20.0",
+    "classnames": "^2.2.6",
+    "dayjs": "^1.9.1",
     "gatsby": "^2.24.60",
     "gatsby-plugin-sass": "^2.3.14",
+    "lodash": "^4.17.20",
     "node-sass": "^4.14.1",
+    "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.2.1",
