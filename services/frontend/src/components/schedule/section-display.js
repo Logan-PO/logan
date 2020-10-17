@@ -18,8 +18,6 @@ class SectionDisplay extends React.Component {
         this.state = {
             entity: this.props.eid ? this.props.getEntity(this.props.eid) : undefined,
         };
-
-        console.log(this.state.entity);
     }
 
     componentDidUpdate(prevProps) {
