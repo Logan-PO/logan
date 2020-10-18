@@ -21,6 +21,7 @@ class GoogleBtn extends React.Component {
         super(props);
 
         this.onLogin = this.onLogin.bind(this);
+        this.onLogout = this.onLogout.bind(this);
         this.handleBearer = this.handleBearer.bind(this);
     }
 
@@ -56,12 +57,17 @@ class GoogleBtn extends React.Component {
             });
     }
 
+    async onLogout() {
+        let logout = this.props.logout;
+        api.setBearerToken(undefined);
+        logout();
+    }
+
     /*
     Rendering the button and giving appropriate methods to be called on success and failure
      */
     render() {
         let isLoggedIn = this.props.isLoggedIn;
-        let logout = this.props.logout;
         return (
             <div>
                 {isLoggedIn ? (
@@ -69,7 +75,7 @@ class GoogleBtn extends React.Component {
                     <GoogleLogout
                         clientId={clientID}
                         buttonText="Logout"
-                        onLogoutSuccess={logout}
+                        onLogoutSuccess={this.onLogout}
                         onFailure={handleLogoutFailure}
                     >
                         {}
