@@ -57,6 +57,11 @@ function setBearerToken(token) {
     _.set(client, 'defaults.headers.common.Authorization', bearer);
 }
 
+async function verifyIDToken(response) {
+    const res = await client.post('/auth/verify', { idToken: response.tokenId });
+    return res.data;
+}
+
 async function getTasks() {
     const response = await client.get('/tasks');
     return response.data;
@@ -87,6 +92,7 @@ async function deleteTask(task) {
 
 export default {
     setBearerToken,
+    verifyIDToken: wrapWithErrorHandling(verifyIDToken),
     getTasks: wrapWithErrorHandling(getTasks),
     createTask: wrapWithErrorHandling(createTask),
     updateTask: wrapWithErrorHandling(updateTask),

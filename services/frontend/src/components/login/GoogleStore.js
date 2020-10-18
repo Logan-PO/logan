@@ -1,5 +1,7 @@
 import { createStore } from 'redux';
 import { devToolsEnhancer } from 'redux-devtools-extension';
+import { createAsyncSlice } from '../../utils/redux-utils';
+import api from '../../utils/api'
 
 /*
  * A login action
@@ -35,5 +37,11 @@ export const loginReducer = (state = { isLoggedIn: false }, action) => {
     }
 };
 
-//Creating the store
-export const googleStore = createStore(loginReducer, devToolsEnhancer(undefined));
+const { slice, asyncActions } = createAsyncSlice({
+    name: 'login',
+    initialState: { isLoggedIn: false },
+    asyncReducers: {
+        fn: api.verifyIDToken,
+        success: (state, action) => {} //action.payload is where response is
+    },
+});

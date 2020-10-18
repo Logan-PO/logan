@@ -48,7 +48,7 @@ class GoogleBtn extends React.Component {
                 console.log(res);
                 //this.handleBearer(res);
                 login();
-                navigate('../');
+                //navigate('../');
             })
             .catch(error => {
                 console.log(error);
@@ -112,7 +112,7 @@ This is from react-redux
 When the state gets updated, so do the props
  */
 const mapStateToProps = state => ({
-    isLoggedIn: state.isLoggedIn,
+    isLoggedIn: state.loginReducer.isLoggedIn,
 });
 
 /*
