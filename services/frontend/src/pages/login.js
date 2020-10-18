@@ -1,7 +1,5 @@
 import React from 'react';
-//import { Provider } from 'react-redux';
 import GoogleBtn from '../components/login/GoogleButton';
-//import { googleStore } from '../components/login/GoogleStore';
 
 export default function Login() {
     return (
@@ -9,7 +7,7 @@ export default function Login() {
             <div>
                 <h1>Welcome to Logan!</h1>
             </div>
-            <GoogleBtn />{' '}
+            <GoogleBtn />
             <div>
                 <h1>About Logan</h1>
                 <p>Stuff about Logan goes here.</p>
