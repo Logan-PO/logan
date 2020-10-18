@@ -1,4 +1,6 @@
 import React from 'react';
+import { navigate } from 'gatsby';
+import api from '../../utils/api';
 
 class SignUpForm extends React.Component {
     constructor(props) {
@@ -23,9 +25,30 @@ class SignUpForm extends React.Component {
         this.setState({ email: event.target.value });
     }
 
-    handleSubmit(event) {
+    async handleSubmit(event) {
         console.log(this.state);
         event.preventDefault();
+
+        /*
+        await axios
+            .post(BASE_URL + USER_ROUTE, {
+                name: this.state.name,
+                email: this.state.email,
+                username: this.state.username,
+            })
+            .then(res => {
+                console.log(res);
+                api.setBearerToken(res.token);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+         */
+        let res = await api.createNewUser(this.state);
+        console.log(res);
+        await api.setBearerToken(res.token);
+        await navigate('../');
     }
 
     render() {

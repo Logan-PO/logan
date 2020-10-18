@@ -62,6 +62,11 @@ async function verifyIDToken(response) {
     return res.data;
 }
 
+async function createNewUser(data) {
+    const res = await client.post('/users', { name: data.name, email: data.email, username: data.username });
+    return res.data;
+}
+
 async function getTasks() {
     const response = await client.get('/tasks');
     return response.data;
@@ -92,6 +97,7 @@ async function deleteTask(task) {
 
 export default {
     setBearerToken,
+    createNewUser: wrapWithErrorHandling(createNewUser),
     verifyIDToken: wrapWithErrorHandling(verifyIDToken),
     getTasks: wrapWithErrorHandling(getTasks),
     createTask: wrapWithErrorHandling(createTask),

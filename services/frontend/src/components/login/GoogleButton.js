@@ -12,7 +12,6 @@ const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleuserc
 //URI for the backend
 const BASE_URL = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
 const AUTH_ROUTE = '/auth/verify';
-const USER_ROUTE = '/users';
 const SIGNUP_PAGE = '../signup';
 const SUCCESS_PAGE = '../';
 
@@ -25,7 +24,6 @@ class GoogleBtn extends React.Component {
         this.handleBearer = this.handleBearer.bind(this);
     }
 
-    //TODO: When we want to make a user, get name, email, and username
     async handleBearer(res) {
         api.setBearerToken(res.token);
         if (res.exists) {
@@ -33,7 +31,6 @@ class GoogleBtn extends React.Component {
             await navigate(SUCCESS_PAGE);
         } else {
             console.log('gotta make a user now');
-            api.setBearerToken(undefined);
             await navigate(SIGNUP_PAGE);
         }
     }
@@ -50,7 +47,8 @@ class GoogleBtn extends React.Component {
             .post(BASE_URL + AUTH_ROUTE, { idToken: response.tokenId })
             .then(res => {
                 console.log(res);
-                this.handleBearer(res);
+                console.log(res.data.token);
+                this.handleBearer(res.data);
                 login();
             })
             .catch(error => {
