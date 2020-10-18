@@ -39,8 +39,6 @@ class GoogleBtn extends React.Component {
     /*
      When we successfully login with the button, make a call to the backend.
      If all conditions are met, then create a login action and update the state
-
-     TODO: when we sign out, set bearer token to undefined (connect to global state first)
      */
     async onLogin(response) {
         let login = this.props.login;
