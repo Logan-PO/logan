@@ -5,12 +5,22 @@ class SignUpForm extends React.Component {
         super(props);
         this.state = { name: '', username: '', email: '' };
 
-        this.handleChange = this.handleChange.bind(this);
+        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleUsernameChange = this.handleUsernameChange.bind(this);
+        this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleChange(event) {
+    handleNameChange(event) {
+        this.setState({ name: event.target.value });
+    }
+
+    handleUsernameChange(event) {
         this.setState({ username: event.target.value });
+    }
+
+    handleEmailChange(event) {
+        this.setState({ email: event.target.value });
     }
 
     handleSubmit(event) {
@@ -23,7 +33,15 @@ class SignUpForm extends React.Component {
             <form onSubmit={this.handleSubmit}>
                 <label>
                     Name:
-                    <input type="text" value={this.state.username} onChange={this.handleChange} />
+                    <input type="text" value={this.state.name} onChange={this.handleNameChange} />
+                </label>
+                <label>
+                    Username:
+                    <input type="text" value={this.state.username} onChange={this.handleUsernameChange} />
+                </label>
+                <label>
+                    Email:
+                    <input type="text" value={this.state.email} onChange={this.handleEmailChange} />
                 </label>
                 <input type="submit" value="Submit" />
             </form>
