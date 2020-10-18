@@ -5,7 +5,7 @@ import * as PropTypes from 'prop-types';
 import axios from 'axios';
 import { navigate } from 'gatsby';
 import api from '../../utils/api';
-import { login, logout } from './GoogleStore';
+import { login, logout } from '../../store/login-reducers';
 
 //Necessary to use the google button
 const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
@@ -82,7 +82,6 @@ class GoogleBtn extends React.Component {
                         onSuccess={this.onLogin}
                         onFailure={handleLoginFailure}
                         cookiePolicy={'single_host_origin'}
-                        //responseType="code,token"
                     >
                         {}
                     </GoogleLogin>

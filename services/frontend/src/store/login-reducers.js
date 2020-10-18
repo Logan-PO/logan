@@ -1,8 +1,3 @@
-import { createStore } from 'redux';
-import { devToolsEnhancer } from 'redux-devtools-extension';
-import { createAsyncSlice } from '../../utils/redux-utils';
-import api from '../../utils/api'
-
 /*
  * A login action
  * Takes in a response, which should be from the google button
@@ -16,8 +11,7 @@ export function login() {
  * A logout action
  * Takes in a response, which should come from the google button
  */
-export function logout(response) {
-    console.log(response);
+export function logout() {
     return { type: 'logout' };
 }
 
@@ -36,12 +30,3 @@ export const loginReducer = (state = { isLoggedIn: false }, action) => {
             return state;
     }
 };
-
-const { slice, asyncActions } = createAsyncSlice({
-    name: 'login',
-    initialState: { isLoggedIn: false },
-    asyncReducers: {
-        fn: api.verifyIDToken,
-        success: (state, action) => {} //action.payload is where response is
-    },
-});

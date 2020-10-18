@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { devToolsEnhancer } from 'redux-devtools-extension';
-import { loginReducer } from '../components/login/GoogleStore';
+import { loginReducer } from './login-reducers';
 import tasks from './tasks';
 
 const rootReducer = combineReducers({
