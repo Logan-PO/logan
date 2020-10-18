@@ -26,27 +26,8 @@ class SignUpForm extends React.Component {
     }
 
     async handleSubmit(event) {
-        console.log(this.state);
         event.preventDefault();
-
-        /*
-        await axios
-            .post(BASE_URL + USER_ROUTE, {
-                name: this.state.name,
-                email: this.state.email,
-                username: this.state.username,
-            })
-            .then(res => {
-                console.log(res);
-                api.setBearerToken(res.token);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-
-         */
         let res = await api.createNewUser(this.state);
-        console.log(res);
         await api.setBearerToken(res.token);
         await navigate('../');
     }
