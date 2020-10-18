@@ -1,6 +1,8 @@
 import React from 'react';
 import { navigate } from 'gatsby';
+import { Grid, TextField, Button } from '@material-ui/core';
 import api from '../../utils/api';
+import styles from './signup.modules.scss';
 
 class SignUpForm extends React.Component {
     constructor(props) {
@@ -34,21 +36,24 @@ class SignUpForm extends React.Component {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <label>
-                    Name:
-                    <input type="text" value={this.state.name} onChange={this.handleNameChange} />
-                </label>
-                <label>
-                    Username:
-                    <input type="text" value={this.state.username} onChange={this.handleUsernameChange} />
-                </label>
-                <label>
-                    Email:
-                    <input type="text" value={this.state.email} onChange={this.handleEmailChange} />
-                </label>
-                <input type="submit" value="Submit" />
-            </form>
+            <div className={styles.signupForm}>
+                <Grid container spacing={2} direction="column">
+                    <Grid item xs={12}>
+                        <TextField label="Name" onChange={this.handleNameChange} value={this.state.name} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField label="Username" onChange={this.handleUsernameChange} value={this.state.username} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField label="Email" onChange={this.handleEmailChange} value={this.state.email} />
+                    </Grid>
+                </Grid>
+                <div>
+                    <Button variant="outlined" color="primary">
+                        Signup
+                    </Button>
+                </div>
+            </div>
         );
     }
 }
