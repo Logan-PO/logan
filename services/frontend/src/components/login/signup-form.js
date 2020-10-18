@@ -49,7 +49,7 @@ class SignUpForm extends React.Component {
                     </Grid>
                 </Grid>
                 <div>
-                    <Button variant="outlined" color="primary">
+                    <Button variant="outlined" color="primary" onClick={this.handleSubmit}>
                         Signup
                     </Button>
                 </div>
