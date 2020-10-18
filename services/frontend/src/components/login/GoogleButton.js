@@ -13,6 +13,8 @@ const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleuserc
 const BASE_URL = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
 const AUTH_ROUTE = '/auth/verify';
 const USER_ROUTE = '/users';
+const SIGNUP_PAGE = '../signup';
+const SUCCESS_PAGE = '../';
 
 //A component for the google sign in button
 class GoogleBtn extends React.Component {
@@ -28,9 +30,11 @@ class GoogleBtn extends React.Component {
         api.setBearerToken(res.token);
         if (res.exists) {
             console.log('user exists');
+            await navigate(SUCCESS_PAGE);
         } else {
-            //await axios.post(BASE_URL + USER_ROUTE, { res.token });
             console.log('gotta make a user now');
+            api.setBearerToken(undefined);
+            await navigate(SIGNUP_PAGE);
         }
     }
 
@@ -46,9 +50,8 @@ class GoogleBtn extends React.Component {
             .post(BASE_URL + AUTH_ROUTE, { idToken: response.tokenId })
             .then(res => {
                 console.log(res);
-                //this.handleBearer(res);
+                this.handleBearer(res);
                 login();
-                //navigate('../');
             })
             .catch(error => {
                 console.log(error);
