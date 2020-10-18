@@ -28,10 +28,8 @@ class GoogleBtn extends React.Component {
     async handleBearer(res) {
         api.setBearerToken(res.token);
         if (res.exists) {
-            console.log('user exists');
             await navigate(SUCCESS_PAGE);
         } else {
-            console.log('gotta make a user now');
             await navigate(SIGNUP_PAGE);
         }
     }
@@ -45,8 +43,6 @@ class GoogleBtn extends React.Component {
         axios
             .post(BASE_URL + AUTH_ROUTE, { idToken: response.tokenId })
             .then(res => {
-                console.log(res);
-                console.log(res.data.token);
                 this.handleBearer(res.data);
                 login();
             })
