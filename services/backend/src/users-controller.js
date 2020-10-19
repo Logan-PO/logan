@@ -102,9 +102,25 @@ async function deleteUser(req, res) {
     if (req.auth.uid !== req.params.uid) throw new PermissionDeniedError('Cannot delete another user');
     await dynamoUtils.delete({ TableName: dynamoUtils.TABLES.USERS, Key: { uid: req.auth.uid } });
 
-    // TODO: Also delete all other objects owned by the user
+    await handleCascadingDeletes(req.auth.uid);
 
     res.json({ success: true });
+}
+
+async function handleCascadingDeletes(uid) {
+    const tablesToClean = _.values(_.omit(dynamoUtils.TABLES, ['USERS']));
+
+    for (const tableName of tablesToClean) {
+        const { Items: items } = await dynamoUtils.scan({
+            TableName: tableName,
+            ExpressionAttributeValues: { ':uid': uid },
+            FilterExpression: ':uid = uid',
+            AutoPaginate: true,
+        });
+
+        const deletes = dynamoUtils.makeDeleteRequests(items, dynamoUtils.PKEYS[tableName]);
+        await dynamoUtils.batchWrite({ [tableName]: deletes });
+    }
 }
 
 module.exports = {

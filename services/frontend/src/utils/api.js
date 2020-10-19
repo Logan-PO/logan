@@ -4,6 +4,8 @@ import axios from 'axios';
 const BASE_URL = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
 const LOCAL_URL = 'http://localhost:3000';
 
+const STASH_KEY = 'stashedBearer';
+
 const client = axios.create({
     baseURL: BASE_URL,
     headers: {
@@ -12,6 +14,11 @@ const client = axios.create({
 });
 
 let bearer;
+
+async function onStartup() {
+    if (hasStashedBearer()) setBearerToken(localStorage.getItem(STASH_KEY), false);
+    if (process.env.NODE_ENV === 'development') await searchForLocalBackend();
+}
 
 // If the backend is running locally, use that instead of the base URL
 async function searchForLocalBackend() {
@@ -24,8 +31,6 @@ async function searchForLocalBackend() {
         // eslint-disable-next-line no-empty
     } catch (e) {}
 }
-
-if (process.env.NODE_ENV === 'development') searchForLocalBackend();
 
 /**
  * Wraps a function with improved error logging
@@ -50,20 +55,35 @@ function wrapWithErrorHandling(fn) {
     };
 }
 
-function setBearerToken(token) {
+function hasStashedBearer() {
+    if (typeof window === 'undefined') return false;
+    return !!localStorage.getItem(STASH_KEY);
+}
+
+function setBearerToken(token, stash = true) {
     if (token) bearer = `Bearer ${token}`;
     else bearer = undefined;
 
     _.set(client, 'defaults.headers.common.Authorization', bearer);
+
+    if (stash && typeof window !== 'undefined') {
+        if (token) localStorage.setItem(STASH_KEY, token);
+        else localStorage.removeItem(STASH_KEY);
+    }
 }
 
-async function verifyIDToken(response) {
-    const res = await client.post('/auth/verify', { idToken: response.tokenId });
+async function verifyIDToken(idToken) {
+    const res = await client.post('/auth/verify', { idToken });
     return res.data;
 }
 
 async function createNewUser(data) {
     const res = await client.post('/users', { name: data.name, email: data.email, username: data.username });
+    return res.data;
+}
+
+async function getUser(uid) {
+    const res = await client.get(`/users/${uid}`);
     return res.data;
 }
 
@@ -122,10 +142,14 @@ async function deleteAssignment(assignment) {
     return response.data;
 }
 
+onStartup();
+
 export default {
+    hasStashedBearer,
     setBearerToken,
     createNewUser: wrapWithErrorHandling(createNewUser),
     verifyIDToken: wrapWithErrorHandling(verifyIDToken),
+    getUser: wrapWithErrorHandling(getUser),
     getTasks: wrapWithErrorHandling(getTasks),
     createTask: wrapWithErrorHandling(createTask),
     updateTask: wrapWithErrorHandling(updateTask),
