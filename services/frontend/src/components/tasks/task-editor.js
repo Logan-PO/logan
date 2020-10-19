@@ -130,12 +130,7 @@ class TaskEditor extends React.Component {
 
         this.updateTimer.reset();
     }
-    /*class: 'PHYS',
-    name: 'Random Assignment',
-    desc: 'test',
-    dueDate: 'soon',
-    color: 'orange',
-    id: 1,*/
+
     render() {
         return (
             <div className={styles.taskEditor}>
