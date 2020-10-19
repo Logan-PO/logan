@@ -1,27 +1,30 @@
 const _ = require('lodash');
-const dayjs = require('dayjs');
 const { dynamoUtils } = require('@logan/aws');
+const {
+    dateUtils: {
+        dayjs,
+        constants: { DB_DATE_FORMAT },
+    },
+} = require('@logan/core');
 const { v4: uuid } = require('uuid');
 const Promise = require('bluebird');
 const requestValidator = require('../utils/request-validator');
 const { NotFoundError } = require('../utils/errors');
 const coursesController = require('./courses-controller');
 
-const DATE_FORMAT = 'M/D/YYYY';
-
 function fromDbFormat(db) {
     return {
         ..._.pick(db, ['uid', 'tid', 'title']),
-        startDate: dayjs(db.sd, DATE_FORMAT).startOf('day'),
-        endDate: dayjs(db.ed, DATE_FORMAT).endOf('day'),
+        startDate: dayjs(db.sd, DB_DATE_FORMAT).startOf('day'),
+        endDate: dayjs(db.ed, DB_DATE_FORMAT).endOf('day'),
     };
 }
 
 function toDbFormat(term) {
     return {
         ..._.pick(term, ['uid', 'tid', 'title']),
-        sd: term.startDate.format(DATE_FORMAT),
-        ed: term.endDate.format(DATE_FORMAT),
+        sd: dayjs(term.startDate).format(DB_DATE_FORMAT),
+        ed: dayjs(term.endDate).format(DB_DATE_FORMAT),
     };
 }
 
