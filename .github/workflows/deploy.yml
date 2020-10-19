@@ -27,6 +27,7 @@ jobs:
           aws s3 sync public s3://logan-frontend/ --delete
           aws s3api put-object-acl --acl public-read --bucket logan-frontend --key index.html
           aws s3api put-object-acl --acl public-read --bucket logan-frontend --key tasks/index.html
+          aws s3api put-object-acl --acl public-read --bucket logan-frontend --key schedule/index.html
         working-directory: ./services/frontend
   deploy-be:
     runs-on: ubuntu-latest
