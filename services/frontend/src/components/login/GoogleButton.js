@@ -5,7 +5,7 @@ import * as PropTypes from 'prop-types';
 import axios from 'axios';
 import { navigate } from 'gatsby';
 import api from '../../utils/api';
-import { login, logout } from '../../store/login-reducers';
+import { login, logout } from '../../store/login';
 
 //Necessary to use the google button
 const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
@@ -112,7 +112,7 @@ This is from react-redux
 When the state gets updated, so do the props
  */
 const mapStateToProps = state => ({
-    isLoggedIn: state.loginReducer.isLoggedIn,
+    isLoggedIn: state.login.isLoggedIn,
 });
 
 /*
