@@ -94,11 +94,12 @@ class AssignmentEditor extends Component {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            label="Due"
-                            fullWidth
-                            onChange={this.handleChange.bind(this, 'dueDate')}
+                            type="date"
+                            disabled={_.get(this.state, 'assignment', { aid: -1000 }).aid !== this.props.aid}
                             value={_.get(this.state.assignment, 'dueDate', '')}
-                        />
+                            onChange={this.handleChange.bind(this, 'dueDate')}
+                            color="secondary"
+                        />{' '}
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
