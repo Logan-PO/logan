@@ -1,0 +1,5 @@
+@import './sidebar.module';
+
+.account-dialog {
+    z-index: $sidebar-z-index + 100 !important;
+}
