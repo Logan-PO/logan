@@ -72,8 +72,8 @@ class AssignmentEditor extends Component {
                         <TextField
                             label="Class"
                             fullWidth
-                            onChange={this.handleChange.bind(this, 'class')}
-                            value={_.get(this.state.assignment, 'class', '')}
+                            onChange={this.handleChange.bind(this, 'cid')}
+                            value={_.get(this.state.assignment, 'cid', '')}
                         />
                     </Grid>
                     <Grid item style={{ flexGrow: 1 }}>
@@ -88,8 +88,8 @@ class AssignmentEditor extends Component {
                         <TextField
                             label="Description"
                             fullWidth
-                            onChange={this.handleChange.bind(this, 'desc')}
-                            value={_.get(this.state.assignment, 'desc', '')}
+                            onChange={this.handleChange.bind(this, 'description')}
+                            value={_.get(this.state.assignment, 'description', '')}
                         />
                     </Grid>
                     <Grid item xs={12}>
