@@ -101,14 +101,6 @@ class AssignmentEditor extends Component {
                             color="secondary"
                         />{' '}
                     </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Color"
-                            fullWidth
-                            onChange={this.handleChange.bind(this, 'color')}
-                            value={_.get(this.state.assignment, 'color', '')}
-                        />
-                    </Grid>
                 </Grid>
             </div>
         );
