@@ -109,15 +109,6 @@ class AssignmentEditor extends Component {
                             value={_.get(this.state.assignment, 'color', '')}
                         />
                     </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="ID"
-                            fullWidth
-                            multiline
-                            onChange={this.handleChange.bind(this, 'id')}
-                            value={_.get(this.state.assignment, 'id', '')}
-                        />
-                    </Grid>
                 </Grid>
             </div>
         );

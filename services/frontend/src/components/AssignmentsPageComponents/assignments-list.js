@@ -32,7 +32,6 @@ class AssignmentsList extends React.Component {
             desc: 'test',
             dueDate: 'soon',
             color: 'orange',
-            id: 1,
         };
     }
 
