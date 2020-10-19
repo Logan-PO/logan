@@ -8,13 +8,21 @@ const LOGIN_STAGE = {
     DONE: 'done',
 };
 
+function getInitialState() {
+    const hasStashedBearer = api.hasStashedBearer();
+
+    return {
+        currentStage: hasStashedBearer ? LOGIN_STAGE.DONE : LOGIN_STAGE.LOGIN,
+        isLoggedIn: hasStashedBearer,
+        isUserConnected: hasStashedBearer,
+        user: undefined,
+        userMeta: undefined,
+    };
+}
+
 const { slice, asyncActions } = createAsyncSlice({
     name: 'login',
-    initialState: {
-        currentStage: LOGIN_STAGE.LOGIN,
-        isLoggedIn: false,
-        isUserConnected: false,
-    },
+    initialState: getInitialState(),
     reducers: {
         setLoginStage(state, action) {
             const newStage = action.payload;
@@ -23,8 +31,14 @@ const { slice, asyncActions } = createAsyncSlice({
             state.isLoggedIn = newStage !== LOGIN_STAGE.LOGIN;
             state.isUserConnected = newStage === LOGIN_STAGE.LOGGED_IN || newStage === LOGIN_STAGE.DONE;
 
-            if (newStage !== LOGIN_STAGE.CREATE) state.userMeta = undefined;
-            if (newStage === LOGIN_STAGE.LOGIN) state.user = undefined;
+            if (newStage !== LOGIN_STAGE.CREATE) {
+                state.userMeta = undefined;
+            }
+
+            if (newStage === LOGIN_STAGE.LOGIN) {
+                state.user = undefined;
+                api.setBearerToken(undefined);
+            }
         },
     },
     asyncReducers: {
@@ -33,11 +47,10 @@ const { slice, asyncActions } = createAsyncSlice({
             success(state, action) {
                 const response = action.payload;
 
-                api.setBearerToken(response.token);
+                api.setBearerToken(response.token, response.exists);
 
                 if (response.exists) {
                     state.currentStage = LOGIN_STAGE.LOGGED_IN;
-                    state.user = response.user;
                 } else {
                     state.currentStage = LOGIN_STAGE.CREATE;
                     state.userMeta = response.meta;
@@ -52,11 +65,17 @@ const { slice, asyncActions } = createAsyncSlice({
                 state.currentStage = LOGIN_STAGE.LOGGED_IN;
             },
         },
+        fetchSelf: {
+            fn: async () => api.getUser('me'),
+            success(state, action) {
+                state.user = action.payload;
+            },
+        },
     },
 });
 
 export { LOGIN_STAGE };
 export const { setLoginStage } = slice.actions;
-export const { verifyIdToken, createNewUser } = asyncActions;
+export const { verifyIdToken, createNewUser, fetchSelf } = asyncActions;
 export { asyncActions };
 export default slice.reducer;
