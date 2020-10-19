@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
 import { Container, Grid, TextField, Button } from '@material-ui/core';
 import api from '../../utils/api';
-import { LOGIN_STAGE } from '../../store/login';
+import { LOGIN_STAGE, setLoginStage } from '../../store/login';
 import styles from './signup.modules.scss';
 
 class SignUpForm extends React.Component {
@@ -19,12 +19,19 @@ class SignUpForm extends React.Component {
         };
 
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     componentDidMount() {
         if (this.props.loginStage === LOGIN_STAGE.LOGIN) {
             navigate('../login');
         } else if (this.props.loginStage !== LOGIN_STAGE.CREATE) {
+            navigate('../');
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.props.loginStage !== LOGIN_STAGE.CREATE) {
             navigate('../');
         }
     }
@@ -37,7 +44,7 @@ class SignUpForm extends React.Component {
         event.preventDefault();
         let res = await api.createNewUser(this.state);
         await api.setBearerToken(res.token);
-        await navigate('../');
+        this.props.setLoginStage(LOGIN_STAGE.DONE);
     }
 
     render() {
@@ -77,6 +84,7 @@ class SignUpForm extends React.Component {
 SignUpForm.propTypes = {
     meta: PropTypes.object,
     loginStage: PropTypes.string,
+    setLoginStage: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -84,4 +92,8 @@ const mapStateToProps = state => ({
     meta: state.login.userMeta,
 });
 
-export default connect(mapStateToProps, null)(SignUpForm);
+const mapDispatchToProps = {
+    setLoginStage,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpForm);

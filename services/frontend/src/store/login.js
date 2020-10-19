@@ -17,13 +17,14 @@ const { slice, asyncActions } = createAsyncSlice({
     },
     reducers: {
         setLoginStage(state, action) {
-            state.currentStage = action.payload;
-        },
-        login(state) {
-            state.isLoggedIn = true;
-        },
-        logout(state) {
-            state.isLoggedIn = false;
+            const newStage = action.payload;
+            state.currentStage = newStage;
+
+            state.isLoggedIn = newStage !== LOGIN_STAGE.LOGIN;
+            state.isUserConnected = newStage === LOGIN_STAGE.LOGGED_IN || newStage === LOGIN_STAGE.DONE;
+
+            if (newStage !== LOGIN_STAGE.CREATE) state.userMeta = undefined;
+            if (newStage === LOGIN_STAGE.LOGIN) state.user = undefined;
         },
     },
     asyncReducers: {
@@ -47,7 +48,7 @@ const { slice, asyncActions } = createAsyncSlice({
 });
 
 export { LOGIN_STAGE };
-export const { setLoginStage, login, logout } = slice.actions;
+export const { setLoginStage } = slice.actions;
 export const { verifyIdToken } = asyncActions;
 export { asyncActions };
 export default slice.reducer;

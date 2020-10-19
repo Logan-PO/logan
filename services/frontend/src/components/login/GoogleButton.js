@@ -3,7 +3,7 @@ import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import api from '../../utils/api';
-import { login, logout, verifyIdToken } from '../../store/login';
+import { verifyIdToken, LOGIN_STAGE, setLoginStage } from '../../store/login';
 
 const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
 
@@ -26,17 +26,16 @@ class GoogleBtn extends React.Component {
 
     async onLogout() {
         api.setBearerToken(undefined);
-        this.props.logout();
+        this.props.setLoginStage(LOGIN_STAGE.LOGIN);
     }
 
     /*
     Rendering the button and giving appropriate methods to be called on success and failure
      */
     render() {
-        let isLoggedIn = this.props.isLoggedIn;
         return (
             <div>
-                {isLoggedIn ? (
+                {this.props.isLoggedIn ? (
                     //Logout button and fields
                     <GoogleLogout
                         clientId={clientID}
@@ -61,8 +60,7 @@ class GoogleBtn extends React.Component {
 
 GoogleBtn.propTypes = {
     isLoggedIn: PropTypes.bool,
-    login: PropTypes.func,
-    logout: PropTypes.func,
+    setLoginStage: PropTypes.func,
     verifyIdToken: PropTypes.func,
 };
 
@@ -88,8 +86,7 @@ const mapStateToProps = state => ({
 When we update the props, dispatch to the state
  */
 const mapDispatchToProps = {
-    login,
-    logout,
+    setLoginStage,
     verifyIdToken,
 };
 
