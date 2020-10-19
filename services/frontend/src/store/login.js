@@ -44,11 +44,19 @@ const { slice, asyncActions } = createAsyncSlice({
                 }
             },
         },
+        createNewUser: {
+            fn: api.createNewUser,
+            success(state, action) {
+                const response = action.payload;
+                api.setBearerToken(response.token);
+                state.currentStage = LOGIN_STAGE.LOGGED_IN;
+            },
+        },
     },
 });
 
 export { LOGIN_STAGE };
 export const { setLoginStage } = slice.actions;
-export const { verifyIdToken } = asyncActions;
+export const { verifyIdToken, createNewUser } = asyncActions;
 export { asyncActions };
 export default slice.reducer;

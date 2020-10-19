@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
 import { Container, Grid, TextField, Button } from '@material-ui/core';
-import api from '../../utils/api';
-import { LOGIN_STAGE, setLoginStage } from '../../store/login';
+import { LOGIN_STAGE, setLoginStage, createNewUser } from '../../store/login';
 import styles from './signup.modules.scss';
 
 class SignUpForm extends React.Component {
@@ -42,9 +41,7 @@ class SignUpForm extends React.Component {
 
     async handleSubmit(event) {
         event.preventDefault();
-        let res = await api.createNewUser(this.state);
-        await api.setBearerToken(res.token);
-        this.props.setLoginStage(LOGIN_STAGE.DONE);
+        await this.props.createNewUser(this.state);
     }
 
     render() {
@@ -85,6 +82,7 @@ SignUpForm.propTypes = {
     meta: PropTypes.object,
     loginStage: PropTypes.string,
     setLoginStage: PropTypes.func,
+    createNewUser: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -94,6 +92,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     setLoginStage,
+    createNewUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUpForm);
