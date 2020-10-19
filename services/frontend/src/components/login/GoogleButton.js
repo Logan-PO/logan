@@ -39,22 +39,14 @@ class GoogleBtn extends React.Component {
      If all conditions are met, then create a login action and update the state
      */
     async onLogin(response) {
-        let login = this.props.login;
-        axios
-            .post(BASE_URL + AUTH_ROUTE, { idToken: response.tokenId })
-            .then(res => {
-                this.handleBearer(res.data);
-                login();
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        const res = await axios.post(BASE_URL + AUTH_ROUTE, { idToken: response.tokenId });
+        this.props.login();
+        await this.handleBearer(res.data);
     }
 
     async onLogout() {
-        let logout = this.props.logout;
         api.setBearerToken(undefined);
-        logout();
+        this.props.logout();
     }
 
     /*
@@ -71,9 +63,7 @@ class GoogleBtn extends React.Component {
                         buttonText="Logout"
                         onLogoutSuccess={this.onLogout}
                         onFailure={handleLogoutFailure}
-                    >
-                        {}
-                    </GoogleLogout>
+                    />
                 ) : (
                     //Login button and fields
                     <GoogleLogin
@@ -82,9 +72,7 @@ class GoogleBtn extends React.Component {
                         onSuccess={this.onLogin}
                         onFailure={handleLoginFailure}
                         cookiePolicy={'single_host_origin'}
-                    >
-                        {}
-                    </GoogleLogin>
+                    />
                 )}
             </div>
         );
@@ -92,9 +80,9 @@ class GoogleBtn extends React.Component {
 }
 
 GoogleBtn.propTypes = {
-    isLoggedIn: PropTypes.any,
-    login: PropTypes.any,
-    logout: PropTypes.any,
+    isLoggedIn: PropTypes.bool,
+    login: PropTypes.func,
+    logout: PropTypes.func,
 };
 
 //If we fail to log in, print the response
