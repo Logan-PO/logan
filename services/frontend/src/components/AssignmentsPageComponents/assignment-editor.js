@@ -67,7 +67,7 @@ class AssignmentEditor extends Component {
     render() {
         return (
             <div className={styles.assignmentEditor}>
-                <Grid container spacing={1}>
+                <Grid container spacing={2}>
                     <Grid item xs={12}>
                         <TextField
                             label="Class"
@@ -76,9 +76,9 @@ class AssignmentEditor extends Component {
                             value={_.get(this.state.assignment, 'class', '')}
                         />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item style={{ flexGrow: 1 }}>
                         <TextField
-                            label="Name"
+                            label="Title"
                             fullWidth
                             onChange={this.handleChange.bind(this, 'title')}
                             value={_.get(this.state.assignment, 'title', '')}
