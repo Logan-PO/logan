@@ -48,8 +48,6 @@ export class AssignmentCell extends React.Component {
     }
 
     render() {
-        console.log('Ass: ', this);
-
         return (
             <div className={styles.assignmentCell}>
                 <ListItem selected={this.props.selected} onClick={this.select}>
