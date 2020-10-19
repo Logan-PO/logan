@@ -12,7 +12,6 @@ export class AssignmentCell extends React.Component {
         super(props);
         this.select = this.select.bind(this);
         this.deleted = this.deleted.bind(this);
-        this.handleChange = this.handleChange.bind(this);
         this.state = {
             assignment: this.props.selectAssignmentFromStore(this.props.aid),
         };
@@ -32,19 +31,6 @@ export class AssignmentCell extends React.Component {
         if (!_.isEqual(storeAssignment, this.state.assignment)) {
             this.setState({ assignment: storeAssignment });
         }
-    }
-
-    handleChange() {
-        const changes = {};
-
-        this.props.updateAssignmentLocal({
-            id: this.props.aid,
-            changes,
-        });
-
-        this.setState({
-            assignment: _.merge({}, this.state.assignment, changes),
-        });
     }
 
     render() {
