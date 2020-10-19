@@ -3,6 +3,7 @@ const dayjs = require('dayjs');
 // See: https://day.js.org/docs/en/plugin/plugin
 const plugins = {
     weekday: require('dayjs/plugin/weekday'),
+    customParseFormat: require('dayjs/plugin/customParseFormat'),
     advancedFormat: require('dayjs/plugin/advancedFormat'),
     duration: require('dayjs/plugin/duration'),
     minMax: require('dayjs/plugin/minMax'),
@@ -17,6 +18,15 @@ const plugins = {
 // Extend dayjs with all those plugins
 for (const plugin of Object.values(plugins)) {
     dayjs.extend(plugin);
+}
+
+function compareDates(d1, d2, format, granularity = 'day') {
+    const date1 = dayjs(d1, format);
+    const date2 = dayjs(d2, format);
+
+    if (date1.isSame(date2, granularity)) return 0;
+    else if (date1.isBefore(date2, granularity)) return -1;
+    else return 1;
 }
 
 function humanReadableDate(date) {
@@ -39,12 +49,13 @@ function readableDueDate(dueDate) {
 
 // Constants
 const DB_DATE_FORMAT = 'YYYY-M-D';
-const DB_TIME_FORMAT = 'H:m';
+const DB_TIME_FORMAT = 'HH:mm';
 const DB_DATETIME_FORMAT = 'YYYY-M-D H:m';
 
 module.exports = {
     dayjs,
     constants: { DB_DATE_FORMAT, DB_TIME_FORMAT, DB_DATETIME_FORMAT },
+    compareDates,
     humanReadableDate,
     dueDateIsDate,
     readableDueDate,

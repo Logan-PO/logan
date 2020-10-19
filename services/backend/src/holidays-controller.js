@@ -1,25 +1,28 @@
 const _ = require('lodash');
-const dayjs = require('dayjs');
 const { dynamoUtils } = require('@logan/aws');
+const {
+    dateUtils: {
+        dayjs,
+        constants: { DB_DATE_FORMAT },
+    },
+} = require('@logan/core');
 const { v4: uuid } = require('uuid');
 const requestValidator = require('../utils/request-validator');
 const { NotFoundError } = require('../utils/errors');
 
-const DATE_FORMAT = 'M/D/YYYY';
-
 function fromDbFormat(db) {
     return {
         ..._.pick(db, ['uid', 'tid', 'hid', 'title']),
-        startDate: dayjs(db.sd, DATE_FORMAT).startOf('day'),
-        endDate: dayjs(db.ed, DATE_FORMAT).endOf('day'),
+        startDate: dayjs(db.sd, DB_DATE_FORMAT).startOf('day'),
+        endDate: dayjs(db.ed, DB_DATE_FORMAT).endOf('day'),
     };
 }
 
 function toDbFormat(holiday) {
     return {
         ..._.pick(holiday, ['uid', 'tid', 'hid', 'title']),
-        sd: holiday.startDate.format(DATE_FORMAT),
-        ed: holiday.endDate.format(DATE_FORMAT),
+        sd: dayjs(holiday.startDate).format(DB_DATE_FORMAT),
+        ed: dayjs(holiday.endDate).format(DB_DATE_FORMAT),
     };
 }
 

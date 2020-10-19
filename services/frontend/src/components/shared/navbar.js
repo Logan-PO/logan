@@ -5,6 +5,7 @@ import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
 import SyncIcon from '@material-ui/icons/Sync';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { fetchTasks } from '../../store/tasks';
+import { fetchSchedule } from '../../store/schedule';
 import styles from './navbar.module.scss';
 import AccountDialog from './account-dialog';
 
@@ -21,8 +22,13 @@ class Navbar extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.fetchAll();
+    }
+
     async fetchAll() {
-        await this.props.fetchTasks();
+        const fetchers = [this.props.fetchTasks(), this.props.fetchSchedule()];
+        await Promise.all(fetchers);
     }
 
     openAccountModal() {
@@ -59,8 +65,9 @@ Navbar.propTypes = {
     title: PropTypes.string,
     buttons: PropTypes.array,
     fetchTasks: PropTypes.func,
+    fetchSchedule: PropTypes.func,
 };
 
-const mapDispatchToProps = { fetchTasks };
+const mapDispatchToProps = { fetchTasks, fetchSchedule };
 
 export default connect(null, mapDispatchToProps)(Navbar);

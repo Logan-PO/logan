@@ -11,6 +11,9 @@ export default function Home() {
             <div>
                 <Link to="tasks">Tasks</Link>
             </div>
+            <div>
+                <Link to="assignments">Assignments</Link>
+            </div>
         </div>
     );
 }
