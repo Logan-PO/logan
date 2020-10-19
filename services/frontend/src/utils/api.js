@@ -221,6 +221,33 @@ async function deleteSection(section) {
     return response.data;
 }
 
+async function getAssignments() {
+    const response = await client.get('/assignments');
+    return response.data;
+}
+
+// Returns the new assignment
+async function createAssignment(assignment) {
+    const response = await client.post('/assignments', assignment);
+    return response.data;
+}
+
+// Returns the updated assigment
+async function updateAssignment(assignment) {
+    const { aid } = assignment;
+    const response = await client.put(`/assignments/${aid}`, assignment);
+    return response.data;
+}
+/**
+ * @param assignment
+ * @returns {Promise<{ success:boolean }>}
+ */
+async function deleteAssignment(assignment) {
+    const { aid } = assignment;
+    const response = await client.delete(`/assignments/${aid}`);
+    return response.data;
+}
+
 onStartup();
 
 export default {
@@ -249,4 +276,8 @@ export default {
     createSection: wrapWithErrorHandling(createSection),
     updateSection: wrapWithErrorHandling(updateSection),
     deleteSection: wrapWithErrorHandling(deleteSection),
+    getAssignments: wrapWithErrorHandling(getAssignments),
+    createAssignment: wrapWithErrorHandling(createAssignment),
+    updateAssignment: wrapWithErrorHandling(updateAssignment),
+    deleteAssignment: wrapWithErrorHandling(deleteAssignment),
 };
