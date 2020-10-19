@@ -24,10 +24,7 @@ jobs:
           aws configure set aws_secret_access_key ${{ secrets.EB_ACCESS_KEY_SECRET }}
       - name: Upload to S3
         run: |
-          aws s3 sync public s3://logan-frontend/ --delete
-          aws s3api put-object-acl --acl public-read --bucket logan-frontend --key index.html
-          aws s3api put-object-acl --acl public-read --bucket logan-frontend --key tasks/index.html
-          aws s3api put-object-acl --acl public-read --bucket logan-frontend --key schedule/index.html
+          aws s3 sync public s3://logan-frontend/ --delete --acl public-read
         working-directory: ./services/frontend
   deploy-be:
     runs-on: ubuntu-latest
