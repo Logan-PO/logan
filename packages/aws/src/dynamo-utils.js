@@ -21,6 +21,16 @@ const TABLES = {
     SECTIONS: 'sections',
 };
 
+const PKEYS = {
+    [TABLES.USERS]: 'uid',
+    [TABLES.TASKS]: 'tid',
+    [TABLES.ASSIGNMENTS]: 'aid',
+    [TABLES.TERMS]: 'tid',
+    [TABLES.HOLIDAYS]: 'hid',
+    [TABLES.COURSES]: 'cid',
+    [TABLES.SECTIONS]: 'sid',
+};
+
 /**
  * @param {Object} params
  * @param {string} params.TableName
@@ -34,9 +44,9 @@ function get(params) {
 /**
  * @param {Object} params
  * @param {string} params.TableName
- * @param {string} params.FilterExpression
+ * @param {string} [params.FilterExpression]
  * @param {Object} [params.ExpressionAttributeNames]
- * @param {Object} params.ExpressionAttributeValues
+ * @param {Object} [params.ExpressionAttributeValues]
  * @param {boolean} [params.AutoPaginate = false]
  * @param [params.ExclusiveStartKey] - Used in pagination
  * @returns {Promise<{Items:Object[],[LastEvaluatedKey]}>}
@@ -86,33 +96,41 @@ function deleteItem(params) {
     return dynamoClient.delete(params).promise();
 }
 
-/**
- * Perform a batchWrite on a single table
- * For info on requests formatting,
- * see: https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#batchWrite-property
- * @param {string} tableName
- * @param {Object[]} requests
- * @param {boolean} [autoPaginate = false]
- * @returns {Promise<*>}
- */
-async function batchWrite(tableName, requests, autoPaginate = false) {
-    if (!autoPaginate) {
-        return dynamoClient
-            .batchWrite({
-                RequestItems: {
-                    [tableName]: requests,
-                },
-            })
-            .promise();
-    } else {
-        let currentIndex = 0;
-        do {
-            const currentRequests = _.slice(requests, currentIndex, currentIndex + 25);
-            const response = await batchWrite(tableName, currentRequests, false);
+function makeDeleteRequests(items, key) {
+    return items.map(item => ({ DeleteRequest: { Key: _.pick(item, key) } }));
+}
 
-            const unprocessedItems = _.get(response.UnprocessedItems, [tableName], []);
-            currentIndex += currentRequests.length - unprocessedItems.length;
-        } while (currentIndex < requests.length);
+function flattenRequestItems(requestItems) {
+    return _.chain(requestItems)
+        .entries()
+        .flatMap(([tableName, requests]) => requests.map(request => ({ TableName: tableName, ...request })))
+        .value();
+}
+
+function unflattenRequestItems(flattened) {
+    const grouped = _.groupBy(flattened, 'TableName');
+    return _.mapValues(grouped, requests => requests.map(request => _.omit(request, 'TableName')));
+}
+
+async function batchWrite(requestItems, { autoPaginate = true, expectFlat = false } = {}) {
+    // Exit if empty request items
+    if (!(expectFlat ? requestItems : _.flatten(_.values(requestItems))).length) return;
+
+    if (!autoPaginate) {
+        if (expectFlat) return dynamoClient.batchWrite({ RequestItems: unflattenRequestItems(requestItems) }).promise();
+        return dynamoClient.batchWrite({ RequestItems: requestItems }).promise();
+    } else {
+        let flat = expectFlat ? requestItems : flattenRequestItems(requestItems);
+
+        do {
+            const currentRequests = _.slice(flat, 0, 25);
+            const response = await batchWrite(currentRequests, { autoPaginate: false, expectFlat: true });
+            flat = _.drop(flat, 25);
+
+            if (!_.isEmpty(response.UnprocessedItems)) {
+                flat.push(...flattenRequestItems(response.UnprocessedItems));
+            }
+        } while (flat.length);
     }
 }
 
@@ -122,5 +140,7 @@ module.exports = {
     put,
     delete: deleteItem,
     batchWrite,
+    makeDeleteRequests,
     TABLES,
+    PKEYS,
 };

@@ -1,18 +1,11 @@
 const _ = require('lodash');
+const testUtils = require('../utils/test-utils');
 
-const mockDbGet = jest.fn(() => ({}));
-const mockDbScan = jest.fn(() => ({}));
-const mockDbPut = jest.fn(() => ({}));
-const mockDbDelete = jest.fn(() => ({}));
 const jsonMock = jest.fn();
 
 // Mock @logan/aws
 jest.doMock('@logan/aws', () => {
     const mocked = jest.requireActual('@logan/aws');
-    mocked.dynamoUtils.get = mockDbGet;
-    mocked.dynamoUtils.scan = mockDbScan;
-    mocked.dynamoUtils.put = mockDbPut;
-    mocked.dynamoUtils.delete = mockDbDelete;
     mocked.secretUtils.getSecret = async () => ({ web: 'mock-secret' });
     return mocked;
 });
@@ -31,6 +24,8 @@ const basicUser2 = {
     email: 'basicuser2@gmail.com',
 };
 
+// eslint-disable-next-line import/order
+const { dynamoUtils } = require('@logan/aws');
 // Load users-controller.js after mocking everything
 const usersController = require('./users-controller');
 
@@ -39,32 +34,27 @@ beforeEach(() => {
     jest.resetAllMocks();
 });
 
+beforeAll(async () => testUtils.clearTables());
+
 describe('getUser', () => {
+    beforeAll(async () => {
+        await dynamoUtils.batchWrite({
+            [dynamoUtils.TABLES.USERS]: [basicUser1, basicUser2].map(user => ({
+                PutRequest: { Item: usersController.__test_only__.toDbFormat(user) },
+            })),
+        });
+    });
+
+    afterAll(async () => testUtils.clearTable('users'));
+
     it('Basic fetch returns the correct user', async () => {
         const req = {
             params: _.pick(basicUser1, ['uid']),
             auth: basicUser2,
         };
 
-        mockDbGet.mockReturnValueOnce({ Item: usersController.__test_only__.toDbFormat(basicUser1) });
-
         await usersController.getUser(req, { json: jsonMock });
 
-        expect(mockDbGet).toHaveBeenCalledTimes(1);
-        expect(jsonMock).toHaveBeenCalledWith(basicUser1);
-    });
-
-    it("Fetching yourself doesn't query Dynamo", async () => {
-        const req = {
-            params: _.pick(basicUser1, ['uid']),
-            auth: basicUser1,
-        };
-
-        mockDbGet.mockReturnValueOnce({ Item: usersController.__test_only__.toDbFormat(basicUser1) });
-
-        await usersController.getUser(req, { json: jsonMock });
-
-        expect(mockDbGet).toHaveBeenCalledTimes(0);
         expect(jsonMock).toHaveBeenCalledWith(basicUser1);
     });
 
@@ -74,22 +64,18 @@ describe('getUser', () => {
             auth: basicUser1,
         };
 
-        mockDbGet.mockReturnValueOnce({ Item: undefined });
-
         await expect(usersController.getUser(req, { json: jsonMock })).rejects.toThrowError('User does not exist');
-        expect(mockDbGet).toHaveBeenCalledTimes(1);
     });
 });
 
 describe('createUser', () => {
+    beforeAll(async () => testUtils.clearTables());
+
     it('Creating a normal user succeeds', async () => {
         const requestBody = _.omit(basicUser1, ['uid']);
 
-        mockDbScan.mockReturnValueOnce({ Items: [], Count: 0 });
-
         await usersController.createUser({ body: requestBody }, { json: jsonMock });
-        expect(mockDbScan).toHaveBeenCalledTimes(1);
-        expect(mockDbPut).toHaveBeenCalledTimes(1);
+
         expect(jsonMock).toHaveBeenCalledWith(
             expect.objectContaining({
                 user: {
@@ -99,9 +85,19 @@ describe('createUser', () => {
                 bearer: expect.anything(),
             })
         );
+
+        const { Items: users } = await dynamoUtils.scan({ TableName: 'users' });
+        expect(users).toHaveLength(1);
+        expect(users).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining(usersController.__test_only__.toDbFormat(_.omit(basicUser1, ['uid']))),
+            ])
+        );
     });
 
     it('Missing required properties fails', async () => {
+        await testUtils.clearTable('users');
+
         const baseUser = _.omit(basicUser1, ['uid']);
 
         // Require name
@@ -115,10 +111,9 @@ describe('createUser', () => {
     });
 
     it('Attempting to create a non-unique user fails', async () => {
+        await testUtils.clearTable('users');
         const baseUser = _.omit(basicUser1, ['uid']);
-
-        mockDbScan.mockReturnValueOnce({ Count: 1 });
-
+        await usersController.createUser({ body: baseUser }, { json: jsonMock });
         await expect(usersController.createUser({ body: baseUser }, { json: jsonMock })).rejects.toThrow('unique');
     });
 });
@@ -132,11 +127,8 @@ describe('updateUser', () => {
             body: updatedUser,
         };
 
-        mockDbScan.mockReturnValue({ Count: 0 });
-
         await usersController.updateUser(req, { json: jsonMock });
 
-        expect(mockDbPut).toHaveBeenCalledTimes(1);
         expect(jsonMock).toHaveBeenCalledWith(updatedUser);
     });
 
@@ -151,9 +143,21 @@ describe('updateUser', () => {
 });
 
 describe('deleteUser', () => {
+    beforeEach(async () => testUtils.clearTable('users'));
+
     it('Deleting yourself should not fail', async () => {
-        await usersController.deleteUser({ auth: basicUser1, params: basicUser1 }, { json: jsonMock });
-        expect(mockDbDelete).toHaveBeenCalledTimes(1);
+        await usersController.createUser({ body: basicUser1 }, { json: jsonMock });
+        const { Items: beforeDelete } = await dynamoUtils.scan({ TableName: 'users' });
+        expect(beforeDelete).toHaveLength(1);
+        const createdUid = beforeDelete[0].uid;
+
+        await usersController.deleteUser(
+            { auth: { uid: createdUid }, params: { uid: createdUid } },
+            { json: jsonMock }
+        );
+
+        const { Items: users } = await dynamoUtils.scan({ TableName: 'users' });
+        expect(users).toHaveLength(0);
     });
 
     it('Deleting another user should fail', async () => {
