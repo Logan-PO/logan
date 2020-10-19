@@ -35,9 +35,7 @@ export class AssignmentCell extends React.Component {
     }
 
     handleChange() {
-        const changes = {
-            color: 'green',
-        };
+        const changes = {};
 
         this.props.updateAssignmentLocal({
             id: this.props.aid,

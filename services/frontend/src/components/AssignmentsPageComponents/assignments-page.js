@@ -33,7 +33,6 @@ export class AssignmentsPage extends React.Component {
         return (
             <Page title="Assignments">
                 <div className={styles.assignmentsPage}>
-                    <div className={styles.sidebar}></div>
                     <AssignmentsList onAssignmentSelected={this.didSelectAssignment} />
                     <AssignmentEditor aid={this.state.selectedAid} />
                 </div>
