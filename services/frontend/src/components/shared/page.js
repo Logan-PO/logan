@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { navigate } from 'gatsby';
 import { Toolbar } from '@material-ui/core';
 import { LOGIN_STAGE, fetchSelf } from '../../store/login';
 import styles from './page.module.scss';
@@ -14,6 +15,8 @@ class Page extends React.Component {
     componentDidMount() {
         if (this.props.loginStage === LOGIN_STAGE.DONE && !this.props.currentUser) {
             this.props.fetchSelf();
+        } else if (this.props.loginStage !== LOGIN_STAGE.DONE) {
+            navigate('/login');
         }
     }
 
