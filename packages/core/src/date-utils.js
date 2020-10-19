@@ -19,6 +19,24 @@ for (const plugin of Object.values(plugins)) {
     dayjs.extend(plugin);
 }
 
+function humanReadableDate(date) {
+    if (date.isToday()) return 'Today';
+    else if (date.isTomorrow()) return 'Tomorrow';
+    else if (date.isYesterday()) return 'Yesterday';
+    else if (date.year() === dayjs().year()) return date.format('MMMM Do');
+    else return date.format('MMMM Do, YYYY');
+}
+
+function dueDateIsDate(dueDate) {
+    return dueDate !== 'asap' && dueDate !== 'eventually';
+}
+
+function readableDueDate(dueDate) {
+    if (dueDate === 'asap') return 'ASAP';
+    else if (dueDate === 'eventually') return 'Eventually';
+    else return humanReadableDate(dayjs(dueDate));
+}
+
 // Constants
 const DB_DATE_FORMAT = 'YYYY-M-D';
 const DB_TIME_FORMAT = 'H:m';
@@ -27,4 +45,7 @@ const DB_DATETIME_FORMAT = 'YYYY-M-D H:m';
 module.exports = {
     dayjs,
     constants: { DB_DATE_FORMAT, DB_TIME_FORMAT, DB_DATETIME_FORMAT },
+    humanReadableDate,
+    dueDateIsDate,
+    readableDueDate,
 };

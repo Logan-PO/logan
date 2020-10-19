@@ -1,12 +1,14 @@
 import { combineReducers } from 'redux';
-import { devToolsEnhancer } from 'redux-devtools-extension';
 import { configureStore } from '@reduxjs/toolkit';
+import { devToolsEnhancer } from 'redux-devtools-extension';
+import { loginReducer } from './login-reducers';
 import tasks from './tasks';
 import assignments from './assignments';
 
 const rootReducer = combineReducers({
     tasks,
     assignments,
+    loginReducer,
 });
 
 const store = configureStore({

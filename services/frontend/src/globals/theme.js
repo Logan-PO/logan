@@ -2,7 +2,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import { colors } from '@material-ui/core';
 
 const primary = colors.teal;
-const secondary = colors.purple;
+const secondary = colors.deepOrange;
 
 const defaultFontFamily = ['Roboto', '-apple-system', 'BlinkMacSystemFont', 'Arial', 'sans-serif'];
 const headingsFontFamily = ['Poppins', ...defaultFontFamily];
@@ -13,11 +13,13 @@ const theme = createMuiTheme({
             light: primary[300],
             main: primary[500],
             dark: primary[700],
+            contrastText: 'white',
         },
         secondary: {
             light: secondary[300],
             main: secondary[500],
             dark: secondary[700],
+            contrastText: 'white',
         },
         error: {
             main: colors.red[500],

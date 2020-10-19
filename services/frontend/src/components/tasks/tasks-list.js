@@ -1,6 +1,8 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { dateUtils } from '@logan/core';
 import { List, ListSubheader, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { getTasksSelectors, fetchTasks, createTask, deleteTask, compareDueDates } from '../../store/tasks';
@@ -87,12 +89,15 @@ const mapStateToProps = state => {
     const selectors = getTasksSelectors(state.tasks);
     const sections = {};
     for (const task of selectors.selectAll()) {
-        if (sections[task.dueDate]) sections[task.dueDate].push(task.tid);
-        else sections[task.dueDate] = [task.tid];
+        const key = dateUtils.dueDateIsDate(task.dueDate) ? dateUtils.dayjs(task.dueDate) : task.dueDate;
+        if (sections[key]) sections[key].push(task.tid);
+        else sections[key] = [task.tid];
     }
 
     return {
-        sections: Object.entries(sections).sort((a, b) => compareDueDates(a[0], b[0])),
+        sections: _.entries(sections)
+            .sort((a, b) => compareDueDates(a[0], b[0]))
+            .map(([key, value]) => [dateUtils.readableDueDate(key), value]),
     };
 };
 
