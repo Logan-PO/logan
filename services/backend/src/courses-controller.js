@@ -1,8 +1,10 @@
 const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
+const Promise = require('bluebird');
 const requestValidator = require('../utils/request-validator');
 const { NotFoundError, ValidationError } = require('../utils/errors');
+const assignmentsController = require('./assignments-controller');
 
 function fromDbFormat(db) {
     return {
@@ -95,7 +97,80 @@ async function deleteCourse(req, res) {
         ConditionExpression: 'uid = :uid',
     });
 
+    // Delete sub-sections
+    const { Items: sections } = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.SECTIONS,
+        ExpressionAttributeValues: { ':cid': requestedCid },
+        FilterExpression: ':cid = cid',
+        AutoPaginate: true,
+    });
+
+    const sectionDeletes = dynamoUtils.makeDeleteRequests(sections, 'sid');
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.SECTIONS]: sectionDeletes });
+
+    // Delete sub-assignments
+    const { Items: assignments } = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+        ExpressionAttributeValues: { ':cid': requestedCid },
+        FilterExpression: ':cid = cid',
+        AutoPaginate: true,
+    });
+
+    const assignmentDeletes = dynamoUtils.makeDeleteRequests(assignments, 'aid');
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.ASSIGNMENTS]: assignmentDeletes });
+
+    // Delete sub-tasks
+    const { Items: tasks } = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.TASKS,
+        ExpressionAttributeValues: { ':cid': requestedCid },
+        FilterExpression: ':cid = cid',
+        AutoPaginate: true,
+    });
+
+    const taskDeletes = dynamoUtils.makeDeleteRequests(tasks, 'tid');
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.TASKS]: taskDeletes });
+
+    await handleCascadingDeletes(requestedCid);
+
     res.json({ success: true });
+}
+
+async function handleCascadingDeletes(cid) {
+    // Delete sub-sections
+    const { Items: sections } = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.SECTIONS,
+        ExpressionAttributeValues: { ':cid': cid },
+        FilterExpression: ':cid = cid',
+        AutoPaginate: true,
+    });
+
+    const sectionDeletes = dynamoUtils.makeDeleteRequests(sections, 'sid');
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.SECTIONS]: sectionDeletes });
+
+    // Delete sub-assignments
+    const { Items: assignments } = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+        ExpressionAttributeValues: { ':cid': cid },
+        FilterExpression: ':cid = cid',
+        AutoPaginate: true,
+    });
+
+    const assignmentDeletes = dynamoUtils.makeDeleteRequests(assignments, 'aid');
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.ASSIGNMENTS]: assignmentDeletes });
+
+    // Delete sub-tasks for sub-assignments
+    await Promise.map(assignments, ({ aid }) => assignmentsController.handleCascadingDeletes(aid), { concurrency: 10 });
+
+    // Delete sub-tasks
+    const { Items: tasks } = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.TASKS,
+        ExpressionAttributeValues: { ':cid': cid },
+        FilterExpression: ':cid = cid',
+        AutoPaginate: true,
+    });
+
+    const taskDeletes = dynamoUtils.makeDeleteRequests(tasks, 'tid');
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.TASKS]: taskDeletes });
 }
 
 module.exports = {
@@ -105,4 +180,5 @@ module.exports = {
     createCourse,
     updateCourse,
     deleteCourse,
+    handleCascadingDeletes,
 };
