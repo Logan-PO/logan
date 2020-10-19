@@ -57,8 +57,8 @@ function setBearerToken(token) {
     _.set(client, 'defaults.headers.common.Authorization', bearer);
 }
 
-async function verifyIDToken(response) {
-    const res = await client.post('/auth/verify', { idToken: response.tokenId });
+async function verifyIDToken(idToken) {
+    const res = await client.post('/auth/verify', { idToken });
     return res.data;
 }
 

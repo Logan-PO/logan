@@ -1,19 +1,11 @@
 import React from 'react';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import { connect } from 'react-redux';
-import * as PropTypes from 'prop-types';
-import axios from 'axios';
-import { navigate } from 'gatsby';
+import PropTypes from 'prop-types';
 import api from '../../utils/api';
-import { login, logout } from '../../store/login';
+import { login, logout, verifyIdToken } from '../../store/login';
 
-//Necessary to use the google button
 const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
-//URI for the backend
-const BASE_URL = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
-const AUTH_ROUTE = '/auth/verify';
-const SIGNUP_PAGE = '../signup';
-const SUCCESS_PAGE = '../';
 
 //A component for the google sign in button
 class GoogleBtn extends React.Component {
@@ -22,16 +14,6 @@ class GoogleBtn extends React.Component {
 
         this.onLogin = this.onLogin.bind(this);
         this.onLogout = this.onLogout.bind(this);
-        this.handleBearer = this.handleBearer.bind(this);
-    }
-
-    async handleBearer(res) {
-        api.setBearerToken(res.token);
-        if (res.exists) {
-            await navigate(SUCCESS_PAGE);
-        } else {
-            await navigate(SIGNUP_PAGE);
-        }
     }
 
     /*
@@ -39,9 +21,7 @@ class GoogleBtn extends React.Component {
      If all conditions are met, then create a login action and update the state
      */
     async onLogin(response) {
-        const res = await axios.post(BASE_URL + AUTH_ROUTE, { idToken: response.tokenId });
-        this.props.login();
-        await this.handleBearer(res.data);
+        await this.props.verifyIdToken(response.tokenId);
     }
 
     async onLogout() {
@@ -83,6 +63,7 @@ GoogleBtn.propTypes = {
     isLoggedIn: PropTypes.bool,
     login: PropTypes.func,
     logout: PropTypes.func,
+    verifyIdToken: PropTypes.func,
 };
 
 //If we fail to log in, print the response
@@ -109,6 +90,7 @@ When we update the props, dispatch to the state
 const mapDispatchToProps = {
     login,
     logout,
+    verifyIdToken,
 };
 
 /*
