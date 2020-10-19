@@ -1,1 +1,3 @@
-export { default as wrapRootElement } from './src/store/ReduxWrapper';
+import './src/globals/global.scss';
+
+export { default as wrapRootElement } from './src/globals/RootWrapper';
