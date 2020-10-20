@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
+import { DatePicker, TimePicker } from '@material-ui/pickers';
 import { getScheduleSelectors, updateSectionLocal, asyncActions } from '../../store/schedule';
 import { getChanges } from './change-processor';
 
@@ -32,13 +33,9 @@ class SectionDisplay extends React.Component {
         const changes = {};
 
         if (prop === 'startDate' || prop === 'endDate') {
-            const dateString = e.target.value;
-            const dateObj = dayjs(dateString, 'YYYY-MM-DD');
-            changes[prop] = dateObj.format(dateConstants.DB_DATE_FORMAT);
+            changes[prop] = e.format(dateConstants.DB_DATE_FORMAT);
         } else if (prop === 'startTime' || prop === 'endTime') {
-            const dateString = e.target.value;
-            const dateObj = dayjs(dateString, 'HH:mm');
-            changes[prop] = dateObj.format(dateConstants.DB_TIME_FORMAT);
+            changes[prop] = e.format(dateConstants.DB_TIME_FORMAT);
         } else {
             changes[prop] = e.target.value;
         }
@@ -74,24 +71,28 @@ class SectionDisplay extends React.Component {
                     value={_.get(this.state.entity, 'title', '')}
                     onChange={this.handleChange.bind(this, 'title')}
                 />
-                <input
-                    type="date"
-                    value={dayjs(_.get(this.state.entity, 'startDate')).format('YYYY-MM-DD')}
+                <DatePicker
+                    variant="inline"
+                    label="Start"
+                    value={dayjs(_.get(this.state.entity, 'startDate'), dateConstants.DB_DATE_FORMAT)}
                     onChange={this.handleChange.bind(this, 'startDate')}
                 />
-                <input
-                    type="date"
-                    value={dayjs(_.get(this.state.entity, 'endDate')).format('YYYY-MM-DD')}
+                <DatePicker
+                    variant="inline"
+                    label="End"
+                    value={dayjs(_.get(this.state.entity, 'endDate'), dateConstants.DB_DATE_FORMAT)}
                     onChange={this.handleChange.bind(this, 'endDate')}
                 />
-                <input
-                    type="time"
-                    value={dayjs(_.get(this.state.entity, 'startTime'), dateConstants.DB_TIME_FORMAT).format('HH:mm')}
+                <TimePicker
+                    variant="inline"
+                    label="Start"
+                    value={dayjs(_.get(this.state.entity, 'startTime'), dateConstants.DB_TIME_FORMAT)}
                     onChange={this.handleChange.bind(this, 'startTime')}
                 />
-                <input
-                    type="time"
-                    value={dayjs(_.get(this.state.entity, 'endTime'), dateConstants.DB_TIME_FORMAT).format('HH:mm')}
+                <TimePicker
+                    variant="inline"
+                    label="End"
+                    value={dayjs(_.get(this.state.entity, 'endTime'), dateConstants.DB_TIME_FORMAT)}
                     onChange={this.handleChange.bind(this, 'endTime')}
                 />
                 <button onClick={this.actuallyMakeUpdates} disabled={!changesExist}>
