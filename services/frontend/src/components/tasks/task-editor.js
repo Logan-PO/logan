@@ -130,7 +130,7 @@ class TaskEditor extends React.Component {
                                 <Grid item>
                                     <PriorityPicker
                                         disabled={this.isEmpty()}
-                                        value={_.get(this.state.task, 'priority', 0)}
+                                        value={_.get(this.state.task, 'priority')}
                                         onChange={this.handleChange.bind(this, 'priority')}
                                     />
                                 </Grid>

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormControl, FormLabel, FormControlLabel, RadioGroup, Radio, colors } from '@material-ui/core';
@@ -30,7 +31,7 @@ class PriorityPicker extends React.Component {
         return (
             <FormControl disabled={this.props.disabled}>
                 <FormLabel color="secondary">Priority</FormLabel>
-                <RadioGroup name="priority" value={this.props.value} onChange={this._internalChange}>
+                <RadioGroup name="priority" value={_.get(this.props, 'value', '')} onChange={this._internalChange}>
                     {Object.entries(priorities).map(([label, [value, color]]) => {
                         const style = {};
                         if (Number(this.props.value) === value) style.color = color;
