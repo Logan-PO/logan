@@ -70,14 +70,21 @@ class TaskCell extends React.Component {
         const needsUpperLabel = course || assignment;
         const hasBoth = course && assignment;
 
+        const checkboxStyles = {};
+        if (course && _.get(this.state.task, 'complete')) {
+            checkboxStyles.color = course.color;
+        }
+
         return (
             <div className={styles.taskCell}>
                 <ListItem selected={this.props.selected} onClick={this.select}>
                     <ListItemIcon>
                         <Checkbox
                             edge="start"
+                            color="secondary"
                             checked={_.get(this.state, 'task.complete', false)}
                             onChange={this.handleChange}
+                            style={checkboxStyles}
                         />
                     </ListItemIcon>
                     <ListItemText
