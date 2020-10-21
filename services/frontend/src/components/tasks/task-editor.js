@@ -13,11 +13,15 @@ import {
     RadioGroup,
     Radio,
 } from '@material-ui/core';
+import { DatePicker } from '@material-ui/pickers';
 import UpdateTimer from '../../utils/update-timer';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
 import styles from './task-editor.module.scss';
 
-const { dayjs, constants: dateConstants } = dateUtils;
+const {
+    dayjs,
+    constants: { DB_DATE_FORMAT },
+} = dateUtils;
 
 const priorities = {
     'Very low': -2,
@@ -72,7 +76,7 @@ class TaskEditor extends React.Component {
             const currentTask = this.props.selectTask(this.props.tid);
             this.updateCurrentTask(currentTask);
             if (currentTask.dueDate !== 'asap' && currentTask.dueDate !== 'eventually') {
-                this.setState({ lastDueDate: dayjs(currentTask.dueDate, dateConstants.DB_DATE_FORMAT) });
+                this.setState({ lastDueDate: currentTask.dueDate });
             }
         } else {
             // Also if the task has been updated somewhere else, make sure the state reflects that
@@ -91,11 +95,11 @@ class TaskEditor extends React.Component {
         if (newType === 'date') {
             let lastDueDate = this.state.lastDueDate;
             if (!this.state.lastDueDate) {
-                lastDueDate = dayjs();
+                lastDueDate = dayjs().format(DB_DATE_FORMAT);
                 this.setState({ lastDueDate });
             }
 
-            this.makeChanges({ dueDate: lastDueDate.format(dateConstants.DB_DATE_FORMAT) });
+            this.makeChanges({ dueDate: lastDueDate });
         } else {
             this.makeChanges({ dueDate: newType });
         }
@@ -109,10 +113,9 @@ class TaskEditor extends React.Component {
         if (prop === 'complete') {
             changes[prop] = e.target.checked;
         } else if (prop === 'dueDate') {
-            const dateString = e.target.value;
-            const dateObj = dayjs(dateString, 'YYYY-MM-DD');
-            this.setState({ lastDueDate: dateObj });
-            changes[prop] = dateObj.format(dateConstants.DB_DATE_FORMAT);
+            const str = e.format(DB_DATE_FORMAT);
+            this.setState({ lastDueDate: str });
+            changes[prop] = str;
         } else {
             changes[prop] = e.target.value;
         }
@@ -193,10 +196,10 @@ class TaskEditor extends React.Component {
                                 <FormControlLabel
                                     value="date"
                                     label={
-                                        <TextField
-                                            type="date"
+                                        <DatePicker
+                                            variant="inline"
                                             disabled={_.get(this.state, 'dueDateType') !== 'date'}
-                                            value={_.get(this.state, 'lastDueDate', dayjs()).format('YYYY-MM-DD')}
+                                            value={dayjs(_.get(this.state, 'lastDueDate'))}
                                             onChange={this.handleChange.bind(this, 'dueDate')}
                                             color="secondary"
                                         />

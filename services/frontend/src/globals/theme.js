@@ -13,13 +13,13 @@ const theme = createMuiTheme({
             light: primary[300],
             main: primary[500],
             dark: primary[700],
-            contrastText: 'white',
+            contrastText: '#fff',
         },
         secondary: {
             light: secondary[300],
             main: secondary[500],
             dark: secondary[700],
-            contrastText: 'white',
+            contrastText: '#fff',
         },
         error: {
             main: colors.red[500],

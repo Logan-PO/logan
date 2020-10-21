@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import { dateUtils } from '@logan/core';
 import { Grid, TextField } from '@material-ui/core';
+import { DatePicker } from '@material-ui/pickers';
 import UpdateTimer from '../../utils/update-timer';
 import {
     deleteAssignment,
@@ -11,6 +13,11 @@ import {
     updateAssignmentLocal,
 } from '../../store/assignments';
 import styles from './assignment-editor.module.scss';
+
+const {
+    dayjs,
+    constants: { DB_DATE_FORMAT },
+} = dateUtils;
 
 //Represents a form to submit the info required to create a given assignment
 class AssignmentEditor extends Component {
@@ -50,7 +57,11 @@ class AssignmentEditor extends Component {
 
         const changes = {};
 
-        changes[prop] = e.target.value;
+        if (prop === 'dueDate') {
+            changes[prop] = e.format(DB_DATE_FORMAT);
+        } else {
+            changes[prop] = e.target.value;
+        }
 
         this.props.updateAssignmentLocal({
             id: this.props.aid,
@@ -93,13 +104,11 @@ class AssignmentEditor extends Component {
                         />
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField
-                            type="date"
-                            disabled={_.get(this.state, 'assignment', { aid: -1000 }).aid !== this.props.aid}
-                            value={_.get(this.state.assignment, 'dueDate', '')}
+                        <DatePicker
+                            variant="inline"
+                            value={dayjs(_.get(this.state.assignment, 'dueDate'))}
                             onChange={this.handleChange.bind(this, 'dueDate')}
-                            color="secondary"
-                        />{' '}
+                        />
                     </Grid>
                 </Grid>
             </div>
