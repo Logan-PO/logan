@@ -1,0 +1,35 @@
+@import '../../globals/global';
+
+.terms-list {
+    height: 100%;
+    flex-grow: 1;
+    background: white;
+    overflow: hidden;
+
+    .add-button {
+        position: relative;
+        left: calc(100% - 1.5em);
+        bottom: 1.5em;
+        transform: translate(-100%, -100%);
+        z-index: 10000;
+    }
+
+    .scrollview {
+        height: 100%;
+        overflow-y: scroll;
+        border-right: solid 1px $border;
+    }
+
+    .term-cell {
+        .actions {
+            display: none;
+        }
+
+        &:hover {
+            .actions {
+                display: initial;
+            }
+        }
+    }
+}
+
