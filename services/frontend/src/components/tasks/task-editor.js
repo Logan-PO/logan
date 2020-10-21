@@ -16,20 +16,13 @@ import {
 import { DatePicker } from '@material-ui/pickers';
 import UpdateTimer from '../../utils/update-timer';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
+import PriorityPicker from './priority-picker';
 import styles from './task-editor.module.scss';
 
 const {
     dayjs,
     constants: { DB_DATE_FORMAT },
 } = dateUtils;
-
-const priorities = {
-    'Very low': -2,
-    Low: -1,
-    Normal: 0,
-    High: 1,
-    'Very high': 2,
-};
 
 class TaskEditor extends React.Component {
     constructor(props) {
@@ -116,6 +109,8 @@ class TaskEditor extends React.Component {
             const str = e.format(DB_DATE_FORMAT);
             this.setState({ lastDueDate: str });
             changes[prop] = str;
+        } else if (prop === 'priority') {
+            changes[prop] = Number(e.target.value);
         } else {
             changes[prop] = e.target.value;
         }
@@ -210,24 +205,11 @@ class TaskEditor extends React.Component {
                                     />
                                 </RadioGroup>
                             </FormControl>
-                            <FormControl disabled={this.isEmpty()}>
-                                <FormLabel color="secondary">Priority</FormLabel>
-                                <RadioGroup
-                                    name="priority"
-                                    value={_.get(this.state.task, 'priority', '')}
-                                    onChange={this.handleChange.bind(this, 'priority')}
-                                >
-                                    {_.entries(priorities).map(([pName, p]) => (
-                                        <FormControlLabel
-                                            key={pName}
-                                            value={p}
-                                            label={pName}
-                                            labelPlacement="end"
-                                            control={<Radio color="secondary" />}
-                                        />
-                                    ))}
-                                </RadioGroup>
-                            </FormControl>
+                            <PriorityPicker
+                                disabled={this.isEmpty()}
+                                value={_.get(this.state.task, 'priority', 0)}
+                                onChange={this.handleChange.bind(this, 'priority')}
+                            />
                         </Grid>
                     </Grid>
                 </div>
