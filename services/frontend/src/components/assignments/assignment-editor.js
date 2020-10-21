@@ -12,6 +12,7 @@ import {
     updateAssignment,
     updateAssignmentLocal,
 } from '../../store/assignments';
+import { CoursePicker } from '../shared';
 import styles from './assignment-editor.module.scss';
 
 const {
@@ -59,6 +60,10 @@ class AssignmentEditor extends Component {
 
         if (prop === 'dueDate') {
             changes[prop] = e.format(DB_DATE_FORMAT);
+        } else if (prop === 'cid') {
+            const cid = e.target.value;
+            if (cid === 'none') changes[prop] = undefined;
+            else changes[prop] = e.target.value;
         } else {
             changes[prop] = e.target.value;
         }
@@ -79,14 +84,6 @@ class AssignmentEditor extends Component {
         return (
             <div className={styles.assignmentEditor}>
                 <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Class"
-                            fullWidth
-                            onChange={this.handleChange.bind(this, 'cid')}
-                            value={_.get(this.state.assignment, 'cid', '')}
-                        />
-                    </Grid>
                     <Grid item style={{ flexGrow: 1 }}>
                         <TextField
                             label="Title"
@@ -101,6 +98,12 @@ class AssignmentEditor extends Component {
                             fullWidth
                             onChange={this.handleChange.bind(this, 'description')}
                             value={_.get(this.state.assignment, 'description', '')}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <CoursePicker
+                            value={_.get(this.state.assignment, 'cid', 'none')}
+                            onChange={this.handleChange.bind(this, 'cid')}
                         />
                     </Grid>
                     <Grid item xs={12}>
