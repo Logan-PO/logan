@@ -10,3 +10,17 @@ $border: #eee;
 html, body {
     margin: 0;
 }
+
+.cell-upper-label {
+    font-size: 0.875rem !important;
+
+    .course-label {
+        font-size: inherit;
+        font-weight: bold !important;
+    }
+
+    .assignment-label {
+        font-size: inherit;
+        color: rgba(0, 0, 0, 0.54) !important;
+    }
+}
