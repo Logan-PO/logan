@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
+import { DatePicker } from '@material-ui/pickers';
 import { getScheduleSelectors, asyncActions, updateTermLocal } from '../../store/schedule';
 import { getChanges } from './change-processor';
 import HolidayDisplay from './holiday-display';
@@ -35,10 +36,11 @@ class TermDisplay extends React.Component {
     handleChange(prop, e) {
         const changes = {};
 
+        console.log(this.state.term.startDate);
+        console.log(this.state.term.endDate);
+
         if (prop === 'startDate' || prop === 'endDate') {
-            const dateString = e.target.value;
-            const dateObj = dayjs(dateString, 'YYYY-MM-DD');
-            changes[prop] = dateObj.format(dateConstants.DB_DATE_FORMAT);
+            changes[prop] = e.format(dateConstants.DB_DATE_FORMAT);
         } else {
             changes[prop] = e.target.value;
         }
@@ -91,14 +93,16 @@ class TermDisplay extends React.Component {
                         value={_.get(this.state.term, 'title', '')}
                         onChange={this.handleChange.bind(this, 'title')}
                     />
-                    <input
-                        type="date"
-                        value={dayjs(_.get(this.state.term, 'startDate')).format('YYYY-MM-DD')}
+                    <DatePicker
+                        variant="inline"
+                        label="Start"
+                        value={dayjs(_.get(this.state.term, 'startDate'), dateConstants.DB_DATE_FORMAT)}
                         onChange={this.handleChange.bind(this, 'startDate')}
                     />
-                    <input
-                        type="date"
-                        value={dayjs(_.get(this.state.term, 'endDate')).format('YYYY-MM-DD')}
+                    <DatePicker
+                        variant="inline"
+                        label="End"
+                        value={dayjs(_.get(this.state.term, 'endDate'), dateConstants.DB_DATE_FORMAT)}
                         onChange={this.handleChange.bind(this, 'endDate')}
                     />
                     <button onClick={this.actuallyMakeUpdates} disabled={!changesExist}>
