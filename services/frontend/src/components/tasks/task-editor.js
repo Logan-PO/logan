@@ -119,16 +119,22 @@ class TaskEditor extends React.Component {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <DueDatePicker
-                                disabled={this.isEmpty()}
-                                value={_.get(this.state.task, 'dueDate')}
-                                onChange={this.handleChange.bind(this, 'dueDate')}
-                            />
-                            <PriorityPicker
-                                disabled={this.isEmpty()}
-                                value={_.get(this.state.task, 'priority', 0)}
-                                onChange={this.handleChange.bind(this, 'priority')}
-                            />
+                            <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
+                                <Grid item>
+                                    <DueDatePicker
+                                        disabled={this.isEmpty()}
+                                        value={_.get(this.state.task, 'dueDate')}
+                                        onChange={this.handleChange.bind(this, 'dueDate')}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <PriorityPicker
+                                        disabled={this.isEmpty()}
+                                        value={_.get(this.state.task, 'priority', 0)}
+                                        onChange={this.handleChange.bind(this, 'priority')}
+                                    />
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </div>
