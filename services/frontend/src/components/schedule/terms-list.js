@@ -37,14 +37,14 @@ class TermsList extends React.Component {
 
     didSelectTerm(tid) {
         this.setState(() => ({ selectedTid: tid }));
-        this.props.onTermSelected && this.props.onTermSelected(tid);
+        this.props.onTermSelected(tid);
     }
 
     didDeleteTerm(term) {
         this.props.deleteTerm(term);
         // TODO: Select next term
         this.setState(() => ({ selectedTid: undefined }));
-        this.props.onTermSelected && this.props.onTermSelected(undefined);
+        this.props.onTermSelected(undefined);
     }
 
     render() {
