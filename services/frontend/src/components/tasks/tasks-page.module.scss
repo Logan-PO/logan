@@ -3,8 +3,14 @@
 .tasks-page {
     height: 100%;
     flex-grow: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    justify-content: stretch;
+
+    .tasks-list-container {
+        flex-grow: 4;
+        height: 100%;
+    }
+
+    .task-editor-container {
+        flex-grow: 8;
+        height: 100%;
+    }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Grid } from '@material-ui/core';
 import { Page } from '../shared';
 import { fetchTasks } from '../../store/tasks';
 import TasksList from './tasks-list';
@@ -22,10 +23,14 @@ class TasksPage extends React.Component {
     render() {
         return (
             <Page title="Tasks">
-                <div className={styles.tasksPage}>
-                    <TasksList onTaskSelected={this.didSelectTask} />
-                    <TaskEditor tid={this.state.selectedTid} />
-                </div>
+                <Grid container spacing={0} className={styles.tasksPage}>
+                    <Grid item className={styles.tasksListContainer}>
+                        <TasksList onTaskSelected={this.didSelectTask} />
+                    </Grid>
+                    <Grid item className={styles.taskEditorContainer}>
+                        <TaskEditor tid={this.state.selectedTid} />
+                    </Grid>
+                </Grid>
             </Page>
         );
     }
