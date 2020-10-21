@@ -78,39 +78,41 @@ class AssignmentEditor extends Component {
     render() {
         return (
             <div className={styles.assignmentEditor}>
-                <Grid container direction="column" spacing={2}>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Class"
-                            fullWidth
-                            onChange={this.handleChange.bind(this, 'cid')}
-                            value={_.get(this.state.assignment, 'cid', '')}
-                        />
+                <div className={styles.scrollview}>
+                    <Grid container direction="column" spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Class"
+                                fullWidth
+                                onChange={this.handleChange.bind(this, 'cid')}
+                                value={_.get(this.state.assignment, 'cid', '')}
+                            />
+                        </Grid>
+                        <Grid item style={{ flexGrow: 1 }}>
+                            <TextField
+                                label="Title"
+                                fullWidth
+                                onChange={this.handleChange.bind(this, 'title')}
+                                value={_.get(this.state.assignment, 'title', '')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Description"
+                                fullWidth
+                                onChange={this.handleChange.bind(this, 'description')}
+                                value={_.get(this.state.assignment, 'description', '')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <DatePicker
+                                variant="inline"
+                                value={dayjs(_.get(this.state.assignment, 'dueDate'))}
+                                onChange={this.handleChange.bind(this, 'dueDate')}
+                            />
+                        </Grid>
                     </Grid>
-                    <Grid item style={{ flexGrow: 1 }}>
-                        <TextField
-                            label="Title"
-                            fullWidth
-                            onChange={this.handleChange.bind(this, 'title')}
-                            value={_.get(this.state.assignment, 'title', '')}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Description"
-                            fullWidth
-                            onChange={this.handleChange.bind(this, 'description')}
-                            value={_.get(this.state.assignment, 'description', '')}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <DatePicker
-                            variant="inline"
-                            value={dayjs(_.get(this.state.assignment, 'dueDate'))}
-                            onChange={this.handleChange.bind(this, 'dueDate')}
-                        />
-                    </Grid>
-                </Grid>
+                </div>
             </div>
         );
     }

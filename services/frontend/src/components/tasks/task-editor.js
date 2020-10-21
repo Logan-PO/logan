@@ -137,98 +137,100 @@ class TaskEditor extends React.Component {
     render() {
         return (
             <div className={styles.taskEditor}>
-                <Grid container spacing={2} direction="column">
-                    <Grid item xs={12}>
-                        <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">
-                            <Grid item>
-                                <Checkbox
-                                    style={{ padding: 0 }}
-                                    disabled={this.isEmpty()}
-                                    checked={_.get(this.state.task, 'complete', false)}
-                                    onChange={this.handleChange.bind(this, 'complete')}
-                                />
-                            </Grid>
-                            <Grid item style={{ flexGrow: 1 }}>
-                                <TextField
-                                    label="Title"
-                                    fullWidth
-                                    onChange={this.handleChange.bind(this, 'title')}
-                                    value={_.get(this.state.task, 'title', '')}
-                                    color="secondary"
-                                    placeholder="Untitled task"
-                                    disabled={this.isEmpty()}
-                                />
+                <div className={styles.scrollview}>
+                    <Grid container spacing={2} direction="column">
+                        <Grid item xs={12}>
+                            <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">
+                                <Grid item>
+                                    <Checkbox
+                                        style={{ padding: 0 }}
+                                        disabled={this.isEmpty()}
+                                        checked={_.get(this.state.task, 'complete', false)}
+                                        onChange={this.handleChange.bind(this, 'complete')}
+                                    />
+                                </Grid>
+                                <Grid item style={{ flexGrow: 1 }}>
+                                    <TextField
+                                        label="Title"
+                                        fullWidth
+                                        onChange={this.handleChange.bind(this, 'title')}
+                                        value={_.get(this.state.task, 'title', '')}
+                                        color="secondary"
+                                        placeholder="Untitled task"
+                                        disabled={this.isEmpty()}
+                                    />
+                                </Grid>
                             </Grid>
                         </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Description"
-                            fullWidth
-                            multiline
-                            onChange={this.handleChange.bind(this, 'description')}
-                            value={_.get(this.state.task, 'description', '')}
-                            color="secondary"
-                            placeholder="Task description"
-                            disabled={this.isEmpty()}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControl disabled={this.isEmpty()}>
-                            <FormLabel color="secondary">Due Date</FormLabel>
-                            <RadioGroup
-                                name="dueDateType"
-                                value={_.get(this.state, 'dueDateType', '')}
-                                onChange={this.updateDueDateType}
-                            >
-                                <FormControlLabel
-                                    value="asap"
-                                    label="ASAP"
-                                    labelPlacement="end"
-                                    control={<Radio color="secondary" />}
-                                />
-                                <FormControlLabel
-                                    value="eventually"
-                                    label="Eventually"
-                                    labelPlacement="end"
-                                    control={<Radio color="secondary" />}
-                                />
-                                <FormControlLabel
-                                    value="date"
-                                    label={
-                                        <DatePicker
-                                            variant="inline"
-                                            disabled={_.get(this.state, 'dueDateType') !== 'date'}
-                                            value={dayjs(_.get(this.state, 'lastDueDate'))}
-                                            onChange={this.handleChange.bind(this, 'dueDate')}
-                                            color="secondary"
-                                        />
-                                    }
-                                    labelPlacement="end"
-                                    control={<Radio color="secondary" />}
-                                />
-                            </RadioGroup>
-                        </FormControl>
-                        <FormControl disabled={this.isEmpty()}>
-                            <FormLabel color="secondary">Priority</FormLabel>
-                            <RadioGroup
-                                name="priority"
-                                value={_.get(this.state.task, 'priority', '')}
-                                onChange={this.handleChange.bind(this, 'priority')}
-                            >
-                                {_.entries(priorities).map(([pName, p]) => (
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Description"
+                                fullWidth
+                                multiline
+                                onChange={this.handleChange.bind(this, 'description')}
+                                value={_.get(this.state.task, 'description', '')}
+                                color="secondary"
+                                placeholder="Task description"
+                                disabled={this.isEmpty()}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FormControl disabled={this.isEmpty()}>
+                                <FormLabel color="secondary">Due Date</FormLabel>
+                                <RadioGroup
+                                    name="dueDateType"
+                                    value={_.get(this.state, 'dueDateType', '')}
+                                    onChange={this.updateDueDateType}
+                                >
                                     <FormControlLabel
-                                        key={pName}
-                                        value={p}
-                                        label={pName}
+                                        value="asap"
+                                        label="ASAP"
                                         labelPlacement="end"
                                         control={<Radio color="secondary" />}
                                     />
-                                ))}
-                            </RadioGroup>
-                        </FormControl>
+                                    <FormControlLabel
+                                        value="eventually"
+                                        label="Eventually"
+                                        labelPlacement="end"
+                                        control={<Radio color="secondary" />}
+                                    />
+                                    <FormControlLabel
+                                        value="date"
+                                        label={
+                                            <DatePicker
+                                                variant="inline"
+                                                disabled={_.get(this.state, 'dueDateType') !== 'date'}
+                                                value={dayjs(_.get(this.state, 'lastDueDate'))}
+                                                onChange={this.handleChange.bind(this, 'dueDate')}
+                                                color="secondary"
+                                            />
+                                        }
+                                        labelPlacement="end"
+                                        control={<Radio color="secondary" />}
+                                    />
+                                </RadioGroup>
+                            </FormControl>
+                            <FormControl disabled={this.isEmpty()}>
+                                <FormLabel color="secondary">Priority</FormLabel>
+                                <RadioGroup
+                                    name="priority"
+                                    value={_.get(this.state.task, 'priority', '')}
+                                    onChange={this.handleChange.bind(this, 'priority')}
+                                >
+                                    {_.entries(priorities).map(([pName, p]) => (
+                                        <FormControlLabel
+                                            key={pName}
+                                            value={p}
+                                            label={pName}
+                                            labelPlacement="end"
+                                            control={<Radio color="secondary" />}
+                                        />
+                                    ))}
+                                </RadioGroup>
+                            </FormControl>
+                        </Grid>
                     </Grid>
-                </Grid>
+                </div>
             </div>
         );
     }
