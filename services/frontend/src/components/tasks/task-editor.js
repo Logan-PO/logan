@@ -122,6 +122,7 @@ class TaskEditor extends React.Component {
                             <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
                                 <Grid item>
                                     <DueDatePicker
+                                        entityId={_.get(this.state.task, 'tid')}
                                         disabled={this.isEmpty()}
                                         value={_.get(this.state.task, 'dueDate')}
                                         onChange={this.handleChange.bind(this, 'dueDate')}

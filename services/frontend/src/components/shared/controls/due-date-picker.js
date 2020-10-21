@@ -24,7 +24,9 @@ class DueDatePicker extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.value === prevProps.value) return;
+        if (_.isEqual(this.props, prevProps)) return;
+
+        const isNewEntity = prevProps.entityId !== this.props.entityId;
 
         if (!this.props.value) {
             this.setState({
@@ -32,9 +34,15 @@ class DueDatePicker extends React.Component {
                 lastDueDate: undefined,
             });
         } else if (this.props.value === 'asap') {
-            this.setState({ dueDateType: 'asap' });
+            this.setState({
+                dueDateType: 'asap',
+                ...(isNewEntity && { lastDueDate: undefined }),
+            });
         } else if (this.props.value === 'eventually') {
-            this.setState({ dueDateType: 'eventually' });
+            this.setState({
+                dueDateType: 'eventually',
+                ...(isNewEntity && { lastDueDate: undefined }),
+            });
         } else {
             this.setState({
                 dueDateType: 'date',
@@ -68,6 +76,9 @@ class DueDatePicker extends React.Component {
     }
 
     render() {
+        const lastDueDate = _.get(this.state, 'lastDueDate');
+        const dateValue = lastDueDate ? dayjs(lastDueDate) : null;
+
         return (
             <FormControl disabled={this.props.disabled}>
                 <FormLabel color="secondary">Due date</FormLabel>
@@ -90,9 +101,10 @@ class DueDatePicker extends React.Component {
                             <DatePicker
                                 variant="inline"
                                 disabled={_.get(this.state, 'dueDateType') !== 'date'}
-                                value={dayjs(_.get(this.state, 'lastDueDate'))}
+                                value={dateValue}
                                 onChange={this.updateDate}
                                 color="secondary"
+                                emptyLabel="Choose a date…"
                             />
                         }
                         labelPlacement="end"
@@ -105,6 +117,7 @@ class DueDatePicker extends React.Component {
 }
 
 DueDatePicker.propTypes = {
+    entityId: PropTypes.string,
     disabled: PropTypes.bool,
     value: PropTypes.string,
     onChange: PropTypes.func,

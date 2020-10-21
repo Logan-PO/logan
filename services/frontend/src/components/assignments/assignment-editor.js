@@ -107,6 +107,7 @@ class AssignmentEditor extends Component {
                         </Grid>
                         <Grid item xs={12}>
                             <DueDatePicker
+                                entityId={_.get(this.state.assignment, 'aid')}
                                 disabled={this.isEmpty()}
                                 value={_.get(this.state.assignment, 'dueDate')}
                                 onChange={this.handleChange.bind(this, 'dueDate')}
