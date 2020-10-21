@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { dateUtils } from '@logan/core';
 import { Grid, TextField } from '@material-ui/core';
-import { DatePicker } from '@material-ui/pickers';
 import UpdateTimer from '../../utils/update-timer';
 import {
     deleteAssignment,
@@ -12,12 +10,8 @@ import {
     updateAssignment,
     updateAssignmentLocal,
 } from '../../store/assignments';
+import { DueDatePicker } from '../shared/controls';
 import styles from './assignment-editor.module.scss';
-
-const {
-    dayjs,
-    constants: { DB_DATE_FORMAT },
-} = dateUtils;
 
 //Represents a form to submit the info required to create a given assignment
 class AssignmentEditor extends Component {
@@ -58,7 +52,7 @@ class AssignmentEditor extends Component {
         const changes = {};
 
         if (prop === 'dueDate') {
-            changes[prop] = e.format(DB_DATE_FORMAT);
+            changes[prop] = e;
         } else {
             changes[prop] = e.target.value;
         }
@@ -105,9 +99,8 @@ class AssignmentEditor extends Component {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <DatePicker
-                                variant="inline"
-                                value={dayjs(_.get(this.state.assignment, 'dueDate'))}
+                            <DueDatePicker
+                                value={_.get(this.state.assignment, 'dueDate')}
                                 onChange={this.handleChange.bind(this, 'dueDate')}
                             />
                         </Grid>

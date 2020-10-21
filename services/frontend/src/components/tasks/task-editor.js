@@ -2,33 +2,17 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dateUtils } from '@logan/core';
-import {
-    Grid,
-    TextField,
-    Checkbox,
-    FormControl,
-    FormLabel,
-    FormControlLabel,
-    RadioGroup,
-    Radio,
-} from '@material-ui/core';
-import { DatePicker } from '@material-ui/pickers';
+import { Grid, TextField, Checkbox } from '@material-ui/core';
 import UpdateTimer from '../../utils/update-timer';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
+import { DueDatePicker } from '../shared/controls';
 import PriorityPicker from './priority-picker';
 import styles from './task-editor.module.scss';
-
-const {
-    dayjs,
-    constants: { DB_DATE_FORMAT },
-} = dateUtils;
 
 class TaskEditor extends React.Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
-        this.updateDueDateType = this.updateDueDateType.bind(this);
 
         this.changesExist = false;
         this.updateTimer = new UpdateTimer(1000, () => {
@@ -44,14 +28,8 @@ class TaskEditor extends React.Component {
     }
 
     updateCurrentTask(task) {
-        let dueDateType = _.get(task, 'dueDate');
-        if (dueDateType !== 'asap' && dueDateType !== 'eventually') {
-            dueDateType = 'date';
-        }
-
         this.setState({
             task,
-            dueDateType,
         });
     }
 
@@ -68,33 +46,12 @@ class TaskEditor extends React.Component {
 
             const currentTask = this.props.selectTask(this.props.tid);
             this.updateCurrentTask(currentTask);
-            if (currentTask.dueDate !== 'asap' && currentTask.dueDate !== 'eventually') {
-                this.setState({ lastDueDate: currentTask.dueDate });
-            }
         } else {
             // Also if the task has been updated somewhere else, make sure the state reflects that
             const storeTask = this.props.selectTask(this.props.tid);
             if (!_.isEqual(storeTask, this.state.task)) {
                 this.updateCurrentTask(storeTask);
             }
-        }
-    }
-
-    updateDueDateType(e) {
-        const newType = e.target.value;
-
-        this.changesExist = true;
-
-        if (newType === 'date') {
-            let lastDueDate = this.state.lastDueDate;
-            if (!this.state.lastDueDate) {
-                lastDueDate = dayjs().format(DB_DATE_FORMAT);
-                this.setState({ lastDueDate });
-            }
-
-            this.makeChanges({ dueDate: lastDueDate });
-        } else {
-            this.makeChanges({ dueDate: newType });
         }
     }
 
@@ -106,19 +63,11 @@ class TaskEditor extends React.Component {
         if (prop === 'complete') {
             changes[prop] = e.target.checked;
         } else if (prop === 'dueDate') {
-            const str = e.format(DB_DATE_FORMAT);
-            this.setState({ lastDueDate: str });
-            changes[prop] = str;
-        } else if (prop === 'priority') {
-            changes[prop] = Number(e.target.value);
+            changes[prop] = e;
         } else {
             changes[prop] = e.target.value;
         }
 
-        this.makeChanges(changes);
-    }
-
-    makeChanges(changes) {
         this.props.updateTaskLocal({
             id: this.props.tid,
             changes,
@@ -170,41 +119,11 @@ class TaskEditor extends React.Component {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <FormControl disabled={this.isEmpty()}>
-                                <FormLabel color="secondary">Due Date</FormLabel>
-                                <RadioGroup
-                                    name="dueDateType"
-                                    value={_.get(this.state, 'dueDateType', '')}
-                                    onChange={this.updateDueDateType}
-                                >
-                                    <FormControlLabel
-                                        value="asap"
-                                        label="ASAP"
-                                        labelPlacement="end"
-                                        control={<Radio color="secondary" />}
-                                    />
-                                    <FormControlLabel
-                                        value="eventually"
-                                        label="Eventually"
-                                        labelPlacement="end"
-                                        control={<Radio color="secondary" />}
-                                    />
-                                    <FormControlLabel
-                                        value="date"
-                                        label={
-                                            <DatePicker
-                                                variant="inline"
-                                                disabled={_.get(this.state, 'dueDateType') !== 'date'}
-                                                value={dayjs(_.get(this.state, 'lastDueDate'))}
-                                                onChange={this.handleChange.bind(this, 'dueDate')}
-                                                color="secondary"
-                                            />
-                                        }
-                                        labelPlacement="end"
-                                        control={<Radio color="secondary" />}
-                                    />
-                                </RadioGroup>
-                            </FormControl>
+                            <DueDatePicker
+                                disabled={this.isEmpty()}
+                                value={_.get(this.state.task, 'dueDate')}
+                                onChange={this.handleChange.bind(this, 'dueDate')}
+                            />
                             <PriorityPicker
                                 disabled={this.isEmpty()}
                                 value={_.get(this.state.task, 'priority', 0)}
