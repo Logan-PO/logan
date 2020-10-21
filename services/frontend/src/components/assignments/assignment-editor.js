@@ -69,6 +69,10 @@ class AssignmentEditor extends Component {
         this.updateTimer.reset();
     }
 
+    isEmpty() {
+        return _.isEmpty(this.props.aid);
+    }
+
     render() {
         return (
             <div className={styles.assignmentEditor}>
@@ -76,6 +80,7 @@ class AssignmentEditor extends Component {
                     <Grid container direction="column" spacing={2}>
                         <Grid item xs={12}>
                             <TextField
+                                disabled={this.isEmpty()}
                                 label="Class"
                                 fullWidth
                                 onChange={this.handleChange.bind(this, 'cid')}
@@ -84,6 +89,7 @@ class AssignmentEditor extends Component {
                         </Grid>
                         <Grid item style={{ flexGrow: 1 }}>
                             <TextField
+                                disabled={this.isEmpty()}
                                 label="Title"
                                 fullWidth
                                 onChange={this.handleChange.bind(this, 'title')}
@@ -92,6 +98,7 @@ class AssignmentEditor extends Component {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                disabled={this.isEmpty()}
                                 label="Description"
                                 fullWidth
                                 onChange={this.handleChange.bind(this, 'description')}
@@ -100,6 +107,7 @@ class AssignmentEditor extends Component {
                         </Grid>
                         <Grid item xs={12}>
                             <DueDatePicker
+                                disabled={this.isEmpty()}
                                 value={_.get(this.state.assignment, 'dueDate')}
                                 onChange={this.handleChange.bind(this, 'dueDate')}
                             />
