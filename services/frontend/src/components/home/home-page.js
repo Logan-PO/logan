@@ -1,19 +1,39 @@
+import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
-import { Container, Typography, Grid, Divider } from '@material-ui/core';
+import { Container, Typography, Grid } from '@material-ui/core';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from '../../store/login';
 import GoogleBtn from './GoogleButton';
+import SignUpForm from './signup-form';
 import styles from './home-page.module.scss';
 
 class HomePage extends React.Component {
-    async componentDidUpdate() {
+    constructor(props) {
+        super(props);
+
+        this.modalClosed = this.modalClosed.bind(this);
+
+        this.state = {
+            createModalOpen: false,
+        };
+    }
+
+    async componentDidUpdate(prevProps) {
+        if (_.isEqual(this.props, prevProps)) return;
+
         if (this.props.loginStage === LOGIN_STAGE.LOGGED_IN) {
             await this.props.fetchSelf();
             this.props.setLoginStage(LOGIN_STAGE.DONE);
             navigate('/tasks');
+        } else if (this.props.loginStage === LOGIN_STAGE.CREATE) {
+            this.setState({ createModalOpen: true });
         }
+    }
+
+    modalClosed() {
+        this.setState({ createModalOpen: false });
     }
 
     render() {
@@ -37,6 +57,7 @@ class HomePage extends React.Component {
                         <GoogleBtn />
                     </Grid>
                 </Grid>
+                <SignUpForm open={this.state.createModalOpen} onClose={this.modalClosed} />
             </Container>
         );
     }

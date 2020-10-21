@@ -2,36 +2,34 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { navigate } from 'gatsby';
-import { Container, Grid, TextField, Button } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, TextField, Button } from '@material-ui/core';
 import { LOGIN_STAGE, setLoginStage, createNewUser } from '../../store/login';
-import styles from './signup.modules.scss';
 
 class SignUpForm extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            name: _.get(props, ['meta', 'name'], ''),
+            name: '',
             username: '',
-            email: _.get(props, ['meta', 'email'], ''),
+            email: '',
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    componentDidMount() {
-        if (this.props.loginStage === LOGIN_STAGE.LOGIN) {
-            navigate('../login');
-        } else if (this.props.loginStage !== LOGIN_STAGE.CREATE) {
-            navigate('../');
-        }
-    }
+    componentDidUpdate(prevProps) {
+        if (_.isEqual(this.props, prevProps)) return;
 
-    componentDidUpdate() {
         if (this.props.loginStage !== LOGIN_STAGE.CREATE) {
-            navigate('../');
+            this.props.onClose();
+        } else {
+            this.setState({
+                name: _.get(this.props, ['meta', 'name'], ''),
+                username: '',
+                email: _.get(this.props, ['meta', 'email'], ''),
+            });
         }
     }
 
@@ -39,41 +37,45 @@ class SignUpForm extends React.Component {
         this.setState({ [prop]: e.target.value });
     }
 
-    async handleSubmit(event) {
-        event.preventDefault();
+    async handleSubmit(e) {
+        e.preventDefault();
         await this.props.createNewUser(this.state);
     }
 
     render() {
         return (
-            <div className={styles.signupForm}>
-                <Container>
-                    <Grid container spacing={2} direction="column">
+            <Dialog open={this.props.open} onClose={this.props.onClose} fullWidth={true} maxWidth="xs">
+                <DialogTitle>Create Account</DialogTitle>
+                <DialogContent>
+                    <Grid container direction="column" spacing={1}>
                         <Grid item xs={12}>
                             <TextField
                                 label="Name"
                                 onChange={this.handleChange.bind(this, 'name')}
                                 value={this.state.name}
+                                fullWidth
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 label="Username"
+                                autoFocus
                                 onChange={this.handleChange.bind(this, 'username')}
                                 value={this.state.username}
+                                fullWidth
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField label="Email" disabled value={this.state.email} />
+                            <TextField label="Email" disabled value={this.state.email} fullWidth />
                         </Grid>
                     </Grid>
-                    <div>
-                        <Button variant="outlined" color="primary" onClick={this.handleSubmit}>
-                            Signup
-                        </Button>
-                    </div>
-                </Container>
-            </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button color="primary" onClick={this.handleSubmit}>
+                        Signup
+                    </Button>
+                </DialogActions>
+            </Dialog>
         );
     }
 }
@@ -83,6 +85,8 @@ SignUpForm.propTypes = {
     loginStage: PropTypes.string,
     setLoginStage: PropTypes.func,
     createNewUser: PropTypes.func,
+    open: PropTypes.bool,
+    onClose: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
