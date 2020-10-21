@@ -31,9 +31,9 @@ class DueDatePicker extends React.Component {
                 dueDateType: undefined,
                 lastDueDate: undefined,
             });
-        } else if (this.props.value === 'asap' && this.state.dueDateType !== 'asap') {
+        } else if (this.props.value === 'asap') {
             this.setState({ dueDateType: 'asap' });
-        } else if (this.props.value === 'eventually' && this.state.dueDateType !== 'eventually') {
+        } else if (this.props.value === 'eventually') {
             this.setState({ dueDateType: 'eventually' });
         } else {
             this.setState({
