@@ -1,17 +1,21 @@
+import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Select, ListSubheader, MenuItem } from '@material-ui/core';
+import { FormControl, InputLabel, Select, ListSubheader, MenuItem } from '@material-ui/core';
 import { getScheduleSelectors } from '../../../store/schedule';
 
 class CoursePicker extends React.Component {
-    render() {
-        let derivedValue = this.props.value;
+    getPropsToForward() {
+        return _.omit(this.props, ['tids', 'getTerm', 'allCids', 'getCoursesForTerm', 'value', 'onChange']);
+    }
 
-        if (this.props.value !== 'none' && !this.props.allCids.includes(this.props.value)) {
-            derivedValue = undefined;
-        }
+    getDerivedValue() {
+        if (this.props.value !== 'none' && !this.props.allCids.includes(this.props.value)) return undefined;
+        else return this.props.value;
+    }
 
+    generateItems() {
         const terms = this.props.tids.map(tid => {
             const term = { ...this.props.getTerm(tid) };
             term.courses = this.props.getCoursesForTerm(term);
@@ -36,15 +40,23 @@ class CoursePicker extends React.Component {
             }
         }
 
+        return items;
+    }
+
+    render() {
         return (
-            <Select value={derivedValue} onChange={this.props.onChange}>
-                {items}
-            </Select>
+            <FormControl disabled={this.props.disabled}>
+                <InputLabel>Course</InputLabel>
+                <Select value={this.getDerivedValue()} onChange={this.props.onChange} {...this.getPropsToForward()}>
+                    {this.generateItems()}
+                </Select>
+            </FormControl>
         );
     }
 }
 
 CoursePicker.propTypes = {
+    disabled: PropTypes.bool,
     tids: PropTypes.array,
     getTerm: PropTypes.func,
     getCoursesForTerm: PropTypes.func,

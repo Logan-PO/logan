@@ -16,6 +16,7 @@ import {
 import { DatePicker } from '@material-ui/pickers';
 import UpdateTimer from '../../utils/update-timer';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
+import { CoursePicker } from '../shared';
 import styles from './task-editor.module.scss';
 
 const {
@@ -116,6 +117,10 @@ class TaskEditor extends React.Component {
             const str = e.format(DB_DATE_FORMAT);
             this.setState({ lastDueDate: str });
             changes[prop] = str;
+        } else if (prop === 'cid') {
+            const cid = e.target.value;
+            if (cid === 'none') changes[prop] = undefined;
+            else changes[prop] = e.target.value;
         } else {
             changes[prop] = e.target.value;
         }
@@ -171,6 +176,13 @@ class TaskEditor extends React.Component {
                             color="secondary"
                             placeholder="Task description"
                             disabled={this.isEmpty()}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <CoursePicker
+                            disabled={this.isEmpty()}
+                            value={_.get(this.state.task, 'cid', 'none')}
+                            onChange={this.handleChange.bind(this, 'cid')}
                         />
                     </Grid>
                     <Grid item xs={12}>
