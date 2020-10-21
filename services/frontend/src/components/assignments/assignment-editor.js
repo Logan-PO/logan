@@ -78,7 +78,7 @@ class AssignmentEditor extends Component {
     render() {
         return (
             <div className={styles.assignmentEditor}>
-                <Grid container spacing={2}>
+                <Grid container direction="column" spacing={2}>
                     <Grid item xs={12}>
                         <TextField
                             label="Class"
