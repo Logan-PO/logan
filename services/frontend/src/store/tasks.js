@@ -65,7 +65,7 @@ const { slice, asyncActions } = createAsyncSlice({
         deleteTask: {
             fn: api.deleteTask,
             begin(state, action) {
-                adapter.removeOne(state, action.meta.arg);
+                adapter.removeOne(state, action.meta.arg.tid);
             },
         },
     },
