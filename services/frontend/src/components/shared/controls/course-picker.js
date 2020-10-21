@@ -6,6 +6,12 @@ import { getScheduleSelectors } from '../../../store/schedule';
 
 class CoursePicker extends React.Component {
     render() {
+        let derivedValue = this.props.value;
+
+        if (this.props.value !== 'none' && !this.props.allCids.includes(this.props.value)) {
+            derivedValue = undefined;
+        }
+
         const terms = this.props.tids.map(tid => {
             const term = { ...this.props.getTerm(tid) };
             term.courses = this.props.getCoursesForTerm(term);
@@ -31,7 +37,7 @@ class CoursePicker extends React.Component {
         }
 
         return (
-            <Select value={this.props.value} onChange={this.props.onChange}>
+            <Select value={derivedValue} onChange={this.props.onChange}>
                 {items}
             </Select>
         );
@@ -42,6 +48,7 @@ CoursePicker.propTypes = {
     tids: PropTypes.array,
     getTerm: PropTypes.func,
     getCoursesForTerm: PropTypes.func,
+    allCids: PropTypes.array,
     value: PropTypes.string,
     onChange: PropTypes.func,
 };
@@ -58,6 +65,7 @@ const mapStateToProps = state => {
         tids: selectors.baseSelectors.terms.selectIds(),
         getTerm: selectors.baseSelectors.terms.selectById,
         getCoursesForTerm: selectors.getCoursesForTerm,
+        allCids: selectors.baseSelectors.courses.selectIds(),
     };
 };
 
