@@ -52,7 +52,7 @@ class TaskCell extends React.Component {
     render() {
         return (
             <div className={styles.taskCell}>
-                <ListItem selected={this.props.selected} onClick={this.select}>
+                <ListItem button selected={this.props.selected} onClick={this.select}>
                     <ListItemIcon>
                         <Checkbox
                             edge="start"

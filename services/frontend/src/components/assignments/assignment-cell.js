@@ -36,7 +36,7 @@ export class AssignmentCell extends React.Component {
     render() {
         return (
             <div className={styles.assignmentCell}>
-                <ListItem selected={this.props.selected} onClick={this.select}>
+                <ListItem button selected={this.props.selected} onClick={this.select}>
                     <ListItemIcon>{_.get(this.state, 'assignment.cid', ['N/A'])}</ListItemIcon>
                     <ListItemText
                         primary={_.get(this.state, 'assignment.title')}
