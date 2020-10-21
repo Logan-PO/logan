@@ -18,13 +18,10 @@ export class AssignmentsPage extends React.Component {
         };
     }
 
-    componentDidMount() {
-        this.props.fetchAssignments();
-    }
-
     didSelectAssignment(aid) {
         this.setState({ selectedAid: aid });
     }
+
     render() {
         return (
             <Page title="Assignments">
