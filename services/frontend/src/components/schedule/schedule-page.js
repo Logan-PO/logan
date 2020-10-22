@@ -6,6 +6,7 @@ import TermsList from './terms-list';
 import TermChildrenList from './term-children-list';
 import TermEditor from './term-editor';
 import styles from './schedule-page.module.scss';
+import CourseEditor from './course-editor';
 
 class SchedulePage extends React.Component {
     constructor(props) {
@@ -44,6 +45,14 @@ class SchedulePage extends React.Component {
         });
     }
 
+    editorToDisplay() {
+        if (!this.state.selectedCid && !this.state.selectedHid) {
+            return <TermEditor tid={this.state.selectedTid} />;
+        } else if (this.state.selectedCid) {
+            return <CourseEditor cid={this.state.selectedCid} />;
+        }
+    }
+
     render() {
         return (
             <Page title="Schedule">
@@ -61,7 +70,7 @@ class SchedulePage extends React.Component {
                             />
                         </div>
                     )}
-                    <TermEditor tid={this.state.selectedTid} />
+                    {this.editorToDisplay()}
                 </div>
             </Page>
         );
