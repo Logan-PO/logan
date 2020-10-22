@@ -15,7 +15,20 @@ class TermChildrenList extends React.Component {
     }
 
     randomChild(type) {
-        return {};
+        if (type === 'course') {
+            return {
+                tid: this.props.tid,
+                title: 'New course',
+                color: '#000000',
+            };
+        } else if (type === 'holiday') {
+            return {
+                tid: this.props.tid,
+                title: 'New holiday',
+                startDate: '2020-01-01',
+                endDate: '2020-01-02',
+            };
+        }
     }
 
     didSelectChild(type, id) {
