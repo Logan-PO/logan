@@ -59,6 +59,7 @@ class TasksList extends React.Component {
             else sections[key] = [task.tid];
         }
 
+        // TODO: Better sorting
         if (this.state.showingCompletedTasks) {
             return _.entries(sections)
                 .sort((a, b) => compareDueDates(b[0], a[0]))
