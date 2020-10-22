@@ -71,7 +71,7 @@ class TaskCell extends React.Component {
         const hasBoth = course && assignment;
 
         return (
-            <div className={styles.taskCell}>
+            <div className={`list-cell ${styles.taskCell}`}>
                 <PriorityDisplay priority={_.get(this.state.task, 'priority')} />
                 <ListItem button selected={this.props.selected} onClick={this.select}>
                     <ListItemIcon>
@@ -99,7 +99,7 @@ class TaskCell extends React.Component {
                         }
                         secondary={_.get(this.state, 'task.description')}
                     />
-                    <ListItemSecondaryAction className={styles.actions}>
+                    <ListItemSecondaryAction className="actions">
                         <IconButton edge="end" onClick={this.deleted}>
                             <DeleteIcon color="error" />
                         </IconButton>

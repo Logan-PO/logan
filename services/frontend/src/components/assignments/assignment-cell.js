@@ -7,7 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '../../store/assignments';
 import { getScheduleSelectors } from '../../store/schedule';
 import { CourseLabel } from '../shared';
-import styles from './assignment-cell.module.scss';
+import globalStyles from '../../globals/global.scss';
 
 export class AssignmentCell extends React.Component {
     constructor(props) {
@@ -39,13 +39,13 @@ export class AssignmentCell extends React.Component {
         const course = this.props.getCourse(_.get(this.state.assignment, 'cid'));
 
         return (
-            <div className={styles.assignmentCell}>
+            <div className="list-cell">
                 <ListItem button selected={this.props.selected} onClick={this.select}>
                     <ListItemText
                         primary={
                             <React.Fragment>
                                 {course && (
-                                    <div className={styles.cellUpperLabel}>
+                                    <div className={globalStyles.cellUpperLabel}>
                                         <CourseLabel cid={course.cid} />
                                     </div>
                                 )}
@@ -54,7 +54,7 @@ export class AssignmentCell extends React.Component {
                         }
                         secondary={_.get(this.state, 'assignment.description')}
                     />
-                    <ListItemSecondaryAction className={styles.actions}>
+                    <ListItemSecondaryAction className="actions">
                         <IconButton edge="end" onClick={this.deleted}>
                             <DeleteIcon color="error" />
                         </IconButton>

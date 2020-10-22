@@ -7,7 +7,7 @@ import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Sw
 import AddIcon from '@material-ui/icons/Add';
 import { getTasksSelectors, fetchTasks, createTask, deleteTask, compareDueDates } from '../../store/tasks';
 import TaskCell from './task-cell';
-import styles from './tasks-list.module.scss';
+import '../shared/list.scss';
 
 class TasksList extends React.Component {
     constructor(props) {
@@ -75,14 +75,14 @@ class TasksList extends React.Component {
         const sections = this.sectionsToShow();
 
         return (
-            <div className={styles.tasksList}>
-                <div className={styles.scrollview}>
+            <div className="scrollable-list">
+                <div className="scroll-view">
                     <List>
                         {sections.map(section => {
                             const [dueDate, tids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader className={styles.heading}>{dueDate}</ListSubheader>
+                                    <ListSubheader>{dueDate}</ListSubheader>
                                     {tids.map(tid => (
                                         <TaskCell
                                             key={tid}
@@ -109,11 +109,7 @@ class TasksList extends React.Component {
                         </FormControl>
                     </Toolbar>
                 </AppBar>
-                <Fab
-                    className={styles.addButton}
-                    color="secondary"
-                    onClick={() => this.props.createTask(this.randomTask())}
-                >
+                <Fab className="add-button" color="secondary" onClick={() => this.props.createTask(this.randomTask())}>
                     <AddIcon />
                 </Fab>
             </div>

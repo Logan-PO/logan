@@ -7,14 +7,4 @@
     &> * {
        flex-grow: 1;
     }
-
-    .actions {
-        display: none;
-    }
-
-    &:hover {
-        .actions {
-            display: initial;
-        }
-    }
 }
