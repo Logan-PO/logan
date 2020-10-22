@@ -2,10 +2,10 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Grid, TextField, Checkbox } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 import UpdateTimer from '../../utils/update-timer';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
-import { CoursePicker, DueDatePicker, PriorityPicker } from '../shared/controls';
+import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox } from '../shared/controls';
 import styles from './task-editor.module.scss';
 
 class TaskEditor extends React.Component {
@@ -90,8 +90,8 @@ class TaskEditor extends React.Component {
                             <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">
                                 <Grid item>
                                     <Checkbox
-                                        style={{ padding: 0 }}
                                         disabled={this.isEmpty()}
+                                        cid={_.get(this.state.task, 'cid')}
                                         checked={_.get(this.state.task, 'complete', false)}
                                         onChange={this.handleChange.bind(this, 'complete')}
                                     />
