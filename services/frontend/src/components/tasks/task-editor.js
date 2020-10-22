@@ -7,6 +7,7 @@ import UpdateTimer from '../../utils/update-timer';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
 import { DueDatePicker } from '../shared/controls';
 import PriorityPicker from './priority-picker';
+import { CoursePicker } from '../shared';
 import styles from './task-editor.module.scss';
 
 class TaskEditor extends React.Component {
@@ -64,6 +65,10 @@ class TaskEditor extends React.Component {
             changes[prop] = e.target.checked;
         } else if (prop === 'dueDate') {
             changes[prop] = e;
+        } else if (prop === 'cid') {
+            const cid = e.target.value;
+            if (cid === 'none') changes[prop] = undefined;
+            else changes[prop] = e.target.value;
         } else {
             changes[prop] = e.target.value;
         }
@@ -116,6 +121,13 @@ class TaskEditor extends React.Component {
                                 color="secondary"
                                 placeholder="Task description"
                                 disabled={this.isEmpty()}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CoursePicker
+                                disabled={this.isEmpty()}
+                                value={_.get(this.state.task, 'cid', 'none')}
+                                onChange={this.handleChange.bind(this, 'cid')}
                             />
                         </Grid>
                         <Grid item xs={12}>

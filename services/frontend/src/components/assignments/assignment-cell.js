@@ -2,9 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { ListItem, ListItemText, ListItemIcon, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import { ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '../../store/assignments';
+import { getScheduleSelectors } from '../../store/schedule';
+import { CourseLabel } from '../shared';
 import styles from './assignment-cell.module.scss';
 
 export class AssignmentCell extends React.Component {
@@ -34,12 +36,22 @@ export class AssignmentCell extends React.Component {
     }
 
     render() {
+        const course = this.props.getCourse(_.get(this.state.assignment, 'cid'));
+
         return (
             <div className={styles.assignmentCell}>
                 <ListItem button selected={this.props.selected} onClick={this.select}>
-                    <ListItemIcon>{_.get(this.state, 'assignment.cid', ['N/A'])}</ListItemIcon>
                     <ListItemText
-                        primary={_.get(this.state, 'assignment.title')}
+                        primary={
+                            <React.Fragment>
+                                {course && (
+                                    <div className={styles.cellUpperLabel}>
+                                        <CourseLabel cid={course.cid} />
+                                    </div>
+                                )}
+                                <div>{_.get(this.state, 'assignment.title')}</div>
+                            </React.Fragment>
+                        }
                         secondary={_.get(this.state, 'assignment.description')}
                     />
                     <ListItemSecondaryAction className={styles.actions}>
@@ -56,6 +68,7 @@ AssignmentCell.propTypes = {
     aid: PropTypes.string,
     updateAssignmentLocal: PropTypes.func,
     selectAssignmentFromStore: PropTypes.func,
+    getCourse: PropTypes.func,
     selected: PropTypes.bool,
     onSelect: PropTypes.func,
     onDelete: PropTypes.func,
@@ -64,6 +77,7 @@ AssignmentCell.propTypes = {
 const mapStateToProps = state => {
     return {
         selectAssignmentFromStore: getAssignmentsSelectors(state.assignments).selectById,
+        getCourse: getScheduleSelectors(state.schedule).baseSelectors.courses.selectById,
     };
 };
 

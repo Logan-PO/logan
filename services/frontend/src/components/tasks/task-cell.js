@@ -2,9 +2,21 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { ListItem, ListItemText, ListItemIcon, Checkbox, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import {
+    ListItem,
+    ListItemText,
+    Typography,
+    ListItemIcon,
+    Checkbox,
+    ListItemSecondaryAction,
+    IconButton,
+} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
+import { getScheduleSelectors } from '../../store/schedule';
+import { getAssignmentsSelectors } from '../../store/assignments';
+import { CourseLabel } from '../shared';
+import globalStyles from '../../globals/global.scss';
 import styles from './task-cell.module.scss';
 
 class TaskCell extends React.Component {
@@ -50,18 +62,47 @@ class TaskCell extends React.Component {
     }
 
     render() {
+        const assignment = this.props.getAssignment(_.get(this.state.task, 'aid'));
+        const course = assignment
+            ? this.props.getCourse(assignment.cid)
+            : this.props.getCourse(_.get(this.state.task, 'cid'));
+
+        const needsUpperLabel = course || assignment;
+        const hasBoth = course && assignment;
+
+        const checkboxStyles = {};
+        if (course && _.get(this.state.task, 'complete')) {
+            checkboxStyles.color = course.color;
+        }
+
         return (
             <div className={styles.taskCell}>
                 <ListItem button selected={this.props.selected} onClick={this.select}>
                     <ListItemIcon>
                         <Checkbox
                             edge="start"
+                            color="secondary"
                             checked={_.get(this.state, 'task.complete', false)}
                             onChange={this.handleChange}
+                            style={checkboxStyles}
                         />
                     </ListItemIcon>
                     <ListItemText
-                        primary={_.get(this.state, 'task.title')}
+                        primary={
+                            <React.Fragment>
+                                {needsUpperLabel && (
+                                    <div className={globalStyles.cellUpperLabel}>
+                                        {course && <CourseLabel cid={course.cid} />}
+                                        {assignment && (
+                                            <Typography className={globalStyles.assignmentLabel}>
+                                                {(hasBoth && '/') + assignment.title}
+                                            </Typography>
+                                        )}
+                                    </div>
+                                )}
+                                <div>{_.get(this.state, 'task.title')}</div>
+                            </React.Fragment>
+                        }
                         secondary={_.get(this.state, 'task.description')}
                     />
                     <ListItemSecondaryAction className={styles.actions}>
@@ -79,6 +120,8 @@ TaskCell.propTypes = {
     tid: PropTypes.string,
     updateTaskLocal: PropTypes.func,
     selectTaskFromStore: PropTypes.func,
+    getCourse: PropTypes.func,
+    getAssignment: PropTypes.func,
     selected: PropTypes.bool,
     onSelect: PropTypes.func,
     onDelete: PropTypes.func,
@@ -87,6 +130,8 @@ TaskCell.propTypes = {
 const mapStateToProps = state => {
     return {
         selectTaskFromStore: getTasksSelectors(state.tasks).selectById,
+        getCourse: getScheduleSelectors(state.schedule).baseSelectors.courses.selectById,
+        getAssignment: getAssignmentsSelectors(state.assignments).selectById,
     };
 };
 

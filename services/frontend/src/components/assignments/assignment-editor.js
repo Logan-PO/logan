@@ -11,6 +11,7 @@ import {
     updateAssignmentLocal,
 } from '../../store/assignments';
 import { DueDatePicker } from '../shared/controls';
+import { CoursePicker } from '../shared';
 import styles from './assignment-editor.module.scss';
 
 //Represents a form to submit the info required to create a given assignment
@@ -53,6 +54,10 @@ class AssignmentEditor extends Component {
 
         if (prop === 'dueDate') {
             changes[prop] = e;
+        } else if (prop === 'cid') {
+            const cid = e.target.value;
+            if (cid === 'none') changes[prop] = undefined;
+            else changes[prop] = e.target.value;
         } else {
             changes[prop] = e.target.value;
         }
@@ -81,15 +86,6 @@ class AssignmentEditor extends Component {
                         <Grid item xs={12}>
                             <TextField
                                 disabled={this.isEmpty()}
-                                label="Class"
-                                fullWidth
-                                onChange={this.handleChange.bind(this, 'cid')}
-                                value={_.get(this.state.assignment, 'cid', '')}
-                            />
-                        </Grid>
-                        <Grid item style={{ flexGrow: 1 }}>
-                            <TextField
-                                disabled={this.isEmpty()}
                                 label="Title"
                                 fullWidth
                                 onChange={this.handleChange.bind(this, 'title')}
@@ -106,9 +102,16 @@ class AssignmentEditor extends Component {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <DueDatePicker
-                                entityId={_.get(this.state.assignment, 'aid')}
+                            <CoursePicker
                                 disabled={this.isEmpty()}
+                                value={_.get(this.state.assignment, 'cid', 'none')}
+                                onChange={this.handleChange.bind(this, 'cid')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <DueDatePicker
+                                disabled={this.isEmpty()}
+                                entityId={_.get(this.state.assignment, 'aid')}
                                 value={_.get(this.state.assignment, 'dueDate')}
                                 onChange={this.handleChange.bind(this, 'dueDate')}
                             />
