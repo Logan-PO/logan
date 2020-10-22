@@ -143,6 +143,11 @@ const { slice, asyncActions } = createAsyncSlice({
     },
 });
 
+export const getTermSelectors = state => wrapAdapter(adapters.terms)(state.terms);
+export const getCourseSelectors = state => wrapAdapter(adapters.courses)(state.courses);
+export const getHolidaySelectors = state => wrapAdapter(adapters.holidays)(state.holidays);
+export const getSectionSelectors = state => wrapAdapter(adapters.sections)(state.sections);
+
 export function getScheduleSelectors(state) {
     const baseSelectors = _.mapValues(adapters, (adapter, name) => wrapAdapter(adapter)(state[name]));
 

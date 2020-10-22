@@ -4,6 +4,7 @@ import { Page } from '../shared';
 import { getScheduleSelectors, asyncActions as asyncScheduleActions } from '../../store/schedule';
 import TermsList from './terms-list';
 import TermChildrenList from './term-children-list';
+import TermEditor from './term-editor';
 import styles from './schedule-page.module.scss';
 
 class SchedulePage extends React.Component {
@@ -60,6 +61,7 @@ class SchedulePage extends React.Component {
                             />
                         </div>
                     )}
+                    <TermEditor tid={this.state.selectedTid} />
                 </div>
             </Page>
         );
