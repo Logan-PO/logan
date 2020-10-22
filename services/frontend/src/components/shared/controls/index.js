@@ -1,4 +1,3 @@
-import DueDatePicker from './due-date-picker';
-import CoursePicker from './course-picker';
-
-export { DueDatePicker, CoursePicker };
+export { default as DueDatePicker } from './due-date-picker';
+export { default as CoursePicker } from './course-picker';
+export { default as PriorityPicker } from './priority-picker';

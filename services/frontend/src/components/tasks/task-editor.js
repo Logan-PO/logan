@@ -5,8 +5,7 @@ import PropTypes from 'prop-types';
 import { Grid, TextField, Checkbox } from '@material-ui/core';
 import UpdateTimer from '../../utils/update-timer';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
-import { CoursePicker, DueDatePicker } from '../shared/controls';
-import PriorityPicker from './priority-picker';
+import { CoursePicker, DueDatePicker, PriorityPicker } from '../shared/controls';
 import styles from './task-editor.module.scss';
 
 class TaskEditor extends React.Component {

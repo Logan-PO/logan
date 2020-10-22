@@ -10,8 +10,7 @@ import {
     updateAssignment,
     updateAssignmentLocal,
 } from '../../store/assignments';
-import { DueDatePicker } from '../shared/controls';
-import { CoursePicker } from '../shared';
+import { CoursePicker, DueDatePicker } from '../shared/controls';
 import styles from './assignment-editor.module.scss';
 
 //Represents a form to submit the info required to create a given assignment
