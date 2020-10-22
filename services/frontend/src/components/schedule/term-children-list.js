@@ -12,23 +12,13 @@ class TermChildrenList extends React.Component {
 
         this.didSelectChild = this.didSelectChild.bind(this);
         this.didDeleteChild = this.didDeleteChild.bind(this);
-
-        this.state = {
-            selectedId: undefined,
-        };
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.tid !== prevProps.tid) {
-            this.setState({
-                selectedId: undefined,
-            });
-        }
+    randomChild(type) {
+        return {};
     }
 
     didSelectChild(type, id) {
-        this.setState(() => ({ selectedId: id }));
-
         if (type === 'course') {
             this.props.onCourseSelected(id);
         } else if (type === 'holiday') {
@@ -43,16 +33,15 @@ class TermChildrenList extends React.Component {
             this.props.deleteHoliday(child);
         }
 
-        this.setState(() => ({ selectedId: undefined }));
         this.didSelectChild(type, undefined);
     }
 
     getCoursesList() {
         const courses = this.props.getCoursesForTerm({ tid: this.props.tid });
 
-        if (courses.length) {
-            return courses.map(course => {
-                const isSelected = course.cid === this.state.selectedId;
+        return [
+            ...courses.map(course => {
+                const isSelected = course.cid === this.props.selectedId;
 
                 return (
                     <div key={course.cid} className="list-cell">
@@ -70,22 +59,21 @@ class TermChildrenList extends React.Component {
                         </ListItem>
                     </div>
                 );
-            });
-        } else {
-            return (
-                <ListItem button disabled>
-                    <ListItemText primary="No courses for this term yet" />
+            }),
+            <div key="add-new" className="list-cell">
+                <ListItem button onClick={() => this.props.createCourse(this.randomChild('course'))}>
+                    <ListItemText primary="Add new" primaryTypographyProps={{ color: 'primary' }} />
                 </ListItem>
-            );
-        }
+            </div>,
+        ];
     }
 
     getHolidaysList() {
         const holidays = this.props.getHolidaysForTerm({ tid: this.props.tid });
 
-        if (holidays.length) {
-            return holidays.map(holiday => {
-                const isSelected = holiday.hid === this.state.selectedId;
+        return [
+            ...holidays.map(holiday => {
+                const isSelected = holiday.hid === this.props.selectedId;
 
                 return (
                     <div key={holiday.hid} className="list-cell">
@@ -103,14 +91,13 @@ class TermChildrenList extends React.Component {
                         </ListItem>
                     </div>
                 );
-            });
-        } else {
-            return (
-                <ListItem button disabled>
-                    <ListItemText primary="No holidays for this term yet" />
+            }),
+            <div key="add-new" className="list-cell">
+                <ListItem button onClick={() => this.props.createCourse(this.randomChild('holiday'))}>
+                    <ListItemText primary="Add new" primaryTypographyProps={{ color: 'primary' }} />
                 </ListItem>
-            );
-        }
+            </div>,
+        ];
     }
 
     render() {
@@ -131,6 +118,7 @@ class TermChildrenList extends React.Component {
 
 TermChildrenList.propTypes = {
     tid: PropTypes.string,
+    selectedId: PropTypes.string,
     getTerm: PropTypes.func,
     getCoursesForTerm: PropTypes.func,
     getHolidaysForTerm: PropTypes.func,

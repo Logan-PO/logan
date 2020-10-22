@@ -54,6 +54,7 @@ class SchedulePage extends React.Component {
                         <div className={styles.list}>
                             <TermChildrenList
                                 tid={this.state.selectedTid}
+                                selectedId={this.state.selectedCid || this.state.selectedHid}
                                 onCourseSelected={this.onCourseSelected}
                                 onHolidaySelected={this.onHolidaySelected}
                             />
