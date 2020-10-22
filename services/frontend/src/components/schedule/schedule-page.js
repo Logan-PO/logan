@@ -4,9 +4,10 @@ import { Page } from '../shared';
 import { getScheduleSelectors, asyncActions as asyncScheduleActions } from '../../store/schedule';
 import TermsList from './terms-list';
 import TermChildrenList from './term-children-list';
+import SectionsList from './sections-list';
 import TermEditor from './term-editor';
-import styles from './schedule-page.module.scss';
 import CourseEditor from './course-editor';
+import styles from './schedule-page.module.scss';
 
 class SchedulePage extends React.Component {
     constructor(props) {
@@ -15,6 +16,7 @@ class SchedulePage extends React.Component {
         this.onTermSelected = this.onTermSelected.bind(this);
         this.onCourseSelected = this.onCourseSelected.bind(this);
         this.onHolidaySelected = this.onHolidaySelected.bind(this);
+        this.onSectionSelected = this.onSectionSelected.bind(this);
 
         this.state = {
             selectedTid: undefined,
@@ -28,6 +30,7 @@ class SchedulePage extends React.Component {
             selectedTid: tid,
             selectedCid: undefined,
             selectedHid: undefined,
+            selectedSid: undefined,
         });
     }
 
@@ -35,6 +38,7 @@ class SchedulePage extends React.Component {
         this.setState({
             selectedCid: cid,
             selectedHid: undefined,
+            selectedSid: undefined,
         });
     }
 
@@ -42,6 +46,13 @@ class SchedulePage extends React.Component {
         this.setState({
             selectedCid: undefined,
             selectedHid: hid,
+            selectedSid: undefined,
+        });
+    }
+
+    onSectionSelected(sid) {
+        this.setState({
+            selectedSid: sid,
         });
     }
 
@@ -68,6 +79,11 @@ class SchedulePage extends React.Component {
                                 onCourseSelected={this.onCourseSelected}
                                 onHolidaySelected={this.onHolidaySelected}
                             />
+                        </div>
+                    )}
+                    {this.state.selectedCid && (
+                        <div className={styles.list}>
+                            <SectionsList cid={this.state.selectedCid} onSectionSelected={this.onSectionSelected} />
                         </div>
                     )}
                     {this.editorToDisplay()}
