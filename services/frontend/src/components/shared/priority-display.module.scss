@@ -1,9 +1,10 @@
 .priority-display {
     display: inline-block;
     width: 5px;
+    max-width: 5px;
     margin: 0;
     padding: 0;
     align-self: stretch;
-    flex-grow: 0;
+    flex-grow: 0 !important;
     -webkit-transition: 0.1s;
 }

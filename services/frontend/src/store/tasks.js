@@ -6,11 +6,18 @@ import api from '../utils/api';
 
 const { dayjs } = dateUtils;
 
+function compareStrings(a, b) {
+    if (a === b) return 0;
+    else return a < b ? -1 : 1;
+}
+
 export function compareTasks(task1, task2) {
     const dueDateComparison = compareDueDates(task1.dueDate, task2.dueDate);
     if (dueDateComparison !== 0) return dueDateComparison;
-    if (task1.title !== task2.title) return task1.title < task2.title ? -1 : 1;
-    return task1.tid < task2.tid ? -1 : 0;
+    if (task1.priority !== task2.priority) return task2.priority - task1.priority;
+    if (task1.cid && task2.cid && task1.cid !== task2.cid) return compareStrings(task1.cid, task2.cid);
+    if (task1.title !== task2.title) return compareStrings(task1.title, task2.title);
+    return compareStrings(task1.tid, task2.tid);
 }
 
 export function compareDueDates(dueDate1, dueDate2) {
