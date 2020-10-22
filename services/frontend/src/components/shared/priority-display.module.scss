@@ -1,0 +1,9 @@
+.priority-display {
+    display: inline-block;
+    width: 5px;
+    margin: 0;
+    padding: 0;
+    align-self: stretch;
+    flex-grow: 0;
+    -webkit-transition: 0.1s;
+}

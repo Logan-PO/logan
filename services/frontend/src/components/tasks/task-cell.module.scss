@@ -1,6 +1,13 @@
 @import '../../globals/global';
 
 .task-cell {
+    display: flex;
+    flex-direction: row;
+
+    &> * {
+       flex-grow: 1;
+    }
+
     .actions {
         display: none;
     }

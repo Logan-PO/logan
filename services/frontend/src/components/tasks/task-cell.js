@@ -14,7 +14,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
 import { getAssignmentsSelectors } from '../../store/assignments';
-import { CourseLabel } from '../shared';
+import { CourseLabel, PriorityDisplay } from '../shared';
 import { Checkbox } from '../shared/controls';
 import globalStyles from '../../globals/global.scss';
 import styles from './task-cell.module.scss';
@@ -72,6 +72,7 @@ class TaskCell extends React.Component {
 
         return (
             <div className={styles.taskCell}>
+                <PriorityDisplay priority={_.get(this.state.task, 'priority')} />
                 <ListItem button selected={this.props.selected} onClick={this.select}>
                     <ListItemIcon>
                         <Checkbox
