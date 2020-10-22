@@ -47,12 +47,37 @@ class TasksList extends React.Component {
         this.setState({ showingCompletedTasks: e.target.checked });
     }
 
+    sectionsToShow() {
+        const tasks = this.props.tids
+            .map(tid => this.props.getTask(tid))
+            .filter(task => task.complete === this.state.showingCompletedTasks);
+
+        const sections = {};
+        for (const task of tasks) {
+            const key = dateUtils.dueDateIsDate(task.dueDate) ? dateUtils.dayjs(task.dueDate) : task.dueDate;
+            if (sections[key]) sections[key].push(task.tid);
+            else sections[key] = [task.tid];
+        }
+
+        if (this.state.showingCompletedTasks) {
+            return _.entries(sections)
+                .sort((a, b) => compareDueDates(b[0], a[0]))
+                .map(([key, value]) => [dateUtils.readableDueDate(key), value]);
+        } else {
+            return _.entries(sections)
+                .sort((a, b) => compareDueDates(a[0], b[0]))
+                .map(([key, value]) => [dateUtils.readableDueDate(key), value]);
+        }
+    }
+
     render() {
+        const sections = this.sectionsToShow();
+
         return (
             <div className={styles.tasksList}>
                 <div className={styles.scrollview}>
                     <List>
-                        {this.props.sections.map(section => {
+                        {sections.map(section => {
                             const [dueDate, tids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
@@ -96,7 +121,8 @@ class TasksList extends React.Component {
 }
 
 TasksList.propTypes = {
-    sections: PropTypes.arrayOf(PropTypes.array),
+    tids: PropTypes.array,
+    getTask: PropTypes.func,
     fetchTasks: PropTypes.func,
     createTask: PropTypes.func,
     deleteTask: PropTypes.func,
@@ -105,17 +131,10 @@ TasksList.propTypes = {
 
 const mapStateToProps = state => {
     const selectors = getTasksSelectors(state.tasks);
-    const sections = {};
-    for (const task of selectors.selectAll()) {
-        const key = dateUtils.dueDateIsDate(task.dueDate) ? dateUtils.dayjs(task.dueDate) : task.dueDate;
-        if (sections[key]) sections[key].push(task.tid);
-        else sections[key] = [task.tid];
-    }
 
     return {
-        sections: _.entries(sections)
-            .sort((a, b) => compareDueDates(a[0], b[0]))
-            .map(([key, value]) => [dateUtils.readableDueDate(key), value]),
+        tids: getTasksSelectors(state.tasks).selectIds(),
+        getTask: selectors.selectById,
     };
 };
 
