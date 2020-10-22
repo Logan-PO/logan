@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Grid, Typography, TextField } from '@material-ui/core';
 import { getCourseSelectors, updateCourse, updateCourseLocal } from '../../store/schedule';
 import Editor from '../shared/editor';
+import ColorPicker from '../shared/controls/color-picker';
 
 class CourseEditor extends Editor {
     constructor(props) {
@@ -53,6 +54,13 @@ class CourseEditor extends Editor {
                                 fullWidth
                                 value={_.get(this.state.course, 'nickname', '')}
                                 onChange={this.handleChange.bind(this, 'nickname')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <ColorPicker
+                                disabled={this.isEmpty()}
+                                value={_.get(this.state.course, 'color', '')}
+                                onChange={this.handleChange.bind(this, 'color')}
                             />
                         </Grid>
                     </Grid>
