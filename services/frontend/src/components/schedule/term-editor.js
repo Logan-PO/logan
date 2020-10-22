@@ -6,7 +6,7 @@ import { dateUtils } from '@logan/core';
 import { Grid, Typography, TextField } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 import UpdateTimer from '../../utils/update-timer';
-import { getTermSelectors, updateTerm, updateTermLocal, deleteTerm } from '../../store/schedule';
+import { getTermSelectors, updateTerm, updateTermLocal } from '../../store/schedule';
 import './editor.scss';
 
 const {
@@ -151,6 +151,6 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = { updateTerm, updateTermLocal, deleteTerm };
+const mapDispatchToProps = { updateTerm, updateTermLocal };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TermEditor);
