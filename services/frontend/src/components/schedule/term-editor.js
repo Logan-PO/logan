@@ -5,83 +5,43 @@ import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
 import { Grid, Typography, TextField } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
-import UpdateTimer from '../../utils/update-timer';
 import { getTermSelectors, updateTerm, updateTermLocal } from '../../store/schedule';
-import './editor.scss';
+import Editor from '../shared/editor';
 
 const {
     dayjs,
     constants: { DB_DATE_FORMAT },
 } = dateUtils;
 
-class TermEditor extends React.Component {
+class TermEditor extends Editor {
     constructor(props) {
-        super(props);
+        super(props, { id: 'tid', entity: 'term' });
 
         this.handleChange = this.handleChange.bind(this);
-
-        this.changesExist = false;
-        this.updateTimer = new UpdateTimer(1000, () => {
-            this.props.updateTerm(this.state.term);
-            this.changesExist = false;
-        });
 
         this.state = {
             term: {},
         };
     }
 
-    isEmpty() {
-        return _.isEmpty(this.props.tid);
+    selectEntity(id) {
+        return this.props.selectTerm(id);
     }
 
-    updateCurrentTerm(term) {
-        this.setState({
-            term,
-        });
+    updateEntity(entity) {
+        this.props.updateTerm(entity);
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.tid !== prevProps.tid) {
-            // If the user has selected a new task and updates to the existing task haven't been saved yet, save them
-            if (prevProps.tid && this.changesExist) {
-                const prev = this.props.selectTerm(prevProps.tid);
-
-                if (prev) this.updateTimer.fire();
-
-                this.updateTimer.stop();
-            }
-
-            const current = this.props.selectTerm(this.props.tid);
-            this.updateCurrentTerm(current);
-        } else {
-            // Also if the task has been updated somewhere else, make sure the state reflects that
-            const stored = this.props.selectTerm(this.props.tid);
-            if (!_.isEqual(stored, this.state.term)) {
-                this.updateCurrentTerm(stored);
-            }
-        }
+    updateEntityLocal({ id, changes }) {
+        this.props.updateTermLocal({ id, changes });
     }
 
-    handleChange(prop, e) {
-        this.changesExist = true;
-
-        const changes = {};
-
+    processChange(changes, prop, e) {
         if (prop === 'startDate' || prop === 'endDate') {
             changes[prop] = e.format(DB_DATE_FORMAT);
         } else {
-            changes[prop] = e.target.value;
+            super.processChange(changes, prop, e);
         }
-
-        this.props.updateTermLocal({
-            id: this.props.tid,
-            changes,
-        });
-
-        this.updateCurrentTerm(_.merge({}, this.state.term, changes));
-
-        this.updateTimer.reset();
     }
 
     render() {
