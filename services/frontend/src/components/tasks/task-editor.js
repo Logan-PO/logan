@@ -3,62 +3,34 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Grid, TextField } from '@material-ui/core';
-import UpdateTimer from '../../utils/update-timer';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
+import Editor from '../shared/editor';
 import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox } from '../shared/controls';
-import styles from './task-editor.module.scss';
 
-class TaskEditor extends React.Component {
+class TaskEditor extends Editor {
     constructor(props) {
-        super(props);
+        super(props, { id: 'tid', entity: 'task' });
+
         this.handleChange = this.handleChange.bind(this);
 
-        this.changesExist = false;
-        this.updateTimer = new UpdateTimer(1000, () => {
-            this.props.updateTask(this.state.task);
-            this.changesExist = false;
-        });
-
-        this.state = {};
+        this.state = {
+            task: {},
+        };
     }
 
-    isEmpty() {
-        return _.isEmpty(this.props.tid);
+    selectEntity(id) {
+        return this.props.selectTask(id);
     }
 
-    updateCurrentTask(task) {
-        this.setState({
-            task,
-        });
+    updateEntityLocal({ id, changes }) {
+        this.props.updateTaskLocal({ id, changes });
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.tid !== prevProps.tid) {
-            // If the user has selected a new task and updates to the existing task haven't been saved yet, save them
-            if (prevProps.tid && this.changesExist) {
-                const prevTask = this.props.selectTask(prevProps.tid);
-
-                if (prevTask) this.updateTimer.fire();
-
-                this.updateTimer.stop();
-            }
-
-            const currentTask = this.props.selectTask(this.props.tid);
-            this.updateCurrentTask(currentTask);
-        } else {
-            // Also if the task has been updated somewhere else, make sure the state reflects that
-            const storeTask = this.props.selectTask(this.props.tid);
-            if (!_.isEqual(storeTask, this.state.task)) {
-                this.updateCurrentTask(storeTask);
-            }
-        }
+    updateEntity(entity) {
+        this.props.updateTask(entity);
     }
 
-    handleChange(prop, e) {
-        this.changesExist = true;
-
-        const changes = {};
-
+    processChange(changes, prop, e) {
         if (prop === 'complete') {
             changes[prop] = e.target.checked;
         } else if (prop === 'dueDate') {
@@ -68,23 +40,14 @@ class TaskEditor extends React.Component {
             if (cid === 'none') changes[prop] = undefined;
             else changes[prop] = e.target.value;
         } else {
-            changes[prop] = e.target.value;
+            super.processChange(changes, prop, e);
         }
-
-        this.props.updateTaskLocal({
-            id: this.props.tid,
-            changes,
-        });
-
-        this.updateCurrentTask(_.merge({}, this.state.task, changes));
-
-        this.updateTimer.reset();
     }
 
     render() {
         return (
-            <div className={styles.taskEditor}>
-                <div className={styles.scrollview}>
+            <div className="editor">
+                <div className="scroll-view">
                     <Grid container spacing={2} direction="column">
                         <Grid item xs={12}>
                             <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">

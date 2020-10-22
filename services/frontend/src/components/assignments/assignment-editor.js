@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Grid, TextField } from '@material-ui/core';
-import UpdateTimer from '../../utils/update-timer';
 import {
     deleteAssignment,
     getAssignmentsSelectors,
@@ -11,46 +10,31 @@ import {
     updateAssignmentLocal,
 } from '../../store/assignments';
 import { CoursePicker, DueDatePicker } from '../shared/controls';
-import styles from './assignment-editor.module.scss';
+import Editor from '../shared/editor';
 
 //Represents a form to submit the info required to create a given assignment
-class AssignmentEditor extends Component {
+class AssignmentEditor extends Editor {
     constructor(props) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-        this.updateTimer = new UpdateTimer(1000, () => this.props.updateAssignment(this.state.assignment));
+        super(props, { id: 'aid', entity: 'assignment' });
+
         this.state = {
             assignment: undefined,
         };
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.aid !== prevProps.aid) {
-            if (prevProps.aid && this.changesExist) {
-                const prevAssignment = this.props.selectAssignment(prevProps.aid);
-
-                if (prevAssignment) this.updateTimer.fire();
-
-                this.updateTimer.stop();
-            }
-
-            this.setState({
-                assignment: this.props.selectAssignment(this.props.aid),
-            });
-        } else {
-            // Also if the task has been updated somewhere else, make sure the state reflects that
-            const storeAssignment = this.props.selectAssignment(this.props.aid);
-            if (!_.isEqual(storeAssignment, this.state.assignment)) {
-                this.setState({ assignment: storeAssignment });
-            }
-        }
+    selectEntity(id) {
+        return this.props.selectAssignment(id);
     }
 
-    handleChange(prop, e) {
-        this.changesExist = true;
+    updateEntityLocal({ id, changes }) {
+        this.props.updateAssignmentLocal({ id, changes });
+    }
 
-        const changes = {};
+    updateEntity(entity) {
+        this.props.updateAssignment(entity);
+    }
 
+    processChange(changes, prop, e) {
         if (prop === 'dueDate') {
             changes[prop] = e;
         } else if (prop === 'cid') {
@@ -60,27 +44,12 @@ class AssignmentEditor extends Component {
         } else {
             changes[prop] = e.target.value;
         }
-
-        this.props.updateAssignmentLocal({
-            id: this.props.aid,
-            changes,
-        });
-
-        this.setState({
-            assignment: _.merge({}, this.state.assignment, changes),
-        });
-
-        this.updateTimer.reset();
-    }
-
-    isEmpty() {
-        return _.isEmpty(this.props.aid);
     }
 
     render() {
         return (
-            <div className={styles.assignmentEditor}>
-                <div className={styles.scrollview}>
+            <div className="editor">
+                <div className="scroll-view">
                     <Grid container direction="column" spacing={2}>
                         <Grid item xs={12}>
                             <TextField
