@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dateUtils } from '@logan/core';
-import { List, ListSubheader, Fab } from '@material-ui/core';
+import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { getTasksSelectors, fetchTasks, createTask, deleteTask, compareDueDates } from '../../store/tasks';
 import TaskCell from './task-cell';
@@ -15,8 +15,10 @@ class TasksList extends React.Component {
 
         this.didSelectTask = this.didSelectTask.bind(this);
         this.didDeleteTask = this.didDeleteTask.bind(this);
+        this.toggleCompletedTasks = this.toggleCompletedTasks.bind(this);
 
         this.state = {
+            showingCompletedTasks: false,
             selectedTid: undefined,
         };
     }
@@ -39,6 +41,10 @@ class TasksList extends React.Component {
         // TODO: Select next task
         this.setState(() => ({ selectedTid: undefined }));
         this.props.onTaskSelected(undefined);
+    }
+
+    toggleCompletedTasks(e) {
+        this.setState({ showingCompletedTasks: e.target.checked });
     }
 
     render() {
@@ -65,6 +71,18 @@ class TasksList extends React.Component {
                         })}
                     </List>
                 </div>
+                <AppBar position="relative" color="primary">
+                    <Toolbar variant="dense">
+                        <FormControl>
+                            <FormControlLabel
+                                control={<Switch color="default" />}
+                                label={this.state.showingCompletedTasks ? 'Completed tasks' : 'Remaining tasks'}
+                                value={this.state.showingCompletedTasks}
+                                onChange={this.toggleCompletedTasks}
+                            />
+                        </FormControl>
+                    </Toolbar>
+                </AppBar>
                 <Fab
                     className={styles.addButton}
                     color="secondary"

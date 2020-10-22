@@ -15,7 +15,7 @@
     }
 
     .scrollview {
-        height: 100%;
+        height: calc(100% - 48px);
         overflow-y: scroll;
         border-right: solid 1px $border;
 
