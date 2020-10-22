@@ -106,7 +106,7 @@ class TermChildrenList extends React.Component {
                 );
             }),
             <div key="add-new" className="list-cell">
-                <ListItem button onClick={() => this.props.createCourse(this.randomChild('holiday'))}>
+                <ListItem button onClick={() => this.props.createHoliday(this.randomChild('holiday'))}>
                     <ListItemText primary="Add new" primaryTypographyProps={{ color: 'primary' }} />
                 </ListItem>
             </div>,
