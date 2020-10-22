@@ -1,6 +1,6 @@
 @import '../../globals/global';
 
-.terms-list {
+.scrollable-list {
     height: 100%;
     flex-grow: 1;
     background: white;
@@ -14,13 +14,13 @@
         z-index: 10000;
     }
 
-    .scrollview {
+    .scroll-view {
         height: 100%;
         overflow-y: scroll;
         border-right: solid 1px $border;
     }
 
-    .term-cell {
+    .list-cell {
         .actions {
             display: none;
         }

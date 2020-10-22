@@ -13,7 +13,7 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getScheduleSelectors, createTerm, deleteTerm } from '../../store/schedule';
-import styles from './terms-list.module.scss';
+import '../shared/list.scss';
 
 class TermsList extends React.Component {
     constructor(props) {
@@ -49,8 +49,8 @@ class TermsList extends React.Component {
 
     render() {
         return (
-            <div className={styles.termsList}>
-                <div className={styles.scrollview}>
+            <div className="scrollable-list">
+                <div className="scroll-view">
                     <List>
                         <ListSubheader>Terms</ListSubheader>
                         {this.props.tids.map(tid => {
@@ -58,10 +58,10 @@ class TermsList extends React.Component {
                             const isSelected = tid === this.state.selectedTid;
 
                             return (
-                                <div key={tid} className={styles.termCell}>
+                                <div key={tid} className="list-cell">
                                     <ListItem button selected={isSelected} onClick={() => this.didSelectTerm(tid)}>
                                         <ListItemText primary={term.title} />
-                                        <ListItemSecondaryAction className={styles.actions}>
+                                        <ListItemSecondaryAction className="actions">
                                             <IconButton edge="end" onClick={() => this.didDeleteTerm(term)}>
                                                 <DeleteIcon color="error" />
                                             </IconButton>
@@ -72,11 +72,7 @@ class TermsList extends React.Component {
                         })}
                     </List>
                 </div>
-                <Fab
-                    className={styles.addButton}
-                    color="secondary"
-                    onClick={() => this.props.createTerm(this.randomTerm())}
-                >
+                <Fab className="add-button" color="secondary" onClick={() => this.props.createTerm(this.randomTerm())}>
                     <AddIcon />
                 </Fab>
             </div>
