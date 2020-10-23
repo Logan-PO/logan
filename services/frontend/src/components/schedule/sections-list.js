@@ -88,7 +88,7 @@ class SectionsList extends React.Component {
                 <Fab
                     className="add-button"
                     color="secondary"
-                    onClick={() => this.props.createTerm(this.randomSection())}
+                    onClick={() => this.props.createSection(this.randomSection())}
                 >
                     <AddIcon />
                 </Fab>
@@ -102,7 +102,7 @@ SectionsList.propTypes = {
     getTerm: PropTypes.func,
     getCourse: PropTypes.func,
     getSectionsForCourse: PropTypes.func,
-    createTerm: PropTypes.func,
+    createSection: PropTypes.func,
     deleteSection: PropTypes.func,
     onSectionSelected: PropTypes.func,
 };
