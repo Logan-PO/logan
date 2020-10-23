@@ -65,7 +65,6 @@ class TaskEditor extends Editor {
                                         fullWidth
                                         onChange={this.handleChange.bind(this, 'title')}
                                         value={_.get(this.state.task, 'title', '')}
-                                        color="secondary"
                                         placeholder="Untitled task"
                                         disabled={this.isEmpty()}
                                     />
@@ -79,7 +78,6 @@ class TaskEditor extends Editor {
                                 multiline
                                 onChange={this.handleChange.bind(this, 'description')}
                                 value={_.get(this.state.task, 'description', '')}
-                                color="secondary"
                                 placeholder="Task description"
                                 disabled={this.isEmpty()}
                             />

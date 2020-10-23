@@ -23,7 +23,7 @@ class PriorityPicker extends React.Component {
     render() {
         return (
             <FormControl disabled={this.props.disabled}>
-                <FormLabel color="secondary">Priority</FormLabel>
+                <FormLabel style={{ fontSize: '0.75rem' }}>Priority</FormLabel>
                 <RadioGroup name="priority" value={_.get(this.props, 'value', '')} onChange={this._internalChange}>
                     {Object.entries(priorities).map(([label, [value, color]]) => {
                         const style = {};

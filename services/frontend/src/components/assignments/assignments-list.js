@@ -70,11 +70,7 @@ class AssignmentsList extends React.Component {
                         })}
                     </List>
                 </div>
-                <Fab
-                    className="add-button"
-                    color="secondary"
-                    onClick={() => this.props.createAssignment(this.randomAssignment())}
-                >
+                <Fab className="add-button" onClick={() => this.props.createAssignment(this.randomAssignment())}>
                     <AddIcon />
                 </Fab>
             </div>

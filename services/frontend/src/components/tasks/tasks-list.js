@@ -8,6 +8,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { getTasksSelectors, fetchTasks, createTask, deleteTask, compareDueDates } from '../../store/tasks';
 import TaskCell from './task-cell';
 import '../shared/list.scss';
+import styles from './tasks-list.module.scss';
 
 class TasksList extends React.Component {
     constructor(props) {
@@ -76,7 +77,7 @@ class TasksList extends React.Component {
 
         return (
             <div className="scrollable-list">
-                <div className="scroll-view">
+                <div className={`scroll-view ${styles.tasksList}`}>
                     <List>
                         {sections.map(section => {
                             const [dueDate, tids] = section;

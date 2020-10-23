@@ -81,19 +81,19 @@ class DueDatePicker extends React.Component {
 
         return (
             <FormControl disabled={this.props.disabled}>
-                <FormLabel color="secondary">Due date</FormLabel>
+                <FormLabel style={{ fontSize: '0.75rem' }}>Due Date</FormLabel>
                 <RadioGroup name="dueDateType" value={_.get(this.state, 'dueDateType', '')} onChange={this.updateType}>
                     <FormControlLabel
                         value="asap"
                         label="ASAP"
                         labelPlacement="end"
-                        control={<Radio color="secondary" />}
+                        control={<Radio color="primary" />}
                     />
                     <FormControlLabel
                         value="eventually"
                         label="Eventually"
                         labelPlacement="end"
-                        control={<Radio color="secondary" />}
+                        control={<Radio color="primary" />}
                     />
                     <FormControlLabel
                         value="date"
@@ -103,12 +103,12 @@ class DueDatePicker extends React.Component {
                                 disabled={_.get(this.state, 'dueDateType') !== 'date'}
                                 value={dateValue}
                                 onChange={this.updateDate}
-                                color="secondary"
+                                color="primary"
                                 emptyLabel="Choose a date…"
                             />
                         }
                         labelPlacement="end"
-                        control={<Radio color="secondary" />}
+                        control={<Radio color="primary" />}
                     />
                 </RadioGroup>
             </FormControl>
