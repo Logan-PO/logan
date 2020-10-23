@@ -88,18 +88,18 @@ class SectionEditor extends Editor {
                                     <TextField
                                         fullWidth
                                         disabled={this.isEmpty()}
-                                        label="Location"
-                                        value={_.get(this.state.section, 'location', '')}
-                                        onChange={this.handleChange.bind(this, 'location')}
+                                        label="Instructor"
+                                        value={_.get(this.state.section, 'instructor', '')}
+                                        onChange={this.handleChange.bind(this, 'instructor')}
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
                                     <TextField
                                         fullWidth
                                         disabled={this.isEmpty()}
-                                        label="Instructor"
-                                        value={_.get(this.state.section, 'instructor', '')}
-                                        onChange={this.handleChange.bind(this, 'instructor')}
+                                        label="Location"
+                                        value={_.get(this.state.section, 'location', '')}
+                                        onChange={this.handleChange.bind(this, 'location')}
                                     />
                                 </Grid>
                             </Grid>
@@ -109,7 +109,7 @@ class SectionEditor extends Editor {
                                 <Grid item xs={6}>
                                     <DatePicker
                                         fullWidth
-                                        label="Start date"
+                                        label="Start Date"
                                         variant="inline"
                                         disabled={this.isEmpty()}
                                         color="secondary"
@@ -118,24 +118,9 @@ class SectionEditor extends Editor {
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <DatePicker
-                                        fullWidth
-                                        label="End date"
-                                        variant="inline"
-                                        disabled={this.isEmpty()}
-                                        color="secondary"
-                                        value={endDate}
-                                        onChange={this.handleChange.bind(this, 'endDate')}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Grid container direction="row" spacing={2}>
-                                <Grid item xs={6}>
                                     <TimePicker
                                         fullWidth
-                                        label="Start time"
+                                        label="Start Time"
                                         variant="inline"
                                         disabled={this.isEmpty()}
                                         color="secondary"
@@ -144,10 +129,25 @@ class SectionEditor extends Editor {
                                         onChange={this.handleChange.bind(this, 'startTime')}
                                     />
                                 </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Grid container direction="row" spacing={2}>
+                                <Grid item xs={6}>
+                                    <DatePicker
+                                        fullWidth
+                                        label="End Date"
+                                        variant="inline"
+                                        disabled={this.isEmpty()}
+                                        color="secondary"
+                                        value={endDate}
+                                        onChange={this.handleChange.bind(this, 'endDate')}
+                                    />
+                                </Grid>
                                 <Grid item xs={6}>
                                     <TimePicker
                                         fullWidth
-                                        label="End time"
+                                        label="End Time"
                                         variant="inline"
                                         disabled={this.isEmpty()}
                                         color="secondary"

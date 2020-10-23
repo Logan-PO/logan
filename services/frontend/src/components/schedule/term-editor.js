@@ -75,7 +75,7 @@ class TermEditor extends Editor {
                                 <Grid item xs={6}>
                                     <DatePicker
                                         fullWidth
-                                        label="Start date"
+                                        label="Start Date"
                                         variant="inline"
                                         disabled={this.isEmpty()}
                                         color="secondary"
@@ -86,7 +86,7 @@ class TermEditor extends Editor {
                                 <Grid item xs={6}>
                                     <DatePicker
                                         fullWidth
-                                        label="End date"
+                                        label="End Date"
                                         variant="inline"
                                         disabled={this.isEmpty()}
                                         color="secondary"

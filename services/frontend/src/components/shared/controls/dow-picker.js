@@ -15,7 +15,7 @@ class DowPicker extends React.Component {
     render() {
         return (
             <FormControl fullWidth={this.props.fullWidth} disabled={this.props.disabled}>
-                <InputLabel>Days of week</InputLabel>
+                <InputLabel>Days of Week</InputLabel>
                 <Select
                     fullWidth={this.props.fullWidth}
                     multiple
