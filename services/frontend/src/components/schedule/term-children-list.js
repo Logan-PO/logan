@@ -5,6 +5,7 @@ import { List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, I
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getScheduleSelectors, createCourse, deleteCourse, createHoliday, deleteHoliday } from '../../store/schedule';
 import '../shared/list.scss';
+import EmptySticker from '../shared/empty-sticker';
 
 class TermChildrenList extends React.Component {
     constructor(props) {
@@ -114,6 +115,14 @@ class TermChildrenList extends React.Component {
     }
 
     render() {
+        if (!this.props.tid) {
+            return (
+                <div className="scrollable-list">
+                    <EmptySticker message="No term selected" />
+                </div>
+            );
+        }
+
         return (
             <div className="scrollable-list">
                 <div className="scroll-view">

@@ -14,6 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getScheduleSelectors, createSection, deleteSection } from '../../store/schedule';
 import '../shared/list.scss';
+import EmptySticker from '../shared/empty-sticker';
 
 class SectionsList extends React.Component {
     constructor(props) {
@@ -51,6 +52,14 @@ class SectionsList extends React.Component {
     }
 
     render() {
+        if (!this.props.cid) {
+            return (
+                <div className="scrollable-list">
+                    <EmptySticker message="No course selected" />
+                </div>
+            );
+        }
+
         const sections = this.props.getSectionsForCourse({ cid: this.props.cid });
 
         return (
