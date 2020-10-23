@@ -7,6 +7,7 @@ import TermChildrenList from './term-children-list';
 import SectionsList from './sections-list';
 import TermEditor from './term-editor';
 import CourseEditor from './course-editor';
+import HolidayEditor from './holiday-editor';
 import SectionEditor from './section-editor';
 import styles from './schedule-page.module.scss';
 
@@ -62,6 +63,8 @@ class SchedulePage extends React.Component {
             return <SectionEditor sid={this.state.selectedSid} />;
         } else if (this.state.selectedCid) {
             return <CourseEditor cid={this.state.selectedCid} />;
+        } else if (this.state.selectedHid) {
+            return <HolidayEditor hid={this.state.selectedHid} />;
         } else {
             return <TermEditor tid={this.state.selectedTid} />;
         }
