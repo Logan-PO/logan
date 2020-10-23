@@ -45,7 +45,7 @@ class Navbar extends React.Component {
             <AppBar className={styles.navbar}>
                 <Toolbar>
                     <Typography variant="h6" noWrap>
-                        Logan &gt; {this.props.title}
+                        Logan &gt; <b>{this.props.title}</b>
                     </Typography>
                     <div className={styles.flexibleSpace} />
                     {this.props.buttons}
