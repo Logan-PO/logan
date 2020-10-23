@@ -86,7 +86,11 @@ class SchedulePage extends React.Component {
                     )}
                     {this.state.selectedCid && (
                         <div className={styles.list}>
-                            <SectionsList cid={this.state.selectedCid} onSectionSelected={this.onSectionSelected} />
+                            <SectionsList
+                                cid={this.state.selectedCid}
+                                selectedSid={this.state.selectedSid}
+                                onSectionSelected={this.onSectionSelected}
+                            />
                         </div>
                     )}
                     {this.editorToDisplay()}

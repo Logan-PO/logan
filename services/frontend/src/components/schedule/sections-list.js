@@ -21,10 +21,6 @@ class SectionsList extends React.Component {
 
         this.didSelectSection = this.didSelectSection.bind(this);
         this.didDeleteSection = this.didDeleteSection.bind(this);
-
-        this.state = {
-            selectedSid: undefined,
-        };
     }
 
     randomSection() {
@@ -45,7 +41,6 @@ class SectionsList extends React.Component {
     }
 
     didSelectSection(sid) {
-        this.setState(() => ({ selectedSid: sid }));
         this.props.onSectionSelected(sid);
     }
 
@@ -64,7 +59,7 @@ class SectionsList extends React.Component {
                     <List>
                         <ListSubheader>Sections</ListSubheader>
                         {sections.map(section => {
-                            const isSelected = section.sid === this.state.selectedSid;
+                            const isSelected = section.sid === this.props.selectedSid;
 
                             return (
                                 <div key={section.sid} className="list-cell">
@@ -99,6 +94,7 @@ class SectionsList extends React.Component {
 
 SectionsList.propTypes = {
     cid: PropTypes.string,
+    selectedSid: PropTypes.string,
     getTerm: PropTypes.func,
     getCourse: PropTypes.func,
     getSectionsForCourse: PropTypes.func,
