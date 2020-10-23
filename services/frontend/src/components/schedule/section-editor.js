@@ -3,9 +3,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { Grid, Typography, TextField } from '@material-ui/core';
+import { Grid, Typography, TextField, Breadcrumbs } from '@material-ui/core';
 import { DatePicker, TimePicker } from '@material-ui/pickers';
-import { getSectionSelectors, updateSection, updateSectionLocal } from '../../store/schedule';
+import { getScheduleSelectors, updateSection, updateSectionLocal } from '../../store/schedule';
 import Editor from '../shared/editor';
 import DowPicker from '../shared/controls/dow-picker';
 
@@ -54,6 +54,9 @@ class SectionEditor extends Editor {
     }
 
     render() {
+        const course = this.props.selectCourse(_.get(this.state.section, 'cid'));
+        const term = this.props.selectTerm(_.get(course, 'tid'));
+
         const startDate = dateOrNull(_.get(this.state.section, 'startDate'), DB_DATE_FORMAT);
         const endDate = dateOrNull(_.get(this.state.section, 'endDate'), DB_DATE_FORMAT);
         const startTime = dateOrNull(_.get(this.state.section, 'startTime'), DB_TIME_FORMAT);
@@ -64,13 +67,17 @@ class SectionEditor extends Editor {
                 <div className="scroll-view">
                     <Grid container spacing={2} direction="column">
                         <Grid item xs={12}>
-                            <Typography variant="h5">Edit Section</Typography>
+                            <Breadcrumbs>
+                                <Typography color="inherit">{_.get(term, 'title')}</Typography>
+                                <Typography color="inherit">{_.get(course, 'title')}</Typography>
+                                <Typography color="textPrimary">{_.get(this.state.section, 'title')}</Typography>
+                            </Breadcrumbs>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
+                                fullWidth
                                 disabled={this.isEmpty()}
                                 label="Title"
-                                fullWidth
                                 value={_.get(this.state.section, 'title', '')}
                                 onChange={this.handleChange.bind(this, 'title')}
                             />
@@ -79,18 +86,18 @@ class SectionEditor extends Editor {
                             <Grid container direction="row" spacing={2}>
                                 <Grid item xs={6}>
                                     <TextField
+                                        fullWidth
                                         disabled={this.isEmpty()}
                                         label="Location"
-                                        fullWidth
                                         value={_.get(this.state.section, 'location', '')}
                                         onChange={this.handleChange.bind(this, 'location')}
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
                                     <TextField
+                                        fullWidth
                                         disabled={this.isEmpty()}
                                         label="Instructor"
-                                        fullWidth
                                         value={_.get(this.state.section, 'instructor', '')}
                                         onChange={this.handleChange.bind(this, 'instructor')}
                                     />
@@ -101,6 +108,7 @@ class SectionEditor extends Editor {
                             <Grid container direction="row" spacing={2}>
                                 <Grid item xs={6}>
                                     <DatePicker
+                                        fullWidth
                                         label="Start date"
                                         variant="inline"
                                         disabled={this.isEmpty()}
@@ -111,6 +119,7 @@ class SectionEditor extends Editor {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <DatePicker
+                                        fullWidth
                                         label="End date"
                                         variant="inline"
                                         disabled={this.isEmpty()}
@@ -125,6 +134,7 @@ class SectionEditor extends Editor {
                             <Grid container direction="row" spacing={2}>
                                 <Grid item xs={6}>
                                     <TimePicker
+                                        fullWidth
                                         label="Start time"
                                         variant="inline"
                                         disabled={this.isEmpty()}
@@ -136,6 +146,7 @@ class SectionEditor extends Editor {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <TimePicker
+                                        fullWidth
                                         label="End time"
                                         variant="inline"
                                         disabled={this.isEmpty()}
@@ -162,6 +173,7 @@ class SectionEditor extends Editor {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <DowPicker
+                                        fullWidth
                                         disabled={this.isEmpty()}
                                         value={_.get(this.state.section, 'daysOfWeek', [])}
                                         onChange={this.handleChange.bind(this, 'daysOfWeek')}
@@ -178,14 +190,20 @@ class SectionEditor extends Editor {
 
 SectionEditor.propTypes = {
     tid: PropTypes.string,
+    selectTerm: PropTypes.func,
+    selectCourse: PropTypes.func,
     selectSection: PropTypes.func,
     updateSectionLocal: PropTypes.func,
     updateSection: PropTypes.func,
 };
 
 const mapStateToProps = state => {
+    const { baseSelectors } = getScheduleSelectors(state.schedule);
+
     return {
-        selectSection: getSectionSelectors(state.schedule).selectById,
+        selectTerm: baseSelectors.terms.selectById,
+        selectCourse: baseSelectors.courses.selectById,
+        selectSection: baseSelectors.sections.selectById,
     };
 };
 

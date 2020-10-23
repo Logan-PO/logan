@@ -14,10 +14,10 @@ class DowPicker extends React.Component {
 
     render() {
         return (
-            <FormControl fullWidth disabled={this.props.disabled}>
+            <FormControl fullWidth={this.props.fullWidth} disabled={this.props.disabled}>
                 <InputLabel>Days of week</InputLabel>
                 <Select
-                    fullWidth
+                    fullWidth={this.props.fullWidth}
                     multiple
                     value={this.props.value}
                     onChange={this.props.onChange}
@@ -40,6 +40,7 @@ class DowPicker extends React.Component {
 }
 
 DowPicker.propTypes = {
+    fullWidth: PropTypes.bool,
     disabled: PropTypes.bool,
     value: PropTypes.arrayOf(PropTypes.number),
     onChange: PropTypes.func,

@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { Grid, Typography, TextField } from '@material-ui/core';
+import { Grid, Typography, TextField, Breadcrumbs } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 import { getTermSelectors, updateTerm, updateTermLocal } from '../../store/schedule';
 import Editor from '../shared/editor';
@@ -56,9 +56,12 @@ class TermEditor extends Editor {
                 <div className="scroll-view">
                     <Grid container spacing={2} direction="column">
                         <Grid item xs={12}>
-                            <Typography variant="h5">Edit Term</Typography>
+                            <Breadcrumbs>
+                                <Typography color="textPrimary">{_.get(this.state.term, 'title')}</Typography>
+                                <Typography color="textPrimary" />
+                            </Breadcrumbs>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12}>
                             <TextField
                                 disabled={this.isEmpty()}
                                 label="Title"
@@ -67,10 +70,11 @@ class TermEditor extends Editor {
                                 onChange={this.handleChange.bind(this, 'title')}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12}>
                             <Grid container direction="row" spacing={2}>
                                 <Grid item xs={6}>
                                     <DatePicker
+                                        fullWidth
                                         label="Start date"
                                         variant="inline"
                                         disabled={this.isEmpty()}
@@ -81,6 +85,7 @@ class TermEditor extends Editor {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <DatePicker
+                                        fullWidth
                                         label="End date"
                                         variant="inline"
                                         disabled={this.isEmpty()}

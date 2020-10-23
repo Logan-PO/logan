@@ -2,8 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Grid, Typography, TextField } from '@material-ui/core';
-import { getCourseSelectors, updateCourse, updateCourseLocal } from '../../store/schedule';
+import { Grid, Typography, TextField, Breadcrumbs } from '@material-ui/core';
+import { getScheduleSelectors, updateCourse, updateCourseLocal } from '../../store/schedule';
 import Editor from '../shared/editor';
 import ColorPicker from '../shared/controls/color-picker';
 
@@ -31,12 +31,17 @@ class CourseEditor extends Editor {
     }
 
     render() {
+        const term = this.props.selectTerm(_.get(this.state.course, 'tid'));
+
         return (
             <div className="editor">
                 <div className="scroll-view">
                     <Grid container spacing={2} direction="column">
                         <Grid item xs={12}>
-                            <Typography variant="h5">Edit Course</Typography>
+                            <Breadcrumbs>
+                                <Typography color="inherit">{_.get(term, 'title')}</Typography>
+                                <Typography color="textPrimary">{_.get(this.state.course, 'title')}</Typography>
+                            </Breadcrumbs>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
@@ -48,20 +53,25 @@ class CourseEditor extends Editor {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField
-                                disabled={this.isEmpty()}
-                                label="Nickname"
-                                fullWidth
-                                value={_.get(this.state.course, 'nickname', '')}
-                                onChange={this.handleChange.bind(this, 'nickname')}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <ColorPicker
-                                disabled={this.isEmpty()}
-                                value={_.get(this.state.course, 'color', '')}
-                                onChange={this.handleChange.bind(this, 'color')}
-                            />
+                            <Grid container direction="row" spacing={2}>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        disabled={this.isEmpty()}
+                                        label="Nickname"
+                                        fullWidth
+                                        value={_.get(this.state.course, 'nickname', '')}
+                                        onChange={this.handleChange.bind(this, 'nickname')}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <ColorPicker
+                                        fullWidth
+                                        disabled={this.isEmpty()}
+                                        value={_.get(this.state.course, 'color', '')}
+                                        onChange={this.handleChange.bind(this, 'color')}
+                                    />
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </div>
@@ -72,14 +82,18 @@ class CourseEditor extends Editor {
 
 CourseEditor.propTypes = {
     cid: PropTypes.string,
+    selectTerm: PropTypes.func,
     selectCourse: PropTypes.func,
     updateCourseLocal: PropTypes.func,
     updateCourse: PropTypes.func,
 };
 
 const mapStateToProps = state => {
+    const { baseSelectors } = getScheduleSelectors(state.schedule);
+
     return {
-        selectCourse: getCourseSelectors(state.schedule).selectById,
+        selectTerm: baseSelectors.terms.selectById,
+        selectCourse: baseSelectors.courses.selectById,
     };
 };
 
