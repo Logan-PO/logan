@@ -25,5 +25,8 @@
   },
   "bugs": {
     "url": "https://github.com/beasterbro/logan/issues"
+  },
+  "dependencies": {
+    "expo-cli": "^3.28.2"
   }
 }
