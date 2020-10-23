@@ -62,14 +62,17 @@ class SectionEditor extends Editor {
         const startTime = dateOrNull(_.get(this.state.section, 'startTime'), DB_TIME_FORMAT);
         const endTime = dateOrNull(_.get(this.state.section, 'endTime'), DB_TIME_FORMAT);
 
+        const termBreadcrumb = _.get(term, 'title');
+        const courseBreadcrumb = !_.isEmpty(_.get(course, 'nickname')) ? course.nickname : _.get(course, 'title');
+
         return (
             <div className="editor">
                 <div className="scroll-view">
                     <Grid container spacing={2} direction="column">
                         <Grid item xs={12}>
                             <Breadcrumbs>
-                                <Typography color="inherit">{_.get(term, 'title')}</Typography>
-                                <Typography color="inherit">{_.get(course, 'title')}</Typography>
+                                <Typography color="inherit">{termBreadcrumb}</Typography>
+                                <Typography color="inherit">{courseBreadcrumb}</Typography>
                                 <Typography color="textPrimary">Edit Section</Typography>
                             </Breadcrumbs>
                         </Grid>
