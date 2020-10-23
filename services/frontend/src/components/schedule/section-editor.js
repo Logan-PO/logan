@@ -70,7 +70,7 @@ class SectionEditor extends Editor {
                             <Breadcrumbs>
                                 <Typography color="inherit">{_.get(term, 'title')}</Typography>
                                 <Typography color="inherit">{_.get(course, 'title')}</Typography>
-                                <Typography color="textPrimary">{_.get(this.state.section, 'title')}</Typography>
+                                <Typography color="textPrimary">Edit Section</Typography>
                             </Breadcrumbs>
                         </Grid>
                         <Grid item xs={12}>

@@ -40,7 +40,7 @@ class CourseEditor extends Editor {
                         <Grid item xs={12}>
                             <Breadcrumbs>
                                 <Typography color="inherit">{_.get(term, 'title')}</Typography>
-                                <Typography color="textPrimary">{_.get(this.state.course, 'title')}</Typography>
+                                <Typography color="textPrimary">Edit Course</Typography>
                             </Breadcrumbs>
                         </Grid>
                         <Grid item xs={12}>

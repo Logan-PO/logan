@@ -57,7 +57,7 @@ class TermEditor extends Editor {
                     <Grid container spacing={2} direction="column">
                         <Grid item xs={12}>
                             <Breadcrumbs>
-                                <Typography color="textPrimary">{_.get(this.state.term, 'title')}</Typography>
+                                <Typography color="textPrimary">Edit Term</Typography>
                                 <Typography color="textPrimary" />
                             </Breadcrumbs>
                         </Grid>
