@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import AddIcon from '@material-ui/icons/Add';
 import { getScheduleSelectors, createCourse, deleteCourse, createHoliday, deleteHoliday } from '../../store/schedule';
 import '../shared/list.scss';
 import EmptySticker from '../shared/empty-sticker';
@@ -76,7 +77,15 @@ class TermChildrenList extends React.Component {
             }),
             <div key="add-new" className="list-cell">
                 <ListItem button onClick={() => this.props.createCourse(this.randomChild('course'))}>
-                    <ListItemText primary="Add new" primaryTypographyProps={{ color: 'primary' }} />
+                    <ListItemText
+                        primary={
+                            <a style={{ display: 'flex', alignItems: 'center' }}>
+                                <AddIcon style={{ marginRight: '0.5rem' }} fontSize="small" />
+                                New course
+                            </a>
+                        }
+                        primaryTypographyProps={{ color: 'primary' }}
+                    />
                 </ListItem>
             </div>,
         ];
@@ -108,7 +117,15 @@ class TermChildrenList extends React.Component {
             }),
             <div key="add-new" className="list-cell">
                 <ListItem button onClick={() => this.props.createHoliday(this.randomChild('holiday'))}>
-                    <ListItemText primary="Add new" primaryTypographyProps={{ color: 'primary' }} />
+                    <ListItemText
+                        primary={
+                            <a style={{ display: 'flex', alignItems: 'center' }}>
+                                <AddIcon style={{ marginRight: '0.5rem' }} fontSize="small" />
+                                New holiday
+                            </a>
+                        }
+                        primaryTypographyProps={{ color: 'primary' }}
+                    />
                 </ListItem>
             </div>,
         ];

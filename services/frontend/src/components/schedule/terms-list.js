@@ -1,15 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-    List,
-    ListSubheader,
-    ListItem,
-    ListItemText,
-    ListItemSecondaryAction,
-    IconButton,
-    Fab,
-} from '@material-ui/core';
+import { List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getScheduleSelectors, createTerm, deleteTerm } from '../../store/schedule';
@@ -53,28 +45,40 @@ class TermsList extends React.Component {
                 <div className="scroll-view">
                     <List>
                         <ListSubheader>Terms</ListSubheader>
-                        {this.props.tids.map(tid => {
-                            const term = this.props.getTerm(tid);
-                            const isSelected = tid === this.state.selectedTid;
+                        {[
+                            ...this.props.tids.map(tid => {
+                                const term = this.props.getTerm(tid);
+                                const isSelected = tid === this.state.selectedTid;
 
-                            return (
-                                <div key={tid} className="list-cell">
-                                    <ListItem button selected={isSelected} onClick={() => this.didSelectTerm(tid)}>
-                                        <ListItemText primary={term.title} />
-                                        <ListItemSecondaryAction className="actions">
-                                            <IconButton edge="end" onClick={() => this.didDeleteTerm(term)}>
-                                                <DeleteIcon color="error" />
-                                            </IconButton>
-                                        </ListItemSecondaryAction>
-                                    </ListItem>
-                                </div>
-                            );
-                        })}
+                                return (
+                                    <div key={tid} className="list-cell">
+                                        <ListItem button selected={isSelected} onClick={() => this.didSelectTerm(tid)}>
+                                            <ListItemText primary={term.title} />
+                                            <ListItemSecondaryAction className="actions">
+                                                <IconButton edge="end" onClick={() => this.didDeleteTerm(term)}>
+                                                    <DeleteIcon color="error" />
+                                                </IconButton>
+                                            </ListItemSecondaryAction>
+                                        </ListItem>
+                                    </div>
+                                );
+                            }),
+                            <div key="add-new" className="list-cell">
+                                <ListItem button onClick={() => this.props.createTerm(this.randomTerm())}>
+                                    <ListItemText
+                                        primary={
+                                            <a style={{ display: 'flex', alignItems: 'center' }}>
+                                                <AddIcon style={{ marginRight: '0.5rem' }} fontSize="small" />
+                                                New term
+                                            </a>
+                                        }
+                                        primaryTypographyProps={{ color: 'primary' }}
+                                    />
+                                </ListItem>
+                            </div>,
+                        ]}
                     </List>
                 </div>
-                <Fab className="add-button" color="secondary" onClick={() => this.props.createTerm(this.randomTerm())}>
-                    <AddIcon />
-                </Fab>
             </div>
         );
     }
