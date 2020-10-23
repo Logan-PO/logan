@@ -28,7 +28,7 @@ class CoursePicker extends React.Component {
             items.push(<ListSubheader key={term.tid}>{term.title}</ListSubheader>);
             for (const course of term.courses) {
                 items.push(
-                    <MenuItem key={course.cid} value={course.cid} style={{ color: course.color }}>
+                    <MenuItem key={course.cid} value={course.cid} style={{ color: course.color, fontWeight: 'bold' }}>
                         {course.nickname || course.title}
                     </MenuItem>
                 );
