@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Grid, Typography, TextField, Breadcrumbs } from '@material-ui/core';
+import { Grid, Typography, TextField, Breadcrumbs, Divider } from '@material-ui/core';
 import { getScheduleSelectors, updateCourse, updateCourseLocal } from '../../store/schedule';
 import Editor from '../shared/editor';
 import ColorPicker from '../shared/controls/color-picker';
@@ -43,6 +43,7 @@ class CourseEditor extends Editor {
                                 <Typography color="textPrimary">Edit Course</Typography>
                             </Breadcrumbs>
                         </Grid>
+                        <Divider flexitem style={{ margin: '0 -1em' }} />
                         <Grid item xs={12}>
                             <TextField
                                 disabled={this.isEmpty()}

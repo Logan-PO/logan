@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { Grid, Typography, TextField, Breadcrumbs } from '@material-ui/core';
+import { Grid, Typography, TextField, Breadcrumbs, Divider } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 import { getTermSelectors, updateTerm, updateTermLocal } from '../../store/schedule';
 import Editor from '../shared/editor';
@@ -61,6 +61,7 @@ class TermEditor extends Editor {
                                 <Typography color="textPrimary" />
                             </Breadcrumbs>
                         </Grid>
+                        <Divider flexitem style={{ margin: '0 -1em' }} />
                         <Grid item xs={12}>
                             <TextField
                                 disabled={this.isEmpty()}
