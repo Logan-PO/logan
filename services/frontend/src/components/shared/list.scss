@@ -1,6 +1,6 @@
 @import '../../globals/global';
 
-.assignments-list {
+.scrollable-list {
     height: 100%;
     flex-grow: 1;
     background: white;
@@ -14,14 +14,21 @@
         z-index: 10000;
     }
 
-    .scrollview {
+    .scroll-view {
         height: 100%;
         overflow-y: scroll;
         border-right: solid 1px $border;
+    }
 
-        .heading {
-            background: white;
+    .list-cell {
+        .actions {
+            display: none;
+        }
+
+        &:hover {
+            .actions {
+                display: initial;
+            }
         }
     }
 }
-
