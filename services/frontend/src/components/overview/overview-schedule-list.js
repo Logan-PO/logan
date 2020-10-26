@@ -72,7 +72,7 @@ const mapStateToProps = state => {
 
     return {
         sections: Object.entries(eventSections).sort((a, b) => compareDueDates(a[0], b[0])),
-    }; //TODO: This should be the combined sections here
+    };
 };
 
 const mapDispatchToProps = { fetchAssignments, fetchTasks };
