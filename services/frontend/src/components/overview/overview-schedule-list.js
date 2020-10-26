@@ -19,11 +19,11 @@ class OverviewScheduleList extends React.Component {
                 <div className="scroll-view">
                     <List>
                         {this.props.sections.map(section => {
-                            const [dueDate, aids] = section;
+                            const [dueDate, ids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
                                     <ListSubheader>{dueDate}</ListSubheader>
-                                    {aids.map(aid => (
+                                    {ids.map(aid => (
                                         <OverviewAssignmentCell key={aid} aid={aid} selected={() => {}} />
                                     ))}
                                 </React.Fragment>
