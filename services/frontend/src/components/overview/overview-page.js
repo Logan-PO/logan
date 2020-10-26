@@ -30,8 +30,12 @@ export class OverviewPage extends React.Component {
             <Page title="Assignments">
                 <div className={styles.assignmentsPage}>
                     <div className={styles.widenMargins}>This is where the Planner View Will Go</div>
-                    <OverviewAssignments />
-                    <OverviewTasks />
+                    <div>
+                        <OverviewAssignments />
+                    </div>
+                    <div>
+                        <OverviewTasks />
+                    </div>
                 </div>
             </Page>
         );
