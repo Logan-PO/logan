@@ -5,6 +5,7 @@ import { Page } from '../shared';
 import { fetchAssignments } from '../../store/assignments';
 import styles from '../assignments/assignments-page.module.scss';
 import OverviewAssignments from './overview-assignments';
+import OverviewTasks from './overview-tasks';
 
 export class OverviewPage extends React.Component {
     constructor(props) {
@@ -30,6 +31,7 @@ export class OverviewPage extends React.Component {
                 <div className={styles.assignmentsPage}>
                     <div className={styles.widenMargins}>This is where the Planner View Will Go</div>
                     <OverviewAssignments />
+                    <OverviewTasks />
                 </div>
             </Page>
         );
