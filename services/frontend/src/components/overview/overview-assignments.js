@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, ListSubheader } from '@material-ui/core';
 import { fetchAssignments, getAssignmentsSelectors, compareDueDates } from '../../store/assignments';
-import styles from '../assignments/assignments-list.module.scss';
 import OverviewAssignmentCell from './overview-assignment-cell';
+import '../shared/list.scss';
 
 class OverviewAssignments extends React.Component {
     constructor(props) {
@@ -13,16 +13,16 @@ class OverviewAssignments extends React.Component {
 
     render() {
         return (
-            <div className={styles.assignmentsList}>
-                <div className={styles.scrollview}>
+            <div className="scrollable-list">
+                <div className="scroll-view">
                     <List>
                         {this.props.sections.map(section => {
                             const [dueDate, aids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader className={styles.heading}>{dueDate}</ListSubheader>
+                                    <ListSubheader>{dueDate}</ListSubheader>
                                     {aids.map(aid => (
-                                        <OverviewAssignmentCell key={aid} aid={aid} selected={() => {}} />
+                                        <OverviewAssignmentCell key={aid} aid={aid} />
                                     ))}
                                 </React.Fragment>
                             );

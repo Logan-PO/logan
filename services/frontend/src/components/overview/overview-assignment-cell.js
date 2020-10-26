@@ -6,7 +6,7 @@ import { ListItem, ListItemText } from '@material-ui/core';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '../../store/assignments';
 import { getScheduleSelectors } from '../../store/schedule';
 import { CourseLabel } from '../shared';
-import styles from '../assignments/assignment-cell.module.scss';
+import globalStyles from '../../globals/global.scss';
 
 export class OverviewAssignmentCell extends React.Component {
     constructor(props) {
@@ -20,13 +20,13 @@ export class OverviewAssignmentCell extends React.Component {
         const course = this.props.getCourse(_.get(this.state.assignment, 'cid'));
 
         return (
-            <div className={styles.assignmentCell}>
+            <div className="list-cell">
                 <ListItem>
                     <ListItemText
                         primary={
                             <React.Fragment>
                                 {course && (
-                                    <div className={styles.cellUpperLabel}>
+                                    <div className={globalStyles.cellUpperLabel}>
                                         <CourseLabel cid={course.cid} />
                                     </div>
                                 )}

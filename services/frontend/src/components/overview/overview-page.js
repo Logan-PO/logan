@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Grid } from '@material-ui/core';
 import { Page } from '../shared';
 import { fetchAssignments } from '../../store/assignments';
 import styles from '../assignments/assignments-page.module.scss';
-import OverviewAssignments from './overview-assignments';
-import OverviewTasks from './overview-tasks';
+import OverviewScheduleList from './overview-schedule-list';
 
 export class OverviewPage extends React.Component {
     constructor(props) {
@@ -27,16 +27,12 @@ export class OverviewPage extends React.Component {
     render() {
         //possible source of error here
         return (
-            <Page title="Assignments">
-                <div className={styles.assignmentsPage}>
-                    <div className={styles.widenMargins}>This is where the Planner View Will Go</div>
-                    <div>
-                        <OverviewAssignments />
-                    </div>
-                    <div>
-                        <OverviewTasks />
-                    </div>
-                </div>
+            <Page title="Overview">
+                <Grid container spacing={0} className={styles.assignmentsPage}>
+                    <Grid item sm={6} md={4} lg={5} className={styles.listContainer}>
+                        <OverviewScheduleList />
+                    </Grid>
+                </Grid>
             </Page>
         );
     }
@@ -44,8 +40,6 @@ export class OverviewPage extends React.Component {
 
 OverviewPage.propTypes = {
     fetchAssignments: PropTypes.func,
-    createAssignment: PropTypes.func,
-    deleteAssignment: PropTypes.func,
 };
 
 const mapDispatchToProps = { fetchAssignments };

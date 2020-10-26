@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { dateUtils } from '@logan/core';
 import { List, ListSubheader } from '@material-ui/core';
 import { getTasksSelectors, fetchTasks, compareDueDates } from '../../store/tasks';
-import styles from '../tasks/tasks-list.module.scss';
+import '../shared/list.scss';
 import OverviewTaskCell from './overview-task-cell';
 
 class OverviewTasks extends React.Component {
@@ -19,14 +19,14 @@ class OverviewTasks extends React.Component {
 
     render() {
         return (
-            <div className={styles.tasksList}>
-                <div className={styles.scrollview}>
+            <div className="scrollable-list">
+                <div className="scroll-view">
                     <List>
                         {this.props.sections.map(section => {
                             const [dueDate, tids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader className={styles.heading}>{dueDate}</ListSubheader>
+                                    <ListSubheader>{dueDate}</ListSubheader>
                                     {tids.map(tid => (
                                         <OverviewTaskCell key={tid} tid={tid} />
                                     ))}
