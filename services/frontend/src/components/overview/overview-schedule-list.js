@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, ListSubheader } from '@material-ui/core';
+import * as dateUtils from '@logan/core/src/date-utils';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
 import '../shared/list.scss';
 import { fetchTasks, getTasksSelectors, compareDueDates } from '../../store/tasks';
@@ -47,9 +48,11 @@ const getID = scheduleEvent => {
 const mapStateToProps = state => {
     const assignmentSelectors = getAssignmentsSelectors(state.assignments);
     const taskSelectors = getTasksSelectors(state.tasks);
+    const eventSelectors = [];
 
-    /*const taskSections = {};
+    const taskSections = {};
     for (const task of taskSelectors.selectAll()) {
+        eventSelectors.push(task);
         const key = dateUtils.dueDateIsDate(task.dueDate) ? dateUtils.dayjs(task.dueDate) : task.dueDate;
         if (taskSections[key]) taskSections[key].push(task.tid);
         else taskSections[key] = [task.tid];
@@ -57,17 +60,21 @@ const mapStateToProps = state => {
 
     const assignmentSections = {};
     for (const assignment of assignmentSelectors.selectAll()) {
-        if (assignmentSections[assignment.dueDate]) assignmentSections[assignment.dueDate].push(assignment.aid);
-        else assignmentSections[assignment.dueDate] = [assignment.aid];
-    }*/
-    const eventSelectors = {};
-    eventSelectors.addAll(assignmentSelectors.selectAll());
-    eventSelectors.addAll(taskSelectors.selectAll());
+        eventSelectors.push(assignment);
+        const key = dateUtils.dueDateIsDate(assignment.dueDate)
+            ? dateUtils.dayjs(assignment.dueDate)
+            : assignment.dueDate;
+        if (assignmentSections[key]) assignmentSections[key].push(assignment.aid);
+        else assignmentSections[key] = [assignment.aid];
+    }
 
     const eventSections = {};
     for (const scheduleEvent of eventSelectors) {
-        if (eventSections[scheduleEvent.dueDate]) eventSections[scheduleEvent.dueDate].push(getID(scheduleEvent));
-        else eventSections[scheduleEvent.dueDate] = [getID(scheduleEvent)];
+        const key = dateUtils.dueDateIsDate(scheduleEvent.dueDate)
+            ? dateUtils.dayjs(scheduleEvent.dueDate)
+            : scheduleEvent.dueDate;
+        if (taskSections[key]) taskSections[key].push(getID(scheduleEvent));
+        else taskSections[key] = [getID(scheduleEvent)];
     }
 
     return {
