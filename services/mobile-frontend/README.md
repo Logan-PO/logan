@@ -1,15 +1,3 @@
-# `@logan/mobile-frontend`
-
-> TODO: description
-
-## Usage
-
-```
-const mobileFrontend = require('@logan/mobile-frontend');
-
-// TODO: DEMONSTRATE API
-```
-
 ## Running the mobile frontend
 To run the frontend, first install expo-cli using
 ```
