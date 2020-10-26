@@ -10,8 +10,8 @@ import {
     deleteAssignment,
     compareDueDates,
 } from '../../store/assignments';
-import styles from './assignments-list.module.scss';
 import AssignmentCell from './assignment-cell';
+import '../shared/list.scss';
 
 class AssignmentsList extends React.Component {
     constructor(props) {
@@ -48,14 +48,14 @@ class AssignmentsList extends React.Component {
 
     render() {
         return (
-            <div className={styles.assignmentsList}>
-                <div className={styles.scrollview}>
+            <div className="scrollable-list">
+                <div className="scroll-view">
                     <List>
                         {this.props.sections.map(section => {
                             const [dueDate, aids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader className={styles.heading}>{dueDate}</ListSubheader>
+                                    <ListSubheader>{dueDate}</ListSubheader>
                                     {aids.map(aid => (
                                         <AssignmentCell
                                             key={aid}
@@ -71,7 +71,7 @@ class AssignmentsList extends React.Component {
                     </List>
                 </div>
                 <Fab
-                    className={styles.addButton}
+                    className="add-button"
                     color="secondary"
                     onClick={() => this.props.createAssignment(this.randomAssignment())}
                 >

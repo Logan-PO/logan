@@ -1,13 +1,10 @@
 @import '../../globals/global';
 
 .task-cell {
-    .actions {
-        display: none;
-    }
+    display: flex;
+    flex-direction: row;
 
-    &:hover {
-        .actions {
-            display: initial;
-        }
+    &> * {
+       flex-grow: 1;
     }
 }

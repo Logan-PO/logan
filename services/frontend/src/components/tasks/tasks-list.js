@@ -3,10 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dateUtils } from '@logan/core';
-import { List, ListSubheader, Fab } from '@material-ui/core';
+import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { getTasksSelectors, fetchTasks, createTask, deleteTask, compareDueDates } from '../../store/tasks';
 import TaskCell from './task-cell';
+import '../shared/list.scss';
 import styles from './tasks-list.module.scss';
 
 class TasksList extends React.Component {
@@ -15,8 +16,10 @@ class TasksList extends React.Component {
 
         this.didSelectTask = this.didSelectTask.bind(this);
         this.didDeleteTask = this.didDeleteTask.bind(this);
+        this.toggleCompletedTasks = this.toggleCompletedTasks.bind(this);
 
         this.state = {
+            showingCompletedTasks: false,
             selectedTid: undefined,
         };
     }
@@ -41,16 +44,46 @@ class TasksList extends React.Component {
         this.props.onTaskSelected(undefined);
     }
 
+    toggleCompletedTasks(e) {
+        this.setState({ showingCompletedTasks: e.target.checked });
+    }
+
+    sectionsToShow() {
+        const tasks = this.props.tids
+            .map(tid => this.props.getTask(tid))
+            .filter(task => task.complete === this.state.showingCompletedTasks);
+
+        const sections = {};
+        for (const task of tasks) {
+            const key = dateUtils.dueDateIsDate(task.dueDate) ? dateUtils.dayjs(task.dueDate) : task.dueDate;
+            if (sections[key]) sections[key].push(task.tid);
+            else sections[key] = [task.tid];
+        }
+
+        // TODO: Better sorting
+        if (this.state.showingCompletedTasks) {
+            return _.entries(sections)
+                .sort((a, b) => compareDueDates(b[0], a[0]))
+                .map(([key, value]) => [dateUtils.readableDueDate(key), value]);
+        } else {
+            return _.entries(sections)
+                .sort((a, b) => compareDueDates(a[0], b[0]))
+                .map(([key, value]) => [dateUtils.readableDueDate(key), value]);
+        }
+    }
+
     render() {
+        const sections = this.sectionsToShow();
+
         return (
-            <div className={styles.tasksList}>
-                <div className={styles.scrollview}>
+            <div className="scrollable-list">
+                <div className={`scroll-view ${styles.tasksList}`}>
                     <List>
-                        {this.props.sections.map(section => {
+                        {sections.map(section => {
                             const [dueDate, tids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader className={styles.heading}>{dueDate}</ListSubheader>
+                                    <ListSubheader>{dueDate}</ListSubheader>
                                     {tids.map(tid => (
                                         <TaskCell
                                             key={tid}
@@ -65,11 +98,19 @@ class TasksList extends React.Component {
                         })}
                     </List>
                 </div>
-                <Fab
-                    className={styles.addButton}
-                    color="secondary"
-                    onClick={() => this.props.createTask(this.randomTask())}
-                >
+                <AppBar position="relative" color="primary">
+                    <Toolbar variant="dense">
+                        <FormControl>
+                            <FormControlLabel
+                                control={<Switch color="default" />}
+                                label={this.state.showingCompletedTasks ? 'Completed tasks' : 'Remaining tasks'}
+                                value={this.state.showingCompletedTasks}
+                                onChange={this.toggleCompletedTasks}
+                            />
+                        </FormControl>
+                    </Toolbar>
+                </AppBar>
+                <Fab className="add-button" color="secondary" onClick={() => this.props.createTask(this.randomTask())}>
                     <AddIcon />
                 </Fab>
             </div>
@@ -78,7 +119,8 @@ class TasksList extends React.Component {
 }
 
 TasksList.propTypes = {
-    sections: PropTypes.arrayOf(PropTypes.array),
+    tids: PropTypes.array,
+    getTask: PropTypes.func,
     fetchTasks: PropTypes.func,
     createTask: PropTypes.func,
     deleteTask: PropTypes.func,
@@ -87,17 +129,10 @@ TasksList.propTypes = {
 
 const mapStateToProps = state => {
     const selectors = getTasksSelectors(state.tasks);
-    const sections = {};
-    for (const task of selectors.selectAll()) {
-        const key = dateUtils.dueDateIsDate(task.dueDate) ? dateUtils.dayjs(task.dueDate) : task.dueDate;
-        if (sections[key]) sections[key].push(task.tid);
-        else sections[key] = [task.tid];
-    }
 
     return {
-        sections: _.entries(sections)
-            .sort((a, b) => compareDueDates(a[0], b[0]))
-            .map(([key, value]) => [dateUtils.readableDueDate(key), value]),
+        tids: getTasksSelectors(state.tasks).selectIds(),
+        getTask: selectors.selectById,
     };
 };
 

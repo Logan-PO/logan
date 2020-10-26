@@ -2,245 +2,114 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dateUtils } from '@logan/core';
-import {
-    Grid,
-    TextField,
-    Checkbox,
-    FormControl,
-    FormLabel,
-    FormControlLabel,
-    RadioGroup,
-    Radio,
-} from '@material-ui/core';
-import { DatePicker } from '@material-ui/pickers';
-import UpdateTimer from '../../utils/update-timer';
+import { Grid, TextField } from '@material-ui/core';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
-import { CoursePicker } from '../shared';
-import styles from './task-editor.module.scss';
+import Editor from '../shared/editor';
+import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox } from '../shared/controls';
 
-const {
-    dayjs,
-    constants: { DB_DATE_FORMAT },
-} = dateUtils;
-
-const priorities = {
-    'Very low': -2,
-    Low: -1,
-    Normal: 0,
-    High: 1,
-    'Very high': 2,
-};
-
-class TaskEditor extends React.Component {
+class TaskEditor extends Editor {
     constructor(props) {
-        super(props);
+        super(props, { id: 'tid', entity: 'task' });
+
         this.handleChange = this.handleChange.bind(this);
-        this.updateDueDateType = this.updateDueDateType.bind(this);
 
-        this.changesExist = false;
-        this.updateTimer = new UpdateTimer(1000, () => {
-            this.props.updateTask(this.state.task);
-            this.changesExist = false;
-        });
-
-        this.state = {};
+        this.state = {
+            task: {},
+        };
     }
 
-    isEmpty() {
-        return _.isEmpty(this.props.tid);
+    selectEntity(id) {
+        return this.props.selectTask(id);
     }
 
-    updateCurrentTask(task) {
-        let dueDateType = _.get(task, 'dueDate');
-        if (dueDateType !== 'asap' && dueDateType !== 'eventually') {
-            dueDateType = 'date';
-        }
-
-        this.setState({
-            task,
-            dueDateType,
-        });
+    updateEntityLocal({ id, changes }) {
+        this.props.updateTaskLocal({ id, changes });
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.tid !== prevProps.tid) {
-            // If the user has selected a new task and updates to the existing task haven't been saved yet, save them
-            if (prevProps.tid && this.changesExist) {
-                const prevTask = this.props.selectTask(prevProps.tid);
-
-                if (prevTask) this.updateTimer.fire();
-
-                this.updateTimer.stop();
-            }
-
-            const currentTask = this.props.selectTask(this.props.tid);
-            this.updateCurrentTask(currentTask);
-            if (currentTask.dueDate !== 'asap' && currentTask.dueDate !== 'eventually') {
-                this.setState({ lastDueDate: currentTask.dueDate });
-            }
-        } else {
-            // Also if the task has been updated somewhere else, make sure the state reflects that
-            const storeTask = this.props.selectTask(this.props.tid);
-            if (!_.isEqual(storeTask, this.state.task)) {
-                this.updateCurrentTask(storeTask);
-            }
-        }
+    updateEntity(entity) {
+        this.props.updateTask(entity);
     }
 
-    updateDueDateType(e) {
-        const newType = e.target.value;
-
-        this.changesExist = true;
-
-        if (newType === 'date') {
-            let lastDueDate = this.state.lastDueDate;
-            if (!this.state.lastDueDate) {
-                lastDueDate = dayjs().format(DB_DATE_FORMAT);
-                this.setState({ lastDueDate });
-            }
-
-            this.makeChanges({ dueDate: lastDueDate });
-        } else {
-            this.makeChanges({ dueDate: newType });
-        }
-    }
-
-    handleChange(prop, e) {
-        this.changesExist = true;
-
-        const changes = {};
-
+    processChange(changes, prop, e) {
         if (prop === 'complete') {
             changes[prop] = e.target.checked;
         } else if (prop === 'dueDate') {
-            const str = e.format(DB_DATE_FORMAT);
-            this.setState({ lastDueDate: str });
-            changes[prop] = str;
+            changes[prop] = e;
         } else if (prop === 'cid') {
             const cid = e.target.value;
             if (cid === 'none') changes[prop] = undefined;
             else changes[prop] = e.target.value;
         } else {
-            changes[prop] = e.target.value;
+            super.processChange(changes, prop, e);
         }
-
-        this.makeChanges(changes);
-    }
-
-    makeChanges(changes) {
-        this.props.updateTaskLocal({
-            id: this.props.tid,
-            changes,
-        });
-
-        this.updateCurrentTask(_.merge({}, this.state.task, changes));
-
-        this.updateTimer.reset();
     }
 
     render() {
         return (
-            <div className={styles.taskEditor}>
-                <Grid container spacing={2} direction="column">
-                    <Grid item xs={12}>
-                        <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">
-                            <Grid item>
-                                <Checkbox
-                                    style={{ padding: 0 }}
-                                    disabled={this.isEmpty()}
-                                    checked={_.get(this.state.task, 'complete', false)}
-                                    onChange={this.handleChange.bind(this, 'complete')}
-                                />
+            <div className="editor">
+                <div className="scroll-view">
+                    <Grid container spacing={2} direction="column">
+                        <Grid item xs={12}>
+                            <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">
+                                <Grid item>
+                                    <Checkbox
+                                        disabled={this.isEmpty()}
+                                        cid={_.get(this.state.task, 'cid')}
+                                        checked={_.get(this.state.task, 'complete', false)}
+                                        onChange={this.handleChange.bind(this, 'complete')}
+                                    />
+                                </Grid>
+                                <Grid item style={{ flexGrow: 1 }}>
+                                    <TextField
+                                        label="Title"
+                                        fullWidth
+                                        onChange={this.handleChange.bind(this, 'title')}
+                                        value={_.get(this.state.task, 'title', '')}
+                                        placeholder="Untitled task"
+                                        disabled={this.isEmpty()}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item style={{ flexGrow: 1 }}>
-                                <TextField
-                                    label="Title"
-                                    fullWidth
-                                    onChange={this.handleChange.bind(this, 'title')}
-                                    value={_.get(this.state.task, 'title', '')}
-                                    color="secondary"
-                                    placeholder="Untitled task"
-                                    disabled={this.isEmpty()}
-                                />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                label="Description"
+                                fullWidth
+                                multiline
+                                onChange={this.handleChange.bind(this, 'description')}
+                                value={_.get(this.state.task, 'description', '')}
+                                placeholder="Task description"
+                                disabled={this.isEmpty()}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CoursePicker
+                                disabled={this.isEmpty()}
+                                value={_.get(this.state.task, 'cid', 'none')}
+                                onChange={this.handleChange.bind(this, 'cid')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
+                                <Grid item>
+                                    <DueDatePicker
+                                        entityId={_.get(this.state.task, 'tid')}
+                                        disabled={this.isEmpty()}
+                                        value={_.get(this.state.task, 'dueDate')}
+                                        onChange={this.handleChange.bind(this, 'dueDate')}
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <PriorityPicker
+                                        disabled={this.isEmpty()}
+                                        value={_.get(this.state.task, 'priority')}
+                                        onChange={this.handleChange.bind(this, 'priority')}
+                                    />
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Description"
-                            fullWidth
-                            multiline
-                            onChange={this.handleChange.bind(this, 'description')}
-                            value={_.get(this.state.task, 'description', '')}
-                            color="secondary"
-                            placeholder="Task description"
-                            disabled={this.isEmpty()}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <CoursePicker
-                            disabled={this.isEmpty()}
-                            value={_.get(this.state.task, 'cid', 'none')}
-                            onChange={this.handleChange.bind(this, 'cid')}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FormControl disabled={this.isEmpty()}>
-                            <FormLabel color="secondary">Due Date</FormLabel>
-                            <RadioGroup
-                                name="dueDateType"
-                                value={_.get(this.state, 'dueDateType', '')}
-                                onChange={this.updateDueDateType}
-                            >
-                                <FormControlLabel
-                                    value="asap"
-                                    label="ASAP"
-                                    labelPlacement="end"
-                                    control={<Radio color="secondary" />}
-                                />
-                                <FormControlLabel
-                                    value="eventually"
-                                    label="Eventually"
-                                    labelPlacement="end"
-                                    control={<Radio color="secondary" />}
-                                />
-                                <FormControlLabel
-                                    value="date"
-                                    label={
-                                        <DatePicker
-                                            variant="inline"
-                                            disabled={_.get(this.state, 'dueDateType') !== 'date'}
-                                            value={dayjs(_.get(this.state, 'lastDueDate'))}
-                                            onChange={this.handleChange.bind(this, 'dueDate')}
-                                            color="secondary"
-                                        />
-                                    }
-                                    labelPlacement="end"
-                                    control={<Radio color="secondary" />}
-                                />
-                            </RadioGroup>
-                        </FormControl>
-                        <FormControl disabled={this.isEmpty()}>
-                            <FormLabel color="secondary">Priority</FormLabel>
-                            <RadioGroup
-                                name="priority"
-                                value={_.get(this.state.task, 'priority', '')}
-                                onChange={this.handleChange.bind(this, 'priority')}
-                            >
-                                {_.entries(priorities).map(([pName, p]) => (
-                                    <FormControlLabel
-                                        key={pName}
-                                        value={p}
-                                        label={pName}
-                                        labelPlacement="end"
-                                        control={<Radio color="secondary" />}
-                                    />
-                                ))}
-                            </RadioGroup>
-                        </FormControl>
-                    </Grid>
-                </Grid>
+                </div>
             </div>
         );
     }

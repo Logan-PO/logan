@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -6,10 +5,6 @@ import { FormControl, InputLabel, Select, ListSubheader, MenuItem } from '@mater
 import { getScheduleSelectors } from '../../../store/schedule';
 
 class CoursePicker extends React.Component {
-    getPropsToForward() {
-        return _.omit(this.props, ['tids', 'getTerm', 'allCids', 'getCoursesForTerm', 'value', 'onChange']);
-    }
-
     getDerivedValue() {
         if (this.props.value !== 'none' && !this.props.allCids.includes(this.props.value)) return undefined;
         else return this.props.value;
@@ -33,7 +28,7 @@ class CoursePicker extends React.Component {
             items.push(<ListSubheader key={term.tid}>{term.title}</ListSubheader>);
             for (const course of term.courses) {
                 items.push(
-                    <MenuItem key={course.cid} value={course.cid} style={{ color: course.color }}>
+                    <MenuItem key={course.cid} value={course.cid} style={{ color: course.color, fontWeight: 'bold' }}>
                         {course.nickname || course.title}
                     </MenuItem>
                 );
@@ -47,12 +42,7 @@ class CoursePicker extends React.Component {
         return (
             <FormControl fullWidth={this.props.fullWidth} disabled={this.props.disabled}>
                 <InputLabel>Course</InputLabel>
-                <Select
-                    fullWidth={this.props.fullWidth}
-                    value={this.getDerivedValue()}
-                    onChange={this.props.onChange}
-                    {...this.getPropsToForward()}
-                >
+                <Select fullWidth={this.props.fullWidth} value={this.getDerivedValue()} onChange={this.props.onChange}>
                     {this.generateItems()}
                 </Select>
             </FormControl>

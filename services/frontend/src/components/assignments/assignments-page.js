@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Grid } from '@material-ui/core';
 import { Page } from '../shared';
 import { fetchAssignments } from '../../store/assignments';
 import AssignmentsList from './assignments-list';
@@ -17,23 +18,21 @@ export class AssignmentsPage extends React.Component {
         };
     }
 
-    componentDidMount() {
-        this.props.fetchAssignments();
-    }
-
     didSelectAssignment(aid) {
         this.setState({ selectedAid: aid });
     }
+
     render() {
-        //possible source of error here
         return (
             <Page title="Assignments">
-                <div className={styles.assignmentsPage}>
-                    <div className={styles.widenMargins}>
+                <Grid container spacing={0} className={styles.assignmentsPage}>
+                    <Grid item sm={6} md={4} lg={5} className={styles.listContainer}>
                         <AssignmentsList onAssignmentSelected={this.didSelectAssignment} />
-                    </div>
-                    <AssignmentEditor aid={this.state.selectedAid} />
-                </div>
+                    </Grid>
+                    <Grid item sm={6} md={8} lg={7} className={styles.editorContainer}>
+                        <AssignmentEditor aid={this.state.selectedAid} />
+                    </Grid>
+                </Grid>
             </Page>
         );
     }

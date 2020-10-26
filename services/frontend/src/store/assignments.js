@@ -45,7 +45,7 @@ const { slice, asyncActions } = createAsyncSlice({
         deleteAssignment: {
             fn: api.deleteAssignment,
             begin(state, action) {
-                adapter.removeOne(state, { payload: action.meta.arg });
+                adapter.removeOne(state, action.meta.arg.aid);
             },
         },
     },

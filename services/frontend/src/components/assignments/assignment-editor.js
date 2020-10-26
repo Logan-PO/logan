@@ -1,65 +1,42 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { dateUtils } from '@logan/core';
 import { Grid, TextField } from '@material-ui/core';
-import { DatePicker } from '@material-ui/pickers';
-import UpdateTimer from '../../utils/update-timer';
 import {
     deleteAssignment,
     getAssignmentsSelectors,
     updateAssignment,
     updateAssignmentLocal,
 } from '../../store/assignments';
-import { CoursePicker } from '../shared';
-import styles from './assignment-editor.module.scss';
-
-const {
-    dayjs,
-    constants: { DB_DATE_FORMAT },
-} = dateUtils;
+import { CoursePicker, DueDatePicker } from '../shared/controls';
+import Editor from '../shared/editor';
 
 //Represents a form to submit the info required to create a given assignment
-class AssignmentEditor extends Component {
+class AssignmentEditor extends Editor {
     constructor(props) {
-        super(props);
-        this.handleChange = this.handleChange.bind(this);
-        this.updateTimer = new UpdateTimer(1000, () => this.props.updateAssignment(this.state.assignment));
+        super(props, { id: 'aid', entity: 'assignment' });
+
         this.state = {
             assignment: undefined,
         };
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.aid !== prevProps.aid) {
-            if (prevProps.aid && this.changesExist) {
-                const prevAssignment = this.props.selectAssignment(prevProps.aid);
-
-                if (prevAssignment) this.updateTimer.fire();
-
-                this.updateTimer.stop();
-            }
-
-            this.setState({
-                assignment: this.props.selectAssignment(this.props.aid),
-            });
-        } else {
-            // Also if the task has been updated somewhere else, make sure the state reflects that
-            const storeAssignment = this.props.selectAssignment(this.props.aid);
-            if (!_.isEqual(storeAssignment, this.state.assignment)) {
-                this.setState({ assignment: storeAssignment });
-            }
-        }
+    selectEntity(id) {
+        return this.props.selectAssignment(id);
     }
 
-    handleChange(prop, e) {
-        this.changesExist = true;
+    updateEntityLocal({ id, changes }) {
+        this.props.updateAssignmentLocal({ id, changes });
+    }
 
-        const changes = {};
+    updateEntity(entity) {
+        this.props.updateAssignment(entity);
+    }
 
+    processChange(changes, prop, e) {
         if (prop === 'dueDate') {
-            changes[prop] = e.format(DB_DATE_FORMAT);
+            changes[prop] = e;
         } else if (prop === 'cid') {
             const cid = e.target.value;
             if (cid === 'none') changes[prop] = undefined;
@@ -67,53 +44,48 @@ class AssignmentEditor extends Component {
         } else {
             changes[prop] = e.target.value;
         }
-
-        this.props.updateAssignmentLocal({
-            id: this.props.aid,
-            changes,
-        });
-
-        this.setState({
-            assignment: _.merge({}, this.state.assignment, changes),
-        });
-
-        this.updateTimer.reset();
     }
 
     render() {
         return (
-            <div className={styles.assignmentEditor}>
-                <Grid container spacing={2}>
-                    <Grid item style={{ flexGrow: 1 }}>
-                        <TextField
-                            label="Title"
-                            fullWidth
-                            onChange={this.handleChange.bind(this, 'title')}
-                            value={_.get(this.state.assignment, 'title', '')}
-                        />
+            <div className="editor">
+                <div className="scroll-view">
+                    <Grid container direction="column" spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                                disabled={this.isEmpty()}
+                                label="Title"
+                                fullWidth
+                                onChange={this.handleChange.bind(this, 'title')}
+                                value={_.get(this.state.assignment, 'title', '')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                disabled={this.isEmpty()}
+                                label="Description"
+                                fullWidth
+                                onChange={this.handleChange.bind(this, 'description')}
+                                value={_.get(this.state.assignment, 'description', '')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <CoursePicker
+                                disabled={this.isEmpty()}
+                                value={_.get(this.state.assignment, 'cid', 'none')}
+                                onChange={this.handleChange.bind(this, 'cid')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <DueDatePicker
+                                disabled={this.isEmpty()}
+                                entityId={_.get(this.state.assignment, 'aid')}
+                                value={_.get(this.state.assignment, 'dueDate')}
+                                onChange={this.handleChange.bind(this, 'dueDate')}
+                            />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            label="Description"
-                            fullWidth
-                            onChange={this.handleChange.bind(this, 'description')}
-                            value={_.get(this.state.assignment, 'description', '')}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <CoursePicker
-                            value={_.get(this.state.assignment, 'cid', 'none')}
-                            onChange={this.handleChange.bind(this, 'cid')}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <DatePicker
-                            variant="inline"
-                            value={dayjs(_.get(this.state.assignment, 'dueDate'))}
-                            onChange={this.handleChange.bind(this, 'dueDate')}
-                        />
-                    </Grid>
-                </Grid>
+                </div>
             </div>
         );
     }
