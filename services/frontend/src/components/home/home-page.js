@@ -2,8 +2,9 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { navigate } from 'gatsby';
+import { Link, navigate } from 'gatsby';
 import { Container, Typography, Grid } from '@material-ui/core';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from '../../store/login';
 import GoogleBtn from './GoogleButton';
 import SignUpForm from './signup-form';
@@ -55,6 +56,15 @@ class HomePage extends React.Component {
                     </Grid>
                     <Grid item xs={12}>
                         <GoogleBtn />
+                        {this.props.loginStage === LOGIN_STAGE.DONE && (
+                            <React.Fragment>
+                                <br />
+                                <br />
+                                <Link to="/tasks">
+                                    Open Logan <ExitToAppIcon fontSize="small" />
+                                </Link>
+                            </React.Fragment>
+                        )}
                     </Grid>
                 </Grid>
                 <SignUpForm open={this.state.createModalOpen} onClose={this.modalClosed} />
