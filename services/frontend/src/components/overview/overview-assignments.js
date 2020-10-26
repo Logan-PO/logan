@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { List, ListSubheader } from '@material-ui/core';
 import { fetchAssignments, getAssignmentsSelectors, compareDueDates } from '../../store/assignments';
 import styles from '../assignments/assignments-list.module.scss';
-import AssignmentCell from '../assignments/assignment-cell';
+import OverviewAssignmentCell from './overview-assignment-cell';
 
 class OverviewAssignments extends React.Component {
     constructor(props) {
@@ -22,13 +22,7 @@ class OverviewAssignments extends React.Component {
                                 <React.Fragment key={section[0]}>
                                     <ListSubheader className={styles.heading}>{dueDate}</ListSubheader>
                                     {aids.map(aid => (
-                                        <AssignmentCell
-                                            key={aid}
-                                            aid={aid}
-                                            onSelect={() => {}}
-                                            onDelete={() => {}}
-                                            selected={() => {}}
-                                        />
+                                        <OverviewAssignmentCell key={aid} aid={aid} selected={() => {}} />
                                     ))}
                                 </React.Fragment>
                             );
