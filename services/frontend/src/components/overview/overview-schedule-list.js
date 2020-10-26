@@ -39,7 +39,7 @@ OverviewScheduleList.propTypes = {
     sections: PropTypes.arrayOf(PropTypes.array),
     fetchAssignments: PropTypes.func,
     fetchTasks: PropTypes.func,
-};
+}; //TODO Make it so that it chooses to render the correct cell based off of the type of ID
 
 const getID = scheduleEvent => {
     return scheduleEvent.aid === null ? scheduleEvent.tid : scheduleEvent.aid;
@@ -50,22 +50,12 @@ const mapStateToProps = state => {
     const taskSelectors = getTasksSelectors(state.tasks);
     const eventSelectors = [];
 
-    const taskSections = {};
     for (const task of taskSelectors.selectAll()) {
         eventSelectors.push(task);
-        const key = dateUtils.dueDateIsDate(task.dueDate) ? dateUtils.dayjs(task.dueDate) : task.dueDate;
-        if (taskSections[key]) taskSections[key].push(task.tid);
-        else taskSections[key] = [task.tid];
     }
 
-    const assignmentSections = {};
     for (const assignment of assignmentSelectors.selectAll()) {
         eventSelectors.push(assignment);
-        const key = dateUtils.dueDateIsDate(assignment.dueDate)
-            ? dateUtils.dayjs(assignment.dueDate)
-            : assignment.dueDate;
-        if (assignmentSections[key]) assignmentSections[key].push(assignment.aid);
-        else assignmentSections[key] = [assignment.aid];
     }
 
     const eventSections = {};
@@ -73,8 +63,8 @@ const mapStateToProps = state => {
         const key = dateUtils.dueDateIsDate(scheduleEvent.dueDate)
             ? dateUtils.dayjs(scheduleEvent.dueDate)
             : scheduleEvent.dueDate;
-        if (taskSections[key]) taskSections[key].push(getID(scheduleEvent));
-        else taskSections[key] = [getID(scheduleEvent)];
+        if (eventSections[key]) eventSections[key].push(getID(scheduleEvent));
+        else eventSections[key] = [getID(scheduleEvent)];
     }
 
     return {
