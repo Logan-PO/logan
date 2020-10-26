@@ -40,9 +40,9 @@ class CoursePicker extends React.Component {
 
     render() {
         return (
-            <FormControl disabled={this.props.disabled}>
+            <FormControl fullWidth={this.props.fullWidth} disabled={this.props.disabled}>
                 <InputLabel>Course</InputLabel>
-                <Select value={this.getDerivedValue()} onChange={this.props.onChange}>
+                <Select fullWidth={this.props.fullWidth} value={this.getDerivedValue()} onChange={this.props.onChange}>
                     {this.generateItems()}
                 </Select>
             </FormControl>
@@ -51,6 +51,7 @@ class CoursePicker extends React.Component {
 }
 
 CoursePicker.propTypes = {
+    fullWidth: PropTypes.bool,
     disabled: PropTypes.bool,
     tids: PropTypes.array,
     getTerm: PropTypes.func,

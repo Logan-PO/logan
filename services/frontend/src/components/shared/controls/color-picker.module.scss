@@ -1,0 +1,17 @@
+.item {
+    display: flex;
+    flex-direction: row;
+
+    .swatch {
+        margin-right: 1em;
+    }
+}
+
+.swatch {
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    align-self: center;
+    margin-right: 0.5em;
+}
