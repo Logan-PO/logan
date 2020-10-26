@@ -5,7 +5,7 @@
   "author": "prao3 <44528013+prao3@users.noreply.github.com>",
   "homepage": "https://github.com/beasterbro/logan/tree/master/services/mobile-frontend#readme",
   "license": "ISC",
-  "main": "lib/mobile-frontend.js",
+  "main": "node_modules/expo/AppEntry.js",
   "directories": {
     "lib": "lib",
     "test": "__tests__"
