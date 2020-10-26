@@ -7,7 +7,6 @@ import {
     ListItemText,
     Typography,
     ListItemIcon,
-    Checkbox,
     ListItemSecondaryAction,
     IconButton,
 } from '@material-ui/core';
@@ -15,7 +14,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
 import { getAssignmentsSelectors } from '../../store/assignments';
-import { CourseLabel } from '../shared';
+import { CourseLabel, PriorityDisplay } from '../shared';
+import { Checkbox } from '../shared/controls';
 import globalStyles from '../../globals/global.scss';
 import styles from './task-cell.module.scss';
 
@@ -70,21 +70,15 @@ class TaskCell extends React.Component {
         const needsUpperLabel = course || assignment;
         const hasBoth = course && assignment;
 
-        const checkboxStyles = {};
-        if (course && _.get(this.state.task, 'complete')) {
-            checkboxStyles.color = course.color;
-        }
-
         return (
-            <div className={styles.taskCell}>
-                <ListItem selected={this.props.selected} onClick={this.select}>
+            <div className={`list-cell ${styles.taskCell}`}>
+                <PriorityDisplay priority={_.get(this.state.task, 'priority')} />
+                <ListItem button selected={this.props.selected} onClick={this.select}>
                     <ListItemIcon>
                         <Checkbox
-                            edge="start"
-                            color="secondary"
+                            cid={_.get(this.state.task, 'cid')}
                             checked={_.get(this.state, 'task.complete', false)}
                             onChange={this.handleChange}
-                            style={checkboxStyles}
                         />
                     </ListItemIcon>
                     <ListItemText
@@ -105,7 +99,7 @@ class TaskCell extends React.Component {
                         }
                         secondary={_.get(this.state, 'task.description')}
                     />
-                    <ListItemSecondaryAction className={styles.actions}>
+                    <ListItemSecondaryAction className="actions">
                         <IconButton edge="end" onClick={this.deleted}>
                             <DeleteIcon color="error" />
                         </IconButton>
