@@ -3,7 +3,6 @@ import { dateUtils } from '@logan/core';
 import { compareDueDates } from '../../store/tasks';
 
 export function initialQuickSort(showComplete, a, b) {
-    console.log(a, b);
     if (showComplete) {
         return dateUtils.compareDates(
             a.completionDate,
