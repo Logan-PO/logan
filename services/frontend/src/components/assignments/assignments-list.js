@@ -5,23 +5,17 @@ import AddIcon from '@material-ui/icons/Add';
 import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
 import _ from 'lodash';
 import { dateUtils } from '@logan/core';
-import {
-    fetchAssignments,
-    createAssignment,
-    getAssignmentsSelectors,
-    deleteAssignment,
-    compareDueDates,
-} from '../../store/assignments';
+import { fetchAssignments, createAssignment, getAssignmentsSelectors, deleteAssignment } from '../../store/assignments';
 import AssignmentCell from './assignment-cell';
 import '../shared/list.scss';
 import classes from './assignments-list.module.scss';
+import { getSections } from './sorting';
 
 class AssignmentsList extends React.Component {
     constructor(props) {
         super(props);
 
         this._shouldShowAssignment = this._shouldShowAssignment.bind(this);
-        this.sectionsToShow = this.sectionsToShow.bind(this);
         this.didSelectAssignment = this.didSelectAssignment.bind(this);
         this.didDeleteAssignment = this.didDeleteAssignment.bind(this);
         this.togglePastAssignments = this.togglePastAssignments.bind(this);
@@ -63,36 +57,15 @@ class AssignmentsList extends React.Component {
         if (this.state.showingPastAssignments) {
             return dateUtils.dayjs(assignment.dueDate).isBefore(today, 'day');
         } else {
-            return !dateUtils.dayjs(assignment.dueDate).isBefore(today, 'day');
-        }
-    }
-
-    sectionsToShow() {
-        const sections = {};
-        const assignmentsToUse = _.filter(this.props.assignments, this._shouldShowAssignment);
-
-        for (const assignment of assignmentsToUse) {
-            const key = dateUtils.dueDateIsDate(assignment.dueDate)
-                ? dateUtils.dayjs(assignment.dueDate)
-                : assignment.dueDate;
-            if (sections[key]) sections[key].push(assignment.aid);
-            else sections[key] = [assignment.aid];
-        }
-
-        // TODO: Better sorting
-        if (this.state.showingPastAssignments) {
-            return _.entries(sections)
-                .sort((a, b) => compareDueDates(b[0], a[0]))
-                .map(([key, value]) => [dateUtils.readableDueDate(key), value]);
-        } else {
-            return _.entries(sections)
-                .sort((a, b) => compareDueDates(a[0], b[0]))
-                .map(([key, value]) => [dateUtils.readableDueDate(key), value]);
+            return dateUtils.dayjs(assignment.dueDate).isSameOrAfter(today, 'day');
         }
     }
 
     render() {
-        const sections = this.sectionsToShow();
+        const sections = getSections(
+            _.filter(this.props.assignments, this._shouldShowAssignment),
+            this.state.showingPastAssignments
+        );
 
         return (
             <div className="scrollable-list">
