@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { List, Box } from '@material-ui/core';
 import * as dateUtils from '@logan/core/src/date-utils';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
-import '../shared/list.scss';
+import './overview-list.module.scss';
 import { fetchTasks, getTasksSelectors, compareDueDates } from '../../store/tasks';
 import OverviewCell from './overview-cell';
 

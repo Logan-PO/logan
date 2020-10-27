@@ -1,10 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
 import { Page } from '../shared';
 import { fetchAssignments } from '../../store/assignments';
-import styles from './overview-page.module.scss';
 import OverviewScheduleList from './overview-schedule-list';
 
 export class OverviewPage extends React.Component {
@@ -28,11 +26,7 @@ export class OverviewPage extends React.Component {
         //possible source of error here
         return (
             <Page title="Overview">
-                <Grid container spacing={0} className={styles.assignmentsPage}>
-                    <Grid item sm={6} md={4} lg={5} className={styles.listContainer}>
-                        <OverviewScheduleList />
-                    </Grid>
-                </Grid>
+                <OverviewScheduleList />
             </Page>
         );
     }
