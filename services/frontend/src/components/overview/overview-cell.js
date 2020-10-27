@@ -22,10 +22,10 @@ export class OverviewCell extends React.Component {
     }
 
     render() {
-        const assignment = this.props.getAssignment(_.get(this.state.task, 'aid'));
+        const assignment = this.props.getAssignment(_.get(this.state.event, 'aid'));
         const course = assignment
             ? this.props.getCourse(assignment.cid)
-            : this.props.getCourse(_.get(this.state.task, 'cid'));
+            : this.props.getCourse(_.get(this.state.event, 'cid'));
 
         const needsUpperLabel = course || assignment;
         const hasBoth = course && assignment;
@@ -41,7 +41,7 @@ export class OverviewCell extends React.Component {
                                             <CourseLabel cid={course.cid} />
                                         </div>
                                     )}
-                                    <div>{_.get(this.state, 'assignment.title')}</div>
+                                    <div>{_.get(this.state, 'event.title')}</div>
                                 </React.Fragment>
                             ) : (
                                 <React.Fragment>
@@ -55,14 +55,14 @@ export class OverviewCell extends React.Component {
                                             )}
                                         </div>
                                     )}
-                                    <div>{_.get(this.state, 'task.title')}</div>
+                                    <div>{_.get(this.state, 'event.title')}</div>
                                 </React.Fragment>
                             )
                         }
                         secondary={
                             this.type === 'assignment'
-                                ? _.get(this.state, 'assignment.description')
-                                : _.get(this.state, 'task.description')
+                                ? _.get(this.state, 'event.description')
+                                : _.get(this.state, 'event.description')
                         }
                     />
                 </ListItem>
