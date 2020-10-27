@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
+import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
 import {
     ListItem,
@@ -12,7 +13,7 @@ import {
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
+import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
 import { getAssignmentsSelectors } from '../../store/assignments';
 import { CourseLabel, PriorityDisplay } from '../shared';
@@ -22,9 +23,12 @@ import styles from './task-cell.module.scss';
 class TaskCell extends React.Component {
     constructor(props) {
         super(props);
+
         this.select = this.select.bind(this);
         this.deleted = this.deleted.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.openRelatedAssignment = this.openRelatedAssignment.bind(this);
+
         this.state = {
             task: this.props.selectTaskFromStore(this.props.tid),
         };
@@ -40,6 +44,11 @@ class TaskCell extends React.Component {
         if (this.props.onDelete) {
             this.props.onDelete(this.state.task);
         }
+    }
+
+    openRelatedAssignment() {
+        this.props.setShouldGoToTask(this.props.tid);
+        navigate('/tasks');
     }
 
     componentDidUpdate() {
@@ -107,7 +116,7 @@ class TaskCell extends React.Component {
                     />
                     <ListItemSecondaryAction className="actions">
                         {this.props.subtaskCell && (
-                            <IconButton edge="end">
+                            <IconButton edge="end" onClick={this.openRelatedAssignment}>
                                 <EditIcon fontSize="small" />
                             </IconButton>
                         )}
@@ -131,6 +140,7 @@ TaskCell.propTypes = {
     selected: PropTypes.bool,
     onSelect: PropTypes.func,
     onDelete: PropTypes.func,
+    setShouldGoToTask: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -141,6 +151,6 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = { updateTask, updateTaskLocal };
+const mapDispatchToProps = { updateTask, updateTaskLocal, setShouldGoToTask };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskCell);

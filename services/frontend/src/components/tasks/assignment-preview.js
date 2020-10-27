@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
-import { Card, CardActionArea, CardContent, Typography, IconButton } from '@material-ui/core';
+import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { getAssignmentsSelectors, setShouldGoToAssignment } from '../../store/assignments';
 import CourseLabel from '../shared/course-label';
@@ -36,9 +36,7 @@ class AssignmentPreview extends React.Component {
                                     Due {assignment.dueDate}
                                 </Typography>
                             </div>
-                            <IconButton disableRipple component="a">
-                                <ExitToAppIcon />
-                            </IconButton>
+                            <ExitToAppIcon />
                         </CardContent>
                     </CardActionArea>
                 </Card>
