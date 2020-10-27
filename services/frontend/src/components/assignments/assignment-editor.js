@@ -11,8 +11,8 @@ import {
 } from '../../store/assignments';
 import { CoursePicker, DueDatePicker } from '../shared/controls';
 import Editor from '../shared/editor';
+import TaskModal from '../tasks/task-modal';
 import SubtasksList from './subtasks-list';
-import NewTaskModal from './task-modal';
 
 //Represents a form to submit the info required to create a given assignment
 class AssignmentEditor extends Editor {
@@ -120,11 +120,7 @@ class AssignmentEditor extends Editor {
                         </Grid>
                     </Grid>
                 </div>
-                <NewTaskModal
-                    open={this.state.newTaskModalOpen}
-                    onClose={this.closeNewTaskModal}
-                    aid={this.props.aid}
-                />
+                <TaskModal open={this.state.newTaskModalOpen} onClose={this.closeNewTaskModal} aid={this.props.aid} />
             </div>
         );
     }

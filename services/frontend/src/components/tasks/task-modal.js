@@ -12,16 +12,20 @@ const {
     constants: { DB_DATE_FORMAT },
 } = dateUtils;
 
-class NewTaskModal extends React.Component {
+class TaskModal extends React.Component {
     constructor(props) {
         super(props);
 
         this.close = this.close.bind(this);
         this.createTask = this.createTask.bind(this);
 
+        const newTitle = props.aid ? 'New subtask' : 'New task';
+
         this.state = {
+            fakeId: Math.random().toString(),
             task: {
-                title: 'New subtask',
+                aid: props.aid,
+                title: newTitle,
                 dueDate: dayjs().format(DB_DATE_FORMAT),
                 priority: 0,
             },
@@ -35,10 +39,13 @@ class NewTaskModal extends React.Component {
     }
 
     componentWillOpen() {
+        const newTitle = this.props.aid ? 'New subtask' : 'New task';
+
         this.setState({
+            fakeId: Math.random().toString(),
             task: {
                 aid: this.props.aid,
-                title: 'New subtask',
+                title: newTitle,
                 dueDate: dayjs().format(DB_DATE_FORMAT),
                 priority: 0,
             },
@@ -93,7 +100,7 @@ class NewTaskModal extends React.Component {
                             <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
                                 <Grid item xs={6}>
                                     <DueDatePicker
-                                        entityId={this.props.aid}
+                                        entityId={this.state.fakeId}
                                         value={_.get(this.state.task, 'dueDate')}
                                         onChange={this.handleChange.bind(this, 'dueDate')}
                                     />
@@ -121,11 +128,11 @@ class NewTaskModal extends React.Component {
     }
 }
 
-NewTaskModal.propTypes = {
+TaskModal.propTypes = {
     aid: PropTypes.string,
     open: PropTypes.bool,
     onClose: PropTypes.func,
     createTask: PropTypes.func,
 };
 
-export default connect(null, { createTask })(NewTaskModal);
+export default connect(null, { createTask })(TaskModal);
