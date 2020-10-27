@@ -82,7 +82,7 @@ class TaskModal extends React.Component {
 
         return (
             <Dialog open={this.props.open} onClose={this.props.onClose} fullWidth maxWidth="sm">
-                <DialogTitle>New Subtask</DialogTitle>
+                <DialogTitle>{isSubtask ? 'New subtask' : 'New Task'}</DialogTitle>
                 <DialogContent>
                     <Grid container direction="column" spacing={1}>
                         <Grid item xs={12}>

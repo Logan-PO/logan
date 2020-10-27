@@ -5,10 +5,11 @@ import { connect } from 'react-redux';
 import { dateUtils } from '@logan/core';
 import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { getTasksSelectors, fetchTasks, createTask, deleteTask, compareDueDates } from '../../store/tasks';
+import { getTasksSelectors, deleteTask, compareDueDates } from '../../store/tasks';
 import TaskCell from './task-cell';
 import '../shared/list.scss';
 import styles from './tasks-list.module.scss';
+import TaskModal from './task-modal';
 
 class TasksList extends React.Component {
     constructor(props) {
@@ -17,18 +18,13 @@ class TasksList extends React.Component {
         this.didSelectTask = this.didSelectTask.bind(this);
         this.didDeleteTask = this.didDeleteTask.bind(this);
         this.toggleCompletedTasks = this.toggleCompletedTasks.bind(this);
+        this.openCreateModal = this.openCreateModal.bind(this);
+        this.closeCreateModal = this.closeCreateModal.bind(this);
 
         this.state = {
             showingCompletedTasks: false,
             selectedTid: undefined,
-        };
-    }
-
-    randomTask() {
-        return {
-            title: 'New task',
-            dueDate: 'asap',
-            priority: 0,
+            newTaskModalOpen: false,
         };
     }
 
@@ -42,6 +38,14 @@ class TasksList extends React.Component {
         // TODO: Select next task
         this.setState(() => ({ selectedTid: undefined }));
         this.props.onTaskSelected(undefined);
+    }
+
+    openCreateModal() {
+        this.setState({ newTaskModalOpen: true });
+    }
+
+    closeCreateModal() {
+        this.setState({ newTaskModalOpen: false });
     }
 
     toggleCompletedTasks(e) {
@@ -110,9 +114,10 @@ class TasksList extends React.Component {
                         </FormControl>
                     </Toolbar>
                 </AppBar>
-                <Fab className="add-button" color="secondary" onClick={() => this.props.createTask(this.randomTask())}>
+                <Fab className="add-button" color="secondary" onClick={this.openCreateModal}>
                     <AddIcon />
                 </Fab>
+                <TaskModal open={this.state.newTaskModalOpen} onClose={this.closeCreateModal} />
             </div>
         );
     }
@@ -121,8 +126,6 @@ class TasksList extends React.Component {
 TasksList.propTypes = {
     tids: PropTypes.array,
     getTask: PropTypes.func,
-    fetchTasks: PropTypes.func,
-    createTask: PropTypes.func,
     deleteTask: PropTypes.func,
     onTaskSelected: PropTypes.func,
 };
@@ -136,6 +139,6 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = { fetchTasks, createTask, deleteTask };
+const mapDispatchToProps = { deleteTask };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksList);
