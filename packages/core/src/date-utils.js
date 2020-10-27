@@ -51,10 +51,29 @@ function readableDueDate(dueDate) {
 const DB_DATE_FORMAT = 'YYYY-M-D';
 const DB_TIME_FORMAT = 'HH:mm';
 const DB_DATETIME_FORMAT = 'YYYY-M-D H:m';
-
+const dayOfWeekToWeekday = dayOfWeek => {
+    switch (dayOfWeek) {
+        case 0:
+            return 'Sunday';
+        case 1:
+            return 'Monday';
+        case 2:
+            return 'Tuesday';
+        case 3:
+            return 'Wednesday';
+        case 4:
+            return 'Thursday';
+        case 5:
+            return 'Friday';
+        case 6:
+            return 'Saturday';
+        default:
+            return undefined;
+    }
+};
 module.exports = {
     dayjs,
-    constants: { DB_DATE_FORMAT, DB_TIME_FORMAT, DB_DATETIME_FORMAT },
+    constants: { DB_DATE_FORMAT, DB_TIME_FORMAT, DB_DATETIME_FORMAT, dayOfWeekToWeekday },
     compareDates,
     humanReadableDate,
     dueDateIsDate,

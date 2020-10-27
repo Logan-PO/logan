@@ -12,7 +12,12 @@ import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/task
 export class OverviewCell extends React.Component {
     constructor(props) {
         super(props);
-        this.type = this.props.selectAssignmentFromStore(this.props.eid) ? 'assignment' : 'task';
+        if (this.props.selectAssignmentFromStore(this.props.eid)) this.type = 'assignment';
+        else if (this.props.selectTaskFromStore(this.props.eid)) this.type = 'task';
+        else this.type = 'section';
+        this.determinePrimaryFormatting = this.determinePrimaryFormatting.bind(this);
+        this.determineSecondaryFormatting = this.determineSecondaryFormatting.bind(this);
+
         this.state = {
             event:
                 this.type === 'assignment'
@@ -21,7 +26,7 @@ export class OverviewCell extends React.Component {
         };
     }
 
-    render() {
+    determinePrimaryFormatting(type) {
         const assignment = _.defaultTo(this.props.getAssignment(_.get(this.state.event, 'aid')), undefined);
         const course = assignment
             ? this.props.getCourse(assignment.cid)
@@ -29,37 +34,60 @@ export class OverviewCell extends React.Component {
 
         const needsUpperLabel = course || assignment;
         const hasBoth = course && assignment;
+        switch (type) {
+            case 'assignment':
+                return (
+                    <React.Fragment>
+                        {course && (
+                            <div className={globalStyles.cellUpperLabel}>
+                                <CourseLabel cid={course.cid} />
+                            </div>
+                        )}
+                        <div>{_.get(this.state, 'event.title')}</div>
+                    </React.Fragment>
+                );
+            case 'task':
+                return (
+                    <React.Fragment>
+                        {needsUpperLabel && (
+                            <div className={globalStyles.cellUpperLabel}>
+                                {course && <CourseLabel cid={course.cid} />}
+                                {assignment && (
+                                    <Typography className={globalStyles.assignmentLabel}>
+                                        {(hasBoth && '/') + assignment.title}
+                                    </Typography>
+                                )}
+                            </div>
+                        )}
+                        <div>{_.get(this.state, 'event.title')}</div>
+                    </React.Fragment>
+                );
+            case 'section':
+                return (
+                    <React.Fragment>
+                        {course && (
+                            <div className={globalStyles.cellUpperLabel}>
+                                <CourseLabel cid={course.cid} />
+                            </div>
+                        )}
+                        <div>{_.get(this.state, 'event.title')}</div>
+                    </React.Fragment>
+                );
+            default:
+                return undefined;
+        }
+    }
+
+    determineSecondaryFormatting(type) {
+        return type === 'section' ? _.get(this.state, 'event.location') : _.get(this.state, 'event.description');
+    }
+    render() {
         return (
             <div className="list-cell">
                 <ListItem>
                     <ListItemText
-                        primary={
-                            this.type === 'assignment' ? (
-                                <React.Fragment>
-                                    {course && (
-                                        <div className={globalStyles.cellUpperLabel}>
-                                            <CourseLabel cid={course.cid} />
-                                        </div>
-                                    )}
-                                    <div>{_.get(this.state, 'event.title')}</div>
-                                </React.Fragment>
-                            ) : (
-                                <React.Fragment>
-                                    {needsUpperLabel && (
-                                        <div className={globalStyles.cellUpperLabel}>
-                                            {course && <CourseLabel cid={course.cid} />}
-                                            {assignment && (
-                                                <Typography className={globalStyles.assignmentLabel}>
-                                                    {(hasBoth && '/') + assignment.title}
-                                                </Typography>
-                                            )}
-                                        </div>
-                                    )}
-                                    <div>{_.get(this.state, 'event.title')}</div>
-                                </React.Fragment>
-                            )
-                        }
-                        secondary={_.get(this.state, 'event.description')}
+                        primary={this.determinePrimaryFormatting(this.type)}
+                        secondary={this.determineSecondaryFormatting(this.type)}
                     />
                 </ListItem>
             </div>

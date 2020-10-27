@@ -1,11 +1,14 @@
+//import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, Box } from '@material-ui/core';
 import * as dateUtils from '@logan/core/src/date-utils';
+//import { dayOfWeekToWeekday } from '@logan/core/src/date-utils';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
 import './overview-list.module.scss';
 import { fetchTasks, getTasksSelectors, compareDueDates } from '../../store/tasks';
+//import { getScheduleSelectors } from '../../store/schedule';
 import OverviewCell from './overview-cell';
 
 class OverviewScheduleList extends React.Component {
@@ -49,12 +52,16 @@ OverviewScheduleList.propTypes = {
 };
 
 const getID = scheduleEvent => {
-    return scheduleEvent.aid ? scheduleEvent.aid : scheduleEvent.tid;
+    if (scheduleEvent.aid) return scheduleEvent.aid;
+    else if (scheduleEvent.tid) return scheduleEvent.tid;
+    else return scheduleEvent.cid;
 };
 
 const mapStateToProps = state => {
     const assignmentSelectors = getAssignmentsSelectors(state.assignments);
     const taskSelectors = getTasksSelectors(state.tasks);
+    //const scheduleSelectors = getScheduleSelectors(state.schedule);
+
     const eventSelectors = [];
 
     for (const task of taskSelectors.selectAll()) {
@@ -64,6 +71,13 @@ const mapStateToProps = state => {
     for (const assignment of assignmentSelectors.selectAll()) {
         eventSelectors.push(assignment);
     }
+    /*    for (const section of scheduleSelectors.baseSelectors.sections.selectAll()) {
+
+        if (_.isMatch(section.daysOfWeek, dateUtils.dayjs().weekday())) {
+            eventSelectors.push(section);
+            console.log(`eventSelector: ${eventSelectors}`);
+        }
+    }*/
 
     const eventSections = {};
     for (const scheduleEvent of eventSelectors) {
