@@ -16,7 +16,6 @@ import { getScheduleSelectors } from '../../store/schedule';
 import { getAssignmentsSelectors } from '../../store/assignments';
 import { CourseLabel, PriorityDisplay } from '../shared';
 import { Checkbox } from '../shared/controls';
-import globalStyles from '../../globals/global.scss';
 import styles from './task-cell.module.scss';
 
 class TaskCell extends React.Component {
@@ -85,11 +84,11 @@ class TaskCell extends React.Component {
                         primary={
                             <React.Fragment>
                                 {needsUpperLabel && (
-                                    <div className={globalStyles.cellUpperLabel}>
+                                    <div className="cell-upper-label">
                                         {course && <CourseLabel cid={course.cid} />}
                                         {assignment && (
-                                            <Typography className={globalStyles.assignmentLabel}>
-                                                {(hasBoth && '/') + assignment.title}
+                                            <Typography className="assignment-label">
+                                                {`${hasBoth ? ' / ' : ''}${assignment.title}`}
                                             </Typography>
                                         )}
                                     </div>

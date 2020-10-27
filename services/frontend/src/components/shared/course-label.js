@@ -11,7 +11,7 @@ class CourseLabel extends React.Component {
         const displayName = _.isEmpty(course.nickname) ? course.title : course.nickname;
 
         return (
-            <Typography style={{ fontWeight: 'bold', fontSize: '0.875rem', color: course.color }}>
+            <Typography className="course-label" style={{ color: course.color }}>
                 {displayName}
             </Typography>
         );

@@ -26,9 +26,9 @@ class TasksList extends React.Component {
 
     randomTask() {
         return {
-            title: 'Random task',
+            title: 'New task',
             dueDate: 'asap',
-            priority: 1,
+            priority: 0,
         };
     }
 
@@ -98,7 +98,7 @@ class TasksList extends React.Component {
                         })}
                     </List>
                 </div>
-                <AppBar position="relative" color="primary">
+                <AppBar position="relative" color="primary" className={styles.actionsBar}>
                     <Toolbar variant="dense">
                         <FormControl>
                             <FormControlLabel
