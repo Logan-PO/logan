@@ -31,6 +31,9 @@ class TasksList extends React.Component {
 
     componentDidMount() {
         if (this.props.shouldGoToTask) {
+            const selectedTask = this.props.getTask(this.props.shouldGoToTask);
+
+            this.setState({ showingCompletedTasks: selectedTask.complete });
             this.didSelectTask(this.props.shouldGoToTask);
             this.props.setShouldGoToTask(undefined);
         }
