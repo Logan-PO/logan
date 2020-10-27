@@ -1,6 +1,25 @@
 @import '../../globals/global';
 
+%list-shared {
+    .list-cell {
+        .actions {
+            display: none;
+        }
+
+        &:hover {
+            .actions {
+                display: initial;
+            }
+        }
+    }
+}
+
+.basic-list {
+    @extend %list-shared;
+}
+
 .scrollable-list {
+    @extend %list-shared;
     height: 100%;
     flex-grow: 1;
     background: white;
@@ -18,17 +37,5 @@
     .scroll-view {
         height: 100%;
         overflow-y: scroll;
-    }
-
-    .list-cell {
-        .actions {
-            display: none;
-        }
-
-        &:hover {
-            .actions {
-                display: initial;
-            }
-        }
     }
 }

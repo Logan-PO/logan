@@ -66,20 +66,22 @@ class TaskCell extends React.Component {
             ? this.props.getCourse(assignment.cid)
             : this.props.getCourse(_.get(this.state.task, 'cid'));
 
-        const needsUpperLabel = course || assignment;
+        const needsUpperLabel = !this.props.subtaskCell && (course || assignment);
         const hasBoth = course && assignment;
 
         return (
             <div className={`list-cell ${styles.taskCell}`}>
                 <PriorityDisplay priority={_.get(this.state.task, 'priority')} />
                 <ListItem button selected={this.props.selected} onClick={this.select}>
-                    <ListItemIcon>
-                        <Checkbox
-                            cid={_.get(this.state.task, 'cid')}
-                            checked={_.get(this.state, 'task.complete', false)}
-                            onChange={this.handleChange}
-                        />
-                    </ListItemIcon>
+                    {!this.props.subtaskCell && (
+                        <ListItemIcon>
+                            <Checkbox
+                                cid={_.get(this.state.task, 'cid')}
+                                checked={_.get(this.state, 'task.complete', false)}
+                                onChange={this.handleChange}
+                            />
+                        </ListItemIcon>
+                    )}
                     <ListItemText
                         primary={
                             <React.Fragment>
@@ -110,6 +112,7 @@ class TaskCell extends React.Component {
 }
 
 TaskCell.propTypes = {
+    subtaskCell: PropTypes.bool,
     tid: PropTypes.string,
     updateTaskLocal: PropTypes.func,
     selectTaskFromStore: PropTypes.func,

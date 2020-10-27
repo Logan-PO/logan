@@ -25,7 +25,12 @@ class SubtasksList extends React.Component {
 
     render() {
         return (
-            <List>{this.props.aid && this.props.tasks.map(task => <TaskCell key={task.tid} tid={task.tid} />)}</List>
+            <div className="basic-list">
+                <List>
+                    {this.props.aid &&
+                        this.props.tasks.map(task => <TaskCell key={task.tid} tid={task.tid} subtaskCell />)}
+                </List>
+            </div>
         );
     }
 }
