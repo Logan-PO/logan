@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { dateUtils } from '@logan/core';
 import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { getTasksSelectors, deleteTask, compareDueDates } from '../../store/tasks';
+import { getTasksSelectors, deleteTask, compareDueDates, setShouldGoToTask } from '../../store/tasks';
+import { setShouldGoToAssignment } from '../../store/assignments';
 import TaskCell from './task-cell';
 import '../shared/list.scss';
 import styles from './tasks-list.module.scss';
@@ -26,6 +27,13 @@ class TasksList extends React.Component {
             selectedTid: undefined,
             newTaskModalOpen: false,
         };
+    }
+
+    componentDidMount() {
+        if (this.props.shouldGoToTask) {
+            this.didSelectTask(this.props.shouldGoToTask);
+            this.props.setShouldGoToTask(undefined);
+        }
     }
 
     didSelectTask(tid) {
@@ -128,17 +136,21 @@ TasksList.propTypes = {
     getTask: PropTypes.func,
     deleteTask: PropTypes.func,
     onTaskSelected: PropTypes.func,
+    shouldGoToTask: PropTypes.string,
+    setShouldGoToTask: PropTypes.func,
+    setShouldGoToAssignment: PropTypes.func,
 };
 
 const mapStateToProps = state => {
     const selectors = getTasksSelectors(state.tasks);
 
     return {
+        shouldGoToTask: state.tasks.shouldGoToTask,
         tids: getTasksSelectors(state.tasks).selectIds(),
         getTask: selectors.selectById,
     };
 };
 
-const mapDispatchToProps = { deleteTask };
+const mapDispatchToProps = { deleteTask, setShouldGoToTask, setShouldGoToAssignment };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksList);

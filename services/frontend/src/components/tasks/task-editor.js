@@ -97,7 +97,7 @@ class TaskEditor extends Editor {
                                 <Grid item xs={12} lg={4}>
                                     <CoursePicker
                                         fullWidth
-                                        disabled={this.isEmpty() || relatedAssignment}
+                                        disabled={this.isEmpty() || !!relatedAssignment}
                                         value={cid || 'none'}
                                         onChange={this.handleChange.bind(this, 'cid')}
                                     />

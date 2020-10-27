@@ -9,6 +9,7 @@ import {
     getAssignmentsSelectors,
     deleteAssignment,
     compareDueDates,
+    setShouldGoToAssignment,
 } from '../../store/assignments';
 import AssignmentCell from './assignment-cell';
 import '../shared/list.scss';
@@ -23,6 +24,13 @@ class AssignmentsList extends React.Component {
         this.state = {
             selectedAssignment: undefined,
         };
+    }
+
+    componentDidMount() {
+        if (this.props.shouldGoToAssignment) {
+            this.didSelectAssignment(this.props.shouldGoToAssignment);
+            this.props.setShouldGoToAssignment(undefined);
+        }
     }
 
     randomAssignment() {
@@ -87,6 +95,8 @@ AssignmentsList.propTypes = {
     createAssignment: PropTypes.func,
     deleteAssignment: PropTypes.func,
     onAssignmentSelected: PropTypes.func,
+    shouldGoToAssignment: PropTypes.string,
+    setShouldGoToAssignment: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -98,10 +108,16 @@ const mapStateToProps = state => {
     }
 
     return {
+        shouldGoToAssignment: state.assignments.shouldGoToAssignment,
         sections: Object.entries(sections).sort((a, b) => compareDueDates(a[0], b[0])),
     };
 };
 
-const mapDispatchToProps = { fetchAssignments, createAssignment, deleteAssignment };
+const mapDispatchToProps = {
+    fetchAssignments,
+    createAssignment,
+    deleteAssignment,
+    setShouldGoToAssignment,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AssignmentsList);

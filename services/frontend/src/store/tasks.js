@@ -49,6 +49,9 @@ const { slice, asyncActions } = createAsyncSlice({
     name: 'tasks',
     initialState: adapter.getInitialState(),
     reducers: {
+        setShouldGoToTask(state, action) {
+            state.shouldGoToTask = action.payload;
+        },
         updateTaskLocal: adapter.updateOne,
         deleteTaskLocal: adapter.removeOne,
     },
@@ -74,6 +77,6 @@ const { slice, asyncActions } = createAsyncSlice({
 });
 
 export const getTasksSelectors = wrapAdapter(adapter);
-export const { updateTaskLocal, deleteTaskLocal } = slice.actions;
+export const { updateTaskLocal, deleteTaskLocal, setShouldGoToTask } = slice.actions;
 export const { fetchTasks, createTask, updateTask, deleteTask } = asyncActions;
 export default slice.reducer;
