@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { Grid, TextField, Button } from '@material-ui/core';
+import { Grid, TextField, Button, Typography } from '@material-ui/core';
 import {
     deleteAssignment,
     getAssignmentsSelectors,
@@ -85,10 +85,11 @@ class AssignmentEditor extends Editor {
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container direction="row" spacing={2}>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} lg={6}>
                                     <Grid container direction="column" spacing={2}>
                                         <Grid item xs={12}>
                                             <CoursePicker
+                                                fullWidth
                                                 disabled={this.isEmpty()}
                                                 value={_.get(this.state.assignment, 'cid', 'none')}
                                                 onChange={this.handleChange.bind(this, 'cid')}
@@ -104,17 +105,23 @@ class AssignmentEditor extends Editor {
                                         </Grid>
                                     </Grid>
                                 </Grid>
-                                <Grid item xs={6}>
-                                    Subtasks
-                                    <SubtasksList aid={this.props.aid} />
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        disableElevation
-                                        onClick={this.openNewTaskModal}
-                                    >
-                                        New subtask
-                                    </Button>
+                                <Grid item xs={12} lg={6}>
+                                    {!this.isEmpty() && (
+                                        <React.Fragment>
+                                            <Typography variant="overline">
+                                                <b>Subtasks</b>
+                                            </Typography>
+                                            <SubtasksList aid={this.props.aid} />
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                disableElevation
+                                                onClick={this.openNewTaskModal}
+                                            >
+                                                New subtask
+                                            </Button>
+                                        </React.Fragment>
+                                    )}
                                 </Grid>
                             </Grid>
                         </Grid>
