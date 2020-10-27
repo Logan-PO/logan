@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Grid } from '@material-ui/core';
 import { Page } from '../shared';
 import { fetchAssignments } from '../../store/assignments';
-import styles from '../assignments/assignments-page.module.scss';
+import styles from './overview-page.module.scss';
 import OverviewScheduleList from './overview-schedule-list';
 
 export class OverviewPage extends React.Component {
