@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader } from '@material-ui/core';
+import { List, Box } from '@material-ui/core';
 import * as dateUtils from '@logan/core/src/date-utils';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
 import '../shared/list.scss';
@@ -14,6 +14,11 @@ class OverviewScheduleList extends React.Component {
     }
 
     render() {
+        const defaultProps = {
+            bgcolor: '#b5b0b0',
+            m: 1,
+            border: 1,
+        };
         return (
             <div className="scrollable-list">
                 <div className="scroll-view">
@@ -22,7 +27,9 @@ class OverviewScheduleList extends React.Component {
                             const [dueDate, eids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader>{dueDate}</ListSubheader>
+                                    <Box borderColor="primary.main" {...defaultProps}>
+                                        {dueDate}
+                                    </Box>
                                     {eids.map(eid => (
                                         <OverviewCell key={eid} eid={eid} />
                                     ))}
