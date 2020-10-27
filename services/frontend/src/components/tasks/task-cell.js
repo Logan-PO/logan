@@ -22,15 +22,20 @@ import styles from './task-cell.module.scss';
 
 const {
     dayjs,
-    constants: { DB_DATETIME_FORMAT },
+    constants: { DB_DATE_FORMAT, DB_DATETIME_FORMAT },
 } = dateUtils;
 
 class TaskCell extends React.Component {
     constructor(props) {
         super(props);
+
         this.select = this.select.bind(this);
         this.deleted = this.deleted.bind(this);
         this.handleChange = this.handleChange.bind(this);
+
+        this.shouldShowOverdueLabel = this.shouldShowOverdueLabel.bind(this);
+        this.overdueLabelContent = this.overdueLabelContent.bind(this);
+
         this.state = {
             task: this.props.selectTaskFromStore(this.props.tid),
         };
@@ -71,6 +76,25 @@ class TaskCell extends React.Component {
         });
     }
 
+    shouldShowOverdueLabel() {
+        if (!this.props.showOverdueLabel) return false;
+        if (!dateUtils.dueDateIsDate(this.state.task.dueDate)) return false;
+
+        const dateValue = dayjs(this.state.task.dueDate, DB_DATE_FORMAT);
+        return dateValue.isBefore(dayjs(), 'day');
+    }
+
+    overdueLabelContent() {
+        const dateValue = dayjs(this.state.task.dueDate, DB_DATE_FORMAT);
+        const days = dayjs().diff(dateValue, 'days');
+
+        if (days === 1) {
+            return 'Due yesterday';
+        } else {
+            return `Due ${days} days ago`;
+        }
+    }
+
     render() {
         const assignment = this.props.getAssignment(_.get(this.state.task, 'aid'));
         const course = assignment
@@ -104,7 +128,12 @@ class TaskCell extends React.Component {
                                         )}
                                     </div>
                                 )}
-                                <div>{_.get(this.state, 'task.title')}</div>
+                                <Typography>{_.get(this.state, 'task.title')}</Typography>
+                                {this.shouldShowOverdueLabel() && (
+                                    <Typography variant="body2" color="error">
+                                        {this.overdueLabelContent()}
+                                    </Typography>
+                                )}
                             </React.Fragment>
                         }
                         secondary={_.get(this.state, 'task.description')}
@@ -122,6 +151,7 @@ class TaskCell extends React.Component {
 
 TaskCell.propTypes = {
     tid: PropTypes.string,
+    showOverdueLabel: PropTypes.bool,
     updateTaskLocal: PropTypes.func,
     selectTaskFromStore: PropTypes.func,
     getCourse: PropTypes.func,

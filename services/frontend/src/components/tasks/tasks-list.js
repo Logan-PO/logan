@@ -69,6 +69,7 @@ class TasksList extends React.Component {
                                         <TaskCell
                                             key={tid}
                                             tid={tid}
+                                            showOverdueLabel={!this.state.showingCompletedTasks}
                                             onSelect={this.didSelectTask}
                                             onDelete={this.didDeleteTask}
                                             selected={this.state.selectedTid === tid}
