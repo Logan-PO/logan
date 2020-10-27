@@ -5,12 +5,12 @@ import AddIcon from '@material-ui/icons/Add';
 import { List, ListSubheader, Fab } from '@material-ui/core';
 import {
     fetchAssignments,
-    createAssignment,
     getAssignmentsSelectors,
     deleteAssignment,
     compareDueDates,
     setShouldGoToAssignment,
 } from '../../store/assignments';
+import AssignmentModal from './assignment-modal';
 import AssignmentCell from './assignment-cell';
 import '../shared/list.scss';
 
@@ -20,9 +20,12 @@ class AssignmentsList extends React.Component {
 
         this.didSelectAssignment = this.didSelectAssignment.bind(this);
         this.didDeleteAssignment = this.didDeleteAssignment.bind(this);
+        this.openNewAssignmentModal = this.openNewAssignmentModal.bind(this);
+        this.closeNewAssignmentModal = this.closeNewAssignmentModal.bind(this);
 
         this.state = {
             selectedAssignment: undefined,
+            newAssignmentModalOpen: false,
         };
     }
 
@@ -33,25 +36,24 @@ class AssignmentsList extends React.Component {
         }
     }
 
-    randomAssignment() {
-        return {
-            class: 'PHYS',
-            title: 'Random Assignment',
-            desc: 'test',
-            dueDate: 'soon',
-            color: 'orange',
-        };
-    }
-
     didSelectAssignment(aid) {
         this.setState(() => ({ selectedAid: aid }));
         this.props.onAssignmentSelected(aid);
     }
+
     didDeleteAssignment(assignment) {
         this.props.deleteAssignment(assignment);
         // TODO: Select next assignment
         this.setState(() => ({ selectedAid: undefined }));
         this.props.onAssignmentSelected(undefined);
+    }
+
+    openNewAssignmentModal() {
+        this.setState({ newAssignmentModalOpen: true });
+    }
+
+    closeNewAssignmentModal() {
+        this.setState({ newAssignmentModalOpen: false });
     }
 
     render() {
@@ -78,13 +80,10 @@ class AssignmentsList extends React.Component {
                         })}
                     </List>
                 </div>
-                <Fab
-                    className="add-button"
-                    color="secondary"
-                    onClick={() => this.props.createAssignment(this.randomAssignment())}
-                >
+                <Fab className="add-button" color="secondary" onClick={this.openNewAssignmentModal}>
                     <AddIcon />
                 </Fab>
+                <AssignmentModal open={this.state.newAssignmentModalOpen} onClose={this.closeNewAssignmentModal} />
             </div>
         );
     }
@@ -92,7 +91,6 @@ class AssignmentsList extends React.Component {
 AssignmentsList.propTypes = {
     sections: PropTypes.arrayOf(PropTypes.array),
     fetchAssignments: PropTypes.func,
-    createAssignment: PropTypes.func,
     deleteAssignment: PropTypes.func,
     onAssignmentSelected: PropTypes.func,
     shouldGoToAssignment: PropTypes.string,
@@ -115,7 +113,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     fetchAssignments,
-    createAssignment,
     deleteAssignment,
     setShouldGoToAssignment,
 };

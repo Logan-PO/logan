@@ -13,33 +13,29 @@ import {
     Button,
     CircularProgress,
 } from '@material-ui/core';
-import { CoursePicker, DueDatePicker, PriorityPicker } from '../shared/controls';
-import { createTask } from '../../store/tasks';
-import styles from './task-modal.module.scss';
+import { CoursePicker, DueDatePicker } from '../shared/controls';
+import { createAssignment } from '../../store/assignments';
+import styles from '../tasks/task-modal.module.scss';
 
 const {
     dayjs,
     constants: { DB_DATE_FORMAT },
 } = dateUtils;
 
-class TaskModal extends React.Component {
+class AssignmentModal extends React.Component {
     constructor(props) {
         super(props);
 
         this.close = this.close.bind(this);
-        this.createTask = this.createTask.bind(this);
-
-        const newTitle = props.aid ? 'New subtask' : 'New task';
+        this.createAssignment = this.createAssignment.bind(this);
 
         this.state = {
             fakeId: Math.random().toString(),
             isCreating: false,
             showLoader: false,
-            task: {
-                aid: props.aid,
-                title: newTitle,
+            assignment: {
+                title: 'New assignment',
                 dueDate: dayjs().format(DB_DATE_FORMAT),
-                priority: 0,
             },
         };
     }
@@ -51,17 +47,13 @@ class TaskModal extends React.Component {
     }
 
     componentWillOpen() {
-        const newTitle = this.props.aid ? 'New subtask' : 'New task';
-
         this.setState({
             fakeId: Math.random().toString(),
             isCreating: false,
             showLoader: false,
-            task: {
-                aid: this.props.aid,
-                title: newTitle,
+            assignment: {
+                title: 'New assignment',
                 dueDate: dayjs().format(DB_DATE_FORMAT),
-                priority: 0,
             },
         });
     }
@@ -70,34 +62,32 @@ class TaskModal extends React.Component {
         this.props.onClose();
     }
 
-    async createTask() {
+    async createAssignment() {
         this.setState({ isCreating: true });
         const id = setTimeout(() => this.setState({ showLoader: true }), 500);
-        await this.props.createTask(this.state.task);
+        await this.props.createAssignment(this.state.assignment);
         clearTimeout(id);
         this.setState({ showLoader: false, isCreating: false });
         this.props.onClose();
     }
 
     handleChange(prop, e) {
-        const task = this.state.task;
+        const assignment = this.state.assignment;
 
         if (prop === 'dueDate') {
-            task[prop] = e;
+            assignment[prop] = e;
         } else if (prop === 'cid') {
             const cid = e.target.value;
-            if (cid === 'none') task[prop] = undefined;
-            else task[prop] = e.target.value;
+            if (cid === 'none') assignment[prop] = undefined;
+            else assignment[prop] = e.target.value;
         } else {
-            task[prop] = e.target.value;
+            assignment[prop] = e.target.value;
         }
 
-        this.setState({ task });
+        this.setState({ assignment });
     }
 
     render() {
-        const isSubtask = !!this.props.aid;
-
         return (
             <Dialog
                 open={this.props.open}
@@ -107,14 +97,14 @@ class TaskModal extends React.Component {
                 disableBackdropClick={this.state.isCreating}
                 disableEscapeKeyDown
             >
-                <DialogTitle>{isSubtask ? 'New Subtask' : 'New Task'}</DialogTitle>
+                <DialogTitle>New Assignment</DialogTitle>
                 <DialogContent>
-                    <Grid container direction="column" spacing={1}>
+                    <Grid container direction="column" spacing={2}>
                         <Grid item xs={12}>
                             <TextField
                                 label="Title"
                                 onChange={this.handleChange.bind(this, 'title')}
-                                value={_.get(this.state.task, 'title')}
+                                value={_.get(this.state.assignment, 'title')}
                                 fullWidth
                             />
                         </Grid>
@@ -123,32 +113,24 @@ class TaskModal extends React.Component {
                                 label="Description"
                                 multiline
                                 onChange={this.handleChange.bind(this, 'description')}
-                                value={_.get(this.state.task, 'description')}
+                                value={_.get(this.state.assignment, 'description')}
                                 fullWidth
                             />
                         </Grid>
-                        {!isSubtask && (
-                            <Grid item xs={12}>
-                                <CoursePicker
-                                    value={_.get(this.state.task, 'cid', 'none')}
-                                    onChange={this.handleChange.bind(this, 'cid')}
-                                    fullWidth
-                                />
-                            </Grid>
-                        )}
                         <Grid item xs={12}>
-                            <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
+                            <Grid container spacing={2}>
                                 <Grid item xs={6}>
-                                    <DueDatePicker
-                                        entityId={this.state.fakeId}
-                                        value={_.get(this.state.task, 'dueDate')}
-                                        onChange={this.handleChange.bind(this, 'dueDate')}
+                                    <CoursePicker
+                                        value={_.get(this.state.assignment, 'cid', 'none')}
+                                        onChange={this.handleChange.bind(this, 'cid')}
+                                        fullWidth
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <PriorityPicker
-                                        value={_.get(this.state.task, 'priority')}
-                                        onChange={this.handleChange.bind(this, 'priority')}
+                                    <DueDatePicker
+                                        entityId={this.state.fakeId}
+                                        value={_.get(this.state.assignment, 'dueDate')}
+                                        onChange={this.handleChange.bind(this, 'dueDate')}
                                     />
                                 </Grid>
                             </Grid>
@@ -161,7 +143,7 @@ class TaskModal extends React.Component {
                     </Button>
                     <div className={styles.wrapper}>
                         <Button
-                            onClick={this.createTask}
+                            onClick={this.createAssignment}
                             variant="contained"
                             color="primary"
                             disabled={this.state.showLoader}
@@ -177,11 +159,10 @@ class TaskModal extends React.Component {
     }
 }
 
-TaskModal.propTypes = {
-    aid: PropTypes.string,
+AssignmentModal.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
-    createTask: PropTypes.func,
+    createAssignment: PropTypes.func,
 };
 
-export default connect(null, { createTask })(TaskModal);
+export default connect(null, { createAssignment })(AssignmentModal);
