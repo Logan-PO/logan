@@ -11,6 +11,7 @@ import {
     IconButton,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
 import { getAssignmentsSelectors } from '../../store/assignments';
@@ -18,6 +19,11 @@ import { CourseLabel, PriorityDisplay } from '../shared';
 import { Checkbox } from '../shared/controls';
 import globalStyles from '../../globals/global.scss';
 import styles from './task-cell.module.scss';
+
+const {
+    dayjs,
+    constants: { DB_DATETIME_FORMAT },
+} = dateUtils;
 
 class TaskCell extends React.Component {
     constructor(props) {
@@ -50,6 +56,10 @@ class TaskCell extends React.Component {
         const changes = {
             complete: !this.state.task.complete,
         };
+
+        if (changes.complete) {
+            changes.completionDate = dayjs().format(DB_DATETIME_FORMAT);
+        }
 
         this.props.updateTaskLocal({
             id: this.props.tid,
