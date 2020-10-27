@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -48,7 +49,11 @@ class TasksList extends React.Component {
     }
 
     render() {
-        const tasks = this.props.tids.map(tid => this.props.getTask(tid));
+        const tasks = _.filter(
+            this.props.tids.map(tid => this.props.getTask(tid)),
+            task => task.complete === this.state.showingCompletedTasks
+        );
+
         const sections = getSections(tasks, this.state.showingCompletedTasks);
 
         return (
