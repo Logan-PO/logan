@@ -3,10 +3,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { List } from '@material-ui/core';
+import { Paper, List } from '@material-ui/core';
 import TaskCell from '../tasks/task-cell';
 import { getTasksSelectors, createTask, deleteTask } from '../../store/tasks';
 import '../shared/list.scss';
+import './subtasks-list.scss';
 
 const {
     dayjs,
@@ -24,13 +25,19 @@ class SubtasksList extends React.Component {
     }
 
     render() {
+        if (!this.props.tasks.length) {
+            return <div />;
+        }
+
         return (
-            <div className="basic-list">
-                <List>
-                    {this.props.aid &&
-                        this.props.tasks.map(task => <TaskCell key={task.tid} tid={task.tid} subtaskCell />)}
-                </List>
-            </div>
+            <Paper variant="outlined" className="subtasks-list">
+                <div className="basic-list">
+                    <List>
+                        {this.props.aid &&
+                            this.props.tasks.map(task => <TaskCell key={task.tid} tid={task.tid} subtaskCell />)}
+                    </List>
+                </div>
+            </Paper>
         );
     }
 }
