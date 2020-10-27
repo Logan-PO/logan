@@ -24,7 +24,7 @@ class OverviewScheduleList extends React.Component {
                                 <React.Fragment key={section[0]}>
                                     <ListSubheader>{dueDate}</ListSubheader>
                                     {eids.map(eid => (
-                                        <OverviewCell key={eid} eid={eid} selected={() => {}} />
+                                        <OverviewCell key={eid} eid={eid} />
                                     ))}
                                 </React.Fragment>
                             );
@@ -39,10 +39,10 @@ OverviewScheduleList.propTypes = {
     sections: PropTypes.arrayOf(PropTypes.array),
     fetchAssignments: PropTypes.func,
     fetchTasks: PropTypes.func,
-}; //TODO Make it so that it chooses to render the correct cell based off of the type of ID
+};
 
 const getID = scheduleEvent => {
-    return scheduleEvent.aid === null ? scheduleEvent.tid : scheduleEvent.aid;
+    return scheduleEvent.aid ? scheduleEvent.aid : scheduleEvent.tid;
 };
 
 const mapStateToProps = state => {

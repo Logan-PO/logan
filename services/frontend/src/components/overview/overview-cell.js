@@ -12,7 +12,7 @@ import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/task
 export class OverviewCell extends React.Component {
     constructor(props) {
         super(props);
-        this.type = this.props.selectAssignmentFromStore(this.props.eid) === null ? 'task' : 'assignment';
+        this.type = this.props.selectAssignmentFromStore(this.props.eid) ? 'assignment' : 'task';
         this.state = {
             event:
                 this.type === 'assignment'
@@ -22,7 +22,7 @@ export class OverviewCell extends React.Component {
     }
 
     render() {
-        const assignment = this.props.getAssignment(_.get(this.state.event, 'aid'));
+        const assignment = _.defaultTo(this.props.getAssignment(_.get(this.state.event, 'aid')), undefined);
         const course = assignment
             ? this.props.getCourse(assignment.cid)
             : this.props.getCourse(_.get(this.state.event, 'cid'));
@@ -59,11 +59,7 @@ export class OverviewCell extends React.Component {
                                 </React.Fragment>
                             )
                         }
-                        secondary={
-                            this.type === 'assignment'
-                                ? _.get(this.state, 'event.description')
-                                : _.get(this.state, 'event.description')
-                        }
+                        secondary={_.get(this.state, 'event.description')}
                     />
                 </ListItem>
             </div>
