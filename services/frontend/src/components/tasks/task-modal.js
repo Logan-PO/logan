@@ -33,6 +33,7 @@ class TaskModal extends React.Component {
 
         this.state = {
             fakeId: Math.random().toString(),
+            isCreating: false,
             showLoader: false,
             task: {
                 aid: props.aid,
@@ -54,6 +55,7 @@ class TaskModal extends React.Component {
 
         this.setState({
             fakeId: Math.random().toString(),
+            isCreating: false,
             showLoader: false,
             task: {
                 aid: this.props.aid,
@@ -69,10 +71,11 @@ class TaskModal extends React.Component {
     }
 
     async createTask() {
+        this.setState({ isCreating: true });
         const id = setTimeout(() => this.setState({ showLoader: true }), 500);
         await this.props.createTask(this.state.task);
         clearTimeout(id);
-        this.setState({ showLoader: false });
+        this.setState({ showLoader: false, isCreating: false });
         this.props.onClose();
     }
 
@@ -96,7 +99,14 @@ class TaskModal extends React.Component {
         const isSubtask = !!this.props.aid;
 
         return (
-            <Dialog open={this.props.open} onClose={this.props.onClose} fullWidth maxWidth="sm">
+            <Dialog
+                open={this.props.open}
+                onClose={this.props.onClose}
+                fullWidth
+                maxWidth="sm"
+                disableBackdropClick={this.state.isCreating}
+                disableEscapeKeyDown
+            >
                 <DialogTitle>{isSubtask ? 'New subtask' : 'New Task'}</DialogTitle>
                 <DialogContent>
                     <Grid container direction="column" spacing={1}>
