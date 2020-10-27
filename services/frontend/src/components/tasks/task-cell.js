@@ -10,6 +10,7 @@ import {
     ListItemSecondaryAction,
     IconButton,
 } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
@@ -30,11 +31,15 @@ class TaskCell extends React.Component {
     }
 
     select() {
-        this.props.onSelect(this.props.tid);
+        if (this.props.onSelect) {
+            this.props.onSelect(this.props.tid);
+        }
     }
 
     deleted() {
-        this.props.onDelete(this.state.task);
+        if (this.props.onDelete) {
+            this.props.onDelete(this.state.task);
+        }
     }
 
     componentDidUpdate() {
@@ -101,6 +106,11 @@ class TaskCell extends React.Component {
                         secondary={_.get(this.state, 'task.description')}
                     />
                     <ListItemSecondaryAction className="actions">
+                        {this.props.subtaskCell && (
+                            <IconButton edge="end">
+                                <EditIcon fontSize="small" />
+                            </IconButton>
+                        )}
                         <IconButton edge="end" onClick={this.deleted}>
                             <DeleteIcon color="error" />
                         </IconButton>
