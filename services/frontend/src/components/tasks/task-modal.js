@@ -3,9 +3,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { Dialog, DialogTitle, DialogContent, Grid, TextField, DialogActions, Button } from '@material-ui/core';
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    Grid,
+    TextField,
+    DialogActions,
+    Button,
+    CircularProgress,
+} from '@material-ui/core';
 import { CoursePicker, DueDatePicker, PriorityPicker } from '../shared/controls';
 import { createTask } from '../../store/tasks';
+import styles from './task-modal.module.scss';
 
 const {
     dayjs,
@@ -23,6 +33,7 @@ class TaskModal extends React.Component {
 
         this.state = {
             fakeId: Math.random().toString(),
+            showLoader: false,
             task: {
                 aid: props.aid,
                 title: newTitle,
@@ -43,6 +54,7 @@ class TaskModal extends React.Component {
 
         this.setState({
             fakeId: Math.random().toString(),
+            showLoader: false,
             task: {
                 aid: this.props.aid,
                 title: newTitle,
@@ -57,7 +69,10 @@ class TaskModal extends React.Component {
     }
 
     async createTask() {
+        const id = setTimeout(() => this.setState({ showLoader: true }), 500);
         await this.props.createTask(this.state.task);
+        clearTimeout(id);
+        this.setState({ showLoader: false });
         this.props.onClose();
     }
 
@@ -134,9 +149,18 @@ class TaskModal extends React.Component {
                     <Button onClick={this.close} disableElevation>
                         Cancel
                     </Button>
-                    <Button onClick={this.createTask} variant="contained" color="primary" disableElevation>
-                        Create
-                    </Button>
+                    <div className={styles.wrapper}>
+                        <Button
+                            onClick={this.createTask}
+                            variant="contained"
+                            color="primary"
+                            disabled={this.state.showLoader}
+                            disableElevation
+                        >
+                            Create
+                        </Button>
+                        {this.state.showLoader && <CircularProgress size={24} className={styles.buttonProgress} />}
+                    </div>
                 </DialogActions>
             </Dialog>
         );
