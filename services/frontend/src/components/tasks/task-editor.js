@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Grid, TextField } from '@material-ui/core';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
+import { getAssignmentsSelectors } from '../../store/assignments';
 import Editor from '../shared/editor';
 import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox } from '../shared/controls';
+import AssignmentPreview from './assignment-preview';
 
 class TaskEditor extends Editor {
     constructor(props) {
@@ -45,16 +47,24 @@ class TaskEditor extends Editor {
     }
 
     render() {
+        const relatedAssignment = this.props.selectAssignment(_.get(this.state.task, 'aid'));
+        const cid = relatedAssignment ? relatedAssignment.cid : _.get(this.state.task, 'cid');
+
         return (
             <div className="editor">
                 <div className="scroll-view">
                     <Grid container spacing={2} direction="column">
+                        {relatedAssignment && (
+                            <Grid item xs={12}>
+                                <AssignmentPreview aid={relatedAssignment.aid} />
+                            </Grid>
+                        )}
                         <Grid item xs={12}>
                             <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">
                                 <Grid item>
                                     <Checkbox
                                         disabled={this.isEmpty()}
-                                        cid={_.get(this.state.task, 'cid')}
+                                        cid={cid}
                                         checked={_.get(this.state.task, 'complete', false)}
                                         onChange={this.handleChange.bind(this, 'complete')}
                                     />
@@ -84,8 +94,8 @@ class TaskEditor extends Editor {
                         </Grid>
                         <Grid item xs={12}>
                             <CoursePicker
-                                disabled={this.isEmpty()}
-                                value={_.get(this.state.task, 'cid', 'none')}
+                                disabled={this.isEmpty() || relatedAssignment}
+                                value={cid || 'none'}
                                 onChange={this.handleChange.bind(this, 'cid')}
                             />
                         </Grid>
@@ -119,12 +129,14 @@ TaskEditor.propTypes = {
     tid: PropTypes.string,
     updateTaskLocal: PropTypes.func,
     selectTask: PropTypes.func,
+    selectAssignment: PropTypes.func,
     updateTask: PropTypes.func,
 };
 
 const mapStateToProps = state => {
     return {
         selectTask: getTasksSelectors(state.tasks).selectById,
+        selectAssignment: getAssignmentsSelectors(state.assignments).selectById,
     };
 };
 
