@@ -69,9 +69,13 @@ class TaskCell extends React.Component {
             changes,
         });
 
+        const afterUpdates = _.merge({}, this.state.task, changes);
+
         this.setState({
-            task: _.merge({}, this.state.task, changes),
+            task: afterUpdates,
         });
+
+        this.props.updateTask(afterUpdates);
     }
 
     render() {
@@ -133,6 +137,7 @@ class TaskCell extends React.Component {
 TaskCell.propTypes = {
     subtaskCell: PropTypes.bool,
     tid: PropTypes.string,
+    updateTask: PropTypes.func,
     updateTaskLocal: PropTypes.func,
     selectTaskFromStore: PropTypes.func,
     getCourse: PropTypes.func,
