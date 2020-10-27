@@ -16,7 +16,7 @@ class AccountDialog extends React.Component {
 
     logout() {
         this.props.setLoginStage(LOGIN_STAGE.LOGIN);
-        navigate('/login');
+        navigate('/');
     }
 
     render() {

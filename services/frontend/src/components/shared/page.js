@@ -16,7 +16,7 @@ class Page extends React.Component {
         if (this.props.loginStage === LOGIN_STAGE.DONE && !this.props.currentUser) {
             this.props.fetchSelf();
         } else if (this.props.loginStage !== LOGIN_STAGE.DONE) {
-            navigate('/login');
+            navigate('/');
         }
     }
 

@@ -61,7 +61,7 @@ const { slice, asyncActions } = createAsyncSlice({
             fn: api.createNewUser,
             success(state, action) {
                 const response = action.payload;
-                api.setBearerToken(response.token);
+                api.setBearerToken(response.bearer);
                 state.currentStage = LOGIN_STAGE.LOGGED_IN;
             },
         },

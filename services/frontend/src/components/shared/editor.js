@@ -65,6 +65,11 @@ class Editor extends React.Component {
         changes[prop] = e.target.value;
     }
 
+    componentDidMount() {
+        const entity = this.selectEntity(this.props[this._id]);
+        this.updateCurrentEntityState(entity);
+    }
+
     componentDidUpdate(prevProps) {
         if (this.props[this._id] !== prevProps[this._id]) {
             // If the user has selected a new task and updates to the existing task haven't been saved yet, save them

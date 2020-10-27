@@ -33,28 +33,26 @@ class GoogleBtn extends React.Component {
     Rendering the button and giving appropriate methods to be called on success and failure
      */
     render() {
-        return (
-            <div>
-                {this.props.isLoggedIn ? (
-                    //Logout button and fields
-                    <GoogleLogout
-                        clientId={clientID}
-                        buttonText="Logout"
-                        onLogoutSuccess={this.onLogout}
-                        onFailure={handleLogoutFailure}
-                    />
-                ) : (
-                    //Login button and fields
-                    <GoogleLogin
-                        clientId={clientID}
-                        buttonText="Login"
-                        onSuccess={this.onLogin}
-                        onFailure={handleLoginFailure}
-                        cookiePolicy={'single_host_origin'}
-                    />
-                )}
-            </div>
-        );
+        if (this.props.isLoggedIn) {
+            return (
+                <GoogleLogout
+                    clientId={clientID}
+                    buttonText="Logout"
+                    onLogoutSuccess={this.onLogout}
+                    onFailure={handleLogoutFailure}
+                />
+            );
+        } else {
+            return (
+                <GoogleLogin
+                    clientId={clientID}
+                    buttonText="Login"
+                    onSuccess={this.onLogin}
+                    onFailure={handleLoginFailure}
+                    cookiePolicy={'single_host_origin'}
+                />
+            );
+        }
     }
 }
 

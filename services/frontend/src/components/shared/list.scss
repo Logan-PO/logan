@@ -5,6 +5,7 @@
     flex-grow: 1;
     background: white;
     overflow: hidden;
+    border-right: solid 1px $border;
 
     .add-button {
         position: relative;
@@ -17,7 +18,6 @@
     .scroll-view {
         height: 100%;
         overflow-y: scroll;
-        border-right: solid 1px $border;
     }
 
     .list-cell {
