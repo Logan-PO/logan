@@ -94,7 +94,7 @@ class TaskEditor extends Editor {
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
-                                <Grid item xs={4}>
+                                <Grid item xs={12} lg={4}>
                                     <CoursePicker
                                         fullWidth
                                         disabled={this.isEmpty() || relatedAssignment}
@@ -102,7 +102,7 @@ class TaskEditor extends Editor {
                                         onChange={this.handleChange.bind(this, 'cid')}
                                     />
                                 </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={12} lg={4}>
                                     <DueDatePicker
                                         entityId={_.get(this.state.task, 'tid')}
                                         disabled={this.isEmpty()}
@@ -110,7 +110,7 @@ class TaskEditor extends Editor {
                                         onChange={this.handleChange.bind(this, 'dueDate')}
                                     />
                                 </Grid>
-                                <Grid item xs={4}>
+                                <Grid item xs={12} lg={4}>
                                     <PriorityPicker
                                         disabled={this.isEmpty()}
                                         value={_.get(this.state.task, 'priority')}
