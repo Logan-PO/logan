@@ -1,14 +1,13 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dateUtils } from '@logan/core';
 import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { getTasksSelectors, fetchTasks, createTask, deleteTask, compareDueDates } from '../../store/tasks';
+import { getTasksSelectors, fetchTasks, createTask, deleteTask } from '../../store/tasks';
 import TaskCell from './task-cell';
 import '../shared/list.scss';
 import styles from './tasks-list.module.scss';
+import { getSections } from './sorting';
 
 class TasksList extends React.Component {
     constructor(props) {
@@ -48,32 +47,9 @@ class TasksList extends React.Component {
         this.setState({ showingCompletedTasks: e.target.checked });
     }
 
-    sectionsToShow() {
-        const tasks = this.props.tids
-            .map(tid => this.props.getTask(tid))
-            .filter(task => task.complete === this.state.showingCompletedTasks);
-
-        const sections = {};
-        for (const task of tasks) {
-            const key = dateUtils.dueDateIsDate(task.dueDate) ? dateUtils.dayjs(task.dueDate) : task.dueDate;
-            if (sections[key]) sections[key].push(task.tid);
-            else sections[key] = [task.tid];
-        }
-
-        // TODO: Better sorting
-        if (this.state.showingCompletedTasks) {
-            return _.entries(sections)
-                .sort((a, b) => compareDueDates(b[0], a[0]))
-                .map(([key, value]) => [dateUtils.readableDueDate(key), value]);
-        } else {
-            return _.entries(sections)
-                .sort((a, b) => compareDueDates(a[0], b[0]))
-                .map(([key, value]) => [dateUtils.readableDueDate(key), value]);
-        }
-    }
-
     render() {
-        const sections = this.sectionsToShow();
+        const tasks = this.props.tids.map(tid => this.props.getTask(tid));
+        const sections = getSections(tasks, this.state.showingCompletedTasks);
 
         return (
             <div className="scrollable-list">
