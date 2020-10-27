@@ -6,7 +6,7 @@ import * as dateUtils from '@logan/core/src/date-utils';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
 import '../shared/list.scss';
 import { fetchTasks, getTasksSelectors, compareDueDates } from '../../store/tasks';
-import OverviewAssignmentCell from './overview-assignment-cell';
+import OverviewCell from './overview-cell';
 
 class OverviewScheduleList extends React.Component {
     constructor(props) {
@@ -19,12 +19,12 @@ class OverviewScheduleList extends React.Component {
                 <div className="scroll-view">
                     <List>
                         {this.props.sections.map(section => {
-                            const [dueDate, ids] = section;
+                            const [dueDate, eids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
                                     <ListSubheader>{dueDate}</ListSubheader>
-                                    {ids.map(aid => (
-                                        <OverviewAssignmentCell key={aid} aid={aid} selected={() => {}} />
+                                    {eids.map(eid => (
+                                        <OverviewCell key={eid} eid={eid} selected={() => {}} />
                                     ))}
                                 </React.Fragment>
                             );

@@ -9,7 +9,7 @@ import { CourseLabel } from '../shared';
 import globalStyles from '../../globals/global.scss';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
 
-export class OverviewAssignmentCell extends React.Component {
+export class OverviewCell extends React.Component {
     constructor(props) {
         super(props);
         this.type = this.props.selectAssignmentFromStore(this.props.eid) === null ? 'task' : 'assignment';
@@ -70,7 +70,7 @@ export class OverviewAssignmentCell extends React.Component {
         );
     }
 }
-OverviewAssignmentCell.propTypes = {
+OverviewCell.propTypes = {
     eid: PropTypes.string,
     selectAssignmentFromStore: PropTypes.func,
     selectTaskFromStore: PropTypes.func,
@@ -89,4 +89,4 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = { updateAssignment, updateAssignmentLocal, updateTask, updateTaskLocal };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OverviewAssignmentCell);
+export default connect(mapStateToProps, mapDispatchToProps)(OverviewCell);
