@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
 import { Dialog, DialogTitle, DialogContent, Grid, TextField, DialogActions, Button } from '@material-ui/core';
-import { DueDatePicker, PriorityPicker } from '../shared/controls';
+import { CoursePicker, DueDatePicker, PriorityPicker } from '../shared/controls';
 import { createTask } from '../../store/tasks';
 
 const {
@@ -66,6 +66,10 @@ class TaskModal extends React.Component {
 
         if (prop === 'dueDate') {
             task[prop] = e;
+        } else if (prop === 'cid') {
+            const cid = e.target.value;
+            if (cid === 'none') task[prop] = undefined;
+            else task[prop] = e.target.value;
         } else {
             task[prop] = e.target.value;
         }
@@ -74,6 +78,8 @@ class TaskModal extends React.Component {
     }
 
     render() {
+        const isSubtask = !!this.props.aid;
+
         return (
             <Dialog open={this.props.open} onClose={this.props.onClose} fullWidth maxWidth="sm">
                 <DialogTitle>New Subtask</DialogTitle>
@@ -96,6 +102,15 @@ class TaskModal extends React.Component {
                                 fullWidth
                             />
                         </Grid>
+                        {!isSubtask && (
+                            <Grid item xs={12}>
+                                <CoursePicker
+                                    value={_.get(this.state.task, 'cid', 'none')}
+                                    onChange={this.handleChange.bind(this, 'cid')}
+                                    fullWidth
+                                />
+                            </Grid>
+                        )}
                         <Grid item xs={12}>
                             <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
                                 <Grid item xs={6}>
