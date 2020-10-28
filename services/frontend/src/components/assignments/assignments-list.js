@@ -9,7 +9,6 @@ import {
     fetchAssignments,
     getAssignmentsSelectors,
     deleteAssignment,
-    compareDueDates,
     setShouldGoToAssignment,
 } from '../../store/assignments';
 import AssignmentModal from './assignment-modal';

@@ -35,7 +35,6 @@ class TaskCell extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.openRelatedAssignment = this.openRelatedAssignment.bind(this);
 
-
         this.shouldShowOverdueLabel = this.shouldShowOverdueLabel.bind(this);
         this.overdueLabelContent = this.overdueLabelContent.bind(this);
 
