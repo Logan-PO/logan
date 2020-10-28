@@ -6,12 +6,11 @@ const { NotFoundError } = require('../utils/errors');
 
 function fromDbFormat(db) {
     return {
-        ..._.pick(db, ['uid', 'tid', 'title', 'aid', 'cid']),
+        ..._.pick(db, ['uid', 'tid', 'title', 'aid', 'cid', 'tags']),
         description: db.desc,
         dueDate: db.due,
         priority: db.pri,
         complete: db.cmp,
-        tags: db.tags || [],
     };
 }
 
