@@ -43,7 +43,7 @@ class CourseEditor extends Editor {
                                 <Typography color="textPrimary">Edit Course</Typography>
                             </Breadcrumbs>
                         </Grid>
-                        <Divider flexitem style={{ margin: '0 -1em' }} />
+                        <Divider flexItem style={{ margin: '0 -1em' }} />
                         <Grid item xs={12}>
                             <TextField
                                 disabled={this.isEmpty()}

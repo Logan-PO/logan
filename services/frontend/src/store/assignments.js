@@ -27,6 +27,9 @@ const { slice, asyncActions } = createAsyncSlice({
     name: 'assignments',
     initialState: adapter.getInitialState(),
     reducers: {
+        setShouldGoToAssignment(state, action) {
+            state.shouldGoToAssignment = action.payload;
+        },
         updateAssignmentLocal: adapter.updateOne,
         deleteAssignmentLocal: adapter.removeOne,
     },
@@ -52,6 +55,6 @@ const { slice, asyncActions } = createAsyncSlice({
 });
 
 export const getAssignmentsSelectors = wrapAdapter(adapter);
-export const { updateAssignmentLocal, deleteAssignmentLocal } = slice.actions;
+export const { updateAssignmentLocal, deleteAssignmentLocal, setShouldGoToAssignment } = slice.actions;
 export const { fetchAssignments, createAssignment, updateAssignment, deleteAssignment } = asyncActions;
 export default slice.reducer;
