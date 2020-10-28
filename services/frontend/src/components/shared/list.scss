@@ -1,6 +1,25 @@
 @import '../../globals/global';
 
+%list-shared {
+    .list-cell {
+        .actions {
+            display: none;
+        }
+
+        &:hover {
+            .actions {
+                display: initial;
+            }
+        }
+    }
+}
+
+.basic-list {
+    @extend %list-shared;
+}
+
 .scrollable-list {
+    @extend %list-shared;
     height: 100%;
     flex-grow: 1;
     background: white;
@@ -12,23 +31,11 @@
         left: calc(100% - 1.5em);
         bottom: 1.5em;
         transform: translate(-100%, -100%);
-        z-index: 10000;
+        z-index: 10;
     }
 
     .scroll-view {
         height: 100%;
         overflow-y: scroll;
-    }
-
-    .list-cell {
-        .actions {
-            display: none;
-        }
-
-        &:hover {
-            .actions {
-                display: initial;
-            }
-        }
     }
 }

@@ -23,11 +23,19 @@ class DueDatePicker extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.updateState(true);
+    }
+
     componentDidUpdate(prevProps) {
         if (_.isEqual(this.props, prevProps)) return;
 
         const isNewEntity = prevProps.entityId !== this.props.entityId;
 
+        this.updateState(isNewEntity);
+    }
+
+    updateState(isNewEntity) {
         if (!this.props.value) {
             this.setState({
                 dueDateType: undefined,
