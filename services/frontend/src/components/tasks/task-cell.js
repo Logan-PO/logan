@@ -14,7 +14,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
 import { getAssignmentsSelectors } from '../../store/assignments';
-import { CourseLabel, PriorityDisplay } from '../shared/displays';
+import { CourseLabel, PriorityDisplay, TagsDisplay } from '../shared/displays';
 import { Checkbox } from '../shared/controls';
 import styles from './task-cell.module.scss';
 
@@ -94,6 +94,9 @@ class TaskCell extends React.Component {
                                     </div>
                                 )}
                                 <div>{_.get(this.state, 'task.title')}</div>
+                                {_.get(this.state.task, 'tags', []).length > 0 && (
+                                    <TagsDisplay tags={this.state.task.tags} />
+                                )}
                             </React.Fragment>
                         }
                         secondary={_.get(this.state, 'task.description')}
