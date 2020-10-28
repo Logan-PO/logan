@@ -64,7 +64,7 @@ const mapStateToProps = state => {
     const eventSelectors = [];
 
     for (const task of taskSelectors.selectAll()) {
-        eventSelectors.push(task);
+        if (!task.complete) eventSelectors.push(task);
     }
 
     for (const assignment of assignmentSelectors.selectAll()) {
