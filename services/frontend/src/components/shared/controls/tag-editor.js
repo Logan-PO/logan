@@ -19,7 +19,7 @@ class TagEditor extends React.Component {
         this.state = {
             focused: false,
             newLabelText: '',
-            hovered: -1,
+            hovered: false,
         };
     }
 
@@ -111,7 +111,8 @@ class TagEditor extends React.Component {
                 <div className={classes.tagEditor}>
                     {this.props.tags.map((tag, index) => (
                         <Chip
-                            color="secondary"
+                            disabled={this.props.disabled}
+                            color="primary"
                             size="small"
                             key={index}
                             label={tag}
@@ -120,7 +121,8 @@ class TagEditor extends React.Component {
                         />
                     ))}
                     <Chip
-                        color="secondary"
+                        disabled={this.props.disabled}
+                        color={this.props.disabled ? 'default' : 'primary'}
                         size="small"
                         key="new"
                         variant={this.state.focused ? 'outlined' : 'default'}
@@ -129,7 +131,7 @@ class TagEditor extends React.Component {
                         {...(this.state.focused ? { onDelete: this.cancelLabel } : {})}
                         onMouseOver={this.hoverNew}
                         style={{
-                            opacity: this.state.hovered || this.state.focused ? 1 : 0.5,
+                            opacity: this.state.hovered || this.state.focused ? 1 : 0.75,
                         }}
                         onMouseOut={this.unhoverNew}
                     />
@@ -140,6 +142,7 @@ class TagEditor extends React.Component {
 }
 
 TagEditor.propTypes = {
+    disabled: PropTypes.bool,
     tags: PropTypes.arrayOf(PropTypes.string),
     onChange: PropTypes.func,
 };

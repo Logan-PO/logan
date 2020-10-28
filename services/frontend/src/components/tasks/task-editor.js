@@ -104,6 +104,7 @@ class TaskEditor extends Editor {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <TagEditor
+                                        disabled={this.isEmpty()}
                                         tags={_.get(this.state.task, 'tags')}
                                         onChange={this.handleChange.bind(this, 'tags')}
                                     />
