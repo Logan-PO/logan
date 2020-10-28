@@ -6,7 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getScheduleSelectors, createSection, deleteSection } from '../../store/schedule';
 import '../shared/list.scss';
-import EmptySticker from '../shared/empty-sticker';
+import EmptySticker from '../shared/displays/empty-sticker';
 
 class SectionsList extends React.Component {
     constructor(props) {

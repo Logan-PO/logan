@@ -14,7 +14,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
 import { getAssignmentsSelectors } from '../../store/assignments';
-import { CourseLabel, PriorityDisplay } from '../shared';
+import { CourseLabel, PriorityDisplay } from '../shared/displays';
 import { Checkbox } from '../shared/controls';
 import styles from './task-cell.module.scss';
 
