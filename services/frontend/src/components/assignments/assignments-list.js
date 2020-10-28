@@ -5,7 +5,14 @@ import AddIcon from '@material-ui/icons/Add';
 import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
 import _ from 'lodash';
 import { dateUtils } from '@logan/core';
-import { fetchAssignments, createAssignment, getAssignmentsSelectors, deleteAssignment } from '../../store/assignments';
+import {
+    fetchAssignments,
+    getAssignmentsSelectors,
+    deleteAssignment,
+    compareDueDates,
+    setShouldGoToAssignment,
+} from '../../store/assignments';
+import AssignmentModal from './assignment-modal';
 import AssignmentCell from './assignment-cell';
 import '../shared/list.scss';
 import classes from './assignments-list.module.scss';
@@ -19,10 +26,13 @@ class AssignmentsList extends React.Component {
         this.didSelectAssignment = this.didSelectAssignment.bind(this);
         this.didDeleteAssignment = this.didDeleteAssignment.bind(this);
         this.togglePastAssignments = this.togglePastAssignments.bind(this);
+        this.openNewAssignmentModal = this.openNewAssignmentModal.bind(this);
+        this.closeNewAssignmentModal = this.closeNewAssignmentModal.bind(this);
 
         this.state = {
             showingPastAssignments: false,
             selectedAssignment: undefined,
+            newAssignmentModalOpen: false,
         };
     }
 
@@ -30,25 +40,31 @@ class AssignmentsList extends React.Component {
         this.setState({ showingPastAssignments: e.target.checked });
     }
 
-    randomAssignment() {
-        return {
-            class: 'PHYS',
-            title: 'Random Assignment',
-            desc: 'test',
-            dueDate: 'soon',
-            color: 'orange',
-        };
+    componentDidMount() {
+        if (this.props.shouldGoToAssignment) {
+            this.didSelectAssignment(this.props.shouldGoToAssignment);
+            this.props.setShouldGoToAssignment(undefined);
+        }
     }
 
     didSelectAssignment(aid) {
         this.setState(() => ({ selectedAid: aid }));
         this.props.onAssignmentSelected(aid);
     }
+
     didDeleteAssignment(assignment) {
         this.props.deleteAssignment(assignment);
         // TODO: Select next assignment
         this.setState(() => ({ selectedAid: undefined }));
         this.props.onAssignmentSelected(undefined);
+    }
+
+    openNewAssignmentModal() {
+        this.setState({ newAssignmentModalOpen: true });
+    }
+
+    closeNewAssignmentModal() {
+        this.setState({ newAssignmentModalOpen: false });
     }
 
     _shouldShowAssignment(assignment) {
@@ -90,7 +106,7 @@ class AssignmentsList extends React.Component {
                         })}
                     </List>
                 </div>
-                <AppBar position="relative" color="primary">
+                <AppBar position="relative" color="primary" className={classes.actionsBar}>
                     <Toolbar variant="dense">
                         <FormControl>
                             <FormControlLabel
@@ -106,13 +122,10 @@ class AssignmentsList extends React.Component {
                         </FormControl>
                     </Toolbar>
                 </AppBar>
-                <Fab
-                    className="add-button"
-                    color="secondary"
-                    onClick={() => this.props.createAssignment(this.randomAssignment())}
-                >
+                <Fab className="add-button" color="secondary" onClick={this.openNewAssignmentModal}>
                     <AddIcon />
                 </Fab>
+                <AssignmentModal open={this.state.newAssignmentModalOpen} onClose={this.closeNewAssignmentModal} />
             </div>
         );
     }
@@ -120,19 +133,25 @@ class AssignmentsList extends React.Component {
 AssignmentsList.propTypes = {
     assignments: PropTypes.arrayOf(PropTypes.object),
     fetchAssignments: PropTypes.func,
-    createAssignment: PropTypes.func,
     deleteAssignment: PropTypes.func,
     onAssignmentSelected: PropTypes.func,
+    shouldGoToAssignment: PropTypes.string,
+    setShouldGoToAssignment: PropTypes.func,
 };
 
 const mapStateToProps = state => {
     const selectors = getAssignmentsSelectors(state.assignments);
 
     return {
+        shouldGoToAssignment: state.assignments.shouldGoToAssignment,
         assignments: selectors.selectAll(),
     };
 };
 
-const mapDispatchToProps = { fetchAssignments, createAssignment, deleteAssignment };
+const mapDispatchToProps = {
+    fetchAssignments,
+    deleteAssignment,
+    setShouldGoToAssignment,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AssignmentsList);

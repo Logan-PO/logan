@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { createEntityAdapter } from '@reduxjs/toolkit';
 import { dateUtils } from '@logan/core';
 import { createAsyncSlice, wrapAdapter } from '../utils/redux-utils';
@@ -53,9 +52,8 @@ const { slice, asyncActions } = createAsyncSlice({
     name: 'tasks',
     initialState: adapter.getInitialState(),
     reducers: {
-        getTasksForAssignment(state, action) {
-            const { aid } = action.payload;
-            return _.filter(adapter.getSelectors(state => state.tasks).selectAll(), task => task.aid === aid);
+        setShouldGoToTask(state, action) {
+            state.shouldGoToTask = action.payload;
         },
         updateTaskLocal: adapter.updateOne,
         deleteTaskLocal: adapter.removeOne,
@@ -82,6 +80,6 @@ const { slice, asyncActions } = createAsyncSlice({
 });
 
 export const getTasksSelectors = wrapAdapter(adapter);
-export const { getTasksForAssignment, updateTaskLocal, deleteTaskLocal } = slice.actions;
+export const { updateTaskLocal, deleteTaskLocal, setShouldGoToTask } = slice.actions;
 export const { fetchTasks, createTask, updateTask, deleteTask } = asyncActions;
 export default slice.reducer;
