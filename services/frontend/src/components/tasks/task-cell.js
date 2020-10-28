@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
+import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
 import {
     ListItem,
@@ -10,32 +11,44 @@ import {
     ListItemSecondaryAction,
     IconButton,
 } from '@material-ui/core';
+import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
+import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
 import { getAssignmentsSelectors } from '../../store/assignments';
 import { CourseLabel, PriorityDisplay } from '../shared';
 import { Checkbox } from '../shared/controls';
-import globalStyles from '../../globals/global.scss';
 import styles from './task-cell.module.scss';
 
 class TaskCell extends React.Component {
     constructor(props) {
         super(props);
+
         this.select = this.select.bind(this);
         this.deleted = this.deleted.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.openRelatedAssignment = this.openRelatedAssignment.bind(this);
+
         this.state = {
             task: this.props.selectTaskFromStore(this.props.tid),
         };
     }
 
     select() {
-        this.props.onSelect(this.props.tid);
+        if (this.props.onSelect) {
+            this.props.onSelect(this.props.tid);
+        }
     }
 
     deleted() {
-        this.props.onDelete(this.state.task);
+        if (this.props.onDelete) {
+            this.props.onDelete(this.state.task);
+        }
+    }
+
+    openRelatedAssignment() {
+        this.props.setShouldGoToTask(this.props.tid);
+        navigate('/tasks');
     }
 
     componentDidUpdate() {
@@ -56,9 +69,13 @@ class TaskCell extends React.Component {
             changes,
         });
 
+        const afterUpdates = _.merge({}, this.state.task, changes);
+
         this.setState({
-            task: _.merge({}, this.state.task, changes),
+            task: afterUpdates,
         });
+
+        this.props.updateTask(afterUpdates);
     }
 
     render() {
@@ -67,29 +84,31 @@ class TaskCell extends React.Component {
             ? this.props.getCourse(assignment.cid)
             : this.props.getCourse(_.get(this.state.task, 'cid'));
 
-        const needsUpperLabel = course || assignment;
+        const needsUpperLabel = !this.props.subtaskCell && (course || assignment);
         const hasBoth = course && assignment;
 
         return (
             <div className={`list-cell ${styles.taskCell}`}>
                 <PriorityDisplay priority={_.get(this.state.task, 'priority')} />
                 <ListItem button selected={this.props.selected} onClick={this.select}>
-                    <ListItemIcon>
-                        <Checkbox
-                            cid={_.get(this.state.task, 'cid')}
-                            checked={_.get(this.state, 'task.complete', false)}
-                            onChange={this.handleChange}
-                        />
-                    </ListItemIcon>
+                    {!this.props.subtaskCell && (
+                        <ListItemIcon>
+                            <Checkbox
+                                cid={_.get(this.state.task, 'cid')}
+                                checked={_.get(this.state, 'task.complete', false)}
+                                onChange={this.handleChange}
+                            />
+                        </ListItemIcon>
+                    )}
                     <ListItemText
                         primary={
                             <React.Fragment>
                                 {needsUpperLabel && (
-                                    <div className={globalStyles.cellUpperLabel}>
+                                    <div className="cell-upper-label">
                                         {course && <CourseLabel cid={course.cid} />}
                                         {assignment && (
-                                            <Typography className={globalStyles.assignmentLabel}>
-                                                {(hasBoth && '/') + assignment.title}
+                                            <Typography className="assignment-label">
+                                                {`${hasBoth ? ' / ' : ''}${assignment.title}`}
                                             </Typography>
                                         )}
                                     </div>
@@ -100,6 +119,11 @@ class TaskCell extends React.Component {
                         secondary={_.get(this.state, 'task.description')}
                     />
                     <ListItemSecondaryAction className="actions">
+                        {this.props.subtaskCell && (
+                            <IconButton edge="end" onClick={this.openRelatedAssignment}>
+                                <EditIcon fontSize="small" />
+                            </IconButton>
+                        )}
                         <IconButton edge="end" onClick={this.deleted}>
                             <DeleteIcon color="error" />
                         </IconButton>
@@ -111,7 +135,9 @@ class TaskCell extends React.Component {
 }
 
 TaskCell.propTypes = {
+    subtaskCell: PropTypes.bool,
     tid: PropTypes.string,
+    updateTask: PropTypes.func,
     updateTaskLocal: PropTypes.func,
     selectTaskFromStore: PropTypes.func,
     getCourse: PropTypes.func,
@@ -119,6 +145,7 @@ TaskCell.propTypes = {
     selected: PropTypes.bool,
     onSelect: PropTypes.func,
     onDelete: PropTypes.func,
+    setShouldGoToTask: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -129,6 +156,6 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = { updateTask, updateTaskLocal };
+const mapDispatchToProps = { updateTask, updateTaskLocal, setShouldGoToTask };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskCell);

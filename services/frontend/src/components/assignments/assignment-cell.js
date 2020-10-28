@@ -7,7 +7,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '../../store/assignments';
 import { getScheduleSelectors } from '../../store/schedule';
 import { CourseLabel } from '../shared';
-import globalStyles from '../../globals/global.scss';
 
 export class AssignmentCell extends React.Component {
     constructor(props) {
@@ -45,7 +44,7 @@ export class AssignmentCell extends React.Component {
                         primary={
                             <React.Fragment>
                                 {course && (
-                                    <div className={globalStyles.cellUpperLabel}>
+                                    <div className="cell-upper-label">
                                         <CourseLabel cid={course.cid} />
                                     </div>
                                 )}

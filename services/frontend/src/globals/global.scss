@@ -15,11 +15,13 @@ html, body {
     font-size: 0.875rem !important;
 
     .course-label {
+        display: inline;
         font-size: inherit;
         font-weight: bold !important;
     }
 
     .assignment-label {
+        display: inline;
         font-size: inherit;
         color: rgba(0, 0, 0, 0.54) !important;
     }

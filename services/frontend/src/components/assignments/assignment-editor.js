@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { Grid, TextField } from '@material-ui/core';
+import { Grid, TextField, Button, Typography } from '@material-ui/core';
 import {
     deleteAssignment,
     getAssignmentsSelectors,
@@ -11,14 +11,20 @@ import {
 } from '../../store/assignments';
 import { CoursePicker, DueDatePicker } from '../shared/controls';
 import Editor from '../shared/editor';
+import TaskModal from '../tasks/task-modal';
+import SubtasksList from './subtasks-list';
 
 //Represents a form to submit the info required to create a given assignment
 class AssignmentEditor extends Editor {
     constructor(props) {
         super(props, { id: 'aid', entity: 'assignment' });
 
+        this.openNewTaskModal = this.openNewTaskModal.bind(this);
+        this.closeNewTaskModal = this.closeNewTaskModal.bind(this);
+
         this.state = {
             assignment: undefined,
+            newTaskModalOpen: false,
         };
     }
 
@@ -46,6 +52,14 @@ class AssignmentEditor extends Editor {
         }
     }
 
+    openNewTaskModal() {
+        this.setState({ newTaskModalOpen: true });
+    }
+
+    closeNewTaskModal() {
+        this.setState({ newTaskModalOpen: false });
+    }
+
     render() {
         return (
             <div className="editor">
@@ -70,22 +84,50 @@ class AssignmentEditor extends Editor {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <CoursePicker
-                                disabled={this.isEmpty()}
-                                value={_.get(this.state.assignment, 'cid', 'none')}
-                                onChange={this.handleChange.bind(this, 'cid')}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <DueDatePicker
-                                disabled={this.isEmpty()}
-                                entityId={_.get(this.state.assignment, 'aid')}
-                                value={_.get(this.state.assignment, 'dueDate')}
-                                onChange={this.handleChange.bind(this, 'dueDate')}
-                            />
+                            <Grid container direction="row" spacing={2}>
+                                <Grid item xs={12} lg={6}>
+                                    <Grid container direction="column" spacing={2}>
+                                        <Grid item xs={12}>
+                                            <CoursePicker
+                                                fullWidth
+                                                disabled={this.isEmpty()}
+                                                value={_.get(this.state.assignment, 'cid', 'none')}
+                                                onChange={this.handleChange.bind(this, 'cid')}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <DueDatePicker
+                                                disabled={this.isEmpty()}
+                                                entityId={_.get(this.state.assignment, 'aid')}
+                                                value={_.get(this.state.assignment, 'dueDate')}
+                                                onChange={this.handleChange.bind(this, 'dueDate')}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                                <Grid item xs={12} lg={6}>
+                                    {!this.isEmpty() && (
+                                        <React.Fragment>
+                                            <Typography variant="overline">
+                                                <b>Subtasks</b>
+                                            </Typography>
+                                            <SubtasksList aid={this.props.aid} />
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                disableElevation
+                                                onClick={this.openNewTaskModal}
+                                            >
+                                                New subtask
+                                            </Button>
+                                        </React.Fragment>
+                                    )}
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </div>
+                <TaskModal open={this.state.newTaskModalOpen} onClose={this.closeNewTaskModal} aid={this.props.aid} />
             </div>
         );
     }
