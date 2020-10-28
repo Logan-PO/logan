@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Grid, TextField } from '@material-ui/core';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
 import Editor from '../shared/editor';
-import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox } from '../shared/controls';
+import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox, TagEditor } from '../shared/controls';
 
 class TaskEditor extends Editor {
     constructor(props) {
@@ -33,7 +33,7 @@ class TaskEditor extends Editor {
     processChange(changes, prop, e) {
         if (prop === 'complete') {
             changes[prop] = e.target.checked;
-        } else if (prop === 'dueDate') {
+        } else if (prop === 'dueDate' || prop === 'tags') {
             changes[prop] = e;
         } else if (prop === 'cid') {
             const cid = e.target.value;
@@ -83,11 +83,21 @@ class TaskEditor extends Editor {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <CoursePicker
-                                disabled={this.isEmpty()}
-                                value={_.get(this.state.task, 'cid', 'none')}
-                                onChange={this.handleChange.bind(this, 'cid')}
-                            />
+                            <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
+                                <Grid item xs={6}>
+                                    <CoursePicker
+                                        disabled={this.isEmpty()}
+                                        value={_.get(this.state.task, 'cid', 'none')}
+                                        onChange={this.handleChange.bind(this, 'cid')}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TagEditor
+                                        tags={_.get(this.state.task, 'tags')}
+                                        onChange={this.handleChange.bind(this, 'tags')}
+                                    />
+                                </Grid>
+                            </Grid>
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>

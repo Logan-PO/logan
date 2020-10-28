@@ -1,0 +1,15 @@
+.tag-editor {
+    display: flex;
+    flex-wrap: wrap;
+
+    .tag-input {
+        appearance: none;
+        border: none;
+        outline: none;
+        margin: -2px;
+        height: calc(1rem + 2px);
+        background: none;
+        min-width: 1rem;
+    }
+
+}
