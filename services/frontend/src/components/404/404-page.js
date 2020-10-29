@@ -1,6 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import styles from './404.module.scss';
 
 export default class ErrorPage extends React.Component {
