@@ -1,0 +1,38 @@
+{
+  "name": "@logan/mobile-frontend",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "prao3 <44528013+prao3@users.noreply.github.com>",
+  "homepage": "https://github.com/beasterbro/logan/tree/master/services/mobile-frontend#readme",
+  "license": "ISC",
+  "main": "node_modules/expo/AppEntry.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beasterbro/logan.git"
+  },
+  "scripts": {
+    "start": "expo start",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/beasterbro/logan/issues"
+  },
+  "dependencies": {
+    "expo": "^39.0.3",
+    "expo-status-bar": "^1.0.2",
+    "react": "^16.12.0",
+    "react-dom": "^17.0.1",
+    "react-native": "^0.63.3",
+    "react-native-web": "^0.14.4"
+  }
+}
