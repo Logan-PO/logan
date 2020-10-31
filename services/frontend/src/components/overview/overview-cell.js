@@ -32,7 +32,7 @@ export class OverviewCell extends React.Component {
         const course = assignment
             ? this.props.getCourse(assignment.cid)
             : this.props.getCourse(_.get(this.state.event, 'cid'));*/
-
+        //TODO: It looks like assignment cells and the like still need select inputs
         switch (type) {
             case 'assignment':
                 return <AssignmentCell key={this.props.eid} aid={this.props.eid} />;
