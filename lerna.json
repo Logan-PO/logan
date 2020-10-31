@@ -3,5 +3,10 @@
     "packages/*",
     "services/*"
   ],
-  "version": "independent"
+  "version": "independent",
+  "command": {
+    "bootstrap": {
+      "nohoist": "expo"
+    }
+  }
 }
