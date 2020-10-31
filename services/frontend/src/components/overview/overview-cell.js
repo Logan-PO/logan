@@ -2,12 +2,13 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { ListItem, ListItemText, Typography } from '@material-ui/core';
+import { ListItem, ListItemText } from '@material-ui/core';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '../../store/assignments';
 import { getScheduleSelectors } from '../../store/schedule';
-import { CourseLabel } from '../shared';
-import globalStyles from '../../globals/global.scss';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
+import { AssignmentCell } from '../assignments/assignment-cell';
+import TaskCell from '../tasks/task-cell';
+import OverviewSectionCell from './overview-section-cell';
 
 export class OverviewCell extends React.Component {
     constructor(props) {
@@ -27,52 +28,18 @@ export class OverviewCell extends React.Component {
     }
 
     determinePrimaryFormatting(type) {
-        const assignment = _.defaultTo(this.props.getAssignment(_.get(this.state.event, 'aid')), undefined);
+        /*const assignment = _.defaultTo(this.props.getAssignment(_.get(this.state.event, 'aid')), undefined);
         const course = assignment
             ? this.props.getCourse(assignment.cid)
-            : this.props.getCourse(_.get(this.state.event, 'cid'));
+            : this.props.getCourse(_.get(this.state.event, 'cid'));*/
 
-        const needsUpperLabel = course || assignment;
-        const hasBoth = course && assignment;
         switch (type) {
             case 'assignment':
-                return (
-                    <React.Fragment>
-                        {course && (
-                            <div className={globalStyles.cellUpperLabel}>
-                                <CourseLabel cid={course.cid} />
-                            </div>
-                        )}
-                        <div>{_.get(this.state, 'event.title')}</div>
-                    </React.Fragment>
-                );
+                return <AssignmentCell key={this.props.eid} aid={this.props.eid} />;
             case 'task':
-                return (
-                    <React.Fragment>
-                        {needsUpperLabel && (
-                            <div className={globalStyles.cellUpperLabel}>
-                                {course && <CourseLabel cid={course.cid} />}
-                                {assignment && (
-                                    <Typography className={globalStyles.assignmentLabel}>
-                                        {(hasBoth && '/') + assignment.title}
-                                    </Typography>
-                                )}
-                            </div>
-                        )}
-                        <div>{_.get(this.state, 'event.title')}</div>
-                    </React.Fragment>
-                );
+                return <TaskCell key={this.props.eid} aid={this.props.eid} />;
             case 'section':
-                return (
-                    <React.Fragment>
-                        {course && (
-                            <div className={globalStyles.cellUpperLabel}>
-                                <CourseLabel cid={course.cid} />
-                            </div>
-                        )}
-                        <div>{_.get(this.state, 'event.title')}</div>
-                    </React.Fragment>
-                );
+                return <OverviewSectionCell />;
             default:
                 return undefined;
         }

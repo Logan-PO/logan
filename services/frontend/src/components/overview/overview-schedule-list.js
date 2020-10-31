@@ -1,4 +1,3 @@
-//import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -7,7 +6,7 @@ import * as dateUtils from '@logan/core/src/date-utils';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
 import './overview-list.module.scss';
 import { fetchTasks, getTasksSelectors, compareDueDates } from '../../store/tasks';
-//import { getScheduleSelectors } from '../../store/schedule';
+import { getScheduleSelectors } from '../../store/schedule';
 import OverviewCell from './overview-cell';
 
 class OverviewScheduleList extends React.Component {
@@ -51,15 +50,15 @@ OverviewScheduleList.propTypes = {
 };
 
 const getID = scheduleEvent => {
-    if (scheduleEvent.aid) return scheduleEvent.aid;
-    else if (scheduleEvent.tid) return scheduleEvent.tid;
+    if (scheduleEvent.tid) return scheduleEvent.tid;
+    else if (scheduleEvent.aid) return scheduleEvent.aid;
     else return scheduleEvent.cid;
 };
 
 const mapStateToProps = state => {
     const assignmentSelectors = getAssignmentsSelectors(state.assignments);
     const taskSelectors = getTasksSelectors(state.tasks);
-    //const scheduleSelectors = getScheduleSelectors(state.schedule);
+    const scheduleSelectors = getScheduleSelectors(state.schedule);
 
     const eventSelectors = [];
 
@@ -70,13 +69,41 @@ const mapStateToProps = state => {
     for (const assignment of assignmentSelectors.selectAll()) {
         eventSelectors.push(assignment);
     }
-    /*    for (const section of scheduleSelectors.baseSelectors.sections.selectAll()) {
-
-        if (_.isMatch(section.daysOfWeek, dateUtils.dayjs().weekday())) {
-            eventSelectors.push(section);
-            console.log(`eventSelector: ${eventSelectors}`);
+    /* title: 'New section',
+            cid: this.props.cid,
+            tid: course.tid,
+            startDate: term.startDate,2020-12-11
+            endDate: term.endDate,2020-8-27
+            startTime: '08:00',
+            endTime: '09:00',
+            daysOfWeek: [1, 3, 5],
+            weeklyRepeat: 1,*/
+    function mapSectionToDates(section) {
+        //generate a list of dayjs objects that have day js formatted dueDates/dates
+        let sectionCellData = [];
+        let initialDate = dateUtils.dayjs(section.startDate + section.startTime, 'YYYY-MM-DD-H:MM');
+        let finalDate = dateUtils.dayjs(section.endDate, 'YYYY-MM-DD');
+        let duration = dateUtils.dayjs.duration(initialDate.diff(finalDate));
+        let weeksLeft = duration.asWeeks();
+        let currentDate = initialDate;
+        while (weeksLeft != 0) {
+            if (weeksLeft % section.weeklyRepeat === 0) {
+                //TODO: This is where the formatting for the section cell comes from
+                sectionCellData.push({ cid: section.cid, tid: section.tid, dueDate: currentDate });
+            }
+            weeksLeft.subtract(1, 'week');
+            currentDate.add(1, 'week');
         }
-    }*/
+        return sectionCellData;
+    } //TODO: Going to have the overview cell parse out which lower level cell it needs to display, e.g. overview-assignment or overview-task
+
+    for (const section of scheduleSelectors.baseSelectors.sections.selectAll()) {
+        //TODO: Map from its start day to days for the week and then add those event into the eventSelectors
+        const tempSectionCellData = mapSectionToDates(section);
+        for (const scheduledTime of tempSectionCellData) {
+            eventSelectors.push(scheduledTime);
+        }
+    }
 
     const eventSections = {};
     for (const scheduleEvent of eventSelectors) {
