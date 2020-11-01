@@ -14,7 +14,7 @@ jobs:
       - name: Install Dependencies & Bootstrap
         run: |
           npm install
-          npm run bootstrap
+          npm run bootstrap:web
       - name: Build
         run: npm run build
         working-directory: ./services/frontend
