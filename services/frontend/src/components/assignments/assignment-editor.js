@@ -3,16 +3,23 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { Grid, TextField, Button, Typography } from '@material-ui/core';
+import { DatePicker } from '@material-ui/pickers';
+import { dateUtils } from '@logan/core';
 import {
     deleteAssignment,
     getAssignmentsSelectors,
     updateAssignment,
     updateAssignmentLocal,
 } from '../../store/assignments';
-import { CoursePicker, DueDatePicker } from '../shared/controls';
+import { CoursePicker } from '../shared/controls';
 import Editor from '../shared/editor';
 import TaskModal from '../tasks/task-modal';
 import SubtasksList from './subtasks-list';
+
+const {
+    dayjs,
+    constants: { DB_DATE_FORMAT },
+} = dateUtils;
 
 //Represents a form to submit the info required to create a given assignment
 class AssignmentEditor extends Editor {
@@ -42,7 +49,7 @@ class AssignmentEditor extends Editor {
 
     processChange(changes, prop, e) {
         if (prop === 'dueDate') {
-            changes[prop] = e;
+            changes[prop] = e.format(DB_DATE_FORMAT);
         } else if (prop === 'cid') {
             const cid = e.target.value;
             if (cid === 'none') changes[prop] = undefined;
@@ -96,11 +103,13 @@ class AssignmentEditor extends Editor {
                                             />
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <DueDatePicker
-                                                disabled={this.isEmpty()}
-                                                entityId={_.get(this.state.assignment, 'aid')}
-                                                value={_.get(this.state.assignment, 'dueDate')}
+                                            <DatePicker
+                                                value={dayjs(_.get(this.state.assignment, 'dueDate'))}
                                                 onChange={this.handleChange.bind(this, 'dueDate')}
+                                                disabled={this.isEmpty()}
+                                                variant="inline"
+                                                label="Due Date"
+                                                fullWidth
                                             />
                                         </Grid>
                                     </Grid>
