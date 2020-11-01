@@ -83,3 +83,6 @@ yarn-error.log
 .yarn-integrity
 
 artifact.zip
+
+#Mobile frontend stuff
+/services/mobile-frontend/.expo/
