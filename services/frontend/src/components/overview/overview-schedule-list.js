@@ -84,7 +84,7 @@ const mapStateToProps = state => {
         let initialDate = dateUtils.dayjs(section.startDate + section.startTime, 'YYYY-MM-DD-H:MM');
         let finalDate = dateUtils.dayjs(section.endDate, 'YYYY-MM-DD');
         let duration = dateUtils.dayjs.duration(initialDate.diff(finalDate));
-        let weeksLeft = duration.duration().asWeeks();
+        let weeksLeft = duration.asWeeks();
         let currentDate = initialDate;
         while (weeksLeft != 0) {
             if (weeksLeft % section.weeklyRepeat === 0) {

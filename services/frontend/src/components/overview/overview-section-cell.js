@@ -1,14 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '../../store/assignments';
 import { getScheduleSelectors } from '../../store/schedule';
 
 export class OverviewSectionCell extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            assignment: this.props.selectAssignmentFromStore(this.props.aid),
+            section: this.props.selectCourseFromStore(this.props.sid),
         };
     }
 
@@ -17,18 +16,14 @@ export class OverviewSectionCell extends React.Component {
     }
 }
 OverviewSectionCell.propTypes = {
-    aid: PropTypes.string,
-    selectAssignmentFromStore: PropTypes.func,
-    getCourse: PropTypes.func,
+    sid: PropTypes.string,
+    selectCourseFromStore: PropTypes.func,
 };
 
 const mapStateToProps = state => {
     return {
-        selectAssignmentFromStore: getAssignmentsSelectors(state.assignments).selectById,
-        getCourse: getScheduleSelectors(state.schedule).baseSelectors.courses.selectById,
+        selectCourseFromStore: getScheduleSelectors(state.schedule).baseSelectors.courses.selectById,
     };
 };
 
-const mapDispatchToProps = { updateAssignment, updateAssignmentLocal };
-
-export default connect(mapStateToProps, mapDispatchToProps)(OverviewSectionCell);
+export default connect(mapStateToProps, null)(OverviewSectionCell);

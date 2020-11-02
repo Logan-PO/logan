@@ -39,7 +39,7 @@ export class OverviewCell extends React.Component {
             case 'task':
                 return <TaskCell key={this.props.eid} aid={this.props.eid} />;
             case 'section':
-                return <OverviewSectionCell />;
+                return <OverviewSectionCell key={this.props.eid} aid={this.props.eid} />;
             default:
                 return undefined;
         }
