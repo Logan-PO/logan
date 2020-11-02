@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { dateUtils } from '@logan/core';
 import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { bindFunctions } from '../../utils/bindings';
 import { getTasksSelectors, deleteTask, compareDueDates, setShouldGoToTask } from '../../store/tasks';
 import { setShouldGoToAssignment } from '../../store/assignments';
 import TaskCell from './task-cell';
@@ -17,13 +16,11 @@ class TasksList extends React.Component {
     constructor(props) {
         super(props);
 
-        bindFunctions(this, [
-            this.didSelectTask,
-            this.didDeleteTask,
-            this.toggleCompletedTasks,
-            this.openCreateModal,
-            this.closeCreateModal,
-        ]);
+        this.didSelectTask = this.didSelectTask.bind(this);
+        this.didDeleteTask = this.didDeleteTask.bind(this);
+        this.toggleCompletedTasks = this.toggleCompletedTasks.bind(this);
+        this.openCreateModal = this.openCreateModal.bind(this);
+        this.closeCreateModal = this.closeCreateModal.bind(this);
 
         this.state = {
             showingCompletedTasks: false,
