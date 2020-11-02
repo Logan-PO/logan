@@ -13,7 +13,8 @@ import {
     Button,
     CircularProgress,
 } from '@material-ui/core';
-import { CoursePicker, DueDatePicker } from '../shared/controls';
+import { DatePicker } from '@material-ui/pickers';
+import { CoursePicker } from '../shared/controls';
 import { createAssignment } from '../../store/assignments';
 import styles from '../tasks/task-modal.module.scss';
 
@@ -75,7 +76,7 @@ class AssignmentModal extends React.Component {
         const assignment = this.state.assignment;
 
         if (prop === 'dueDate') {
-            assignment[prop] = e;
+            assignment[prop] = e.format(DB_DATE_FORMAT);
         } else if (prop === 'cid') {
             const cid = e.target.value;
             if (cid === 'none') assignment[prop] = undefined;
@@ -127,10 +128,12 @@ class AssignmentModal extends React.Component {
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <DueDatePicker
-                                        entityId={this.state.fakeId}
-                                        value={_.get(this.state.assignment, 'dueDate')}
+                                    <DatePicker
+                                        value={dayjs(_.get(this.state.assignment, 'dueDate'))}
                                         onChange={this.handleChange.bind(this, 'dueDate')}
+                                        variant="inline"
+                                        label="Due Date"
+                                        fullWidth
                                     />
                                 </Grid>
                             </Grid>
