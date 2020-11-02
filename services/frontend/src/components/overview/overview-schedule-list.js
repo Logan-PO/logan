@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, Box } from '@material-ui/core';
+import { List, ListSubheader } from '@material-ui/core';
+
 import dayjs from 'dayjs';
 import * as dateUtils from '@logan/core/src/date-utils';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
@@ -29,9 +30,7 @@ export class OverviewScheduleList extends React.Component {
                             const [dueDate, eids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <Box borderColor="primary.main" {...defaultProps}>
-                                        {dueDate}
-                                    </Box>
+                                    <ListSubheader>{dueDate}</ListSubheader>
                                     {eids.map(eid => (
                                         <OverviewCell key={eid} eid={eid} />
                                     ))}
