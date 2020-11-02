@@ -17,7 +17,7 @@ import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
 import { getAssignmentsSelectors } from '../../store/assignments';
-import { CourseLabel, PriorityDisplay } from '../shared';
+import { CourseLabel, PriorityDisplay, TagsDisplay } from '../shared/displays';
 import { Checkbox } from '../shared/controls';
 import styles from './task-cell.module.scss';
 
@@ -145,7 +145,10 @@ class TaskCell extends React.Component {
                                         )}
                                     </div>
                                 )}
-                                <Typography>{_.get(this.state, 'task.title')}</Typography>
+                                <div>{_.get(this.state, 'task.title')}</div>
+                                {_.get(this.state.task, 'tags', []).length > 0 && (
+                                    <TagsDisplay tags={this.state.task.tags} />
+                                )}
                                 {this.shouldShowOverdueLabel() && (
                                     <Typography variant="body2" color="error">
                                         {this.overdueLabelContent()}

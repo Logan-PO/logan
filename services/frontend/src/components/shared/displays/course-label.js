@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Typography } from '@material-ui/core';
-import { getScheduleSelectors } from '../../store/schedule';
+import { getScheduleSelectors } from '../../../store/schedule';
 
 class CourseLabel extends React.Component {
     render() {

@@ -6,7 +6,7 @@ import { ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@ma
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '../../store/assignments';
 import { getScheduleSelectors } from '../../store/schedule';
-import { CourseLabel } from '../shared';
+import { CourseLabel } from '../shared/displays';
 
 export class AssignmentCell extends React.Component {
     constructor(props) {

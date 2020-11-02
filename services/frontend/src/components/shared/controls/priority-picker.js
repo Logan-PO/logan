@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FormControl, FormLabel, FormControlLabel, RadioGroup, Radio } from '@material-ui/core';
-import priorities from '../priority-constants';
+import priorities from '../displays/priority-constants';
 
 class PriorityPicker extends React.Component {
     constructor(props) {
