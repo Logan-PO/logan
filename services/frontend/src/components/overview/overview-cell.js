@@ -30,7 +30,7 @@ export class OverviewCell extends React.Component {
             case 'task':
                 return this.props.selectTaskFromStore(this.props.eid);
             case 'section':
-                console.log(this.props.eid);
+                console.log(this.props.selectSectionFromStore(this.props.eid));
                 return this.props.selectSectionFromStore(this.props.eid);
             default:
                 return undefined;
@@ -49,7 +49,6 @@ export class OverviewCell extends React.Component {
             case 'task':
                 return <TaskCell key={this.props.eid} tid={this.props.eid} />;
             case 'section':
-                console.log(this.props.eid);
                 return <OverviewSectionCell key={this.props.eid} sid={this.props.eid} />;
             default:
                 return undefined;
@@ -80,12 +79,12 @@ OverviewCell.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        selectSectionFromStore: getSectionSelectors(state.sections).selectById,
+        selectSectionFromStore: getSectionSelectors(state.schedule).selectById,
         selectTaskFromStore: getTasksSelectors(state.tasks).selectById,
         selectAssignmentFromStore: getAssignmentsSelectors(state.assignments).selectById,
         getCourse: getScheduleSelectors(state.schedule).baseSelectors.courses.selectById,
         getAssignment: getAssignmentsSelectors(state.assignments).selectById,
-    };
+    }; //scheduleSelectors.baseSelectors.sections.selectAll()
 };
 
 const mapDispatchToProps = { updateTask, updateTaskLocal };

@@ -22,7 +22,7 @@ export class OverviewSectionCell extends React.Component {
                         primary={
                             <React.Fragment>
                                 <div className="cell-upper-label">
-                                    <CourseLabel cid={this.props.cid} />
+                                    <CourseLabel cid={_.get(this.state, 'section.cid')} />
                                 </div>
                                 <div>{_.get(this.state, 'section.title')}</div>
                             </React.Fragment>
@@ -43,7 +43,7 @@ OverviewSectionCell.propTypes = {
 
 const mapStateToProps = state => {
     return {
-        selectSectionFromStore: getSectionSelectors(state.sections).selectById,
+        selectSectionFromStore: getSectionSelectors(state.schedule).selectById,
     };
 };
 
