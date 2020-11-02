@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { getAssignmentsSelectors, setShouldGoToAssignment } from '../../store/assignments';
-import CourseLabel from '../shared/course-label';
+import { CourseLabel } from '../shared/displays';
 import classes from './assignment-preview.module.scss';
 
 class AssignmentPreview extends React.Component {
