@@ -15,7 +15,7 @@ const basicAssignment1 = {
     title: 'assignment1',
     cid: 'cid123',
     description: 'basic assignment 1',
-    dueDate: '1/30/21',
+    dueDate: '2021-1-30',
 };
 
 const basicAssignment2 = {
@@ -24,7 +24,7 @@ const basicAssignment2 = {
     title: 'assignment2',
     cid: 'cid321',
     description: 'basic assignment 2',
-    dueDate: '1/31/21',
+    dueDate: '2021-1-31',
 };
 
 const { dynamoUtils } = require('@logan/aws');
