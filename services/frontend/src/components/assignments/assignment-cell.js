@@ -19,7 +19,7 @@ export class AssignmentCell extends React.Component {
     }
 
     select() {
-        this.props.onSelect(this.props.aid);
+        if (this.props.onSelect) this.props.onSelect(this.props.aid);
     }
 
     deleted() {
