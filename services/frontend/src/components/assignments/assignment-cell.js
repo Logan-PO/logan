@@ -54,9 +54,11 @@ export class AssignmentCell extends React.Component {
                         secondary={_.get(this.state, 'assignment.description')}
                     />
                     <ListItemSecondaryAction className="actions">
-                        <IconButton edge="end" onClick={this.deleted}>
-                            <DeleteIcon color="error" />
-                        </IconButton>
+                        {this.props.onDelete ? (
+                            <IconButton edge="end" onClick={this.deleted}>
+                                <DeleteIcon color="error" />
+                            </IconButton>
+                        ) : null}
                     </ListItemSecondaryAction>
                 </ListItem>
             </div>
