@@ -53,7 +53,7 @@ OverviewScheduleList.propTypes = {
 const getID = scheduleEvent => {
     if (scheduleEvent.tid) return scheduleEvent.tid;
     else if (scheduleEvent.aid) return scheduleEvent.aid;
-    else return scheduleEvent.cid;
+    else return scheduleEvent.section.sid;
 };
 
 const mapStateToProps = state => {
@@ -104,7 +104,8 @@ const mapStateToProps = state => {
 
     for (const section of scheduleSelectors.baseSelectors.sections.selectAll()) {
         //TODO: Map from its start day to days for the week and then add those event into the eventSelectors
-        eventSelectors.push({ cid: section.cid, tid: section.tid, dueDate: dayjs(section.startDate) });
+        console.log(section.title);
+        eventSelectors.push({ section: section, dueDate: section.dueDate });
         /*    const tempSectionCellData = mapSectionToDates(section);
         for (const scheduledTime of tempSectionCellData) {
             eventSelectors.push(scheduledTime);
