@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import { getScheduleSelectors, createCourse, deleteCourse, createHoliday, deleteHoliday } from '../../store/schedule';
 import '../shared/list.scss';
-import EmptySticker from '../shared/empty-sticker';
+import EmptySticker from '../shared/displays/empty-sticker';
 
 class TermChildrenList extends React.Component {
     constructor(props) {

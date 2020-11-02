@@ -6,7 +6,7 @@ import { Grid, TextField } from '@material-ui/core';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
 import { getAssignmentsSelectors } from '../../store/assignments';
 import Editor from '../shared/editor';
-import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox } from '../shared/controls';
+import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox, TagEditor } from '../shared/controls';
 import AssignmentPreview from './assignment-preview';
 
 class TaskEditor extends Editor {
@@ -35,7 +35,7 @@ class TaskEditor extends Editor {
     processChange(changes, prop, e) {
         if (prop === 'complete') {
             changes[prop] = e.target.checked;
-        } else if (prop === 'dueDate') {
+        } else if (prop === 'dueDate' || prop === 'tags') {
             changes[prop] = e;
         } else if (prop === 'cid') {
             const cid = e.target.value;
@@ -94,15 +94,26 @@ class TaskEditor extends Editor {
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
-                                <Grid item xs={12} lg={4}>
+                                <Grid item xs={6}>
                                     <CoursePicker
                                         fullWidth
-                                        disabled={this.isEmpty() || !!relatedAssignment}
-                                        value={cid || 'none'}
+                                        disabled={this.isEmpty()}
+                                        value={_.get(this.state.task, 'cid', 'none')}
                                         onChange={this.handleChange.bind(this, 'cid')}
                                     />
                                 </Grid>
-                                <Grid item xs={12} lg={4}>
+                                <Grid item xs={6}>
+                                    <TagEditor
+                                        disabled={this.isEmpty()}
+                                        tags={_.get(this.state.task, 'tags')}
+                                        onChange={this.handleChange.bind(this, 'tags')}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
+                                <Grid item xs={6}>
                                     <DueDatePicker
                                         entityId={_.get(this.state.task, 'tid')}
                                         disabled={this.isEmpty()}
@@ -110,7 +121,7 @@ class TaskEditor extends Editor {
                                         onChange={this.handleChange.bind(this, 'dueDate')}
                                     />
                                 </Grid>
-                                <Grid item xs={12} lg={4}>
+                                <Grid item xs={6}>
                                     <PriorityPicker
                                         disabled={this.isEmpty()}
                                         value={_.get(this.state.task, 'priority')}
