@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, Box } from '@material-ui/core';
+import dayjs from 'dayjs';
 import * as dateUtils from '@logan/core/src/date-utils';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
 import './overview-list.module.scss';
@@ -81,17 +82,23 @@ const mapStateToProps = state => {
     function mapSectionToDates(section) {
         //generate a list of dayjs objects that have day js formatted dueDates/dates
         let sectionCellData = [];
-        let initialDate = dateUtils.dayjs(section.startDate + section.startTime, 'YYYY-MM-DD-H:MM');
-        let finalDate = dateUtils.dayjs(section.endDate, 'YYYY-MM-DD');
-        let duration = dateUtils.dayjs.duration(initialDate.diff(finalDate));
+
+        let initialDate = dayjs(section.startDate);
+        let finalDate = dayjs(section.endDate);
+
+        let duration = dayjs.duration(finalDate.diff(initialDate));
+        console.log(duration);
+
         let weeksLeft = duration.asWeeks();
+        console.log(weeksLeft);
+
         let currentDate = initialDate;
-        while (weeksLeft != 0) {
-            if (weeksLeft % section.weeklyRepeat === 0) {
+        while (duration >= 0) {
+            if (duration.asWeeks() % section.weeklyRepeat === 0) {
                 //TODO: This is where the formatting for the section cell comes from
                 sectionCellData.push({ cid: section.cid, tid: section.tid, dueDate: currentDate });
             }
-            weeksLeft.subtract(1, 'week');
+            duration.subtract(1, 'week');
             currentDate.add(1, 'week');
         }
         return sectionCellData;
