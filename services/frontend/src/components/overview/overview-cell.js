@@ -6,9 +6,9 @@ import { ListItem, ListItemText } from '@material-ui/core';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '../../store/assignments';
 import { getScheduleSelectors } from '../../store/schedule';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
+import AssignmentCell from '../assignments/assignment-cell';
+import TaskCell from '../tasks/task-cell';
 import OverviewSectionCell from './overview-section-cell';
-import { OverviewAssignmentCell } from './overview-assignment-cell';
-import OverviewTaskCell from './overview-task-cell';
 
 export class OverviewCell extends React.Component {
     constructor(props) {
@@ -35,10 +35,11 @@ export class OverviewCell extends React.Component {
         //TODO: It looks like assignment cells and the like still need select inputs
         switch (type) {
             case 'assignment':
-                return <OverviewAssignmentCell key={this.props.eid} aid={this.props.eid} />;
+                return <AssignmentCell key={this.props.eid} aid={this.props.eid} />;
             case 'task':
-                return <OverviewTaskCell key={this.props.eid} tid={this.props.eid} />;
+                return <TaskCell key={this.props.eid} tid={this.props.eid} />;
             case 'section':
+                console.log('Section');
                 return <OverviewSectionCell key={this.props.eid} sid={this.props.eid} />;
             default:
                 return undefined;
@@ -52,10 +53,7 @@ export class OverviewCell extends React.Component {
         return (
             <div className="list-cell">
                 <ListItem>
-                    <ListItemText
-                        primary={this.determinePrimaryFormatting(this.type)}
-                        secondary={this.determineSecondaryFormatting(this.type)}
-                    />
+                    <ListItemText primary={this.determinePrimaryFormatting(this.type)} />
                 </ListItem>
             </div>
         );

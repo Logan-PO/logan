@@ -10,7 +10,7 @@ import { fetchTasks, getTasksSelectors, compareDueDates } from '../../store/task
 import { getScheduleSelectors } from '../../store/schedule';
 import OverviewCell from './overview-cell';
 
-class OverviewScheduleList extends React.Component {
+export class OverviewScheduleList extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -87,29 +87,28 @@ const mapStateToProps = state => {
         let finalDate = dayjs(section.endDate);
 
         let duration = dayjs.duration(finalDate.diff(initialDate));
-        console.log(duration);
-
-        let weeksLeft = duration.asWeeks();
-        console.log(weeksLeft);
-
         let currentDate = initialDate;
-        while (duration >= 0) {
-            if (duration.asWeeks() % section.weeklyRepeat === 0) {
+        while (duration.asWeeks() >= 0) {
+            if (duration.asWeeks() % section.weeklyRepeat === 0 && currentDate.w) {
                 //TODO: This is where the formatting for the section cell comes from
+                //console.log({ cid: section.cid, tid: section.tid, dueDate: currentDate });
                 sectionCellData.push({ cid: section.cid, tid: section.tid, dueDate: currentDate });
             }
-            duration.subtract(1, 'week');
-            currentDate.add(1, 'week');
+            console.log(duration);
+            duration = duration.subtract(1, 'week');
+            currentDate = currentDate.add(1, 'week');
+            break;
         }
         return sectionCellData;
     } //TODO: Going to have the overview cell parse out which lower level cell it needs to display, e.g. overview-assignment or overview-task
 
     for (const section of scheduleSelectors.baseSelectors.sections.selectAll()) {
         //TODO: Map from its start day to days for the week and then add those event into the eventSelectors
-        const tempSectionCellData = mapSectionToDates(section);
+        eventSelectors.push({ cid: section.cid, tid: section.tid, dueDate: dayjs(section.startDate) });
+        /*    const tempSectionCellData = mapSectionToDates(section);
         for (const scheduledTime of tempSectionCellData) {
             eventSelectors.push(scheduledTime);
-        }
+        }*/
     }
 
     const eventSections = {};
