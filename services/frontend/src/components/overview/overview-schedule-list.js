@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, ListSubheader } from '@material-ui/core';
 
-//import dayjs from 'dayjs';
+import dayjs from 'dayjs';
 import * as dateUtils from '@logan/core/src/date-utils';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
 import './overview-list.module.scss';
 import { fetchTasks, getTasksSelectors, compareDueDates } from '../../store/tasks';
-//import { getScheduleSelectors } from '../../store/schedule';
+import { getScheduleSelectors } from '../../store/schedule';
 import OverviewCell from './overview-cell';
 
 export class OverviewScheduleList extends React.Component {
@@ -53,7 +53,7 @@ const getID = scheduleEvent => {
 const mapStateToProps = state => {
     const assignmentSelectors = getAssignmentsSelectors(state.assignments);
     const taskSelectors = getTasksSelectors(state.tasks);
-    // const scheduleSelectors = getScheduleSelectors(state.schedule);
+    const scheduleSelectors = getScheduleSelectors(state.schedule);
 
     const eventSelectors = [];
 
@@ -73,7 +73,7 @@ const mapStateToProps = state => {
             endTime: '09:00',
             daysOfWeek: [1, 3, 5],
             weeklyRepeat: 1,*/
-    /*    function mapSectionToDates(section) {
+    function mapSectionToDates(section) {
         //generate a list of dayjs objects that have day js formatted dueDates/dates
         let sectionCellData = [];
 
@@ -85,7 +85,6 @@ const mapStateToProps = state => {
         while (duration.asWeeks() >= 0) {
             if (duration.asWeeks() % section.weeklyRepeat === 0 && currentDate.w) {
                 //TODO: This is where the formatting for the section cell comes from
-                //console.log({ cid: section.cid, tid: section.tid, dueDate: currentDate });
                 sectionCellData.push({ cid: section.cid, tid: section.tid, dueDate: currentDate });
             }
             console.log(duration);
@@ -100,11 +99,11 @@ const mapStateToProps = state => {
         //TODO: Map from its start day to days for the week and then add those event into the eventSelectors
         console.log(section.title);
         eventSelectors.push({ section: section, dueDate: section.dueDate });
-        /!*    const tempSectionCellData = mapSectionToDates(section);
+        const tempSectionCellData = mapSectionToDates(section);
         for (const scheduledTime of tempSectionCellData) {
             eventSelectors.push(scheduledTime);
-        }*!/
-    }*/
+        }
+    }
 
     const eventSections = {};
     for (const scheduleEvent of eventSelectors) {
