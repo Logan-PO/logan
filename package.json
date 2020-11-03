@@ -4,7 +4,9 @@
   "description": "",
   "private": true,
   "scripts": {
-    "bootstrap": "lerna bootstrap --hoist",
+    "bootstrap": "lerna bootstrap --hoist && npm run bootstrap:mobile",
+    "bootstrap:web": "lerna bootstrap --scope @logan/web-frontend",
+    "bootstrap:mobile": "lerna bootstrap --scope @logan/mobile-frontend",
     "bootstrap:backend": "lerna bootstrap --scope @logan/backend --include-dependencies -- --production --no-optional",
     "clean-all": "lerna clean --yes",
     "rebootstrap": "bash scripts/fix-node-modules.sh",
