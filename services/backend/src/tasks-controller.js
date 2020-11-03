@@ -11,6 +11,7 @@ function fromDbFormat(db) {
         dueDate: db.due,
         priority: db.pri,
         complete: db.cmp,
+        completionDate: db.cd,
     };
 }
 
@@ -21,6 +22,7 @@ function toDbFormat(task) {
         due: task.dueDate,
         pri: task.priority,
         cmp: task.complete,
+        cd: task.completionDate,
         tags: _.isEmpty(task.tags) ? undefined : task.tags,
     };
 }

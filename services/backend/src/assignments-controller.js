@@ -1,8 +1,14 @@
 const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
+const {
+    dateUtils: {
+        dayjs,
+        constants: { DB_DATE_FORMAT },
+    },
+} = require('@logan/core');
 const { v4: uuid } = require('uuid');
 const requestValidator = require('../utils/request-validator');
-const { NotFoundError } = require('../utils/errors');
+const { NotFoundError, ValidationError } = require('../utils/errors');
 
 function fromDbFormat(db) {
     return {
@@ -18,6 +24,12 @@ function toDbFormat(assignment) {
         desc: assignment.description,
         due: assignment.dueDate,
     };
+}
+
+function validateDueDate(str) {
+    if (!dayjs(str, DB_DATE_FORMAT).isValid()) {
+        throw new ValidationError(`Invalid due date ${str}. Must be in format ${DB_DATE_FORMAT}`);
+    }
 }
 
 async function getAssignment(req, res) {
@@ -54,6 +66,8 @@ async function createAssignment(req, res) {
 
     const assignment = _.merge({}, req.body, { aid }, _.pick(req.auth, ['uid']));
 
+    validateDueDate(assignment.dueDate);
+
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.ASSIGNMENTS,
         Item: toDbFormat(assignment),
@@ -66,6 +80,7 @@ async function updateAssignment(req, res) {
     const assignment = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
 
     requestValidator.requireBodyParams(req, ['title', 'dueDate']);
+    validateDueDate(assignment.dueDate);
 
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.ASSIGNMENTS,
