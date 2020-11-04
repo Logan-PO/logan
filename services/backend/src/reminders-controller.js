@@ -1,7 +1,14 @@
 const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
+const {
+    dateUtils: {
+        dayjs,
+        constants: { DB_DATETIME_FORMAT },
+    },
+} = require('@logan/core');
 const { v4: uuid } = require('uuid');
 const requestValidator = require('../utils/request-validator');
+const { ValidationError } = require('../utils/errors');
 
 /**
  * @typedef {Object} Reminder
@@ -49,10 +56,17 @@ function toDbFormat(reminder) {
     };
 }
 
+function validateTimestamp(ts) {
+    if (!dayjs(ts, DB_DATETIME_FORMAT).isValid()) {
+        throw new ValidationError(`Invalid reminder timestamp ${ts}. Must be in format ${DB_DATETIME_FORMAT}`);
+    }
+}
+
 async function createReminder(req, res) {
     const rid = uuid();
 
     requestValidator.requireBodyParams(req, ['eid', 'entityType', 'timestamp', 'message']);
+    validateTimestamp(req.body.timestamp);
 
     const reminder = _.merge({}, req.body, { rid }, _.pick(req.auth, ['uid']));
 
@@ -68,6 +82,7 @@ async function updateReminder(req, res) {
     requestValidator.requireBodyParams(req, ['rid', 'eid', 'entityType', 'timestamp', 'message']);
 
     const reminder = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
+    validateTimestamp(reminder.timestamp);
 
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.REMINDERS,
