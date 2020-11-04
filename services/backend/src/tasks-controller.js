@@ -35,7 +35,9 @@ async function getTask(req, res) {
     });
 
     if (dbResponse.Item) {
-        res.json(fromDbFormat(dbResponse.Item));
+        const task = fromDbFormat(dbResponse.Item);
+        task.reminders = await remindersForEntity('task', task.tid);
+        res.json(task);
     } else {
         throw new NotFoundError('Task does not exist');
     }
@@ -48,7 +50,19 @@ async function getTasks(req, res) {
         ExpressionAttributeValues: { ':uid': req.auth.uid },
     });
 
-    res.json(dbResponse.Items.map(fromDbFormat));
+    const { Items: remindersResponse } = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.REMINDERS,
+        FilterExpression: 'uid = :uid and et = :et',
+        ExpressionAttributeValues: { ':uid': req.auth.uid, ':et': 'task' },
+    });
+
+    const tasks = dbResponse.Items.map(db => {
+        const task = fromDbFormat(db);
+        task.reminders = _.filter(remindersResponse, reminder => reminder.eid === task.tid);
+        return task;
+    });
+
+    res.json(tasks);
 }
 
 async function createTask(req, res) {
@@ -79,6 +93,8 @@ async function updateTask(req, res) {
         ExpressionAttributeValues: { ':uid': req.auth.uid },
         ConditionExpression: 'uid = :uid',
     });
+
+    task.reminders = await remindersForEntity('task', task.tid);
 
     res.json(task);
 }

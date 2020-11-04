@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const mockDbGet = jest.fn(() => ({}));
-const mockDbScan = jest.fn(() => ({}));
+const mockDbScan = jest.fn(() => ({ Items: [] }));
 const mockDbPut = jest.fn(() => ({}));
 const mockDbDelete = jest.fn(() => ({}));
 const jsonMock = jest.fn();
@@ -57,11 +57,12 @@ describe('getTask', () => {
         };
 
         mockDbGet.mockReturnValueOnce({ Item: toDbFormat(basicTask1) });
+        mockDbScan.mockReturnValueOnce({ Items: [] });
 
         await tasksController.getTask(req, { json: jsonMock });
 
         expect(mockDbGet).toHaveBeenCalledTimes(1);
-        expect(jsonMock).toHaveBeenCalledWith(basicTask1);
+        expect(jsonMock).toHaveBeenCalledWith(expect.objectContaining(basicTask1));
     });
 
     it('Fetching a nonexistent task fails', async () => {
@@ -82,12 +83,17 @@ describe('getTasks', () => {
             auth: { uid: 'usr123' },
         };
 
-        mockDbScan.mockReturnValueOnce({ Items: [toDbFormat(basicTask1), toDbFormat(basicTask2)] });
+        mockDbScan.mockImplementation(({ TableName }) => {
+            if (TableName === 'tasks') return { Items: [toDbFormat(basicTask1), toDbFormat(basicTask2)] };
+            else return { Items: [] };
+        });
 
         await tasksController.getTasks(req, { json: jsonMock });
 
-        expect(mockDbScan).toHaveBeenCalledTimes(1);
-        expect(jsonMock).toHaveBeenCalledWith([basicTask1, basicTask2]);
+        expect(jsonMock).toHaveBeenCalledWith([
+            expect.objectContaining(basicTask1),
+            expect.objectContaining(basicTask2),
+        ]);
     });
 });
 
@@ -130,15 +136,17 @@ describe('updateTask', () => {
             auth: { uid: 'usr123' },
         };
 
+        mockDbScan.mockReturnValueOnce({ Items: [] });
         await tasksController.updateTask(req, { json: jsonMock });
 
         expect(mockDbPut).toHaveBeenCalledTimes(1);
-        expect(jsonMock).toHaveBeenCalledWith(updatedTask);
+        expect(jsonMock).toHaveBeenCalledWith(expect.objectContaining(updatedTask));
     });
 });
 
 describe('deleteTask', () => {
     it('Successful delete', async () => {
+        mockDbScan.mockReturnValueOnce({ Items: [] });
         await tasksController.deleteTask({ params: basicTask1, auth: 'usr123' }, { json: jsonMock });
         expect(mockDbDelete).toHaveBeenCalledTimes(1);
     });

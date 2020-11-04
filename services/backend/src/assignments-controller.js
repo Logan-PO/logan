@@ -44,7 +44,9 @@ async function getAssignment(req, res) {
     });
 
     if (dbResponse.Item) {
-        res.json(fromDbFormat(dbResponse.Item));
+        const assignment = fromDbFormat(dbResponse.Item);
+        assignment.reminders = await remindersForEntity('assignment', assignment.aid);
+        res.json(assignment);
     } else {
         throw new NotFoundError('Assignment does not exist');
     }
@@ -59,7 +61,19 @@ async function getAssignments(req, res) {
         ExpressionAttributeValues: { ':uid': requestedBy },
     });
 
-    res.json(dbResponse.Items.map(fromDbFormat));
+    const { Items: remindersResponse } = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.REMINDERS,
+        FilterExpression: 'uid = :uid and et = :et',
+        ExpressionAttributeValues: { ':uid': req.auth.uid, ':et': 'assignment' },
+    });
+
+    const assignments = dbResponse.Items.map(db => {
+        const assignment = fromDbFormat(db);
+        assignment.reminders = _.filter(remindersResponse, reminder => reminder.eid === assignment.aid);
+        return assignment;
+    });
+
+    res.json(assignments);
 }
 
 async function createAssignment(req, res) {
@@ -91,6 +105,8 @@ async function updateAssignment(req, res) {
         ExpressionAttributeValues: { ':uid': req.auth.uid },
         ConditionExpression: 'uid = :uid',
     });
+
+    assignment.reminders = await remindersForEntity('assignment', assignment.aid);
 
     res.json(assignment);
 }
