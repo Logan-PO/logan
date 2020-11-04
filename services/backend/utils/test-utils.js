@@ -2,15 +2,7 @@ const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const Promise = require('bluebird');
 
-const tableKeyMap = {
-    users: 'uid',
-    terms: 'tid',
-    courses: 'cid',
-    holidays: 'hid',
-    sections: 'sid',
-    assignments: 'aid',
-    tasks: 'tid',
-};
+const tableKeyMap = dynamoUtils.PKEYS;
 
 async function clearTables(tables = undefined) {
     if (!tables) tables = _.values(dynamoUtils.TABLES);

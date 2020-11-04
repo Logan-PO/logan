@@ -19,6 +19,7 @@ const TABLES = {
     HOLIDAYS: 'holidays',
     COURSES: 'courses',
     SECTIONS: 'sections',
+    REMINDERS: 'reminders',
 };
 
 const PKEYS = {
@@ -29,6 +30,7 @@ const PKEYS = {
     [TABLES.HOLIDAYS]: 'hid',
     [TABLES.COURSES]: 'cid',
     [TABLES.SECTIONS]: 'sid',
+    [TABLES.REMINDERS]: 'rid',
 };
 
 /**
