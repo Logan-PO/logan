@@ -96,11 +96,10 @@ async function updateReminder(req, res) {
 
 async function deleteReminder(req, res) {
     const { rid } = req.params;
-    const { eid } = requestValidator.requireBodyParams(req, ['eid']);
 
     await dynamoUtils.delete({
         TableName: dynamoUtils.TABLES.REMINDERS,
-        Key: { rid, eid },
+        Key: { rid },
         ExpressionAttributeValues: { ':uid': req.auth.uid },
         ConditionExpression: 'uid = :uid',
     });
