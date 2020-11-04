@@ -164,9 +164,11 @@ class TaskCell extends React.Component {
                                 <EditIcon fontSize="small" />
                             </IconButton>
                         )}
-                        <IconButton edge="end" onClick={this.deleted}>
-                            <DeleteIcon color="error" />
-                        </IconButton>
+                        {this.props.onDelete ? (
+                            <IconButton edge="end" onClick={this.deleted}>
+                                <DeleteIcon color="error" />
+                            </IconButton>
+                        ) : null}
                     </ListItemSecondaryAction>
                 </ListItem>
             </div>
