@@ -81,9 +81,6 @@ const mapStateToProps = state => {
     }
     function isThisWeek(curDate, finDate, repeatMod) {
         let duration = dayjs.duration(finDate.diff(curDate));
-        console.log(_.floor(duration.asWeeks()));
-        console.log(repeatMod);
-        console.log(_.floor(duration.asWeeks() % repeatMod));
         return _.floor(duration.asWeeks()) % repeatMod === 0;
     }
     function mapSectionToDates(section) {
@@ -99,8 +96,10 @@ const mapStateToProps = state => {
                 isSameWeekDay(currentDate, section.daysOfWeek) &&
                 isThisWeek(currentDate, finalDate, section.weeklyRepeat)
             ) {
-                //let sectionDate = currentDate.add(section.startTime);
-                sectionCellData.push({ section: section, dueDate: currentDate });
+                let tempDate = dayjs(section.startTime, 'HH:mm');
+                let sectionDate = currentDate.add(tempDate.hour(), 'hour');
+                sectionDate = sectionDate.add(tempDate.minute(), 'minute');
+                sectionCellData.push({ section: section, dueDate: sectionDate });
             }
             currentDate = currentDate.add(1, 'day');
             //break;
@@ -111,7 +110,6 @@ const mapStateToProps = state => {
     for (const section of scheduleSelectors.baseSelectors.sections.selectAll()) {
         //TODO: Map from its start day to days for the week and then add those event into the eventSelectors
         console.log(section.title);
-        //eventSelectors.push({ section: section, dueDate: section.dueDate });
         const tempSectionCellData = mapSectionToDates(section);
         for (const scheduledTime of tempSectionCellData) {
             eventSelectors.push(scheduledTime);
