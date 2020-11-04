@@ -20,6 +20,70 @@ const formatting = _.mapValues(controllers, controller => _.pick(controller, '__
 
 beforeAll(async () => testUtils.clearTables());
 
+describe('Tasks', () => {
+    let basicTask1, basicTask2;
+    let basicReminder1, basicReminder2;
+
+    beforeAll(async () => {
+        // Create 1 task for the other assignment
+        basicTask1 = {
+            uid: 'usr123',
+            tid: 'tid123',
+            title: 'task 1',
+            desc: 'problem 1',
+            due: '1/30/21',
+            pri: 2,
+            cmp: false,
+        };
+
+        basicTask2 = {
+            uid: 'usr123',
+            tid: 'tid124',
+            title: 'task 1',
+            desc: 'problem 1',
+            due: '1/30/21',
+            pri: 2,
+            cmp: false,
+        };
+
+        basicReminder1 = {
+            uid: 'usr123',
+            rid: uuid(),
+            et: 'task',
+            eid: basicTask1.tid,
+        };
+
+        basicReminder2 = {
+            uid: 'usr123',
+            rid: uuid(),
+            et: 'task',
+            eid: basicTask2.tid,
+        };
+
+        await dynamoUtils.batchWrite({
+            [dynamoUtils.TABLES.TASKS]: [basicTask1, basicTask2].map(t => ({ PutRequest: { Item: t } })),
+            [dynamoUtils.TABLES.REMINDERS]: [basicReminder1, basicReminder2].map(r => ({ PutRequest: { Item: r } })),
+        });
+    });
+
+    afterAll(async () => {
+        await testUtils.clearTables(['tasks', 'reminders']);
+    });
+
+    // Delete assignment
+    it('Successful delete', async () => {
+        await controllers.tasks.deleteTask(
+            { params: { tid: basicTask1.tid }, auth: { uid: basicTask1.uid } },
+            { json: jsonMock }
+        );
+
+        // Check that only the other task's reminder remains
+        const { Items: remainingReminders } = await dynamoUtils.scan({ TableName: dynamoUtils.TABLES.REMINDERS });
+        expect(remainingReminders).toHaveLength(1);
+        expect(remainingReminders[0]).toEqual(basicReminder2);
+    });
+});
+
 describe('Assignments', () => {
     let basicAssignment1, basicAssignment2;
     let tasks, basicTask1;

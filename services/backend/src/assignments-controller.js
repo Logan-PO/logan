@@ -7,8 +7,11 @@ const {
     },
 } = require('@logan/core');
 const { v4: uuid } = require('uuid');
+const Promise = require('bluebird');
 const requestValidator = require('../utils/request-validator');
 const { NotFoundError, ValidationError } = require('../utils/errors');
+const tasksController = require('./tasks-controller');
+const { remindersForEntity } = require('./reminders-controller');
 
 function fromDbFormat(db) {
     return {
@@ -108,6 +111,7 @@ async function deleteAssignment(req, res) {
 }
 
 async function handleCascadingDeletes(aid) {
+    // Delete subtasks
     const { Items: subtasks } = await dynamoUtils.scan({
         TableName: dynamoUtils.TABLES.TASKS,
         ExpressionAttributeValues: { ':aid': aid },
@@ -117,6 +121,12 @@ async function handleCascadingDeletes(aid) {
 
     const deleteRequests = subtasks.map(task => ({ DeleteRequest: { Key: _.pick(task, 'tid') } }));
     await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.TASKS]: deleteRequests });
+    await Promise.map(subtasks, ({ tid }) => tasksController.handleCascadingDeletes(tid));
+
+    // Delete reminders
+    const reminders = await remindersForEntity('assignment', aid);
+    const deleteRequests2 = reminders.map(reminder => ({ DeleteRequest: { Key: _.pick(reminder, 'rid') } }));
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.REMINDERS]: deleteRequests2 });
 }
 
 module.exports = {

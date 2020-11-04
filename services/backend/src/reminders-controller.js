@@ -107,9 +107,20 @@ async function deleteReminder(req, res) {
     res.json({ success: true });
 }
 
+async function remindersForEntity(type, eid) {
+    const { Items: dbReminders } = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.REMINDERS,
+        FilterExpression: ':eid = eid and :et = et',
+        ExpressionAttributeValues: { ':eid': eid, ':et': type },
+    });
+
+    return dbReminders.map(fromDbFormat);
+}
+
 module.exports = {
     __test_only__: { fromDbFormat, toDbFormat },
     createReminder,
     updateReminder,
     deleteReminder,
+    remindersForEntity,
 };

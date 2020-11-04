@@ -5,6 +5,7 @@ const Promise = require('bluebird');
 const requestValidator = require('../utils/request-validator');
 const { NotFoundError, ValidationError } = require('../utils/errors');
 const assignmentsController = require('./assignments-controller');
+const tasksController = require('./tasks-controller');
 
 function fromDbFormat(db) {
     return {
@@ -171,6 +172,7 @@ async function handleCascadingDeletes(cid) {
 
     const taskDeletes = dynamoUtils.makeDeleteRequests(tasks, 'tid');
     await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.TASKS]: taskDeletes });
+    await Promise.map(tasks, ({ tid }) => tasksController.handleCascadingDeletes(tid));
 }
 
 module.exports = {

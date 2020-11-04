@@ -3,6 +3,7 @@ const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const requestValidator = require('../utils/request-validator');
 const { NotFoundError } = require('../utils/errors');
+const { remindersForEntity } = require('./reminders-controller');
 
 function fromDbFormat(db) {
     return {
@@ -92,7 +93,16 @@ async function deleteTask(req, res) {
         ConditionExpression: 'uid = :uid',
     });
 
+    await handleCascadingDeletes(requestedTid);
+
     res.json({ success: true });
+}
+
+async function handleCascadingDeletes(tid) {
+    const reminders = await remindersForEntity('task', tid);
+
+    const deleteRequests = reminders.map(reminder => ({ DeleteRequest: { Key: _.pick(reminder, 'rid') } }));
+    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.REMINDERS]: deleteRequests });
 }
 
 module.exports = {
@@ -102,4 +112,5 @@ module.exports = {
     createTask,
     updateTask,
     deleteTask,
+    handleCascadingDeletes,
 };
