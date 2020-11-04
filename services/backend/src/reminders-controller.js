@@ -37,11 +37,16 @@ function fromDbFormat(db) {
 }
 
 /**
- * @param {Reminder }reminder
+ * @param {Reminder} reminder
  * @return {DBReminder}
  */
 function toDbFormat(reminder) {
-
+    return {
+        ..._.pick(reminder, ['rid', 'uid', 'eid']),
+        et: reminder.entityType,
+        ts: reminder.timestamp,
+        msg: reminder.message,
+    };
 }
 
 module.exports = {
