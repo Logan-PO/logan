@@ -87,6 +87,19 @@ async function getUser(uid) {
     return res.data;
 }
 
+// Returns the updated user
+async function updateUser(user) {
+    const { uid } = user;
+    const response = await client.put(`/users/${uid}`, user);
+    return response.data;
+}
+
+async function deleteUser(user) {
+    const { uid } = user;
+    const response = await client.delete(`/users/${uid}`);
+    return response.data;
+}
+
 /* --- TASKS --- */
 
 async function getTasks() {
@@ -282,6 +295,8 @@ export default {
     createNewUser: wrapWithErrorHandling(createNewUser),
     verifyIDToken: wrapWithErrorHandling(verifyIDToken),
     getUser: wrapWithErrorHandling(getUser),
+    updateUser: wrapWithErrorHandling(updateUser),
+    deleteUser: wrapWithErrorHandling(deleteUser),
     getTasks: wrapWithErrorHandling(getTasks),
     createTask: wrapWithErrorHandling(createTask),
     updateTask: wrapWithErrorHandling(updateTask),
