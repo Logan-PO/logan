@@ -23,14 +23,14 @@ export class OverviewScheduleList extends React.Component {
                     <List>
                         {this.props.sections.map(section => {
                             const [dueDate, eids] = section;
-                            return (
+                            return dayjs(dueDate).diff(dateUtils.dayjs()) >= 0 ? (
                                 <React.Fragment key={section[0]}>
                                     <ListSubheader>{dueDate}</ListSubheader>
                                     {eids.map(eid => (
                                         <OverviewCell key={eid} eid={eid} />
                                     ))}
                                 </React.Fragment>
-                            );
+                            ) : null;
                         })}
                     </List>
                 </div>
