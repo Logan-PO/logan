@@ -20,6 +20,9 @@ export function compareTasks(task1, task2) {
 }
 
 export function compareDueDates(dueDate1, dueDate2) {
+    dueDate1 = dueDate1.toLowerCase();
+    dueDate2 = dueDate2.toLowerCase();
+
     if (dueDate1 === 'asap') {
         if (dueDate2 === 'asap') return 0;
         else return -1;

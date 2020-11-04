@@ -1,21 +1,6 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import NavigationManager from '../mobile-frontend/src/components/navigation-manager';
 
 export default function App() {
-    return (
-        <View style={styles.container}>
-            <Text>Test start page</Text>
-            <StatusBar style="auto" />
-        </View>
-    );
+    return <NavigationManager />;
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});

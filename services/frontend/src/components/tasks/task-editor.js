@@ -3,11 +3,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Grid, TextField } from '@material-ui/core';
+import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
 import { getAssignmentsSelectors } from '../../store/assignments';
 import Editor from '../shared/editor';
 import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox, TagEditor } from '../shared/controls';
 import AssignmentPreview from './assignment-preview';
+
+const {
+    dayjs,
+    constants: { DB_DATETIME_FORMAT },
+} = dateUtils;
 
 class TaskEditor extends Editor {
     constructor(props) {
@@ -35,6 +41,10 @@ class TaskEditor extends Editor {
     processChange(changes, prop, e) {
         if (prop === 'complete') {
             changes[prop] = e.target.checked;
+
+            if (e.target.checked) {
+                changes.completionDate = dayjs().format(DB_DATETIME_FORMAT);
+            }
         } else if (prop === 'dueDate' || prop === 'tags') {
             changes[prop] = e;
         } else if (prop === 'cid') {
@@ -97,8 +107,8 @@ class TaskEditor extends Editor {
                                 <Grid item xs={6}>
                                     <CoursePicker
                                         fullWidth
-                                        disabled={this.isEmpty()}
-                                        value={_.get(this.state.task, 'cid', 'none')}
+                                        disabled={this.isEmpty() || !!relatedAssignment}
+                                        value={cid || 'none'}
                                         onChange={this.handleChange.bind(this, 'cid')}
                                     />
                                 </Grid>

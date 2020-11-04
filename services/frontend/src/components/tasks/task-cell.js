@@ -13,12 +13,18 @@ import {
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
 import { getAssignmentsSelectors } from '../../store/assignments';
 import { CourseLabel, PriorityDisplay, TagsDisplay } from '../shared/displays';
 import { Checkbox } from '../shared/controls';
 import styles from './task-cell.module.scss';
+
+const {
+    dayjs,
+    constants: { DB_DATE_FORMAT, DB_DATETIME_FORMAT },
+} = dateUtils;
 
 class TaskCell extends React.Component {
     constructor(props) {
@@ -28,6 +34,9 @@ class TaskCell extends React.Component {
         this.deleted = this.deleted.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.openRelatedAssignment = this.openRelatedAssignment.bind(this);
+
+        this.shouldShowOverdueLabel = this.shouldShowOverdueLabel.bind(this);
+        this.overdueLabelContent = this.overdueLabelContent.bind(this);
 
         this.state = {
             task: this.props.selectTaskFromStore(this.props.tid),
@@ -64,6 +73,10 @@ class TaskCell extends React.Component {
             complete: !this.state.task.complete,
         };
 
+        if (changes.complete) {
+            changes.completionDate = dayjs().format(DB_DATETIME_FORMAT);
+        }
+
         this.props.updateTaskLocal({
             id: this.props.tid,
             changes,
@@ -76,6 +89,25 @@ class TaskCell extends React.Component {
         });
 
         this.props.updateTask(afterUpdates);
+    }
+
+    shouldShowOverdueLabel() {
+        if (!this.props.showOverdueLabel) return false;
+        if (!dateUtils.dueDateIsDate(this.state.task.dueDate)) return false;
+
+        const dateValue = dayjs(this.state.task.dueDate, DB_DATE_FORMAT);
+        return dateValue.isBefore(dayjs(), 'day');
+    }
+
+    overdueLabelContent() {
+        const dateValue = dayjs(this.state.task.dueDate, DB_DATE_FORMAT);
+        const days = dayjs().diff(dateValue, 'days');
+
+        if (days === 1) {
+            return 'Due yesterday';
+        } else {
+            return `Due ${days} days ago`;
+        }
     }
 
     render() {
@@ -117,6 +149,11 @@ class TaskCell extends React.Component {
                                 {_.get(this.state.task, 'tags', []).length > 0 && (
                                     <TagsDisplay tags={this.state.task.tags} />
                                 )}
+                                {this.shouldShowOverdueLabel() && (
+                                    <Typography variant="body2" color="error">
+                                        {this.overdueLabelContent()}
+                                    </Typography>
+                                )}
                             </React.Fragment>
                         }
                         secondary={_.get(this.state, 'task.description')}
@@ -142,6 +179,7 @@ class TaskCell extends React.Component {
 TaskCell.propTypes = {
     subtaskCell: PropTypes.bool,
     tid: PropTypes.string,
+    showOverdueLabel: PropTypes.bool,
     updateTask: PropTypes.func,
     updateTaskLocal: PropTypes.func,
     selectTaskFromStore: PropTypes.func,

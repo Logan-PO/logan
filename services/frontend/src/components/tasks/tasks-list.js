@@ -2,28 +2,25 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dateUtils } from '@logan/core';
 import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { bindFunctions } from '../../utils/bindings';
-import { getTasksSelectors, deleteTask, compareDueDates, setShouldGoToTask } from '../../store/tasks';
+import { getTasksSelectors, deleteTask, setShouldGoToTask } from '../../store/tasks';
 import { setShouldGoToAssignment } from '../../store/assignments';
 import TaskCell from './task-cell';
 import '../shared/list.scss';
 import styles from './tasks-list.module.scss';
 import TaskModal from './task-modal';
+import { getSections } from './sorting';
 
 class TasksList extends React.Component {
     constructor(props) {
         super(props);
 
-        bindFunctions(this, [
-            this.didSelectTask,
-            this.didDeleteTask,
-            this.toggleCompletedTasks,
-            this.openCreateModal,
-            this.closeCreateModal,
-        ]);
+        this.didSelectTask = this.didSelectTask.bind(this);
+        this.didDeleteTask = this.didDeleteTask.bind(this);
+        this.toggleCompletedTasks = this.toggleCompletedTasks.bind(this);
+        this.openCreateModal = this.openCreateModal.bind(this);
+        this.closeCreateModal = this.closeCreateModal.bind(this);
 
         this.state = {
             showingCompletedTasks: false,
@@ -66,32 +63,13 @@ class TasksList extends React.Component {
         this.setState({ showingCompletedTasks: e.target.checked });
     }
 
-    sectionsToShow() {
-        const tasks = this.props.tids
-            .map(tid => this.props.getTask(tid))
-            .filter(task => task.complete === this.state.showingCompletedTasks);
-
-        const sections = {};
-        for (const task of tasks) {
-            const key = dateUtils.dueDateIsDate(task.dueDate) ? dateUtils.dayjs(task.dueDate) : task.dueDate;
-            if (sections[key]) sections[key].push(task.tid);
-            else sections[key] = [task.tid];
-        }
-
-        // TODO: Better sorting
-        if (this.state.showingCompletedTasks) {
-            return _.entries(sections)
-                .sort((a, b) => compareDueDates(b[0], a[0]))
-                .map(([key, value]) => [dateUtils.readableDueDate(key), value]);
-        } else {
-            return _.entries(sections)
-                .sort((a, b) => compareDueDates(a[0], b[0]))
-                .map(([key, value]) => [dateUtils.readableDueDate(key), value]);
-        }
-    }
-
     render() {
-        const sections = this.sectionsToShow();
+        const tasks = _.filter(
+            this.props.tids.map(tid => this.props.getTask(tid)),
+            task => task.complete === this.state.showingCompletedTasks
+        );
+
+        const sections = getSections(tasks, this.state.showingCompletedTasks);
 
         return (
             <div className="scrollable-list">
@@ -106,6 +84,7 @@ class TasksList extends React.Component {
                                         <TaskCell
                                             key={tid}
                                             tid={tid}
+                                            showOverdueLabel={!this.state.showingCompletedTasks}
                                             onSelect={this.didSelectTask}
                                             onDelete={this.didDeleteTask}
                                             selected={this.state.selectedTid === tid}
