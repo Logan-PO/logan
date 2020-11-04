@@ -74,7 +74,7 @@ const mapStateToProps = state => {
             daysOfWeek: [1, 3, 5],
             weeklyRepeat: 1,*/
     function isDuringTerm(section, date) {
-        return dayjs(section.endDate).diff(date) >= 0;
+        return dayjs(section.endDate).diff(date) >= 0 && dayjs(section.startDate).diff(date) < 0;
     }
     function isSameWeekDay(date, daysOfWeek) {
         return _.find(daysOfWeek, element => element === date.weekday()) != null;
@@ -87,10 +87,9 @@ const mapStateToProps = state => {
         //generate a list of dayjs objects that have day js formatted dueDates/dates
         let sectionCellData = [];
 
-        let initialDate = dayjs(section.startDate);
         let finalDate = dayjs(section.endDate);
 
-        let currentDate = initialDate;
+        let currentDate = dateUtils.dayjs();
         while (isDuringTerm(section, currentDate)) {
             if (
                 isSameWeekDay(currentDate, section.daysOfWeek) &&
@@ -99,6 +98,7 @@ const mapStateToProps = state => {
                 let tempDate = dayjs(section.startTime, 'HH:mm');
                 let sectionDate = currentDate.add(tempDate.hour(), 'hour');
                 sectionDate = sectionDate.add(tempDate.minute(), 'minute');
+                sectionDate = dateUtils.dayjs.utc(sectionDate).local().format();
                 sectionCellData.push({ section: section, dueDate: sectionDate });
             }
             currentDate = currentDate.add(1, 'day');
