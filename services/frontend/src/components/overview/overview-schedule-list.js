@@ -25,12 +25,14 @@ export class OverviewScheduleList extends React.Component {
                             const [dueDate, eids] = section;
                             return dayjs(dueDate).diff(dateUtils.dayjs()) >= 0 ||
                                 ['asap', 'eventually'].find(dd => dd === dueDate) ? (
-                                <React.Fragment key={section[0]}>
-                                    <ListSubheader>{dueDate}</ListSubheader>
-                                    {eids.map(eid => (
-                                        <OverviewCell key={eid} eid={eid} />
-                                    ))}
-                                </React.Fragment>
+                                <div className="background-color">
+                                    <React.Fragment key={section[0]}>
+                                        <ListSubheader>{dueDate}</ListSubheader>
+                                        {eids.map(eid => (
+                                            <OverviewCell key={eid} eid={eid} />
+                                        ))}
+                                    </React.Fragment>
+                                </div>
                             ) : null;
                         })}
                     </List>
@@ -90,7 +92,9 @@ const mapStateToProps = state => {
 
         let finalDate = dayjs(section.endDate);
 
-        let currentDate = dateUtils.dayjs();
+        //get the current date and set the hours min and secs to 0
+        let currentDate = dateUtils.dayjs().hour(0).minute(0).second(0);
+        console.log(currentDate);
         while (isDuringTerm(section, currentDate)) {
             if (
                 isSameWeekDay(currentDate, section.daysOfWeek) &&
@@ -99,7 +103,6 @@ const mapStateToProps = state => {
                 let tempDate = dayjs(section.startTime, 'HH:mm');
                 let sectionDate = currentDate.add(tempDate.hour(), 'hour');
                 sectionDate = sectionDate.add(tempDate.minute(), 'minute');
-                sectionDate = dateUtils.dayjs.utc(sectionDate).local().format();
                 sectionCellData.push({ section: section, dueDate: sectionDate });
             }
             currentDate = currentDate.add(1, 'day');

@@ -2,6 +2,8 @@ const dayjs = require('dayjs');
 
 // See: https://day.js.org/docs/en/plugin/plugin
 const plugins = {
+    timezone: require('dayjs/plugin/timezone'),
+    dayOfYear: require('dayjs/plugin/dayOfYear'),
     utc: require('dayjs/plugin/utc'),
     weekday: require('dayjs/plugin/weekday'),
     customParseFormat: require('dayjs/plugin/customParseFormat'),
