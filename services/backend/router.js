@@ -79,6 +79,13 @@ const authedRoutes = {
         get: controllers.sections.getSections,
         post: controllers.sections.createSection,
     },
+    '/reminders/:rid': {
+        put: controllers.reminders.updateReminder,
+        delete: controllers.reminders.deleteReminder,
+    },
+    '/reminders': {
+        post: controllers.reminders.createReminder,
+    },
 };
 
 /**

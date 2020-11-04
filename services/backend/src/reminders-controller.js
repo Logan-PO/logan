@@ -49,6 +49,52 @@ function toDbFormat(reminder) {
     };
 }
 
+async function createReminder(req, res) {
+    const rid = uuid();
+
+    requestValidator.requireBodyParams(req, ['eid', 'entityType', 'timestamp', 'message']);
+
+    const reminder = _.merge({}, req.body, { rid }, _.pick(req.auth, ['uid']));
+
+    await dynamoUtils.put({
+        TableName: dynamoUtils.TABLES.REMINDERS,
+        Item: toDbFormat(reminder),
+    });
+
+    res.json(reminder);
+}
+
+async function updateReminder(req, res) {
+    requestValidator.requireBodyParams(req, ['rid', 'eid', 'entityType', 'timestamp', 'message']);
+
+    const reminder = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
+
+    await dynamoUtils.put({
+        TableName: dynamoUtils.TABLES.REMINDERS,
+        Item: toDbFormat(reminder),
+        ExpressionAttributeValues: { ':uid': req.auth.uid },
+        ConditionExpression: 'uid = :uid',
+    });
+
+    res.json(reminder);
+}
+
+async function deleteReminder(req, res) {
+    const { rid } = req.params;
+
+    await dynamoUtils.delete({
+        TableName: dynamoUtils.TABLES.REMINDERS,
+        Key: { rid },
+        ExpressionAttributeValues: { ':uid': req.auth.uid },
+        ConditionExpression: 'uid = :uid',
+    });
+
+    res.json({ success: true });
+}
+
 module.exports = {
     __test_only__: { fromDbFormat, toDbFormat },
+    createReminder,
+    updateReminder,
+    deleteReminder,
 };
