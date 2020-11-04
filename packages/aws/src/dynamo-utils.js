@@ -30,7 +30,7 @@ const PKEYS = {
     [TABLES.HOLIDAYS]: 'hid',
     [TABLES.COURSES]: 'cid',
     [TABLES.SECTIONS]: 'sid',
-    [TABLES.REMINDERS]: ['rid', 'eid'],
+    [TABLES.REMINDERS]: 'rid',
 };
 
 /**
