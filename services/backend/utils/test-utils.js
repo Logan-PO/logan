@@ -2,7 +2,7 @@ const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const Promise = require('bluebird');
 
-const tableKeyMap = dynamoUtils.PKEYS;
+const tableKeysMap = dynamoUtils.PKEYS;
 
 async function clearTables(tables = undefined) {
     if (!tables) tables = _.values(dynamoUtils.TABLES);
@@ -13,8 +13,8 @@ async function clearTables(tables = undefined) {
     });
 
     const requests = _.mapValues(itemsByTable, (items, table) => {
-        const pk = tableKeyMap[table];
-        return items.map(item => ({ DeleteRequest: { Key: { [pk]: item[pk] } } }));
+        const pks = tableKeysMap[table];
+        return items.map(item => ({ DeleteRequest: { Key: _.pick(item, _.flatten([pks])) } }));
     });
 
     await dynamoUtils.batchWrite(requests);

@@ -1,20 +1,21 @@
-const tableKeyMap = {
-    users: 'uid',
-    terms: 'tid',
-    courses: 'cid',
-    holidays: 'hid',
-    sections: 'sid',
-    assignments: 'aid',
-    tasks: 'tid',
+const tableKeysMap = {
+    users: ['uid'],
+    terms: ['tid'],
+    courses: ['cid'],
+    holidays: ['hid'],
+    sections: ['sid'],
+    assignments: ['aid'],
+    tasks: ['tid'],
+    reminders: ['rid', 'eid'],
 };
 
 const tables = [];
 
-for (const [tableName, key] of Object.entries(tableKeyMap)) {
+for (const [tableName, keys] of Object.entries(tableKeysMap)) {
     tables.push({
         TableName: tableName,
-        KeySchema: [{ AttributeName: key, KeyType: 'HASH' }],
-        AttributeDefinitions: [{ AttributeName: key, AttributeType: 'S' }],
+        KeySchema: keys.map((key, i) => ({ AttributeName: key, KeyType: i ? 'RANGE' : 'HASH' })),
+        AttributeDefinitions: keys.map(key => ({ AttributeName: key, AttributeType: 'S' })),
         ProvisionedThroughput: { ReadCapacityUnits: 5, WriteCapacityUnits: 5 },
     });
 }
