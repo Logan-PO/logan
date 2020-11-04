@@ -1,8 +1,8 @@
+import _ from 'lodash';
 import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { element } from 'prop-types';
 import { connect } from 'react-redux';
 import { List, ListSubheader } from '@material-ui/core';
-
 import dayjs from 'dayjs';
 import * as dateUtils from '@logan/core/src/date-utils';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
@@ -73,6 +73,19 @@ const mapStateToProps = state => {
             endTime: '09:00',
             daysOfWeek: [1, 3, 5],
             weeklyRepeat: 1,*/
+    function isDuringTerm(section, date) {
+        return dayjs(section.endDate).diff(date) >= 0;
+    }
+    function isSameWeekDay(date, daysOfWeek) {
+        console.log(daysOfWeek);
+        console.log(date.weekday());
+        console.log(_.find(daysOfWeek, element => element === date.weekday()));
+        return _.find(daysOfWeek, element => element === date.weekday()) != null;
+    }
+    function isThisWeek(curDate, finDate, repeatMod) {
+        console.log(_.floor(dayjs.duration(finDate.diff(curDate, 'week'))));
+        return _.floor(dayjs.duration(finDate.diff(curDate, 'week'))) % repeatMod === 0;
+    }
     function mapSectionToDates(section) {
         //generate a list of dayjs objects that have day js formatted dueDates/dates
         let sectionCellData = [];
@@ -80,17 +93,17 @@ const mapStateToProps = state => {
         let initialDate = dayjs(section.startDate);
         let finalDate = dayjs(section.endDate);
 
-        let duration = dayjs.duration(finalDate.diff(initialDate));
         let currentDate = initialDate;
-        while (duration.asWeeks() >= 0) {
-            if (duration.asWeeks() % section.weeklyRepeat === 0 && currentDate.w) {
-                //TODO: This is where the formatting for the section cell comes from
-                sectionCellData.push({ cid: section.cid, tid: section.tid, dueDate: currentDate });
+        while (isDuringTerm(section, currentDate)) {
+            if (
+                isSameWeekDay(currentDate, section.daysOfWeek) //&&
+                //isThisWeek(currentDate, finalDate, section.weeklyRepeat)
+            ) {
+                //let sectionDate = currentDate.add(section.startTime);
+                sectionCellData.push({ section: section, dueDate: currentDate });
             }
-            console.log(duration);
-            duration = duration.subtract(1, 'week');
-            currentDate = currentDate.add(1, 'week');
-            break;
+            currentDate = currentDate.add(1, 'day');
+            //break;
         }
         return sectionCellData;
     } //TODO: Going to have the overview cell parse out which lower level cell it needs to display, e.g. overview-assignment or overview-task
@@ -98,7 +111,7 @@ const mapStateToProps = state => {
     for (const section of scheduleSelectors.baseSelectors.sections.selectAll()) {
         //TODO: Map from its start day to days for the week and then add those event into the eventSelectors
         console.log(section.title);
-        eventSelectors.push({ section: section, dueDate: section.dueDate });
+        //eventSelectors.push({ section: section, dueDate: section.dueDate });
         const tempSectionCellData = mapSectionToDates(section);
         for (const scheduledTime of tempSectionCellData) {
             eventSelectors.push(scheduledTime);
