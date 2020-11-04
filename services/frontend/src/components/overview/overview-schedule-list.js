@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import PropTypes, { element } from 'prop-types';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, ListSubheader } from '@material-ui/core';
 import dayjs from 'dayjs';
@@ -77,14 +77,14 @@ const mapStateToProps = state => {
         return dayjs(section.endDate).diff(date) >= 0;
     }
     function isSameWeekDay(date, daysOfWeek) {
-        console.log(daysOfWeek);
-        console.log(date.weekday());
-        console.log(_.find(daysOfWeek, element => element === date.weekday()));
         return _.find(daysOfWeek, element => element === date.weekday()) != null;
     }
     function isThisWeek(curDate, finDate, repeatMod) {
-        console.log(_.floor(dayjs.duration(finDate.diff(curDate, 'week'))));
-        return _.floor(dayjs.duration(finDate.diff(curDate, 'week'))) % repeatMod === 0;
+        let duration = dayjs.duration(finDate.diff(curDate));
+        console.log(_.floor(duration.asWeeks()));
+        console.log(repeatMod);
+        console.log(_.floor(duration.asWeeks() % repeatMod));
+        return _.floor(duration.asWeeks()) % repeatMod === 0;
     }
     function mapSectionToDates(section) {
         //generate a list of dayjs objects that have day js formatted dueDates/dates
@@ -96,8 +96,8 @@ const mapStateToProps = state => {
         let currentDate = initialDate;
         while (isDuringTerm(section, currentDate)) {
             if (
-                isSameWeekDay(currentDate, section.daysOfWeek) //&&
-                //isThisWeek(currentDate, finalDate, section.weeklyRepeat)
+                isSameWeekDay(currentDate, section.daysOfWeek) &&
+                isThisWeek(currentDate, finalDate, section.weeklyRepeat)
             ) {
                 //let sectionDate = currentDate.add(section.startTime);
                 sectionCellData.push({ section: section, dueDate: currentDate });
