@@ -13,7 +13,7 @@ import {
     Button,
     CircularProgress,
 } from '@material-ui/core';
-import { CoursePicker, DueDatePicker, PriorityPicker } from '../shared/controls';
+import { CoursePicker, DueDatePicker, PriorityPicker, TagEditor } from '../shared/controls';
 import { createTask } from '../../store/tasks';
 import styles from './task-modal.module.scss';
 
@@ -128,15 +128,25 @@ class TaskModal extends React.Component {
                                 fullWidth
                             />
                         </Grid>
-                        {!isSubtask && (
-                            <Grid item xs={12}>
-                                <CoursePicker
-                                    value={_.get(this.state.task, 'cid', 'none')}
-                                    onChange={this.handleChange.bind(this, 'cid')}
-                                    fullWidth
-                                />
+                        <Grid item xs={12}>
+                            <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
+                                {!isSubtask && (
+                                    <Grid item xs={6}>
+                                        <CoursePicker
+                                            value={_.get(this.state.task, 'cid', 'none')}
+                                            onChange={this.handleChange.bind(this, 'cid')}
+                                            fullWidth
+                                        />
+                                    </Grid>
+                                )}
+                                <Grid item>
+                                    <TagEditor
+                                        tags={_.get(this.state.task, 'tags')}
+                                        onChange={this.handleChange.bind(this, 'tags')}
+                                    />
+                                </Grid>
                             </Grid>
-                        )}
+                        </Grid>
                         <Grid item xs={12}>
                             <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
                                 <Grid item xs={6}>
