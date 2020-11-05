@@ -34,7 +34,7 @@ Checkbox.propTypes = {
     checked: PropTypes.bool,
     onChange: PropTypes.func,
     disabled: PropTypes.bool,
-    marginRight: PropTypes.number,
+    marginRight: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
 };
 
 const mapStateToProps = state => ({
