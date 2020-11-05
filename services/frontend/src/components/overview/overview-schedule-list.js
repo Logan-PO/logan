@@ -12,7 +12,7 @@ import OverviewCell from './overview-cell';
 
 const {
     dayjs,
-    constants: { DB_DATE_FORMAT },
+    constants: { DB_DATE_FORMAT, DB_TIME_FORMAT },
 } = dateUtils;
 
 export class OverviewScheduleList extends React.Component {
@@ -45,7 +45,7 @@ export class OverviewScheduleList extends React.Component {
                 sections.push(section);
             }
 
-            return sections;
+            return _.sortBy(sections, section => dayjs(section.startTime, DB_TIME_FORMAT));
         }
 
         function filterByDate(arr, date) {
