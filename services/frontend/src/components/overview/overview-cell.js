@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { ListItem, ListItemText } from '@material-ui/core';
 import { getAssignmentsSelectors } from '../../store/assignments';
 import { getScheduleSelectors, getSectionSelectors } from '../../store/schedule';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
@@ -57,14 +56,9 @@ export class OverviewCell extends React.Component {
     determineSecondaryFormatting(type) {
         return type === 'section' ? _.get(this.state, 'event.location') : _.get(this.state, 'event.description');
     }
+
     render() {
-        return (
-            <div className="list-cell">
-                <ListItem>
-                    <ListItemText primary={this.determinePrimaryFormatting(this.type)} />
-                </ListItem>
-            </div>
-        );
+        return this.determinePrimaryFormatting(this.type);
     }
 }
 OverviewCell.propTypes = {
