@@ -41,6 +41,18 @@ class AssignmentsList extends React.Component {
 
     componentDidMount() {
         if (this.props.shouldGoToAssignment) {
+            const selectedAssignment = this.props.getAssignment(this.props.shouldGoToAssignment);
+
+            const isPastAssignment =
+                !!selectedAssignment &&
+                dateUtils.dueDateIsDate(selectedAssignment.dueDate) &&
+                dateUtils
+                    .dayjs(selectedAssignment.dueDate, dateUtils.constants.DB_DATE_FORMAT)
+                    .isBefore(dateUtils.dayjs(), 'day');
+
+            console.log(isPastAssignment);
+
+            this.setState({ showingPastAssignments: isPastAssignment });
             this.didSelectAssignment(this.props.shouldGoToAssignment);
             this.props.setShouldGoToAssignment(undefined);
         }
@@ -109,14 +121,18 @@ class AssignmentsList extends React.Component {
                     <Toolbar variant="dense">
                         <FormControl>
                             <FormControlLabel
-                                control={<Switch color="default" />}
+                                control={
+                                    <Switch
+                                        color="default"
+                                        checked={this.state.showingPastAssignments}
+                                        onChange={this.togglePastAssignments}
+                                    />
+                                }
                                 label={
                                     this.state.showingPastAssignments
                                         ? 'Showing past assignments'
                                         : 'Showing upcoming assignments'
                                 }
-                                value={this.state.showingPastAssignments}
-                                onChange={this.togglePastAssignments}
                             />
                         </FormControl>
                     </Toolbar>
@@ -134,6 +150,7 @@ AssignmentsList.propTypes = {
     fetchAssignments: PropTypes.func,
     deleteAssignment: PropTypes.func,
     onAssignmentSelected: PropTypes.func,
+    getAssignment: PropTypes.func,
     shouldGoToAssignment: PropTypes.string,
     setShouldGoToAssignment: PropTypes.func,
 };
@@ -142,6 +159,7 @@ const mapStateToProps = state => {
     const selectors = getAssignmentsSelectors(state.assignments);
 
     return {
+        getAssignment: selectors.selectById,
         shouldGoToAssignment: state.assignments.shouldGoToAssignment,
         assignments: selectors.selectAll(),
     };
