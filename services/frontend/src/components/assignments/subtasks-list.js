@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { Paper, List } from '@material-ui/core';
+import { Paper, List, Divider } from '@material-ui/core';
 import TaskCell from '../tasks/task-cell';
 import { getTasksSelectors, createTask, deleteTask } from '../../store/tasks';
 import '../shared/list.scss';
@@ -34,7 +34,14 @@ class SubtasksList extends React.Component {
                 <div className="basic-list">
                     <List>
                         {this.props.aid &&
-                            this.props.tasks.map(task => <TaskCell key={task.tid} tid={task.tid} subtaskCell />)}
+                            this.props.tasks.map((task, index) => (
+                                <React.Fragment key={task.tid}>
+                                    <TaskCell key={task.tid} tid={task.tid} subtaskCell />
+                                    {index < this.props.tasks.length - 1 && (
+                                        <Divider component="li" style={{ marginTop: -1 }} />
+                                    )}
+                                </React.Fragment>
+                            ))}
                     </List>
                 </div>
             </Paper>
