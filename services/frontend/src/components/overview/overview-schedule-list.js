@@ -109,7 +109,7 @@ const mapStateToProps = state => {
     const eventSections = {};
     for (const scheduleEvent of eventSelectors) {
         const key = dateUtils.dueDateIsDate(scheduleEvent.dueDate)
-            ? dateUtils.dayjs(scheduleEvent.dueDate)
+            ? dateUtils.readableDueDate(scheduleEvent.dueDate)
             : scheduleEvent.dueDate;
         if (eventSections[key]) eventSections[key].push(getID(scheduleEvent));
         else eventSections[key] = [getID(scheduleEvent)];
