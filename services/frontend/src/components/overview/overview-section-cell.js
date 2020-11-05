@@ -2,33 +2,50 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import { ListItem, ListItemText } from '@material-ui/core';
+import { dateUtils } from '@logan/core';
+import { Grid, ListItem, ListItemText } from '@material-ui/core';
 import { CourseLabel } from '../shared/displays';
 import { getSectionSelectors } from '../../store/schedule';
+
+const {
+    dayjs,
+    constants: { DB_TIME_FORMAT },
+} = dateUtils;
 
 export class OverviewSectionCell extends React.Component {
     constructor(props) {
         super(props);
+
+        this.getTimingString = this.getTimingString.bind(this);
+
         this.state = {
             section: this.props.selectSectionFromStore(this.props.sid),
         };
+    }
+
+    getTimingString() {
+        const startTime = dayjs(this.state.section.startTime, DB_TIME_FORMAT);
+        const endTime = dayjs(this.state.section.endTime, DB_TIME_FORMAT);
+
+        if (startTime.format('a') === endTime.format('a')) {
+            return `${startTime.format('h:mm')} - ${endTime.format('h:mm A')}`;
+        } else {
+            return `${startTime.format('h:mm A')} - ${endTime.format('h:mm A')}`;
+        }
     }
 
     render() {
         return (
             <div className="list-cell">
                 <ListItem>
-                    <ListItemText
-                        primary={
-                            <React.Fragment>
-                                <div className="cell-upper-label">
-                                    <CourseLabel cid={_.get(this.state, 'section.cid')} />
-                                </div>
-                                <div>{_.get(this.state, 'section.title')}</div>
-                            </React.Fragment>
-                        }
-                        secondary={_.get(this.state, 'section.location')}
-                    />
+                    <Grid container direction="row" alignItems="top">
+                        <Grid item style={{ minWidth: '11rem' }}>
+                            <ListItemText primary={this.getTimingString()} />
+                        </Grid>
+                        <Grid item>
+                            <ListItemText primary={<CourseLabel cid={_.get(this.state, 'section.cid')} />} />
+                        </Grid>
+                    </Grid>
                 </ListItem>
             </div>
         );
