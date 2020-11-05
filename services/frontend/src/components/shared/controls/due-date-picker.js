@@ -112,7 +112,7 @@ class DueDatePicker extends React.Component {
                                 value={dateValue}
                                 onChange={this.updateDate}
                                 color="primary"
-                                emptyLabel="Choose a date…"
+                                labelFunc={val => (val ? dateUtils.readableDueDate(val) : 'Choose a date…')}
                             />
                         }
                         labelPlacement="end"

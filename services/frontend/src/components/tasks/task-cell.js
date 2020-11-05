@@ -3,14 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
-import {
-    ListItem,
-    ListItemText,
-    Typography,
-    ListItemIcon,
-    ListItemSecondaryAction,
-    IconButton,
-} from '@material-ui/core';
+import { ListItem, ListItemText, Typography, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { dateUtils } from '@logan/core';
@@ -123,15 +116,12 @@ class TaskCell extends React.Component {
             <div className={`list-cell ${styles.taskCell}`}>
                 <PriorityDisplay priority={_.get(this.state.task, 'priority')} />
                 <ListItem button selected={this.props.selected} onClick={this.select}>
-                    {!this.props.subtaskCell && (
-                        <ListItemIcon>
-                            <Checkbox
-                                cid={_.get(this.state.task, 'cid')}
-                                checked={_.get(this.state, 'task.complete', false)}
-                                onChange={this.handleChange}
-                            />
-                        </ListItemIcon>
-                    )}
+                    <Checkbox
+                        cid={_.get(this.state.task, 'cid')}
+                        checked={_.get(this.state, 'task.complete', false)}
+                        onChange={this.handleChange}
+                        marginRight="1rem"
+                    />
                     <ListItemText
                         primary={
                             <React.Fragment>

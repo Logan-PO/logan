@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
+import { Helmet } from 'react-helmet';
 import { Toolbar } from '@material-ui/core';
 import { LOGIN_STAGE, fetchSelf } from '../../store/login';
 import styles from './page.module.scss';
@@ -23,6 +24,9 @@ class Page extends React.Component {
     render() {
         return (
             <div className={styles.page}>
+                <Helmet>
+                    <title>Logan | {this.props.title}</title>
+                </Helmet>
                 <Navbar title={this.props.title} buttons={this.props.buttons} />
                 <div className={styles.rootContainer}>
                     <Toolbar />

@@ -13,6 +13,10 @@ class Checkbox extends React.Component {
             checkboxStyle.color = course.color;
         }
 
+        if (this.props.marginRight !== undefined) {
+            checkboxStyle.marginRight = this.props.marginRight;
+        }
+
         return (
             <MuiCheckbox
                 disabled={this.props.disabled}
@@ -30,6 +34,7 @@ Checkbox.propTypes = {
     checked: PropTypes.bool,
     onChange: PropTypes.func,
     disabled: PropTypes.bool,
+    marginRight: PropTypes.any,
 };
 
 const mapStateToProps = state => ({

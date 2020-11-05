@@ -13,12 +13,12 @@ function compareStrings(a, b) {
 
 const termsAdapter = createEntityAdapter({
     selectId: term => term.tid,
-    sortComparer: (a, b) => dateUtils.compareDates(a.startDate, b.startDate, dateUtils.constants.DB_DATE_FORMAT),
+    sortComparer: (a, b) => dateUtils.compareDates(b.startDate, a.startDate, dateUtils.constants.DB_DATE_FORMAT),
 });
 
 const holidaysAdapter = createEntityAdapter({
     selectId: holiday => holiday.hid,
-    sortComparer: (a, b) => dateUtils.compareDates(a.startDate, b.startDate, dateUtils.constants.DB_DATE_FORMAT),
+    sortComparer: (a, b) => dateUtils.compareDates(b.startDate, a.startDate, dateUtils.constants.DB_DATE_FORMAT),
 });
 
 const coursesAdapter = createEntityAdapter({
