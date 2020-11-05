@@ -134,6 +134,7 @@ class AssignmentModal extends React.Component {
                                         onChange={this.handleChange.bind(this, 'dueDate')}
                                         variant="inline"
                                         label="Due Date"
+                                        labelFunc={dateUtils.readableDueDate}
                                         fullWidth
                                     />
                                 </Grid>
