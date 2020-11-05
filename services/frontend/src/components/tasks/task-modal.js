@@ -112,6 +112,7 @@ class TaskModal extends React.Component {
                     <Grid container direction="column" spacing={1}>
                         <Grid item xs={12}>
                             <TextField
+                                autoFocus
                                 label="Title"
                                 onChange={this.handleChange.bind(this, 'title')}
                                 value={_.get(this.state.task, 'title')}

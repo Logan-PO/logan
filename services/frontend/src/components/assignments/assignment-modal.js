@@ -103,6 +103,7 @@ class AssignmentModal extends React.Component {
                     <Grid container direction="column" spacing={2}>
                         <Grid item xs={12}>
                             <TextField
+                                autoFocus
                                 label="Title"
                                 onChange={this.handleChange.bind(this, 'title')}
                                 value={_.get(this.state.assignment, 'title')}
