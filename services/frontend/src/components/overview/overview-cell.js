@@ -30,7 +30,6 @@ export class OverviewCell extends React.Component {
             case 'task':
                 return this.props.selectTaskFromStore(this.props.eid);
             case 'section':
-                console.log(this.props.selectSectionFromStore(this.props.eid));
                 return this.props.selectSectionFromStore(this.props.eid);
             default:
                 return undefined;
@@ -38,10 +37,6 @@ export class OverviewCell extends React.Component {
     }
 
     determinePrimaryFormatting(type) {
-        /*const assignment = _.defaultTo(this.props.getAssignment(_.get(this.state.event, 'aid')), undefined);
-        const course = assignment
-            ? this.props.getCourse(assignment.cid)
-            : this.props.getCourse(_.get(this.state.event, 'cid'));*/
         switch (type) {
             case 'assignment':
                 return <AssignmentCell key={this.props.eid} aid={this.props.eid} />;
