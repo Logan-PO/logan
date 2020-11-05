@@ -25,14 +25,12 @@ export class OverviewScheduleList extends React.Component {
                             const [dueDate, eids] = section;
                             return dayjs(dueDate).diff(dateUtils.dayjs()) >= 0 ||
                                 ['asap', 'eventually'].find(dd => dd === dueDate) ? (
-                                <div className="background-color">
-                                    <React.Fragment key={section[0]}>
-                                        <ListSubheader>{dueDate}</ListSubheader>
-                                        {eids.map(eid => (
-                                            <OverviewCell key={eid} eid={eid} />
-                                        ))}
-                                    </React.Fragment>
-                                </div>
+                                <React.Fragment key={section[0]}>
+                                    <ListSubheader disableSticky={true}>{dueDate}</ListSubheader>
+                                    {eids.map(eid => (
+                                        <OverviewCell key={eid} eid={eid} />
+                                    ))}
+                                </React.Fragment>
                             ) : null;
                         })}
                     </List>
