@@ -109,6 +109,8 @@ class AssignmentEditor extends Editor {
                                                 disabled={this.isEmpty()}
                                                 variant="inline"
                                                 label="Due Date"
+                                                labelFunc={dateUtils.readableDueDate}
+                                                color="primary"
                                                 fullWidth
                                             />
                                         </Grid>

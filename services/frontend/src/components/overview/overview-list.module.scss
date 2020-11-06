@@ -1,18 +1,17 @@
 @import '../../globals/global';
 
+.background-color {
+  top: 0;
+  z-index: 1;
+  position: sticky;
+  background-color: white;
+}
 .scrollable-list {
   height: 100%;
   flex-grow: 1;
   background: white;
   overflow: hidden;
 
-  .add-button {
-    position: relative;
-    left: calc(100% - 1.5em);
-    bottom: 1.5em;
-    transform: translate(-100%, -100%);
-    z-index: 10000;
-  }
 
   .scroll-view {
     height: 100%;

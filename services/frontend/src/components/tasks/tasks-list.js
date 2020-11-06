@@ -99,10 +99,14 @@ class TasksList extends React.Component {
                     <Toolbar variant="dense">
                         <FormControl>
                             <FormControlLabel
-                                control={<Switch color="default" />}
+                                control={
+                                    <Switch
+                                        color="default"
+                                        checked={this.state.showingCompletedTasks}
+                                        onChange={this.toggleCompletedTasks}
+                                    />
+                                }
                                 label={this.state.showingCompletedTasks ? 'Completed tasks' : 'Remaining tasks'}
-                                value={this.state.showingCompletedTasks}
-                                onChange={this.toggleCompletedTasks}
                             />
                         </FormControl>
                     </Toolbar>

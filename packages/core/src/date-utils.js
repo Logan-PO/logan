@@ -2,6 +2,9 @@ const dayjs = require('dayjs');
 
 // See: https://day.js.org/docs/en/plugin/plugin
 const plugins = {
+    timezone: require('dayjs/plugin/timezone'),
+    dayOfYear: require('dayjs/plugin/dayOfYear'),
+    utc: require('dayjs/plugin/utc'),
     weekday: require('dayjs/plugin/weekday'),
     customParseFormat: require('dayjs/plugin/customParseFormat'),
     advancedFormat: require('dayjs/plugin/advancedFormat'),
@@ -52,6 +55,30 @@ const DB_DATE_FORMAT = 'YYYY-M-D';
 const DB_TIME_FORMAT = 'HH:mm';
 const DB_DATETIME_FORMAT = 'YYYY-M-D H:m';
 
+function toDate(input) {
+    return dayjs(input, DB_DATE_FORMAT);
+}
+
+function formatAsDate(obj) {
+    return obj.format(DB_DATE_FORMAT);
+}
+
+function toTime(input) {
+    return dayjs(input, DB_TIME_FORMAT);
+}
+
+function formatAsTime(obj) {
+    return obj.format(DB_TIME_FORMAT);
+}
+
+function toDateTime(input) {
+    return dayjs(input, DB_DATETIME_FORMAT);
+}
+
+function formatAsDateTime(obj) {
+    return obj.format(DB_DATETIME_FORMAT);
+}
+
 module.exports = {
     dayjs,
     constants: { DB_DATE_FORMAT, DB_TIME_FORMAT, DB_DATETIME_FORMAT },
@@ -59,4 +86,10 @@ module.exports = {
     humanReadableDate,
     dueDateIsDate,
     readableDueDate,
+    toDate,
+    toTime,
+    toDateTime,
+    formatAsDate,
+    formatAsTime,
+    formatAsDateTime,
 };
