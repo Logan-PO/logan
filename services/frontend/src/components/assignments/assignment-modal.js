@@ -30,10 +30,13 @@ class AssignmentModal extends React.Component {
         this.close = this.close.bind(this);
         this.createAssignment = this.createAssignment.bind(this);
 
+        this._titleRef = React.createRef();
+
         this.state = {
             fakeId: Math.random().toString(),
             isCreating: false,
             showLoader: false,
+            justOpened: false,
             assignment: {
                 title: 'New assignment',
                 dueDate: dayjs().format(DB_DATE_FORMAT),
@@ -44,6 +47,8 @@ class AssignmentModal extends React.Component {
     componentDidUpdate(prevProps) {
         if (!prevProps.open && this.props.open) {
             this.componentWillOpen();
+        } else if (this.state.justOpened) {
+            this.componentDidOpen();
         }
     }
 
@@ -52,11 +57,17 @@ class AssignmentModal extends React.Component {
             fakeId: Math.random().toString(),
             isCreating: false,
             showLoader: false,
+            justOpened: true,
             assignment: {
                 title: 'New assignment',
                 dueDate: dayjs().format(DB_DATE_FORMAT),
             },
         });
+    }
+
+    componentDidOpen() {
+        this._titleRef.current && this._titleRef.current.select();
+        this.setState({ justOpened: false });
     }
 
     close() {
@@ -108,6 +119,7 @@ class AssignmentModal extends React.Component {
                                 onChange={this.handleChange.bind(this, 'title')}
                                 value={_.get(this.state.assignment, 'title')}
                                 fullWidth
+                                inputRef={this._titleRef}
                             />
                         </Grid>
                         <Grid item xs={12}>
