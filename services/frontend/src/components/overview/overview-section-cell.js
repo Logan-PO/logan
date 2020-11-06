@@ -66,7 +66,7 @@ export class OverviewSectionCell extends React.Component {
     render() {
         return (
             <div className="list-cell">
-                <ListItem>{this.determineRendering()}</ListItem>
+                <ListItem dense>{this.determineRendering()}</ListItem>
             </div>
         );
     }

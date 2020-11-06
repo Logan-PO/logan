@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, Button } from '@material-ui/core';
+import { List, ListSubheader, ListItem, Typography, Button, colors } from '@material-ui/core';
 import { dateUtils } from '@logan/core';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
 import './overview-list.module.scss';
@@ -80,6 +80,16 @@ export class OverviewScheduleList extends React.Component {
         this.setState({ condensed: !_.get(this.state, 'condensed', false) });
     }
 
+    secondaryHeader(title) {
+        return (
+            <ListItem style={{ background: colors.grey[100] }} dense key={title}>
+                <Typography variant="button">
+                    <b>{title}</b>
+                </Typography>
+            </ListItem>
+        );
+    }
+
     render() {
         const groups = this.getRelevantData();
 
@@ -92,9 +102,10 @@ export class OverviewScheduleList extends React.Component {
                             {groups.map(([date, { sections, assignments, tasks }]) => {
                                 return (
                                     <React.Fragment key={date.format()}>
-                                        <ListSubheader disableSticky={true}>
+                                        <ListSubheader style={{ background: colors.grey[300] }}>
                                             {dateUtils.humanReadableDate(date)}
                                         </ListSubheader>
+                                        {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
                                         {sections.map(({ sid }) => (
                                             <OverviewCell
                                                 condensed={_.get(this.state, 'condensed', false)}
@@ -102,6 +113,7 @@ export class OverviewScheduleList extends React.Component {
                                                 eid={sid}
                                             />
                                         ))}
+                                        {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
                                         {assignments.map(({ aid }) => (
                                             <OverviewCell
                                                 condensed={_.get(this.state, 'condensed', false)}
@@ -109,6 +121,7 @@ export class OverviewScheduleList extends React.Component {
                                                 eid={aid}
                                             />
                                         ))}
+                                        {tasks.length > 0 && this.secondaryHeader('TASKS')}
                                         {tasks.map(({ tid }) => (
                                             <OverviewCell
                                                 condensed={_.get(this.state, 'condensed', false)}
