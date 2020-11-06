@@ -57,6 +57,7 @@ export class OverviewSectionCell extends React.Component {
                         <Grid container direction="row" alignItems="top">
                             <ListItemText primary={_.get(this.state, 'section.instructor')} />{' '}
                         </Grid>
+                        <ListItemText primary={_.get(this.state, 'section.title')} />{' '}
                     </Grid>
                 </Grid>
             );
