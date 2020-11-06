@@ -84,6 +84,7 @@ const authedRoutes = {
         delete: controllers.reminders.deleteReminder,
     },
     '/reminders': {
+        get: controllers.reminders.getReminders,
         post: controllers.reminders.createReminder,
     },
 };

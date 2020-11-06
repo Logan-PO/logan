@@ -62,6 +62,18 @@ function validateTimestamp(ts) {
     }
 }
 
+async function getReminders(req, res) {
+    const requestedBy = req.auth.uid;
+
+    const dbResponse = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.REMINDERS,
+        FilterExpression: 'uid = :uid',
+        ExpressionAttributeValues: { ':uid': requestedBy },
+    });
+
+    res.json(dbResponse.Items.map(fromDbFormat));
+}
+
 async function createReminder(req, res) {
     const rid = uuid();
 
@@ -119,6 +131,7 @@ async function remindersForEntity(type, eid) {
 
 module.exports = {
     __test_only__: { fromDbFormat, toDbFormat },
+    getReminders,
     createReminder,
     updateReminder,
     deleteReminder,
