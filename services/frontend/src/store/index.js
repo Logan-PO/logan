@@ -5,12 +5,14 @@ import login from './login';
 import tasks from './tasks';
 import assignments from './assignments';
 import schedule from './schedule';
+import reminders from './reminders';
 
 const rootReducer = combineReducers({
     tasks,
     assignments,
     login,
     schedule,
+    reminders,
 });
 
 const store = configureStore({
