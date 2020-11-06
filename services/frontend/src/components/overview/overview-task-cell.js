@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
-import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
 import {
     ListItem,
@@ -12,7 +11,6 @@ import {
     IconButton,
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
@@ -32,10 +30,7 @@ class OverviewTaskCell extends React.Component {
         super(props);
 
         this.select = this.select.bind(this);
-        this.deleted = this.deleted.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.openRelatedAssignment = this.openRelatedAssignment.bind(this);
-
         this.shouldShowOverdueLabel = this.shouldShowOverdueLabel.bind(this);
         this.overdueLabelContent = this.overdueLabelContent.bind(this);
 
@@ -48,17 +43,6 @@ class OverviewTaskCell extends React.Component {
         if (this.props.onSelect) {
             this.props.onSelect(this.props.tid);
         }
-    }
-
-    deleted() {
-        if (this.props.onDelete) {
-            this.props.onDelete(this.state.task);
-        }
-    }
-
-    openRelatedAssignment() {
-        this.props.setShouldGoToTask(this.props.tid);
-        navigate('/tasks');
     }
 
     componentDidUpdate() {
@@ -165,7 +149,6 @@ class OverviewTaskCell extends React.Component {
                                 )}
                             </React.Fragment>
                         }
-                        secondary={_.get(this.state, 'task.description')}
                     />
                     <ListItemSecondaryAction className="actions">
                         {this.props.subtaskCell && (
@@ -173,11 +156,6 @@ class OverviewTaskCell extends React.Component {
                                 <EditIcon fontSize="small" />
                             </IconButton>
                         )}
-                        {this.props.onDelete ? (
-                            <IconButton edge="end" onClick={this.deleted}>
-                                <DeleteIcon color="error" />
-                            </IconButton>
-                        ) : null}
                     </ListItemSecondaryAction>
                 </ListItem>
             </div>
@@ -196,7 +174,6 @@ OverviewTaskCell.propTypes = {
     getAssignment: PropTypes.func,
     selected: PropTypes.bool,
     onSelect: PropTypes.func,
-    onDelete: PropTypes.func,
     setShouldGoToTask: PropTypes.func,
 };
 

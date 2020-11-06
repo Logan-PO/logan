@@ -11,9 +11,13 @@ import globalStyles from '../../globals/global.scss';
 export class OverviewAssignmentCell extends React.Component {
     constructor(props) {
         super(props);
+        this.select = this.select.bind(this);
         this.state = {
             assignment: this.props.selectAssignmentFromStore(this.props.aid),
         };
+    }
+    select() {
+        if (this.props.onSelect) this.props.onSelect(this.props.aid);
     }
 
     render() {
@@ -21,7 +25,7 @@ export class OverviewAssignmentCell extends React.Component {
 
         return (
             <div className="list-cell">
-                <ListItem>
+                <ListItem button selected={this.props.selected} onClick={this.select}>
                     <ListItemText
                         primary={
                             <React.Fragment>
@@ -40,6 +44,8 @@ export class OverviewAssignmentCell extends React.Component {
     }
 }
 OverviewAssignmentCell.propTypes = {
+    onSelect: PropTypes.func,
+    selected: PropTypes.bool,
     aid: PropTypes.string,
     selectAssignmentFromStore: PropTypes.func,
     getCourse: PropTypes.func,
