@@ -6,7 +6,10 @@ import styles from './priority-display.module.scss';
 
 class PriorityDisplay extends React.Component {
     render() {
-        const p = _.find(_.values(priorities), ([num]) => num === this.props.priority);
+        const p = _.defaultTo(
+            _.find(_.values(priorities), ([num]) => num === this.props.priority),
+            ['white', 'white']
+        );
         const style = { background: p[1] };
         return <div className={styles.priorityDisplay} style={style} />;
     }

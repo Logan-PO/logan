@@ -1,0 +1,14 @@
+@import '../../globals/global';
+
+.overview-page {
+    height: 100%;
+    flex-grow: 1;
+    flex-direction: row;
+    flex-wrap: nowrap;
+
+    .list-container {
+        height: 100%;
+    }
+
+
+}

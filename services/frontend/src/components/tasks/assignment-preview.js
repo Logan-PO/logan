@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
+import { dateUtils } from '@logan/core';
 import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { getAssignmentsSelectors, setShouldGoToAssignment } from '../../store/assignments';
@@ -16,6 +17,7 @@ class AssignmentPreview extends React.Component {
 
     render() {
         const assignment = this.props.getAssignment(this.props.aid);
+        const formattedDueDate = dateUtils.readableDueDate(assignment.dueDate);
 
         return (
             <React.Fragment>
@@ -33,7 +35,7 @@ class AssignmentPreview extends React.Component {
                                 )}
                                 <Typography>{assignment.title}</Typography>
                                 <Typography variant="body2" color="textSecondary">
-                                    Due {assignment.dueDate}
+                                    Due {formattedDueDate}
                                 </Typography>
                             </div>
                             <ExitToAppIcon />
