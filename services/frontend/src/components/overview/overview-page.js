@@ -8,7 +8,6 @@ export class OverviewPage extends React.Component {
     }
 
     render() {
-        //possible source of error here
         return (
             <Page title="Overview">
                 <OverviewScheduleList />

@@ -33,7 +33,6 @@ export class OverviewAssignmentCell extends React.Component {
                                 <div>{_.get(this.state, 'assignment.title')}</div>
                             </React.Fragment>
                         }
-                        secondary={_.get(this.state, 'assignment.description')}
                     />
                 </ListItem>
             </div>

@@ -33,25 +33,46 @@ export class OverviewSectionCell extends React.Component {
             return `${startTime.format('h:mm A')} - ${endTime.format('h:mm A')}`;
         }
     }
+    determineRendering() {
+        if (this.props.condensed) {
+            return (
+                <Grid container direction="row" alignItems="top">
+                    <Grid item style={{ minWidth: '11rem' }}>
+                        <ListItemText primary={this.getTimingString()} />
+                    </Grid>
+                    <Grid item>
+                        <ListItemText primary={<CourseLabel cid={_.get(this.state, 'section.cid')} />} />
+                    </Grid>
+                </Grid>
+            );
+        } else {
+            return (
+                <Grid container direction="row" alignItems="top">
+                    <Grid item style={{ minWidth: '11rem' }}>
+                        <ListItemText primary={this.getTimingString()} />
+                        <ListItemText primary={_.get(this.state, 'section.location')} />
+                    </Grid>
+                    <Grid item>
+                        <ListItemText primary={<CourseLabel cid={_.get(this.state, 'section.cid')} />} />
+                        <Grid container direction="row" alignItems="top">
+                            <ListItemText primary={_.get(this.state, 'section.instructor')} />{' '}
+                        </Grid>
+                    </Grid>
+                </Grid>
+            );
+        }
+    }
 
     render() {
         return (
             <div className="list-cell">
-                <ListItem>
-                    <Grid container direction="row" alignItems="top">
-                        <Grid item style={{ minWidth: '11rem' }}>
-                            <ListItemText primary={this.getTimingString()} />
-                        </Grid>
-                        <Grid item>
-                            <ListItemText primary={<CourseLabel cid={_.get(this.state, 'section.cid')} />} />
-                        </Grid>
-                    </Grid>
-                </ListItem>
+                <ListItem>{this.determineRendering()}</ListItem>
             </div>
         );
     }
 }
 OverviewSectionCell.propTypes = {
+    condensed: PropTypes.boolean,
     sid: PropTypes.string,
     cid: PropTypes.string,
     tid: PropTypes.string,

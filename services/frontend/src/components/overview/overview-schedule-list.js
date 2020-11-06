@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader } from '@material-ui/core';
+import { List, ListSubheader, Button } from '@material-ui/core';
 import { dateUtils } from '@logan/core';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
 import './overview-list.module.scss';
@@ -20,6 +20,8 @@ export class OverviewScheduleList extends React.Component {
         super(props);
 
         this.getRelevantData = this.getRelevantData.bind(this);
+        this.changeCondense = this.changeCondense.bind(this);
+        this.state = { condensed: false };
     }
 
     getRelevantData() {
@@ -73,37 +75,58 @@ export class OverviewScheduleList extends React.Component {
         return groups;
     }
 
+    changeCondense() {
+        console.log('click');
+        this.setState({ condensed: !_.get(this.state, 'condensed', false) });
+    }
+
     render() {
         const groups = this.getRelevantData();
 
         return (
-            <div className="scrollable-list">
-                <div className="scroll-view">
-                    <List>
-                        {groups.map(([date, { sections, assignments, tasks }]) => {
-                            return (
-                                <React.Fragment key={date.format()}>
-                                    <ListSubheader disableSticky={true}>
-                                        {dateUtils.humanReadableDate(date)}
-                                    </ListSubheader>
-                                    {sections.map(({ sid }) => (
-                                        <OverviewCell key={sid} eid={sid} />
-                                    ))}
-                                    {assignments.map(({ aid }) => (
-                                        <OverviewCell key={aid} eid={aid} />
-                                    ))}
-                                    {tasks.map(({ tid }) => (
-                                        <OverviewCell key={tid} eid={tid} />
-                                    ))}
-                                </React.Fragment>
-                            );
-                        })}
-                    </List>
+            <div>
+                <Button onClick={this.changeCondense}>Condense/Uncondense</Button>
+                <div className="scrollable-list">
+                    <div className="scroll-view">
+                        <List>
+                            {groups.map(([date, { sections, assignments, tasks }]) => {
+                                return (
+                                    <React.Fragment key={date.format()}>
+                                        <ListSubheader disableSticky={true}>
+                                            {dateUtils.humanReadableDate(date)}
+                                        </ListSubheader>
+                                        {sections.map(({ sid }) => (
+                                            <OverviewCell
+                                                condensed={_.get(this.state, 'condensed', false)}
+                                                key={sid}
+                                                eid={sid}
+                                            />
+                                        ))}
+                                        {assignments.map(({ aid }) => (
+                                            <OverviewCell
+                                                condensed={_.get(this.state, 'condensed', false)}
+                                                key={aid}
+                                                eid={aid}
+                                            />
+                                        ))}
+                                        {tasks.map(({ tid }) => (
+                                            <OverviewCell
+                                                condensed={_.get(this.state, 'condensed', false)}
+                                                key={tid}
+                                                eid={tid}
+                                            />
+                                        ))}
+                                    </React.Fragment>
+                                );
+                            })}
+                        </List>
+                    </div>
                 </div>
             </div>
         );
     }
 }
+
 OverviewScheduleList.propTypes = {
     assignmentSelectors: PropTypes.object,
     taskSelectors: PropTypes.object,

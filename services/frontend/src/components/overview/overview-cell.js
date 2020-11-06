@@ -8,6 +8,8 @@ import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/task
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import OverviewSectionCell from './overview-section-cell';
+import OverviewAssignmentCell from './overview-assignment-cell';
+import OverviewTaskCell from './overview-task-cell';
 
 export class OverviewCell extends React.Component {
     constructor(props) {
@@ -43,11 +45,21 @@ export class OverviewCell extends React.Component {
             : this.props.getCourse(_.get(this.state.event, 'cid'));*/
         switch (type) {
             case 'assignment':
-                return <AssignmentCell key={this.props.eid} aid={this.props.eid} />;
+                return this.props.condensed ? (
+                    <OverviewAssignmentCell key={this.props.eid} aid={this.props.eid} />
+                ) : (
+                    <AssignmentCell key={this.props.eid} aid={this.props.eid} />
+                );
             case 'task':
-                return <TaskCell key={this.props.eid} tid={this.props.eid} />;
+                return this.props.condensed ? (
+                    <OverviewTaskCell key={this.props.eid} tid={this.props.eid} />
+                ) : (
+                    <TaskCell key={this.props.eid} tid={this.props.eid} />
+                );
             case 'section':
-                return <OverviewSectionCell key={this.props.eid} sid={this.props.eid} />;
+                return (
+                    <OverviewSectionCell condensed={this.props.condensed} key={this.props.eid} sid={this.props.eid} />
+                );
             default:
                 return undefined;
         }
@@ -62,6 +74,7 @@ export class OverviewCell extends React.Component {
     }
 }
 OverviewCell.propTypes = {
+    condensed: PropTypes.boolean,
     eid: PropTypes.string,
     selectAssignmentFromStore: PropTypes.func,
     selectTaskFromStore: PropTypes.func,
@@ -77,7 +90,7 @@ const mapStateToProps = state => {
         selectAssignmentFromStore: getAssignmentsSelectors(state.assignments).selectById,
         getCourse: getScheduleSelectors(state.schedule).baseSelectors.courses.selectById,
         getAssignment: getAssignmentsSelectors(state.assignments).selectById,
-    }; //scheduleSelectors.baseSelectors.sections.selectAll()
+    };
 };
 
 const mapDispatchToProps = { updateTask, updateTaskLocal };
