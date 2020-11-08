@@ -108,7 +108,7 @@ export class OverviewScheduleList extends React.Component {
         return _.get(this.state, 'listView', true) ? (
             <div>
                 <Button onClick={this.changeCondense}>Condense/Uncondense</Button>
-                <Button onClick={this.changeView}>List/Weekly</Button>
+                <Button onClick={this.changeView}>Weekly View</Button>
                 <div className="scrollable-list">
                     <div className="scroll-view">
                         <List>

@@ -1,14 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { List, ListSubheader, ListItem, Typography, Button, colors } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import { dateUtils } from '@logan/core';
-import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
 import './overview-list.module.scss';
-import { fetchTasks, getTasksSelectors } from '../../store/tasks';
-import { getScheduleSelectors } from '../../store/schedule';
-import OverviewCell from './overview-cell';
+
+import OverviewScheduleList from './overview-schedule-list';
 
 const {
     dayjs,
@@ -18,9 +15,24 @@ const {
 export class OverviewWeekly extends React.Component {
     constructor(props) {
         super(props);
+        this.state = { listView: false };
+        this.changeView = this.changeView.bind(this);
+    }
+
+    changeView() {
+        this.setState({
+            listView: !_.get(this.state, 'listView', false),
+        });
     }
 
     render() {
-        return <div>Hello World</div>;
+        return _.get(this.state, 'listView', false) ? (
+            <OverviewScheduleList />
+        ) : (
+            <div>
+                <Button onClick={this.changeView}>List View</Button>
+                <div>Hello World</div>
+            </div>
+        );
     }
 }
