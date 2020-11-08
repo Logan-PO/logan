@@ -96,6 +96,7 @@ export class OverviewScheduleList extends React.Component {
         return (
             <div>
                 <Button onClick={this.changeCondense}>Condense/Uncondense</Button>
+                <Button onClick={this.changeCondense}>List/Weekly</Button>
                 <div className="scrollable-list">
                     <div className="scroll-view">
                         <List>
