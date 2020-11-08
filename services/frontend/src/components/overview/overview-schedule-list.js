@@ -9,6 +9,7 @@ import './overview-list.module.scss';
 import { fetchTasks, getTasksSelectors } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
 import OverviewCell from './overview-cell';
+import { OverviewWeekly } from './overview-weekly';
 
 const {
     dayjs,
@@ -21,7 +22,9 @@ export class OverviewScheduleList extends React.Component {
 
         this.getRelevantData = this.getRelevantData.bind(this);
         this.changeCondense = this.changeCondense.bind(this);
-        this.state = { condensed: false };
+        this.changeView = this.changeView.bind(this);
+
+        this.state = { condensed: false, listView: true };
     }
 
     getRelevantData() {
@@ -76,8 +79,17 @@ export class OverviewScheduleList extends React.Component {
     }
 
     changeCondense() {
-        console.log('click');
-        this.setState({ condensed: !_.get(this.state, 'condensed', false) });
+        this.setState({
+            condensed: !_.get(this.state, 'condensed', false),
+            listView: _.get(this.state, 'listView', true),
+        });
+    }
+
+    changeView() {
+        this.setState({
+            condensed: _.get(this.state, 'condensed', false),
+            listView: !_.get(this.state, 'listView', true),
+        });
     }
 
     secondaryHeader(title) {
@@ -93,10 +105,10 @@ export class OverviewScheduleList extends React.Component {
     render() {
         const groups = this.getRelevantData();
 
-        return (
+        return _.get(this.state, 'listView', true) ? (
             <div>
                 <Button onClick={this.changeCondense}>Condense/Uncondense</Button>
-                <Button onClick={this.changeCondense}>List/Weekly</Button>
+                <Button onClick={this.changeView}>List/Weekly</Button>
                 <div className="scrollable-list">
                     <div className="scroll-view">
                         <List>
@@ -137,6 +149,8 @@ export class OverviewScheduleList extends React.Component {
                     </div>
                 </div>
             </div>
+        ) : (
+            <OverviewWeekly groups={groups} />
         );
     }
 }
