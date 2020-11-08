@@ -9,6 +9,7 @@ import { getAssignmentsSelectors } from '../../store/assignments';
 import Editor from '../shared/editor';
 import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox, TagEditor } from '../shared/controls';
 import AssignmentPreview from './assignment-preview';
+import './task-editor.scss';
 
 const {
     dayjs,
@@ -63,12 +64,7 @@ class TaskEditor extends Editor {
         return (
             <div className="editor">
                 <div className="scroll-view">
-                    <Grid container spacing={2} direction="column">
-                        {relatedAssignment && (
-                            <Grid item xs={12}>
-                                <AssignmentPreview aid={relatedAssignment.aid} />
-                            </Grid>
-                        )}
+                    <Grid container spacing={2} direction="column" alignItems="stretch">
                         <Grid item xs={12}>
                             <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">
                                 <Grid item>
@@ -105,12 +101,16 @@ class TaskEditor extends Editor {
                         <Grid item xs={12}>
                             <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
                                 <Grid item xs={6}>
-                                    <CoursePicker
-                                        fullWidth
-                                        disabled={this.isEmpty() || !!relatedAssignment}
-                                        value={cid || 'none'}
-                                        onChange={this.handleChange.bind(this, 'cid')}
-                                    />
+                                    {relatedAssignment ? (
+                                        <AssignmentPreview aid={relatedAssignment.aid} />
+                                    ) : (
+                                        <CoursePicker
+                                            fullWidth
+                                            disabled={this.isEmpty() || !!relatedAssignment}
+                                            value={cid || 'none'}
+                                            onChange={this.handleChange.bind(this, 'cid')}
+                                        />
+                                    )}
                                 </Grid>
                                 <Grid item xs={6}>
                                     <TagEditor
