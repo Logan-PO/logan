@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { Grid } from '@material-ui/core';
 import { Page } from '../shared';
 import { fetchAssignments } from '../../store/assignments';
+import EmptySticker from '../shared/displays/empty-sticker';
 import AssignmentsList from './assignments-list';
 import AssignmentEditor from './assignment-editor';
 import styles from './assignments-page.module.scss';
@@ -30,7 +31,11 @@ export class AssignmentsPage extends React.Component {
                         <AssignmentsList onAssignmentSelected={this.didSelectAssignment} />
                     </Grid>
                     <Grid item sm={6} md={8} lg={7} className={styles.editorContainer}>
-                        <AssignmentEditor aid={this.state.selectedAid} />
+                        {this.state.selectedAid ? (
+                            <AssignmentEditor aid={this.state.selectedAid} />
+                        ) : (
+                            <EmptySticker message="Nothing selected" />
+                        )}
                     </Grid>
                 </Grid>
             </Page>
