@@ -73,7 +73,7 @@ function setBearerToken(token, stash = true) {
 }
 
 async function verifyIDToken(idToken) {
-    const res = await client.post('/auth/verify', { idToken });
+    const res = await client.post('/auth/verify', { idToken, clientType: 'web' });
     return res.data;
 }
 
