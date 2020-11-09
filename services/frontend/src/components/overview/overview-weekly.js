@@ -25,7 +25,7 @@ const {
 class OverviewWeekly extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { listView: false, events: this.props.events }; //TODO: events need to be in state so that calendar will update
+        this.state = { listView: false, events: this.props.events };
         this.changeView = this.changeView.bind(this);
         this.convertEvents = this.convertEvents.bind(this);
         this.formatEventForCalendar = this.formatEventForCalendar.bind(this);
@@ -36,7 +36,7 @@ class OverviewWeekly extends React.Component {
             listView: !_.get(this.state, 'listView', false),
             events: this.props.events,
         });
-    } //TODO: Need convert to event method
+    }
     /*{
     id: 0,
     title: 'All Day Event very long title',
