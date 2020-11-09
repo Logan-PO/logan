@@ -11,17 +11,12 @@ import OverviewScheduleList from './overview-schedule-list';
 import './overview-weekly.scss';
 
 const localizer = momentLocalizer(moment);
-/*const events = [
-    {
-        start: moment().toDate(),
-        end: moment().add(1, 'days').toDate(),
-        title: 'Some title',
-    },
-];*/
+
 const {
     dayjs,
     constants: { DB_DATE_FORMAT, DB_TIME_FORMAT },
 } = dateUtils;
+
 class OverviewWeekly extends React.Component {
     constructor(props) {
         super(props);
@@ -134,7 +129,7 @@ class OverviewWeekly extends React.Component {
             ];
         } else if (eevent.sid) {
             //event is a section
-            //TODO:Create a list of date objects to put onto calendar
+            //creates of list of dates to add to the calendar
             let sectionDateList = this.mapSectionToDates(eevent);
 
             return sectionDateList;
