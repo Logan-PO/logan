@@ -194,6 +194,9 @@ class OverviewWeekly extends React.Component {
     render() {
         return (
             <Grid container direction="row" alignItems="top" spacing={2}>
+                <Grid item xs alignContent={'left'}>
+                    <div></div>
+                </Grid>
                 <Grid item xs={10} alignContent={'left'}>
                     {
                         <div>
@@ -202,7 +205,7 @@ class OverviewWeekly extends React.Component {
                                 defaultDate={new Date()}
                                 defaultView="month"
                                 events={this.convertEvents(this.combineEvents())}
-                                style={{ height: '90vh' }} //TODO: If this value is <110 the week view is not adjusted properly
+                                style={{ height: '110vh' }} //TODO: If this value is <110 the week view is not adjusted properly
                                 eventPropGetter={event => {
                                     const backgroundColor = event ? event.color : '#fff';
                                     return { style: { backgroundColor } };
