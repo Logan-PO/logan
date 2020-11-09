@@ -2,10 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import { navigate } from 'gatsby';
 import { dateUtils } from '@logan/core';
 import { Grid, ListItem, ListItemText } from '@material-ui/core';
 import { CourseLabel } from '../shared/displays';
-import { getSectionSelectors } from '../../store/schedule';
+import { getSectionSelectors, setShouldGoTo } from '../../store/schedule';
 
 const {
     dayjs,
@@ -17,6 +18,7 @@ export class OverviewSectionCell extends React.Component {
         super(props);
 
         this.getTimingString = this.getTimingString.bind(this);
+        this.openSection = this.openSection.bind(this);
 
         this.state = {
             section: this.props.selectSectionFromStore(this.props.sid),
@@ -63,10 +65,17 @@ export class OverviewSectionCell extends React.Component {
         }
     }
 
+    openSection() {
+        this.props.setShouldGoTo({ type: 'section', eid: this.state.section.sid });
+        navigate('/schedule');
+    }
+
     render() {
         return (
             <div className="list-cell">
-                <ListItem dense>{this.determineRendering()}</ListItem>
+                <ListItem dense button onClick={this.openSection}>
+                    {this.determineRendering()}
+                </ListItem>
             </div>
         );
     }
@@ -77,6 +86,7 @@ OverviewSectionCell.propTypes = {
     cid: PropTypes.string,
     tid: PropTypes.string,
     selectSectionFromStore: PropTypes.func,
+    setShouldGoTo: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -85,4 +95,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, null)(OverviewSectionCell);
+export default connect(mapStateToProps, { setShouldGoTo })(OverviewSectionCell);
