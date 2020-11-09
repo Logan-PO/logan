@@ -23,8 +23,26 @@ export class OverviewScheduleList extends React.Component {
         this.getRelevantData = this.getRelevantData.bind(this);
         this.changeCondense = this.changeCondense.bind(this);
         this.changeView = this.changeView.bind(this);
+        this.combineEvents = this.combineEvents.bind(this);
 
         this.state = { condensed: false, listView: true };
+    }
+    combineEvents() {
+        const events = [];
+
+        const allAssignments = this.props.assignmentSelectors.selectAll();
+        const allTasks = this.props.taskSelectors.selectAll();
+        const allSections = this.props.scheduleSelectors.baseSelectors.sections.selectAll();
+        for (const assignment of allAssignments) {
+            events.push(assignment);
+        }
+        for (const task of allTasks) {
+            events.push(task);
+        }
+        for (const sections of allSections) {
+            events.push(sections);
+        }
+        return events;
     }
 
     getRelevantData() {
@@ -150,7 +168,7 @@ export class OverviewScheduleList extends React.Component {
                 </div>
             </div>
         ) : (
-            <OverviewWeekly events={groups} />
+            <OverviewWeekly events={this.combineEvents()} />
         );
     }
 }
