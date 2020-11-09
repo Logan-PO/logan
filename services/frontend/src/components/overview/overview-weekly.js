@@ -2,13 +2,16 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import * as dateUtils from '@logan/core/src/date-utils';
 import { getScheduleSelectors } from '../../store/schedule';
-import OverviewScheduleList from './overview-schedule-list';
 import './overview-weekly.scss';
+import './overview-list.module.scss';
+import { getAssignmentsSelectors } from '../../store/assignments';
+import { getTasksSelectors } from '../../store/tasks';
+import OverviewScheduleList from './overview-schedule-list';
 
 const localizer = momentLocalizer(moment);
 
@@ -16,14 +19,26 @@ const {
     dayjs,
     constants: { DB_DATE_FORMAT, DB_TIME_FORMAT },
 } = dateUtils;
+let invalidDate;
 
 class OverviewWeekly extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { listView: false, events: this.props.events };
+        this.combineEvents = this.combineEvents.bind(this);
         this.changeView = this.changeView.bind(this);
         this.convertEvents = this.convertEvents.bind(this);
         this.formatEventForCalendar = this.formatEventForCalendar.bind(this);
+        this.state = { listView: false, events: [] };
+
+        let badDate = dateUtils.dayjs();
+        invalidDate = {
+            id: 0,
+            title: 'Invalid Event',
+            allDay: true,
+            start: new Date(badDate.year(), badDate.month(), badDate.day()),
+            end: new Date(badDate.year(), badDate.month(), badDate.day()),
+            color: 'red',
+        };
     }
 
     changeView() {
@@ -31,6 +46,24 @@ class OverviewWeekly extends React.Component {
             listView: !_.get(this.state, 'listView', false),
             events: this.props.events,
         });
+    }
+
+    combineEvents() {
+        const events = [];
+
+        const allAssignments = this.props.assignmentSelectors.selectAll();
+        const allTasks = this.props.taskSelectors.selectAll();
+        const allSections = this.props.scheduleSelectors.baseSelectors.sections.selectAll();
+        for (const assignment of allAssignments) {
+            events.push(assignment);
+        }
+        for (const task of allTasks) {
+            events.push(task);
+        }
+        for (const sections of allSections) {
+            events.push(sections);
+        }
+        return events;
     }
     /*{
     id: 0,
@@ -134,19 +167,10 @@ class OverviewWeekly extends React.Component {
 
             return sectionDateList;
         } else {
-            let badDate = dateUtils.dayjs();
-            return [
-                {
-                    id: 0,
-                    title: 'Invalid Event',
-                    allDay: true,
-                    start: new Date(badDate.year(), badDate.month(), badDate.day()),
-                    end: new Date(badDate.year(), badDate.month(), badDate.day()),
-                    color: 'red',
-                },
-            ];
+            return [invalidDate];
         }
     }
+
     convertEvents(events) {
         console.log(events);
         let formattedEventList = [];
@@ -162,32 +186,41 @@ class OverviewWeekly extends React.Component {
         return (
             //TODO: This is where you edit the color of the text
             <span>
-                <span style={{ color: 'black' }}>{event.title}</span>
+                <span style={{ color: 'darkgrey' }}>{event.title}</span>
                 {event.desc && `:  ${event.desc}`}
             </span>
         );
     }
     render() {
-        return _.get(this.state, 'listView', false) ? (
-            <OverviewScheduleList />
-        ) : (
-            <div>
-                <Button onClick={this.changeView}>Agenda View</Button>
-                <Calendar
-                    localizer={localizer}
-                    defaultDate={new Date()}
-                    defaultView="month"
-                    events={this.convertEvents(_.get(this.state, 'events', []))}
-                    style={{ height: '130vh' }} //TODO: If this value is <120 the week view is not adjusted properly
-                    eventPropGetter={event => {
-                        const backgroundColor = event ? event.color : '#fff';
-                        return { style: { backgroundColor } };
-                    }}
-                    components={{
-                        event: this.Event,
-                    }}
-                />
-            </div>
+        return (
+            <Grid container direction="row" alignItems="top" spacing={2}>
+                <Grid item xs={10} alignContent={'left'}>
+                    {
+                        <div>
+                            <Calendar
+                                localizer={localizer}
+                                defaultDate={new Date()}
+                                defaultView="month"
+                                events={this.convertEvents(this.combineEvents())}
+                                style={{ height: '90vh' }} //TODO: If this value is <110 the week view is not adjusted properly
+                                eventPropGetter={event => {
+                                    const backgroundColor = event ? event.color : '#fff';
+                                    return { style: { backgroundColor } };
+                                }}
+                                components={{
+                                    event: this.Event,
+                                }}
+                                resizable
+                            />
+                        </div>
+                    }
+                </Grid>
+                <Grid item xs alignContent={'right'}>
+                    <div className="scrollable-list">
+                        <OverviewScheduleList />
+                    </div>
+                </Grid>
+            </Grid>
         );
     }
 }
@@ -195,10 +228,20 @@ class OverviewWeekly extends React.Component {
 OverviewWeekly.propTypes = {
     events: PropTypes.array,
     getCourse: PropTypes.func,
+    assignmentSelectors: PropTypes.object,
+    taskSelectors: PropTypes.object,
+    scheduleSelectors: PropTypes.object,
 };
 
 const mapStateToProps = state => {
+    const assignmentSelectors = getAssignmentsSelectors(state.assignments);
+    const taskSelectors = getTasksSelectors(state.tasks);
+    const scheduleSelectors = getScheduleSelectors(state.schedule);
+
     return {
+        assignmentSelectors,
+        taskSelectors,
+        scheduleSelectors,
         getCourse: getScheduleSelectors(state.schedule).baseSelectors.courses.selectById,
     };
 };

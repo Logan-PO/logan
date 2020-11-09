@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, ListItem, Typography, Button, colors } from '@material-ui/core';
+import { List, ListSubheader, ListItem, Typography, colors } from '@material-ui/core';
 import { dateUtils } from '@logan/core';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
 import './overview-list.module.scss';
@@ -23,26 +23,7 @@ export class OverviewScheduleList extends React.Component {
         this.getRelevantData = this.getRelevantData.bind(this);
         this.changeCondense = this.changeCondense.bind(this);
         this.changeView = this.changeView.bind(this);
-        this.combineEvents = this.combineEvents.bind(this);
-
         this.state = { condensed: false, listView: true };
-    }
-    combineEvents() {
-        const events = [];
-
-        const allAssignments = this.props.assignmentSelectors.selectAll();
-        const allTasks = this.props.taskSelectors.selectAll();
-        const allSections = this.props.scheduleSelectors.baseSelectors.sections.selectAll();
-        for (const assignment of allAssignments) {
-            events.push(assignment);
-        }
-        for (const task of allTasks) {
-            events.push(task);
-        }
-        for (const sections of allSections) {
-            events.push(sections);
-        }
-        return events;
     }
 
     getRelevantData() {
@@ -125,8 +106,6 @@ export class OverviewScheduleList extends React.Component {
 
         return _.get(this.state, 'listView', true) ? (
             <div>
-                <Button onClick={this.changeCondense}>Condense/Uncondense</Button>
-                <Button onClick={this.changeView}>Weekly View</Button>
                 <div className="scrollable-list">
                     <div className="scroll-view">
                         <List>
@@ -168,7 +147,7 @@ export class OverviewScheduleList extends React.Component {
                 </div>
             </div>
         ) : (
-            <OverviewWeekly events={this.combineEvents()} />
+            <OverviewWeekly />
         );
     }
 }
