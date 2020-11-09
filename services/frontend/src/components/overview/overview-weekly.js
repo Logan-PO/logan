@@ -22,12 +22,13 @@ const {
     dayjs,
     constants: { DB_DATE_FORMAT, DB_TIME_FORMAT },
 } = dateUtils;
-export class OverviewWeekly extends React.Component {
+class OverviewWeekly extends React.Component {
     constructor(props) {
         super(props);
         this.state = { listView: false, events: this.props.events }; //TODO: events need to be in state so that calendar will update
         this.changeView = this.changeView.bind(this);
         this.convertEvents = this.convertEvents.bind(this);
+        this.formatEventForCalendar = this.formatEventForCalendar.bind(this);
     }
 
     changeView() {
@@ -55,6 +56,7 @@ export class OverviewWeekly extends React.Component {
         return _.floor(duration.asWeeks()) % repeatMod === 0;
     }
     mapSectionToDates(section) {
+        const course = this.props.getCourse(section.cid);
         //generate a list of dayjs objects that have day js formatted dueDates/dates
         let sectionCellData = [];
 
@@ -92,7 +94,7 @@ export class OverviewWeekly extends React.Component {
                         endTime.minute()
                     ),
                     desc: section.location,
-                    color: 'white',
+                    color: course ? course.color : 'blue',
                 });
             }
             currentDate = currentDate.add(1, 'day');
@@ -102,6 +104,8 @@ export class OverviewWeekly extends React.Component {
 
     formatEventForCalendar(eevent) {
         let date = dateUtils.dayjs(eevent.dueDate, DB_DATE_FORMAT);
+        const course = this.props.getCourse(eevent.cid);
+
         if (eevent.tid) {
             //the event is a task
             return [
@@ -112,7 +116,7 @@ export class OverviewWeekly extends React.Component {
                     start: new Date(date.year(), date.month(), date.date()),
                     end: new Date(date.year(), date.month(), date.date()),
                     desc: eevent.description,
-                    color: 'limegreen',
+                    color: course ? course.color : 'blue',
                 },
             ];
         } else if (eevent.aid) {
@@ -125,7 +129,7 @@ export class OverviewWeekly extends React.Component {
                     start: new Date(date.year(), date.month(), date.date()),
                     end: new Date(date.year(), date.month(), date.date()),
                     desc: eevent.description,
-                    color: 'grey',
+                    color: course ? course.color : 'blue',
                 },
             ];
         } else if (eevent.sid) {
@@ -156,10 +160,18 @@ export class OverviewWeekly extends React.Component {
             for (const item of this.formatEventForCalendar(ev)) {
                 formattedEventList.push(item);
             }
-        } //TODO: Set cell colors for events to course colors
+        }
         return formattedEventList;
     }
-
+    Event({ event }) {
+        return (
+            //TODO: This is where you edit the color of the text
+            <span>
+                <span style={{ color: 'black' }}>{event.title}</span>
+                {event.desc && `:  ${event.desc}`}
+            </span>
+        );
+    }
     render() {
         return _.get(this.state, 'listView', false) ? (
             <OverviewScheduleList />
@@ -171,26 +183,23 @@ export class OverviewWeekly extends React.Component {
                     defaultDate={new Date()}
                     defaultView="month"
                     events={this.convertEvents(_.get(this.state, 'events', []))}
-                    style={{ height: '130vh' }}
+                    style={{ height: '130vh' }} //TODO: If this value is <120 the week view is not adjusted properly
+                    eventPropGetter={event => {
+                        const backgroundColor = event ? event.color : '#fff';
+                        return { style: { backgroundColor } };
+                    }}
                     components={{
-                        event: Event,
+                        event: this.Event,
                     }}
                 />
             </div>
         );
     }
 }
-function Event({ event }) {
-    return (
-        <span>
-            <em style={{ color: event.color }}>{event.title}</em>
-            {event.desc && `:  ${event.desc}`}
-        </span>
-    );
-}
 
 OverviewWeekly.propTypes = {
     events: PropTypes.array,
+    getCourse: PropTypes.func,
 };
 
 const mapStateToProps = state => {

@@ -9,7 +9,7 @@ import './overview-list.module.scss';
 import { fetchTasks, getTasksSelectors } from '../../store/tasks';
 import { getScheduleSelectors } from '../../store/schedule';
 import OverviewCell from './overview-cell';
-import { OverviewWeekly } from './overview-weekly';
+import OverviewWeekly from './overview-weekly';
 
 const {
     dayjs,
