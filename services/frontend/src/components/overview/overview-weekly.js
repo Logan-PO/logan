@@ -204,8 +204,9 @@ class OverviewWeekly extends React.Component {
                                 localizer={localizer}
                                 defaultDate={new Date()}
                                 defaultView="month"
+                                views={['month', 'week']}
                                 events={this.convertEvents(this.combineEvents())}
-                                style={{ height: '110vh' }} //TODO: If this value is <110 the week view is not adjusted properly
+                                style={{ height: '90vh' }} //TODO: If this value is <110 the week view is not adjusted properly
                                 eventPropGetter={event => {
                                     const backgroundColor = event ? event.color : '#fff';
                                     return { style: { backgroundColor } };
@@ -214,6 +215,8 @@ class OverviewWeekly extends React.Component {
                                     event: this.Event,
                                 }}
                                 resizable
+                                step={60} //how much is one slot worth ( in min)
+                                timeslots={2}
                             />
                         </div>
                     }
