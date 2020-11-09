@@ -184,9 +184,9 @@ class OverviewWeekly extends React.Component {
     }
     Event({ event }) {
         return (
-            //TODO: This is where you edit the color of the text
+            //Controls the color of the text
             <span>
-                <span style={{ color: 'darkgrey' }}>{event.title}</span>
+                <span style={{ color: 'black' }}>{event.title}</span>
                 {event.desc && `:  ${event.desc}`}
             </span>
         );
