@@ -150,7 +150,7 @@ export class OverviewScheduleList extends React.Component {
                 </div>
             </div>
         ) : (
-            <OverviewWeekly groups={groups} />
+            <OverviewWeekly events={groups} />
         );
     }
 }
