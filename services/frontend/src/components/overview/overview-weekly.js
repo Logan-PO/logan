@@ -167,7 +167,7 @@ export class OverviewWeekly extends React.Component {
                     defaultDate={new Date()}
                     defaultView="month"
                     events={this.convertEvents(_.get(this.state, 'events', []))}
-                    style={{ height: '100vh' }}
+                    style={{ height: '130vh' }}
                 />
             </div>
         );
