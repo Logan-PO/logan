@@ -29,14 +29,24 @@ class TasksList extends React.Component {
         };
     }
 
+    componentDidMount() {
+        if (this.props.shouldGoToTask) {
+            this.handleGoToTask();
+        }
+    }
+
     componentDidUpdate(prevProps) {
         if (this.props.shouldGoToTask && this.props.shouldGoToTask !== prevProps.shouldGoToTask) {
-            const selectedTask = this.props.getTask(this.props.shouldGoToTask);
-
-            this.setState({ showingCompletedTasks: selectedTask.complete });
-            this.didSelectTask(this.props.shouldGoToTask);
-            this.props.setShouldGoToTask(undefined);
+            this.handleGoToTask();
         }
+    }
+
+    handleGoToTask() {
+        const selectedTask = this.props.getTask(this.props.shouldGoToTask);
+
+        this.setState({ showingCompletedTasks: selectedTask.complete });
+        this.didSelectTask(this.props.shouldGoToTask);
+        this.props.setShouldGoToTask(undefined);
     }
 
     didSelectTask(tid) {

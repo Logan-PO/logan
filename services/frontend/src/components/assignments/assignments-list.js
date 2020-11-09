@@ -39,21 +39,31 @@ class AssignmentsList extends React.Component {
         this.setState({ showingPastAssignments: e.target.checked });
     }
 
+    componentDidMount() {
+        if (this.props.shouldGoToAssignment) {
+            this.handleGoToAssignment();
+        }
+    }
+
     componentDidUpdate(prevProps) {
         if (this.props.shouldGoToAssignment && this.props.shouldGoToAssignment !== prevProps.shouldGoToAssignment) {
-            const selectedAssignment = this.props.getAssignment(this.props.shouldGoToAssignment);
-
-            const isPastAssignment =
-                !!selectedAssignment &&
-                dateUtils.dueDateIsDate(selectedAssignment.dueDate) &&
-                dateUtils
-                    .dayjs(selectedAssignment.dueDate, dateUtils.constants.DB_DATE_FORMAT)
-                    .isBefore(dateUtils.dayjs(), 'day');
-
-            this.setState({ showingPastAssignments: isPastAssignment });
-            this.didSelectAssignment(this.props.shouldGoToAssignment);
-            this.props.setShouldGoToAssignment(undefined);
+            this.handleGoToAssignment();
         }
+    }
+
+    handleGoToAssignment() {
+        const selectedAssignment = this.props.getAssignment(this.props.shouldGoToAssignment);
+
+        const isPastAssignment =
+            !!selectedAssignment &&
+            dateUtils.dueDateIsDate(selectedAssignment.dueDate) &&
+            dateUtils
+                .dayjs(selectedAssignment.dueDate, dateUtils.constants.DB_DATE_FORMAT)
+                .isBefore(dateUtils.dayjs(), 'day');
+
+        this.setState({ showingPastAssignments: isPastAssignment });
+        this.didSelectAssignment(this.props.shouldGoToAssignment);
+        this.props.setShouldGoToAssignment(undefined);
     }
 
     didSelectAssignment(aid) {
