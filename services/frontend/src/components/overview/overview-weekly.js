@@ -92,6 +92,7 @@ export class OverviewWeekly extends React.Component {
                         endTime.minute()
                     ),
                     desc: section.location,
+                    color: 'white',
                 });
             }
             currentDate = currentDate.add(1, 'day');
@@ -111,6 +112,7 @@ export class OverviewWeekly extends React.Component {
                     start: new Date(date.year(), date.month(), date.date()),
                     end: new Date(date.year(), date.month(), date.date()),
                     desc: eevent.description,
+                    color: 'limegreen',
                 },
             ];
         } else if (eevent.aid) {
@@ -123,6 +125,7 @@ export class OverviewWeekly extends React.Component {
                     start: new Date(date.year(), date.month(), date.date()),
                     end: new Date(date.year(), date.month(), date.date()),
                     desc: eevent.description,
+                    color: 'grey',
                 },
             ];
         } else if (eevent.sid) {
@@ -140,6 +143,7 @@ export class OverviewWeekly extends React.Component {
                     allDay: true,
                     start: new Date(badDate.year(), badDate.month(), badDate.day()),
                     end: new Date(badDate.year(), badDate.month(), badDate.day()),
+                    color: 'red',
                 },
             ];
         }
@@ -168,10 +172,21 @@ export class OverviewWeekly extends React.Component {
                     defaultView="month"
                     events={this.convertEvents(_.get(this.state, 'events', []))}
                     style={{ height: '130vh' }}
+                    components={{
+                        event: Event,
+                    }}
                 />
             </div>
         );
     }
+}
+function Event({ event }) {
+    return (
+        <span>
+            <em style={{ color: event.color }}>{event.title}</em>
+            {event.desc && `:  ${event.desc}`}
+        </span>
+    );
 }
 
 OverviewWeekly.propTypes = {
