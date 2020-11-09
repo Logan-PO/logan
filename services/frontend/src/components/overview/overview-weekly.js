@@ -193,7 +193,7 @@ class OverviewWeekly extends React.Component {
     }
     render() {
         return (
-            <Grid container direction="row" alignItems="top" spacing={2}>
+            <Grid container direction="row" alignItems="top" spacing={2} style={{ maxHeight: 'calc(100% - 64px)' }}>
                 <Grid item xs alignContent={'left'}>
                     <div></div>
                 </Grid>
