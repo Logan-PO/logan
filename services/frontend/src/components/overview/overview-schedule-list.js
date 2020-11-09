@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, ListItem, Typography, colors } from '@material-ui/core';
+import { List, ListSubheader, ListItem, Typography, colors, Button } from '@material-ui/core';
 import { dateUtils } from '@logan/core';
 import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
 import './overview-list.module.scss';
@@ -106,6 +106,7 @@ export class OverviewScheduleList extends React.Component {
 
         return _.get(this.state, 'listView', true) ? (
             <div>
+                <Button onClick={this.changeCondense}>Condense/Uncondense</Button>
                 <div className="scrollable-list">
                     <div className="scroll-view">
                         <List>
