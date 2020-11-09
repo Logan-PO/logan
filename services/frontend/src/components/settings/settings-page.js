@@ -7,6 +7,7 @@ import { Page } from '../shared';
 import { setLoginStage } from '../../store/login';
 import UsernameModal from './username-modal';
 import DeleteModal from './delete-modal';
+import LogOutModal from './logout-modal';
 import styles from './settings-page.module.scss';
 
 export class SettingsPage extends React.Component {
@@ -17,10 +18,13 @@ export class SettingsPage extends React.Component {
         this.closeNewUsernameModal = this.closeNewUsernameModal.bind(this);
         this.openNewDeleteModal = this.openNewDeleteModal.bind(this);
         this.closeNewDeleteModal = this.closeNewDeleteModal.bind(this);
+        this.openNewLogOutModal = this.openNewLogOutModal.bind(this);
+        this.closeNewLogOutModal = this.closeNewLogOutModal.bind(this);
 
         this.state = {
             newUsernameModal: false,
             newDeleteModal: false,
+            newLogOutModal: false,
         };
     }
 
@@ -40,6 +44,14 @@ export class SettingsPage extends React.Component {
         this.setState({ newDeleteModal: false });
     }
 
+    openNewLogOutModal() {
+        this.setState({ newLogOutModal: true });
+    }
+
+    closeNewLogOutModal() {
+        this.setState({ newLogOutModal: false });
+    }
+
     render() {
         return (
             <Page title="Settings">
@@ -49,7 +61,25 @@ export class SettingsPage extends React.Component {
                         InputProps={{
                             readOnly: true,
                         }}
-                        value={_.get(this.props, 'user.username')}
+                        value={_.get(this.props, 'user.username') || ''}
+                    />
+                </div>
+                <div className={styles.name}>
+                    <TextField
+                        label="Name"
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                        value={_.get(this.props, 'user.name') || ''}
+                    />
+                </div>
+                <div className={styles.email}>
+                    <TextField
+                        label="Email"
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                        value={_.get(this.props, 'user.email') || ''}
                     />
                 </div>
                 <div className={styles.change}>
@@ -57,6 +87,12 @@ export class SettingsPage extends React.Component {
                         Change Username
                     </Button>
                     <UsernameModal open={this.state.newUsernameModal} onClose={this.closeNewUsernameModal} />
+                </div>
+                <div className={styles.logout}>
+                    <Button variant="contained" color="primary" disableElevation onClick={this.openNewLogOutModal}>
+                        Logout
+                    </Button>
+                    <LogOutModal open={this.state.newLogOutModal} onClose={this.closeNewLogOutModal} />
                 </div>
                 <div className={styles.delete}>
                     <Button variant="contained" color="primary" disableElevation onClick={this.openNewDeleteModal}>
