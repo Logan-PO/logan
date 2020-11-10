@@ -8,7 +8,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { dateUtils } from '@logan/core';
 import { getRemindersSelectors, deleteReminder } from '../../store/reminders';
-import '../shared/list.scss';
 
 class ReminderCell extends React.Component {
     constructor(props) {
@@ -45,20 +44,22 @@ class ReminderCell extends React.Component {
         const timeString = `${dateUtils.humanReadableDate(dateObject)} at ${dateUtils.formatAsTime(dateObject)}`;
 
         return (
-            <ListItem dense className="list-cell">
-                <ListItemIcon>
-                    <NotificationsIcon />
-                </ListItemIcon>
-                <ListItemText primary={_.get(this.state.reminder, 'message', '')} secondary={timeString} />
-                <ListItemSecondaryAction className="actions">
-                    <IconButton>
-                        <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={this.deleteSelf}>
-                        <DeleteIcon />
-                    </IconButton>
-                </ListItemSecondaryAction>
-            </ListItem>
+            <div className="list-cell">
+                <ListItem dense>
+                    <ListItemIcon>
+                        <NotificationsIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={_.get(this.state.reminder, 'message', '')} secondary={timeString} />
+                    <ListItemSecondaryAction className="actions">
+                        <IconButton>
+                            <EditIcon />
+                        </IconButton>
+                        <IconButton onClick={this.deleteSelf}>
+                            <DeleteIcon color="error" />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+            </div>
         );
     }
 }
