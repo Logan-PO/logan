@@ -14,6 +14,7 @@ import {
 import { CoursePicker } from '../shared/controls';
 import Editor from '../shared/editor';
 import TaskModal from '../tasks/task-modal';
+import RemindersList from '../reminders/reminders-list';
 import SubtasksList from './subtasks-list';
 
 const {
@@ -92,7 +93,7 @@ class AssignmentEditor extends Editor {
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container direction="row" spacing={2}>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} lg={6}>
                                     <Grid container direction="column" spacing={2}>
                                         <Grid item xs={12}>
                                             <CoursePicker
@@ -116,9 +117,9 @@ class AssignmentEditor extends Editor {
                                         </Grid>
                                     </Grid>
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} lg={6}>
                                     <Grid container direction="column" spacing={2}>
-                                        <Grid item xs={12} lg={6}>
+                                        <Grid item xs={12}>
                                             {!this.isEmpty() && (
                                                 <React.Fragment>
                                                     <Typography variant="overline">
@@ -135,6 +136,12 @@ class AssignmentEditor extends Editor {
                                                     </Button>
                                                 </React.Fragment>
                                             )}
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <RemindersList
+                                                eid={_.get(this.state.assignment, 'aid')}
+                                                entityType="assignment"
+                                            />
                                         </Grid>
                                     </Grid>
                                 </Grid>
