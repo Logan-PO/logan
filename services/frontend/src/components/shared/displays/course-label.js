@@ -7,7 +7,7 @@ import { getScheduleSelectors } from '../../../store/schedule';
 
 class CourseLabel extends React.Component {
     render() {
-        const course = this.props.getCourse(this.props.cid);
+        const course = this.props.getCourse(this.props.cid) || {};
         const displayName = _.isEmpty(course.nickname) ? course.title : course.nickname;
 
         return (
