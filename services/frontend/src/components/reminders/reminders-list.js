@@ -13,25 +13,33 @@ class RemindersList extends React.Component {
     constructor(props) {
         super(props);
 
+        this.shouldEditReminder = this.shouldEditReminder.bind(this);
+
         this.state = {
             shouldGoToReminder: undefined,
+            reminderToEdit: undefined,
             reminderModalMode: 'create',
             reminderModalOpen: false,
         };
     }
 
-    setReminderModalState(mode, open) {
+    setReminderModalState(mode, open, rid) {
         this.setState({
             reminderModalMode: mode,
             reminderModalOpen: open,
+            reminderToEdit: rid,
         });
+    }
+
+    shouldEditReminder(rid) {
+        this.setReminderModalState('edit', true, rid);
     }
 
     listContent() {
         if (this.props.eid && this.props.rids.length) {
             return this.props.rids.map((rid, index) => (
                 <React.Fragment key={rid}>
-                    <ReminderCell key={rid} rid={rid} />
+                    <ReminderCell key={rid} rid={rid} onEdit={this.shouldEditReminder} />
                     {index < this.props.rids.length - 1 && <Divider component="li" style={{ marginTop: -1 }} />}
                 </React.Fragment>
             ));
@@ -69,6 +77,7 @@ class RemindersList extends React.Component {
                     <ReminderModal
                         open={this.state.reminderModalOpen}
                         mode={this.state.reminderModalMode}
+                        rid={this.state.reminderToEdit}
                         onClose={this.setReminderModalState.bind(this, 'create', false)}
                         entityType={this.props.entityType}
                         eid={this.props.eid}

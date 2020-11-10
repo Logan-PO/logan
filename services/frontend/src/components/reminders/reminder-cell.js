@@ -24,9 +24,11 @@ class ReminderCell extends React.Component {
         this.updateCurrentReminder(this.props.getReminder(this.props.rid));
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.rid !== prevProps.rid) {
-            this.updateCurrentReminder(this.props.getReminder(this.props.rid));
+    componentDidUpdate() {
+        const storedReminder = this.props.getReminder(this.props.rid);
+
+        if (!_.isEqual(storedReminder, this.state.reminder)) {
+            this.updateCurrentReminder(storedReminder);
         }
     }
 
@@ -41,7 +43,7 @@ class ReminderCell extends React.Component {
     render() {
         const ts = _.get(this.state.reminder, 'timestamp');
         const dateObject = dateUtils.toDateTime(ts);
-        const timeString = `${dateUtils.humanReadableDate(dateObject)} at ${dateUtils.formatAsTime(dateObject)}`;
+        const timeString = `${dateUtils.humanReadableDate(dateObject)} at ${dateObject.format('h:mm A')}`;
 
         return (
             <div className="list-cell">
@@ -51,7 +53,7 @@ class ReminderCell extends React.Component {
                     </ListItemIcon>
                     <ListItemText primary={_.get(this.state.reminder, 'message', '')} secondary={timeString} />
                     <ListItemSecondaryAction className="actions">
-                        <IconButton>
+                        <IconButton onClick={() => this.props.onEdit(this.props.rid)}>
                             <EditIcon />
                         </IconButton>
                         <IconButton onClick={this.deleteSelf}>
@@ -68,6 +70,7 @@ ReminderCell.propTypes = {
     rid: PropTypes.string,
     getReminder: PropTypes.func,
     deleteReminder: PropTypes.func,
+    onEdit: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
