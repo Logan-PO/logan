@@ -34,7 +34,7 @@ const { slice, asyncActions } = createAsyncSlice({
         updateReminder: {
             fn: api.updateReminder,
         },
-        deleteTask: {
+        deleteReminder: {
             fn: api.deleteReminder,
             begin(state, action) {
                 adapter.removeOne(state, action.meta.arg.rid);

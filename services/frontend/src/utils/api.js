@@ -270,7 +270,7 @@ async function updateReminder(reminder) {
 
 async function deleteReminder(reminder) {
     const { rid } = reminder;
-    const response = await client.delete(`/reminder/${rid}`);
+    const response = await client.delete(`/reminders/${rid}`);
     return response.data;
 }
 
