@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
-import { ListItem, ListItemText, Typography, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import { ListItem, ListItemText, Typography, ListItemSecondaryAction, IconButton, Fab } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { dateUtils } from '@logan/core';
@@ -115,7 +115,7 @@ class TaskCell extends React.Component {
         return (
             <div className={`list-cell ${styles.taskCell}`}>
                 <PriorityDisplay priority={_.get(this.state.task, 'priority')} />
-                <ListItem button selected={this.props.selected} onClick={this.select}>
+                <ListItem button={!this.props.subtaskCell} selected={this.props.selected} onClick={this.select}>
                     <Checkbox
                         cid={_.get(this.state.task, 'cid')}
                         checked={_.get(this.state, 'task.complete', false)}
@@ -159,6 +159,7 @@ class TaskCell extends React.Component {
                                 <DeleteIcon color="error" />
                             </IconButton>
                         ) : null}
+                        {this.props.specialActionsPadding && <Fab size="small" />}
                     </ListItemSecondaryAction>
                 </ListItem>
             </div>
@@ -179,6 +180,7 @@ TaskCell.propTypes = {
     onSelect: PropTypes.func,
     onDelete: PropTypes.func,
     setShouldGoToTask: PropTypes.func,
+    specialActionsPadding: PropTypes.bool,
 };
 
 const mapStateToProps = state => {
