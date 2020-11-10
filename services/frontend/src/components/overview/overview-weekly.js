@@ -198,7 +198,7 @@ class OverviewWeekly extends React.Component {
                 direction="row"
                 alignItems="top"
                 spacing={2}
-                style={{ maxHeight: 'calc(100% - 64px)' }}
+                style={{ maxHeight: 'calc(100% - 64px)', maxWidth: '100%' }}
                 className={'scrollable-list'}
             >
                 <Grid item xs alignContent={'left'}>
@@ -213,7 +213,7 @@ class OverviewWeekly extends React.Component {
                                 defaultView="month"
                                 views={['month', 'week']}
                                 events={this.convertEvents(this.combineEvents())}
-                                style={{ height: '90vh' }} //TODO: If this value is <110 the week view is not adjusted properly
+                                style={{ height: '90vh' }} //If this value is <110 the week view is not adjusted properly
                                 eventPropGetter={event => {
                                     const backgroundColor = event ? event.color : '#fff';
                                     return { style: { backgroundColor } };
