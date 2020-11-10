@@ -21,7 +21,7 @@ class GoogleBtn extends React.Component {
      If all conditions are met, then create a login action and update the state
      */
     async onLogin(response) {
-        await this.props.verifyIdToken(response.tokenId);
+        await this.props.verifyIdToken({ idToken: response.tokenId, clientType: 'web' });
     }
 
     async onLogout() {

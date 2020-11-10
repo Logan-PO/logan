@@ -39,8 +39,8 @@ class AssignmentsList extends React.Component {
         this.setState({ showingPastAssignments: e.target.checked });
     }
 
-    componentDidMount() {
-        if (this.props.shouldGoToAssignment) {
+    componentDidUpdate(prevProps) {
+        if (this.props.shouldGoToAssignment && this.props.shouldGoToAssignment !== prevProps.shouldGoToAssignment) {
             const selectedAssignment = this.props.getAssignment(this.props.shouldGoToAssignment);
 
             const isPastAssignment =
@@ -49,8 +49,6 @@ class AssignmentsList extends React.Component {
                 dateUtils
                     .dayjs(selectedAssignment.dueDate, dateUtils.constants.DB_DATE_FORMAT)
                     .isBefore(dateUtils.dayjs(), 'day');
-
-            console.log(isPastAssignment);
 
             this.setState({ showingPastAssignments: isPastAssignment });
             this.didSelectAssignment(this.props.shouldGoToAssignment);
