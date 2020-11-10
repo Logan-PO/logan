@@ -92,7 +92,7 @@ class AssignmentEditor extends Editor {
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container direction="row" spacing={2}>
-                                <Grid item xs={12} lg={6}>
+                                <Grid item xs={6}>
                                     <Grid container direction="column" spacing={2}>
                                         <Grid item xs={12}>
                                             <CoursePicker
@@ -116,23 +116,27 @@ class AssignmentEditor extends Editor {
                                         </Grid>
                                     </Grid>
                                 </Grid>
-                                <Grid item xs={12} lg={6}>
-                                    {!this.isEmpty() && (
-                                        <React.Fragment>
-                                            <Typography variant="overline">
-                                                <b>Subtasks</b>
-                                            </Typography>
-                                            <SubtasksList aid={this.props.aid} />
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                disableElevation
-                                                onClick={this.openNewTaskModal}
-                                            >
-                                                New subtask
-                                            </Button>
-                                        </React.Fragment>
-                                    )}
+                                <Grid item xs={6}>
+                                    <Grid container direction="column" spacing={2}>
+                                        <Grid item xs={12} lg={6}>
+                                            {!this.isEmpty() && (
+                                                <React.Fragment>
+                                                    <Typography variant="overline">
+                                                        <b>Subtasks</b>
+                                                    </Typography>
+                                                    <SubtasksList aid={this.props.aid} />
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        disableElevation
+                                                        onClick={this.openNewTaskModal}
+                                                    >
+                                                        New subtask
+                                                    </Button>
+                                                </React.Fragment>
+                                            )}
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>
