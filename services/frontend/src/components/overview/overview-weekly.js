@@ -193,7 +193,14 @@ class OverviewWeekly extends React.Component {
     }
     render() {
         return (
-            <Grid container direction="row" alignItems="top" spacing={2} style={{ maxHeight: 'calc(100% - 64px)' }}>
+            <Grid
+                container
+                direction="row"
+                alignItems="top"
+                spacing={2}
+                style={{ maxHeight: 'calc(100% - 64px)' }}
+                className={'scrollable-list'}
+            >
                 <Grid item xs alignContent={'left'}>
                     <div></div>
                 </Grid>
@@ -223,7 +230,9 @@ class OverviewWeekly extends React.Component {
                 </Grid>
                 <Grid item xs alignContent={'right'}>
                     <div className="scrollable-list">
-                        <OverviewScheduleList />
+                        <div className="scroll-view">
+                            <OverviewScheduleList />
+                        </div>
                     </div>
                 </Grid>
             </Grid>
