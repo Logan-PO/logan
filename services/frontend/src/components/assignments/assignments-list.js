@@ -10,7 +10,7 @@ import {
     getAssignmentsSelectors,
     deleteAssignment,
     setShouldGoToAssignment,
-} from '../../store/assignments';
+} from '@logan/fe-shared/store/assignments';
 import AssignmentModal from './assignment-modal';
 import AssignmentCell from './assignment-cell';
 import '../shared/list.scss';

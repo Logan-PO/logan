@@ -12,9 +12,9 @@ import {
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import { dateUtils } from '@logan/core';
-import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '../../store/tasks';
-import { getScheduleSelectors } from '../../store/schedule';
-import { getAssignmentsSelectors } from '../../store/assignments';
+import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
+import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
+import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { CourseLabel, TagsDisplay } from '../shared/displays';
 import { Checkbox } from '../shared/controls';
 import styles from '../tasks/task-cell.module.scss';

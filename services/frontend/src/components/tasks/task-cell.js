@@ -7,9 +7,9 @@ import { ListItem, ListItemText, Typography, ListItemSecondaryAction, IconButton
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { dateUtils } from '@logan/core';
-import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '../../store/tasks';
-import { getScheduleSelectors } from '../../store/schedule';
-import { getAssignmentsSelectors } from '../../store/assignments';
+import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
+import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
+import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { CourseLabel, PriorityDisplay, TagsDisplay } from '../shared/displays';
 import { Checkbox } from '../shared/controls';
 import styles from './task-cell.module.scss';

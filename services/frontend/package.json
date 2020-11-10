@@ -16,6 +16,7 @@
   "dependencies": {
     "@date-io/dayjs": "1.x",
     "@logan/core": "^1.0.0",
+    "@logan/fe-shared": "^1.0.0",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/pickers": "^3.2.10",
