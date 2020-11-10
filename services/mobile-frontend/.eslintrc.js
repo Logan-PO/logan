@@ -13,4 +13,9 @@ module.exports = {
     globals: {
         localStorage: 'writable',
     },
+    settings: {
+        react: {
+            version: 'detect',
+        },
+    },
 };
