@@ -2,14 +2,16 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Grid, TextField } from '@material-ui/core';
+import { Grid, TextField, Button } from '@material-ui/core';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '../../store/tasks';
 import { getAssignmentsSelectors } from '../../store/assignments';
 import Editor from '../shared/editor';
 import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox, TagEditor } from '../shared/controls';
-import AssignmentPreview from './assignment-preview';
+import RemindersList from '../reminders/reminders-list';
+import ReminderModal from '../reminders/reminder-modal';
 import './task-editor.scss';
+import AssignmentPreview from './assignment-preview';
 
 const {
     dayjs,
@@ -24,7 +26,16 @@ class TaskEditor extends Editor {
 
         this.state = {
             task: {},
+            reminderModalMode: 'create',
+            reminderModalOpen: false,
         };
+    }
+
+    setReminderModalState(mode, open) {
+        this.setState({
+            reminderModalMode: mode,
+            reminderModalOpen: open,
+        });
     }
 
     selectEntity(id) {
@@ -122,6 +133,18 @@ class TaskEditor extends Editor {
                                                 onChange={this.handleChange.bind(this, 'dueDate')}
                                             />
                                         </Grid>
+                                        <Grid item xs={12}>
+                                            <RemindersList eid={_.get(this.state.task, 'tid')} />
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                disabled={this.isEmpty()}
+                                                onClick={this.setReminderModalState.bind(this, 'create', true)}
+                                                disableElevation
+                                            >
+                                                New reminder
+                                            </Button>
+                                        </Grid>
                                     </Grid>
                                 </Grid>
                                 <Grid item xs={6}>
@@ -146,6 +169,13 @@ class TaskEditor extends Editor {
                         </Grid>
                     </Grid>
                 </div>
+                <ReminderModal
+                    open={this.state.reminderModalOpen}
+                    mode={this.state.reminderModalMode}
+                    onClose={this.setReminderModalState.bind(this, 'create', false)}
+                    entityType="task"
+                    eid={_.get(this.state.task, 'tid')}
+                />
             </div>
         );
     }

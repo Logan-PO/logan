@@ -17,6 +17,9 @@ const { slice, asyncActions } = createAsyncSlice({
     name: 'reminders',
     initialState: adapter.getInitialState(),
     reducers: {
+        setShouldGoToReminder(state, action) {
+            state.shouldGoToReminder = action.payload;
+        },
         updateReminderLocal: adapter.updateOne,
     },
     asyncReducers: {
@@ -41,6 +44,6 @@ const { slice, asyncActions } = createAsyncSlice({
 });
 
 export const getRemindersSelectors = wrapAdapter(adapter);
-export const { updateReminderLocal } = slice.actions;
+export const { setShouldGoToReminder, updateReminderLocal } = slice.actions;
 export const { fetchReminders, createReminder, updateReminder, deleteReminder } = asyncActions;
 export default slice.reducer;
