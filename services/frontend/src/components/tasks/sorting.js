@@ -28,12 +28,12 @@ function makeSectionsIncomplete(tasks) {
         if (task.dueDate === 'asap' || task.dueDate === 'eventually') {
             addToSection(task, task.dueDate);
         } else {
-            const dueDate = dateUtils.dayjs(task.dueDate, dateUtils.constants.DB_DATE_FORMAT);
+            const dueDate = dateUtils.toDate(task.dueDate);
 
             if (dueDate.isBefore(now, 'day')) {
-                addToSection(task, 'Overdue');
+                addToSection(task, 'overdue');
             } else {
-                addToSection(task, dateUtils.humanReadableDate(dueDate));
+                addToSection(task, task.dueDate);
             }
         }
     }
@@ -42,9 +42,7 @@ function makeSectionsIncomplete(tasks) {
 }
 
 function makeSectionsComplete(tasks) {
-    return _.groupBy(tasks, task =>
-        dateUtils.humanReadableDate(dateUtils.dayjs(task.completionDate, dateUtils.constants.DB_DATETIME_FORMAT))
-    );
+    return _.groupBy(tasks, 'completionDate');
 }
 
 export function makeSections(showComplete, tasks) {

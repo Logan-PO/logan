@@ -5,6 +5,7 @@ const plugins = {
     timezone: require('dayjs/plugin/timezone'),
     dayOfYear: require('dayjs/plugin/dayOfYear'),
     utc: require('dayjs/plugin/utc'),
+    weekOfYear: require('dayjs/plugin/weekOfYear'),
     weekday: require('dayjs/plugin/weekday'),
     customParseFormat: require('dayjs/plugin/customParseFormat'),
     advancedFormat: require('dayjs/plugin/advancedFormat'),
@@ -36,8 +37,19 @@ function humanReadableDate(date) {
     if (date.isToday()) return 'Today';
     else if (date.isTomorrow()) return 'Tomorrow';
     else if (date.isYesterday()) return 'Yesterday';
-    else if (date.year() === dayjs().year()) return date.format('MMMM Do');
-    else return date.format('MMMM Do, YYYY');
+    else {
+        const now = dayjs();
+
+        if (date.year() === now.year()) {
+            if (date.week() === now.week()) {
+                return date.format('dddd');
+            } else {
+                return date.format('MMMM Do');
+            }
+        } else {
+            return date.format('MMMM Do, YYYY');
+        }
+    }
 }
 
 function dueDateIsDate(dueDate) {

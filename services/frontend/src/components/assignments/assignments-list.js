@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AddIcon from '@material-ui/icons/Add';
-import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
+import { List, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
 import _ from 'lodash';
 import { dateUtils } from '@logan/core';
 import {
@@ -11,6 +11,7 @@ import {
     deleteAssignment,
     setShouldGoToAssignment,
 } from '../../store/assignments';
+import DueDateHeader from '../shared/displays/due-date-header';
 import AssignmentModal from './assignment-modal';
 import AssignmentCell from './assignment-cell';
 import '../shared/list.scss';
@@ -100,7 +101,7 @@ class AssignmentsList extends React.Component {
                             const [dueDate, aids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader>{dueDate}</ListSubheader>
+                                    <DueDateHeader dueDate={dueDate} />
                                     {aids.map(aid => (
                                         <AssignmentCell
                                             key={aid}

@@ -2,10 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
+import { List, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import { getTasksSelectors, deleteTask, setShouldGoToTask } from '../../store/tasks';
 import { setShouldGoToAssignment } from '../../store/assignments';
+import DueDateHeader from '../shared/displays/due-date-header';
 import TaskCell from './task-cell';
 import '../shared/list.scss';
 import styles from './tasks-list.module.scss';
@@ -79,7 +80,7 @@ class TasksList extends React.Component {
                             const [dueDate, tids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader>{dueDate}</ListSubheader>
+                                    <DueDateHeader dueDate={dueDate} />
                                     {tids.map(tid => (
                                         <TaskCell
                                             key={tid}
