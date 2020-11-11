@@ -53,6 +53,9 @@ class Editor extends React.Component {
 
         this.processChange(changes, prop, e);
 
+        // Update the state in advance, to avoid the cursor jump bug
+        this._applyChangesToState(changes);
+
         this.updateEntityLocal({
             id: this.props[this._id],
             changes,
@@ -63,6 +66,11 @@ class Editor extends React.Component {
 
     processChange(changes, prop, e) {
         changes[prop] = e.target.value;
+    }
+
+    _applyChangesToState(changes) {
+        const updatedEntity = _.merge({}, this.state[this._entity], changes);
+        this.setState({ [this._entity]: updatedEntity });
     }
 
     componentDidMount() {
