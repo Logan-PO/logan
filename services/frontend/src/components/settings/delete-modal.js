@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
 import { Dialog, DialogContent, DialogActions, DialogTitle, Button } from '@material-ui/core';
-import { deleteUser } from '../../store/settings';
-import { LOGIN_STAGE, setLoginStage, fetchSelf } from '../../store/login';
+import { deleteUser } from '@logan/fe-shared/store/settings';
+import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
 import styles from './settings-page.module.scss';
 
 class DeleteModal extends React.Component {

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { TextField, Button } from '@material-ui/core';
 import { Page } from '../shared';
-import { setLoginStage } from '../../store/login';
+import { setLoginStage } from '@logan/fe-shared/store/login';
 import UsernameModal from './username-modal';
 import DeleteModal from './delete-modal';
 import LogOutModal from './logout-modal';
