@@ -8,8 +8,9 @@ import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '@log
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import Editor from '../shared/editor';
 import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox, TagEditor } from '../shared/controls';
-import AssignmentPreview from './assignment-preview';
+import RemindersList from '../reminders/reminders-list';
 import './task-editor.scss';
+import AssignmentPreview from './assignment-preview';
 
 const {
     dayjs,
@@ -99,44 +100,51 @@ class TaskEditor extends Editor {
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
+                            <Grid container direction="row" spacing={2}>
                                 <Grid item xs={6}>
-                                    {relatedAssignment ? (
-                                        <AssignmentPreview aid={relatedAssignment.aid} />
-                                    ) : (
-                                        <CoursePicker
-                                            fullWidth
-                                            disabled={this.isEmpty() || !!relatedAssignment}
-                                            value={cid || 'none'}
-                                            onChange={this.handleChange.bind(this, 'cid')}
-                                        />
-                                    )}
+                                    <Grid container direction="column" spacing={2}>
+                                        <Grid item xs={12}>
+                                            {relatedAssignment ? (
+                                                <AssignmentPreview aid={relatedAssignment.aid} />
+                                            ) : (
+                                                <CoursePicker
+                                                    fullWidth
+                                                    disabled={this.isEmpty() || !!relatedAssignment}
+                                                    value={cid || 'none'}
+                                                    onChange={this.handleChange.bind(this, 'cid')}
+                                                />
+                                            )}
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <DueDatePicker
+                                                entityId={_.get(this.state.task, 'tid')}
+                                                disabled={this.isEmpty()}
+                                                value={_.get(this.state.task, 'dueDate')}
+                                                onChange={this.handleChange.bind(this, 'dueDate')}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <RemindersList eid={_.get(this.state.task, 'tid')} entityType="task" />
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <TagEditor
-                                        disabled={this.isEmpty()}
-                                        tags={_.get(this.state.task, 'tags')}
-                                        onChange={this.handleChange.bind(this, 'tags')}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
-                                <Grid item xs={6}>
-                                    <DueDatePicker
-                                        entityId={_.get(this.state.task, 'tid')}
-                                        disabled={this.isEmpty()}
-                                        value={_.get(this.state.task, 'dueDate')}
-                                        onChange={this.handleChange.bind(this, 'dueDate')}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <PriorityPicker
-                                        disabled={this.isEmpty()}
-                                        value={_.get(this.state.task, 'priority')}
-                                        onChange={this.handleChange.bind(this, 'priority')}
-                                    />
+                                    <Grid container direction="column" spacing={2}>
+                                        <Grid item xs={12}>
+                                            <TagEditor
+                                                disabled={this.isEmpty()}
+                                                tags={_.get(this.state.task, 'tags')}
+                                                onChange={this.handleChange.bind(this, 'tags')}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12}>
+                                            <PriorityPicker
+                                                disabled={this.isEmpty()}
+                                                value={_.get(this.state.task, 'priority')}
+                                                onChange={this.handleChange.bind(this, 'priority')}
+                                            />
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>

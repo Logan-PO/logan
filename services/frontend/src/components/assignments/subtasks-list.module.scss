@@ -1,0 +1,9 @@
+.fab-container {
+    display: flex;
+    justify-content: flex-end;
+    height: 20px;
+
+    .fab {
+        transform: translate(-1rem, -50%);
+    }
+}

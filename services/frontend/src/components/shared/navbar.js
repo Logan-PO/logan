@@ -7,6 +7,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { fetchTasks } from '@logan/fe-shared/store/tasks';
 import { fetchAssignments } from '@logan/fe-shared/store/assignments';
 import { fetchSchedule } from '@logan/fe-shared/store/schedule';
+import { fetchReminders } from '@logan/fe-shared/store/reminders';
 import styles from './navbar.module.scss';
 import AccountDialog from './account-dialog';
 
@@ -28,7 +29,12 @@ class Navbar extends React.Component {
     }
 
     async fetchAll() {
-        const fetchers = [this.props.fetchTasks(), this.props.fetchAssignments(), this.props.fetchSchedule()];
+        const fetchers = [
+            this.props.fetchTasks(),
+            this.props.fetchAssignments(),
+            this.props.fetchSchedule(),
+            this.props.fetchReminders(),
+        ];
         await Promise.all(fetchers);
     }
 
@@ -68,8 +74,9 @@ Navbar.propTypes = {
     fetchTasks: PropTypes.func,
     fetchAssignments: PropTypes.func,
     fetchSchedule: PropTypes.func,
+    fetchReminders: PropTypes.func,
 };
 
-const mapDispatchToProps = { fetchTasks, fetchAssignments, fetchSchedule };
+const mapDispatchToProps = { fetchTasks, fetchAssignments, fetchSchedule, fetchReminders };
 
 export default connect(null, mapDispatchToProps)(Navbar);
