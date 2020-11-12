@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FormControl, InputLabel, Select, ListSubheader, MenuItem } from '@material-ui/core';
-import { getScheduleSelectors } from '../../../store/schedule';
+import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 
 class CoursePicker extends React.Component {
     getDerivedValue() {

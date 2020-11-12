@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
 import { FormLabel, Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { getAssignmentsSelectors, setShouldGoToAssignment } from '../../store/assignments';
+import { getAssignmentsSelectors, setShouldGoToAssignment } from '@logan/fe-shared/store/assignments';
 import { CourseLabel } from '../shared/displays';
 import classes from './assignment-preview.module.scss';
 

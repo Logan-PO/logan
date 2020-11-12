@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@material-ui/core';
 import { navigate } from 'gatsby';
-import { LOGIN_STAGE, setLoginStage } from '../../store/login';
+import { LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
 import styles from './account-dialog.module.scss';
 
 class AccountDialog extends React.Component {

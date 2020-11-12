@@ -14,8 +14,8 @@ import {
     CircularProgress,
 } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
+import { createAssignment } from '@logan/fe-shared/store/assignments';
 import { CoursePicker } from '../shared/controls';
-import { createAssignment } from '../../store/assignments';
 import styles from '../tasks/task-modal.module.scss';
 
 const {
