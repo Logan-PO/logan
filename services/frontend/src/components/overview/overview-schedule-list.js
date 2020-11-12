@@ -8,8 +8,10 @@ import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/stor
 import './overview-list.module.scss';
 import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
-import OverviewCell from './overview-cell';
+import AssignmentCell from '../assignments/assignment-cell';
+import TaskCell from '../tasks/task-cell';
 import OverviewWeekly from './overview-weekly';
+import OverviewSectionCell from './overview-section-cell';
 
 const {
     dayjs,
@@ -118,27 +120,19 @@ export class OverviewScheduleList extends React.Component {
                                         </ListSubheader>
                                         {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
                                         {sections.map(({ sid }) => (
-                                            <OverviewCell
+                                            <OverviewSectionCell
                                                 condensed={_.get(this.state, 'condensed', false)}
                                                 key={sid}
-                                                eid={sid}
+                                                sid={sid}
                                             />
                                         ))}
                                         {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
                                         {assignments.map(({ aid }) => (
-                                            <OverviewCell
-                                                condensed={_.get(this.state, 'condensed', false)}
-                                                key={aid}
-                                                eid={aid}
-                                            />
+                                            <AssignmentCell key={aid} aid={aid} />
                                         ))}
                                         {tasks.length > 0 && this.secondaryHeader('TASKS')}
                                         {tasks.map(({ tid }) => (
-                                            <OverviewCell
-                                                condensed={_.get(this.state, 'condensed', false)}
-                                                key={tid}
-                                                eid={tid}
-                                            />
+                                            <TaskCell key={tid} tid={tid} />
                                         ))}
                                     </React.Fragment>
                                 );

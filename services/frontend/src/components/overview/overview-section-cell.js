@@ -12,7 +12,7 @@ const {
     constants: { DB_TIME_FORMAT },
 } = dateUtils;
 
-export class OverviewSectionCell extends React.Component {
+class OverviewSectionCell extends React.Component {
     constructor(props) {
         super(props);
 
