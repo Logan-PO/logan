@@ -10,7 +10,6 @@ import * as dateUtils from '@logan/core/src/date-utils';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import './overview-weekly.scss';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
-
 import OverviewScheduleList from './overview-schedule-list';
 
 const localizer = momentLocalizer(moment);
@@ -126,40 +125,27 @@ class OverviewWeekly extends React.Component {
         return sectionCellData;
     }
 
-    formatEventForCalendar(eevent) {
-        let date = dateUtils.dayjs(eevent.dueDate, DB_DATE_FORMAT);
-        const course = this.props.getCourse(eevent.cid);
+    formatEventForCalendar(event) {
+        let date = dateUtils.dayjs(event.dueDate, DB_DATE_FORMAT);
+        const course = this.props.getCourse(event.cid);
 
-        if (eevent.tid) {
-            //the event is a task
-            return [
-                {
-                    id: eevent.tid,
-                    title: eevent.title,
-                    allDay: true,
-                    start: new Date(date.year(), date.month(), date.date()),
-                    end: new Date(date.year(), date.month(), date.date()),
-                    desc: eevent.description,
-                    color: course ? course.color : 'blue',
-                },
-            ];
-        } else if (eevent.aid) {
+        if (event.aid) {
             //event is an assignment
             return [
                 {
-                    id: eevent.aid,
-                    title: eevent.title,
+                    id: event.aid,
+                    title: event.title,
                     allDay: true,
                     start: new Date(date.year(), date.month(), date.date()),
                     end: new Date(date.year(), date.month(), date.date()),
-                    desc: eevent.description,
+                    desc: event.description,
                     color: course ? course.color : 'blue',
                 },
             ];
-        } else if (eevent.sid) {
+        } else if (event.sid) {
             //event is a section
             //creates of list of dates to add to the calendar
-            let sectionDateList = this.mapSectionToDates(eevent);
+            let sectionDateList = this.mapSectionToDates(event);
 
             return sectionDateList;
         } else {
