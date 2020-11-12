@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Page } from '../shared';
-import { setShouldGoTo, getScheduleSelectors } from '../../store/schedule';
+import { setShouldGoTo, getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import TermsList from './terms-list';
 import TermChildrenList from './term-children-list';
 import SectionsList from './sections-list';

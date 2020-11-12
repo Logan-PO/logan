@@ -7,6 +7,19 @@ const UNAUTHORIZED_ACTIONS = {
     CREATE_USER: 'create_user',
 };
 
+async function getClientCreds(clientType) {
+    switch (clientType) {
+        case 'web':
+            return secretUtils.getSecret('logan/web-google-creds');
+        case 'ios':
+            throw new AuthorizationError('Missing iOS client credentials');
+        case 'android':
+            throw new AuthorizationError('Missing Android client credentials');
+        default:
+            throw new AuthorizationError(`Unrecognized client type ${clientType}`);
+    }
+}
+
 async function getAuthSecret(clientType) {
     const secret = await secretUtils.getSecret('logan/auth-secrets');
     return secret[clientType];
@@ -65,6 +78,7 @@ async function handleAuth(req, authRequired = false, unauthedAction) {
 
 module.exports = {
     UNAUTHORIZED_ACTIONS,
+    getClientCreds,
     generateBearerToken,
     handleAuth,
 };

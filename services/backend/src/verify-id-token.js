@@ -1,14 +1,14 @@
 const _ = require('lodash');
-const { dynamoUtils, secretUtils } = require('@logan/aws');
+const { dynamoUtils } = require('@logan/aws');
 const { OAuth2Client } = require('google-auth-library');
 const auth = require('../utils/auth');
 const requestValidator = require('../utils/request-validator');
 
 async function verifyIdToken(req, res) {
-    const { clientId } = await secretUtils.getSecret('logan/web-google-creds');
-
     // Verify the ID token from the request body
-    const { idToken } = requestValidator.requireBodyParams(req, ['idToken']);
+    const { idToken, clientType = 'web' } = requestValidator.requireBodyParams(req, ['idToken', 'clientType']);
+    const { clientId } = await auth.getClientCreds(clientType);
+
     const client = new OAuth2Client(clientId);
     const ticket = await client.verifyIdToken({
         idToken,
@@ -29,7 +29,7 @@ async function verifyIdToken(req, res) {
         res.json({
             exists: false,
             meta: { name, email },
-            token: await auth.generateBearerToken({ action: auth.UNAUTHORIZED_ACTIONS.CREATE_USER }, 'web'),
+            token: await auth.generateBearerToken({ action: auth.UNAUTHORIZED_ACTIONS.CREATE_USER }, clientType),
         });
     } else {
         // User exists
@@ -37,7 +37,7 @@ async function verifyIdToken(req, res) {
         res.json({
             exists: true,
             user,
-            token: await auth.generateBearerToken({ uid: user.uid }, 'web'),
+            token: await auth.generateBearerToken({ uid: user.uid }, clientType),
         });
     }
 }

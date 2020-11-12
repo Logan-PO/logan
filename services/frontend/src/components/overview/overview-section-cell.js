@@ -5,8 +5,8 @@ import _ from 'lodash';
 import { navigate } from 'gatsby';
 import { dateUtils } from '@logan/core';
 import { Grid, ListItem, ListItemText } from '@material-ui/core';
+import { getSectionSelectors, setShouldGoTo } from '@logan/fe-shared/store/schedule';
 import { CourseLabel } from '../shared/displays';
-import { getSectionSelectors, setShouldGoTo } from '../../store/schedule';
 
 const {
     dayjs,

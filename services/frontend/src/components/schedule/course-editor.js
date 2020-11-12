@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Grid, Typography, TextField, Breadcrumbs, Divider } from '@material-ui/core';
-import { getScheduleSelectors, updateCourse, updateCourseLocal } from '../../store/schedule';
+import { getScheduleSelectors, updateCourse, updateCourseLocal } from '@logan/fe-shared/store/schedule';
 import Editor from '../shared/editor';
 import ColorPicker from '../shared/controls/color-picker';
 

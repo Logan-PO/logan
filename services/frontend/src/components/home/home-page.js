@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Link, navigate } from 'gatsby';
 import { Container, Typography, Grid } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { LOGIN_STAGE, setLoginStage, fetchSelf } from '../../store/login';
+import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
 import GoogleBtn from './GoogleButton';
 import SignUpForm from './signup-form';
 import styles from './home-page.module.scss';

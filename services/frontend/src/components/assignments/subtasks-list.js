@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
 import { Paper, List, Divider } from '@material-ui/core';
+import { getTasksSelectors, createTask, deleteTask } from '@logan/fe-shared/store/tasks';
 import TaskCell from '../tasks/task-cell';
-import { getTasksSelectors, createTask, deleteTask } from '../../store/tasks';
 import '../shared/list.scss';
 import './subtasks-list.scss';
 

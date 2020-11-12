@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
 import { Grid, Typography, TextField, Breadcrumbs, Divider } from '@material-ui/core';
 import { DatePicker, TimePicker } from '@material-ui/pickers';
-import { getScheduleSelectors, updateSection, updateSectionLocal } from '../../store/schedule';
+import { getScheduleSelectors, updateSection, updateSectionLocal } from '@logan/fe-shared/store/schedule';
 import Editor from '../shared/editor';
 import DowPicker from '../shared/controls/dow-picker';
 
