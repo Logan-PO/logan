@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Grid } from '@material-ui/core';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import * as dateUtils from '@logan/core/src/date-utils';
 import { getScheduleSelectors } from '../../store/schedule';
@@ -193,42 +194,29 @@ class OverviewWeekly extends React.Component {
     }
     render() {
         return (
-            <Grid
-                container
-                direction="row"
-                alignItems="top"
-                spacing={2}
-                style={{ maxHeight: 'calc(100% - 64px)', maxWidth: '100%' }}
-                className={'scrollable-list'}
-            >
-                <Grid item xs alignContent={'left'}>
-                    <div></div>
+            <Grid container spacing={0}>
+                <Grid item xs={9} style={{ height: 'calc(100vh - 64px)' }}>
+                    <div className="scroll-view">
+                        <Calendar
+                            localizer={localizer}
+                            defaultDate={new Date()}
+                            defaultView="week"
+                            views={['month', 'week']}
+                            style={{ height: 'calc(100vh - 64px)' }}
+                            events={this.convertEvents(this.combineEvents())}
+                            eventPropGetter={event => {
+                                const backgroundColor = event ? event.color : '#fff';
+                                return { style: { backgroundColor } };
+                            }}
+                            components={{
+                                event: this.Event,
+                            }}
+                            step={60} //how much is one slot worth ( in min)
+                            timeslots={1}
+                        />
+                    </div>
                 </Grid>
-                <Grid item xs={10} alignContent={'left'}>
-                    {
-                        <div>
-                            <Calendar
-                                localizer={localizer}
-                                defaultDate={new Date()}
-                                defaultView="month"
-                                views={['month', 'week']}
-                                events={this.convertEvents(this.combineEvents())}
-                                style={{ height: '90vh' }} //If this value is <110 the week view is not adjusted properly
-                                eventPropGetter={event => {
-                                    const backgroundColor = event ? event.color : '#fff';
-                                    return { style: { backgroundColor } };
-                                }}
-                                components={{
-                                    event: this.Event,
-                                }}
-                                resizable
-                                step={60} //how much is one slot worth ( in min)
-                                timeslots={2}
-                            />
-                        </div>
-                    }
-                </Grid>
-                <Grid item xs alignContent={'right'}>
+                <Grid item xs={3} style={{ height: 'calc(100vh - 64px)' }}>
                     <div className="scrollable-list">
                         <div className="scroll-view">
                             <OverviewScheduleList />
