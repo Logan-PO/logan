@@ -1,6 +1,47 @@
 @import '~react-big-calendar/lib/sass/styles';
+@import '~react-big-calendar/lib/sass/variables';
+
+.full-overview-height {
+    height: calc(100vh - 64px);
+}
+
+.rbc-header {
+    border-left: none;
+    border-right: none;
+    padding-bottom: 0.2rem;
+}
+
+.rbc-time-view, .rbc-month-view {
+    border: none;
+
+    .rbc-month-header {
+        .rbc-header {
+            text-transform: uppercase;
+        }
+    }
+}
+
+.rbc-off-range-bg {
+    background: #eeeeee;
+}
+
+.rbc-time-view {
+    .rbc-time-header-content, .rbc-header {
+        border: none;
+    }
+
+    .rbc-allday-cell {
+        border-left: solid 1px $border-color;
+    }
+}
+
+.rbc-header.rbc-today, .rbc-day-bg.rbc-today {
+    background: none;
+}
 
 .rbc-time-slot {
+    text-align: right;
+
     .rbc-label {
         opacity: 0.6;
     }
@@ -15,6 +56,10 @@
     padding: 0.1rem 0 0.05rem;
     font-size: 0.8rem;
     opacity: 0.8;
+
+    &.rbc-off-range {
+        opacity: 1;
+    }
 }
 
 .rbc-events-container, .rbc-allday-cell, .rbc-month-row {
@@ -37,7 +82,7 @@
         font-weight: normal;
     }
 
-    .rbc-row:empty:last-of-type {
+    .rbc-row:empty {
         display: none;
     }
 }

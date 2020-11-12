@@ -8,8 +8,9 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import * as dateUtils from '@logan/core/src/date-utils';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
-import './overview-weekly.scss';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import './overview-weekly.scss';
+import Toolbar from './toolbar';
 import OverviewScheduleList from './overview-schedule-list';
 import CalendarEvent from './calendar-event';
 
@@ -33,6 +34,8 @@ class OverviewWeekly extends React.Component {
             viewType: 'week',
             events: [],
         };
+
+        this._styleRef = React.createRef();
 
         let badDate = dateUtils.dayjs();
         invalidDate = {
@@ -154,7 +157,6 @@ class OverviewWeekly extends React.Component {
     }
 
     convertEvents(events) {
-        console.log(events);
         let formattedEventList = [];
 
         for (const ev of events) {
@@ -164,39 +166,46 @@ class OverviewWeekly extends React.Component {
         }
         return formattedEventList;
     }
-    Event({ event }) {
-        return (
-            //Controls the color of the text
-            <span>
-                <span style={{ color: 'white' }}>{event.title}</span>
-                {event.desc && `:  ${event.desc}`}
-            </span>
-        );
-    }
+
     render() {
         return (
-            <Grid container spacing={0}>
-                <Grid item xs={9} style={{ height: 'calc(100vh - 64px)' }}>
+            <Grid container style={{ background: 'white' }}>
+                {this.state.viewType === 'week' && (
+                    <Grid item xs={3} className="full-overview-height">
+                        <div className="scrollable-list">
+                            <div className="scroll-view">
+                                <OverviewScheduleList />
+                            </div>
+                        </div>
+                    </Grid>
+                )}
+                <Grid item xs={this.state.viewType === 'week' ? 9 : 12} className="full-overview-height">
                     <div className="scroll-view">
                         <Calendar
+                            className="full-overview-height"
                             localizer={localizer}
                             defaultDate={new Date()}
                             defaultView="week"
                             views={['month', 'week']}
-                            style={{ height: 'calc(100vh - 64px)' }}
+                            onView={this.viewTypeChanged}
                             events={this.convertEvents(this.combineEvents())}
                             eventPropGetter={() => ({ className: `view-type-${this.state.viewType}` })}
                             components={{
+                                toolbar: Toolbar,
                                 event: CalendarEvent,
                             }}
                             step={60} //how much is one slot worth ( in min)
                             timeslots={1}
-                            onView={this.viewTypeChanged}
                             formats={{
-                                dateFormat: 'D',
+                                dateFormat: date => {
+                                    const day = dateUtils.dayjs(date);
+                                    if (day.date() === 1) return day.format('MMM D');
+                                    else return day.format('D');
+                                },
                                 timeGutterFormat: 'h:mma',
-                                weekdayFormat: 'dddd',
-                                dayFormat: date => dayjs(date).format('ddd | D'),
+                                weekdayFormat: 'ddd',
+                                dayFormat: date =>
+                                    `${dayjs(date).format('ddd').toUpperCase()} / ${dayjs(date).format('Do')}`,
                                 dayRangeHeaderFormat: ({ start, end }) => {
                                     const startDate = dayjs(start);
                                     const endDate = dayjs(end);
@@ -209,13 +218,6 @@ class OverviewWeekly extends React.Component {
                                 },
                             }}
                         />
-                    </div>
-                </Grid>
-                <Grid item xs={3} style={{ height: 'calc(100vh - 64px)' }}>
-                    <div className="scrollable-list">
-                        <div className="scroll-view">
-                            <OverviewScheduleList />
-                        </div>
                     </div>
                 </Grid>
             </Grid>

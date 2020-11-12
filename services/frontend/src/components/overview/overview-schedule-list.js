@@ -107,33 +107,29 @@ export class OverviewScheduleList extends React.Component {
         const groups = this.getRelevantData();
 
         return _.get(this.state, 'listView', true) ? (
-            <div className="scrollable-list">
-                <div className="scroll-view">
-                    <List style={{ paddingTop: 0 }}>
-                        {groups.map(([date, { sections, assignments, tasks }]) => {
-                            return (
-                                <React.Fragment key={date.format()}>
-                                    <ListSubheader style={{ background: colors.grey[300] }}>
-                                        {dateUtils.humanReadableDate(date)}
-                                    </ListSubheader>
-                                    {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
-                                    {sections.map(({ sid }) => (
-                                        <OverviewSectionCell key={sid} sid={sid} />
-                                    ))}
-                                    {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
-                                    {assignments.map(({ aid }) => (
-                                        <AssignmentCell key={aid} aid={aid} />
-                                    ))}
-                                    {tasks.length > 0 && this.secondaryHeader('TASKS')}
-                                    {tasks.map(({ tid }) => (
-                                        <TaskCell key={tid} tid={tid} />
-                                    ))}
-                                </React.Fragment>
-                            );
-                        })}
-                    </List>
-                </div>
-            </div>
+            <List style={{ paddingTop: 0 }}>
+                {groups.map(([date, { sections, assignments, tasks }]) => {
+                    return (
+                        <React.Fragment key={date.format()}>
+                            <ListSubheader style={{ background: colors.grey[300] }}>
+                                {dateUtils.humanReadableDate(date)}
+                            </ListSubheader>
+                            {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
+                            {sections.map(({ sid }) => (
+                                <OverviewSectionCell key={sid} sid={sid} />
+                            ))}
+                            {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
+                            {assignments.map(({ aid }) => (
+                                <AssignmentCell key={aid} aid={aid} />
+                            ))}
+                            {tasks.length > 0 && this.secondaryHeader('TASKS')}
+                            {tasks.map(({ tid }) => (
+                                <TaskCell key={tid} tid={tid} />
+                            ))}
+                        </React.Fragment>
+                    );
+                })}
+            </List>
         ) : (
             <OverviewWeekly />
         );
