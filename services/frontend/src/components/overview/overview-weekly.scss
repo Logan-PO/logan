@@ -1,1 +1,19 @@
 @import '~react-big-calendar/lib/sass/styles';
+
+.rbc-time-header {
+    border-right: none !important;
+}
+
+.rbc-events-container, .rbc-allday-cell {
+    .rbc-event {
+        box-sizing: border-box;
+        background: none;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+
+        .rbc-event-label {
+            display: none;
+        }
+    }
+}

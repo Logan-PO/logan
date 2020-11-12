@@ -11,12 +11,13 @@ import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import './overview-weekly.scss';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import OverviewScheduleList from './overview-schedule-list';
+import CalendarEvent from './calendar-event';
 
 const localizer = momentLocalizer(moment);
 
 const {
     dayjs,
-    constants: { DB_DATE_FORMAT, DB_TIME_FORMAT },
+    constants: { DB_DATE_FORMAT },
 } = dateUtils;
 let invalidDate;
 
@@ -71,56 +72,50 @@ class OverviewWeekly extends React.Component {
     isDuringTerm(section, date) {
         return dayjs(section.endDate).diff(date) >= 0 && dayjs(section.startDate).diff(date) < 0;
     }
+
     isSameWeekDay(date, daysOfWeek) {
         return _.find(daysOfWeek, element => element === date.weekday()) != undefined;
     }
+
     isThisWeek(curDate, finDate, repeatMod) {
         let duration = dayjs.duration(finDate.diff(curDate));
         return _.floor(duration.asWeeks()) % repeatMod === 0;
     }
+
     mapSectionToDates(section) {
         const course = this.props.getCourse(section.cid);
+        const startDate = dateUtils.toDate(section.startDate);
+        const endDate = dateUtils.toDate(section.endDate);
+        const startTime = dateUtils.toTime(section.startTime);
+        const endTime = dateUtils.toTime(section.endTime);
+
+        const displayName = _.isEmpty(course.nickname) ? course.title : course.nickname;
+
         //generate a list of dayjs objects that have day js formatted dueDates/dates
         let sectionCellData = [];
 
-        let finalDate = dayjs(section.endDate, DB_DATE_FORMAT);
-
         //get the current date and set the hours min and secs to 0
-        let currentDate = dateUtils.dayjs(section.startDate, DB_DATE_FORMAT).hour(0).minute(0).second(0);
-        currentDate = currentDate.add(1, 'day');
-        while (this.isDuringTerm(section, currentDate)) {
+        let runnerDate = dateUtils.toDate(section.startDate).startOf('day');
+        while (runnerDate.isBetween(startDate, endDate, 'day', '[]')) {
             if (
-                this.isSameWeekDay(currentDate, section.daysOfWeek) &&
-                this.isThisWeek(currentDate, finalDate, section.weeklyRepeat)
+                this.isSameWeekDay(runnerDate, section.daysOfWeek) &&
+                this.isThisWeek(runnerDate, endDate, section.weeklyRepeat)
             ) {
-                let tempDate = dayjs(section.startTime, DB_TIME_FORMAT);
-                let endTime = dayjs(section.endTime, DB_TIME_FORMAT);
-                let sectionDate = currentDate.add(tempDate.hour(), 'hour');
-                sectionDate = sectionDate.add(tempDate.minute(), 'minute');
-                console.log(sectionDate.date());
+                const sectionStart = runnerDate.hour(startTime.hour()).minute(startTime.minute());
+                const sectionEnd = runnerDate.hour(endTime.hour()).minute(endTime.minute());
+
                 sectionCellData.push({
-                    id: section.sid,
-                    title: section.title,
+                    type: 'section',
+                    section,
+                    course,
+                    title: displayName,
                     allDay: false,
-                    start: new Date(
-                        sectionDate.year(),
-                        sectionDate.month(),
-                        sectionDate.date(),
-                        sectionDate.hour(),
-                        sectionDate.minute()
-                    ),
-                    end: new Date(
-                        sectionDate.year(),
-                        sectionDate.month(),
-                        sectionDate.date(),
-                        endTime.hour(),
-                        endTime.minute()
-                    ),
-                    desc: section.location,
-                    color: course ? course.color : 'blue',
+                    start: sectionStart.toDate(),
+                    end: sectionEnd.toDate(),
                 });
             }
-            currentDate = currentDate.add(1, 'day');
+
+            runnerDate = runnerDate.add(1, 'day');
         }
         return sectionCellData;
     }
@@ -133,13 +128,15 @@ class OverviewWeekly extends React.Component {
             //event is an assignment
             return [
                 {
+                    type: 'assignment',
                     id: event.aid,
                     title: event.title,
+                    assignment: event,
+                    course,
                     allDay: true,
-                    start: new Date(date.year(), date.month(), date.date()),
-                    end: new Date(date.year(), date.month(), date.date()),
+                    start: date.toDate(),
+                    end: date.toDate(),
                     desc: event.description,
-                    color: course ? course.color : 'blue',
                 },
             ];
         } else if (event.sid) {
@@ -185,13 +182,13 @@ class OverviewWeekly extends React.Component {
                             views={['month', 'week']}
                             style={{ height: 'calc(100vh - 64px)' }}
                             events={this.convertEvents(this.combineEvents())}
-                            eventPropGetter={event => {
-                                const backgroundColor = event ? event.color : '#fff';
-                                return { style: { backgroundColor } };
-                            }}
+                            eventPropGetter={() => ({ style: { background: 'none' } })}
                             components={{
-                                event: this.Event,
+                                event: CalendarEvent,
                             }}
+                            // components={{
+                            //     event: this.Event,
+                            // }}
                             step={60} //how much is one slot worth ( in min)
                             timeslots={1}
                         />

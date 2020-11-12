@@ -1,0 +1,36 @@
+.logan-event {
+    height: 100%;
+    padding: 0.25em 0 0.25em 0.4em;
+
+    &.assignment-event {
+        padding-top: 0.125em;
+        padding-bottom: 0.125em;
+        background: none;
+        color: black;
+    }
+
+    .event-icon {
+        height: 0.9rem;
+        width: 0.9rem;
+        display: inline;
+        margin-right: 0.3rem;
+    }
+
+    .event-title {
+        font-size: 0.8rem;
+        line-height: 1rem;
+        font-weight: bold;
+        overflow: hidden;
+        text-overflow: clip;
+        white-space: nowrap;
+    }
+
+    .event-subtitle {
+        font-size: 0.8rem;
+        line-height: 1rem;
+        overflow: hidden;
+        text-overflow: clip;
+        white-space: nowrap;
+        opacity: 0.8;
+    }
+}
