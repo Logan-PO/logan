@@ -36,6 +36,7 @@ class Toolbar extends React.Component {
     }
 
     currentTitle() {
+        const now = dateUtils.dayjs();
         const currentDate = dateUtils.dayjs(this.props.date);
 
         if (this.props.view === 'month') {
@@ -43,8 +44,12 @@ class Toolbar extends React.Component {
         } else {
             const weekStart = currentDate.weekday(0);
             const weekEnd = currentDate.weekday(6);
+            const weeksDiff = (currentDate.week() - now.week() + (currentDate.year() - now.year()) * 52) / 2;
 
-            if (weekStart.isSame(weekEnd, 'month')) {
+            if (weeksDiff === 0) return 'This Week';
+            else if (weeksDiff === 1) return 'Next Week';
+            else if (weeksDiff === -1) return 'Last Week';
+            else if (weekStart.isSame(weekEnd, 'month')) {
                 return `${weekStart.format('MMMM Do')} - ${weekEnd.format('Do')}`;
             } else {
                 return `${weekStart.format('MMMM Do')} - ${weekEnd.format('MMMM Do')}`;
