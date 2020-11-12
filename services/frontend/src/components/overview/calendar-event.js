@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Paper, Typography } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import './event.scss';
 import { appropriateTextColor, printSectionTimes } from './scheduling-utils';
@@ -9,18 +9,27 @@ import { appropriateTextColor, printSectionTimes } from './scheduling-utils';
 class CalendarEvent extends React.Component {
     constructor(props) {
         super(props);
-        console.log(props);
     }
 
     asWeeklySection() {
+        const viewType = _.get(this.props, 'event.viewType', 'week');
         const section = _.get(this.props, 'event.section');
         const background = _.get(this.props, 'event.course.color');
-        const color = appropriateTextColor(background || '#ffffff');
+
+        const paperStyle = {
+            background: viewType === 'week' ? background : 'none',
+            color: viewType === 'week' ? appropriateTextColor(background || '#ffffff') : 'black',
+        };
 
         return (
-            <Paper className="logan-event" style={{ background, color }} elevation={0}>
-                <Typography className="event-title">{this.props.title}</Typography>
-                {section && <Typography className="event-subtitle">{printSectionTimes(section)}</Typography>}
+            <Paper className="logan-event" style={paperStyle} elevation={0}>
+                <div className="event-title">
+                    <div className="event-flex-container">
+                        {viewType === 'month' && <div className="swatch" style={{ background }} />}
+                        {this.props.title}
+                    </div>
+                </div>
+                {viewType === 'week' && section && <div className="event-subtitle">{printSectionTimes(section)}</div>}
             </Paper>
         );
     }
@@ -30,12 +39,12 @@ class CalendarEvent extends React.Component {
 
         return (
             <Paper className="logan-event assignment-event" elevation={0}>
-                <Typography className="event-title">
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="event-title">
+                    <div className="event-flex-container">
                         <AssignmentIcon style={{ fill: color }} className="event-icon" />
                         <span>{this.props.title}</span>
                     </div>
-                </Typography>
+                </div>
             </Paper>
         );
     }

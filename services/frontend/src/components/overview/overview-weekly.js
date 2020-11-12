@@ -25,10 +25,14 @@ class OverviewWeekly extends React.Component {
     constructor(props) {
         super(props);
         this.combineEvents = this.combineEvents.bind(this);
-        this.changeView = this.changeView.bind(this);
         this.convertEvents = this.convertEvents.bind(this);
         this.formatEventForCalendar = this.formatEventForCalendar.bind(this);
-        this.state = { listView: false, events: [] };
+        this.viewTypeChanged = this.viewTypeChanged.bind(this);
+
+        this.state = {
+            viewType: 'week',
+            events: [],
+        };
 
         let badDate = dateUtils.dayjs();
         invalidDate = {
@@ -41,11 +45,8 @@ class OverviewWeekly extends React.Component {
         };
     }
 
-    changeView() {
-        this.setState({
-            listView: !_.get(this.state, 'listView', false),
-            events: this.props.events,
-        });
+    viewTypeChanged(newType) {
+        this.setState({ viewType: newType });
     }
 
     combineEvents() {
@@ -105,11 +106,12 @@ class OverviewWeekly extends React.Component {
                 const sectionEnd = runnerDate.hour(endTime.hour()).minute(endTime.minute());
 
                 sectionCellData.push({
+                    viewType: this.state.viewType,
                     type: 'section',
                     section,
                     course,
                     title: displayName,
-                    allDay: false,
+                    allDay: this.state.viewType === 'month',
                     start: sectionStart.toDate(),
                     end: sectionEnd.toDate(),
                 });
@@ -128,12 +130,13 @@ class OverviewWeekly extends React.Component {
             //event is an assignment
             return [
                 {
+                    viewType: this.state.viewType,
                     type: 'assignment',
                     id: event.aid,
                     title: event.title,
                     assignment: event,
                     course,
-                    allDay: true,
+                    allDay: this.state.viewType === 'week',
                     start: date.toDate(),
                     end: date.toDate(),
                     desc: event.description,
@@ -182,15 +185,19 @@ class OverviewWeekly extends React.Component {
                             views={['month', 'week']}
                             style={{ height: 'calc(100vh - 64px)' }}
                             events={this.convertEvents(this.combineEvents())}
-                            eventPropGetter={() => ({ style: { background: 'none' } })}
+                            eventPropGetter={() => ({ className: `view-type-${this.state.viewType}` })}
                             components={{
                                 event: CalendarEvent,
                             }}
-                            // components={{
-                            //     event: this.Event,
-                            // }}
                             step={60} //how much is one slot worth ( in min)
                             timeslots={1}
+                            onView={this.viewTypeChanged}
+                            formats={{
+                                dateFormat: 'D',
+                                timeGutterFormat: 'h:mma',
+                                weekdayFormat: 'dddd',
+                                dayFormat: 'ddd (M/D)',
+                            }}
                         />
                     </div>
                 </Grid>

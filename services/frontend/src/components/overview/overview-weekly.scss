@@ -1,10 +1,23 @@
 @import '~react-big-calendar/lib/sass/styles';
 
+.rbc-time-slot {
+    .rbc-label {
+        opacity: 0.6;
+    }
+}
+
 .rbc-time-header {
     border-right: none !important;
 }
 
-.rbc-events-container, .rbc-allday-cell {
+.rbc-date-cell {
+    text-align: center;
+    padding: 0.1rem 0 0.05rem;
+    font-size: 0.8rem;
+    opacity: 0.8;
+}
+
+.rbc-events-container, .rbc-allday-cell, .rbc-month-row {
     .rbc-event {
         box-sizing: border-box;
         background: none;
@@ -15,5 +28,16 @@
         .rbc-event-label {
             display: none;
         }
+    }
+
+    .rbc-show-more {
+        background: none;
+        padding: 0.1rem 0.4rem;
+        text-decoration: none;
+        font-weight: normal;
+    }
+
+    .rbc-row:empty:last-of-type {
+        display: none;
     }
 }

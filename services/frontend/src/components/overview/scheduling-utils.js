@@ -18,8 +18,8 @@ export function printSectionTimes(section) {
     const endTime = dateUtils.toTime(section.endTime);
 
     if (startTime.format('a') === endTime.format('a')) {
-        return `${startTime.format('h:mm')} - ${endTime.format('h:mm A')}`;
+        return `${startTime.format('h:mm')} - ${endTime.format('h:mma')}`;
     } else {
-        return `${startTime.format('h:mm A')} - ${endTime.format('h:mm A')}`;
+        return `${startTime.format('h:mma')} - ${endTime.format('h:mma')}`;
     }
 }
