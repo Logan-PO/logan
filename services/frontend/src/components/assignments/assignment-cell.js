@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '../../store/assignments';
-import { getScheduleSelectors } from '../../store/schedule';
+import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '@logan/fe-shared/store/assignments';
+import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { CourseLabel } from '../shared/displays';
 
 export class AssignmentCell extends React.Component {

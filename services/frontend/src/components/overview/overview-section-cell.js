@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { dateUtils } from '@logan/core';
 import { Grid, ListItem, ListItemText } from '@material-ui/core';
+import { getSectionSelectors } from '@logan/fe-shared/store/schedule';
 import { CourseLabel } from '../shared/displays';
-import { getSectionSelectors } from '../../store/schedule';
 
 const {
     dayjs,
@@ -36,8 +36,8 @@ export class OverviewSectionCell extends React.Component {
     determineRendering() {
         if (this.props.condensed) {
             return (
-                <Grid container direction="row" alignItems="top">
-                    <Grid item style={{ minWidth: '11rem' }}>
+                <Grid container direction="row" alignItems="flex-start">
+                    <Grid item style={{ minWidth: '9rem' }}>
                         <ListItemText primary={this.getTimingString()} />
                     </Grid>
                     <Grid item>
@@ -47,16 +47,17 @@ export class OverviewSectionCell extends React.Component {
             );
         } else {
             return (
-                <Grid container direction="row" alignItems="top">
-                    <Grid item style={{ minWidth: '11rem' }}>
+                <Grid container direction="row" alignItems="flex-start">
+                    <Grid item style={{ minWidth: '9rem' }}>
                         <ListItemText primary={this.getTimingString()} />
                         <ListItemText primary={_.get(this.state, 'section.location')} />
                     </Grid>
                     <Grid item>
                         <ListItemText primary={<CourseLabel cid={_.get(this.state, 'section.cid')} />} />
-                        <Grid container direction="row" alignItems="top">
+                        <Grid container direction="row" alignItems="flex-start">
                             <ListItemText primary={_.get(this.state, 'section.instructor')} />{' '}
                         </Grid>
+                        <ListItemText primary={_.get(this.state, 'section.title')} />{' '}
                     </Grid>
                 </Grid>
             );
@@ -72,7 +73,7 @@ export class OverviewSectionCell extends React.Component {
     }
 }
 OverviewSectionCell.propTypes = {
-    condensed: PropTypes.boolean,
+    condensed: PropTypes.bool,
     sid: PropTypes.string,
     cid: PropTypes.string,
     tid: PropTypes.string,

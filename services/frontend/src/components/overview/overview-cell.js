@@ -2,9 +2,9 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getAssignmentsSelectors } from '../../store/assignments';
-import { getScheduleSelectors, getSectionSelectors } from '../../store/schedule';
-import { getTasksSelectors, updateTask, updateTaskLocal } from '../../store/tasks';
+import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import { getScheduleSelectors, getSectionSelectors } from '@logan/fe-shared/store/schedule';
+import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import OverviewSectionCell from './overview-section-cell';
@@ -69,7 +69,7 @@ export class OverviewCell extends React.Component {
     }
 }
 OverviewCell.propTypes = {
-    condensed: PropTypes.boolean,
+    condensed: PropTypes.bool,
     eid: PropTypes.string,
     selectAssignmentFromStore: PropTypes.func,
     selectTaskFromStore: PropTypes.func,

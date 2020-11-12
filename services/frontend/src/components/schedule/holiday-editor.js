@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
 import { Grid, Typography, TextField, Breadcrumbs, Divider } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
-import { getScheduleSelectors, updateHoliday, updateHolidayLocal } from '../../store/schedule';
+import { getScheduleSelectors, updateHoliday, updateHolidayLocal } from '@logan/fe-shared/store/schedule';
 import Editor from '../shared/editor';
 
 const {

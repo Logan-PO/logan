@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
 import SyncIcon from '@material-ui/icons/Sync';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { fetchTasks } from '../../store/tasks';
-import { fetchAssignments } from '../../store/assignments';
-import { fetchSchedule } from '../../store/schedule';
-import { fetchReminders } from '../../store/reminders';
+import { fetchTasks } from '@logan/fe-shared/store/tasks';
+import { fetchAssignments } from '@logan/fe-shared/store/assignments';
+import { fetchSchedule } from '@logan/fe-shared/store/schedule';
+import { fetchReminders } from '@logan/fe-shared/store/reminders';
 import styles from './navbar.module.scss';
 import AccountDialog from './account-dialog';
 

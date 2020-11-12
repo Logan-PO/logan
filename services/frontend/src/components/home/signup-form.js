@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, TextField, Button } from '@material-ui/core';
-import { LOGIN_STAGE, setLoginStage, createNewUser } from '../../store/login';
+import { LOGIN_STAGE, setLoginStage, createNewUser } from '@logan/fe-shared/store/login';
 
 class SignUpForm extends React.Component {
     constructor(props) {

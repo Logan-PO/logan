@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page } from '../shared';
-import OverviewScheduleList from './overview-schedule-list';
+import OverviewWeekly from './overview-weekly';
 
 export class OverviewPage extends React.Component {
     constructor(props) {
@@ -10,7 +10,7 @@ export class OverviewPage extends React.Component {
     render() {
         return (
             <Page title="Overview">
-                <OverviewScheduleList />
+                <OverviewWeekly />
             </Page>
         );
     }

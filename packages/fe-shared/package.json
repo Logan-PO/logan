@@ -1,0 +1,29 @@
+{
+  "name": "@logan/fe-shared",
+  "version": "1.0.0",
+  "description": "Shared frontend functionality",
+  "author": "Lucas Popp <lmp122@case.edu>",
+  "homepage": "https://github.com/beasterbro/logan/tree/master/packages/fe-shared#readme",
+  "license": "ISC",
+  "main": "index.js",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beasterbro/logan.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/beasterbro/logan/issues"
+  },
+  "dependencies": {
+    "@logan/core": "^1.0.0",
+    "@reduxjs/toolkit": "^1.4.0",
+    "axios": "^0.20.0",
+    "bluebird": "^3.7.2",
+    "lodash": "^4.17.20",
+    "redux": "^4.0.5",
+    "redux-devtools-extension": "^2.13.8"
+  }
+}

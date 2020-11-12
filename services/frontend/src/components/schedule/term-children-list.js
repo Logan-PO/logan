@@ -4,7 +4,13 @@ import { connect } from 'react-redux';
 import { List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
-import { getScheduleSelectors, createCourse, deleteCourse, createHoliday, deleteHoliday } from '../../store/schedule';
+import {
+    getScheduleSelectors,
+    createCourse,
+    deleteCourse,
+    createHoliday,
+    deleteHoliday,
+} from '@logan/fe-shared/store/schedule';
 import '../shared/list.scss';
 import EmptySticker from '../shared/displays/empty-sticker';
 

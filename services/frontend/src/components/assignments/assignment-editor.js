@@ -10,7 +10,7 @@ import {
     getAssignmentsSelectors,
     updateAssignment,
     updateAssignmentLocal,
-} from '../../store/assignments';
+} from '@logan/fe-shared/store/assignments';
 import { CoursePicker } from '../shared/controls';
 import Editor from '../shared/editor';
 import RemindersList from '../reminders/reminders-list';

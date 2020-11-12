@@ -6,6 +6,11 @@ on:
       - master
 
 jobs:
+  cancel-previous:
+    - name: Cancel Workflow Action
+      uses: styfle/cancel-workflow-action@0.6.0
+      with:
+        access_token: ${{ github.token }}
   deploy-fe:
     runs-on: ubuntu-latest
     steps:
