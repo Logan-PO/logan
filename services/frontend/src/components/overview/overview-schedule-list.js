@@ -2,10 +2,9 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, ListItem, Typography, colors, Button } from '@material-ui/core';
+import { List, ListSubheader, ListItem, Typography, colors } from '@material-ui/core';
 import { dateUtils } from '@logan/core';
 import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
-import './overview-list.module.scss';
 import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import AssignmentCell from '../assignments/assignment-cell';
@@ -25,7 +24,8 @@ export class OverviewScheduleList extends React.Component {
         this.getRelevantData = this.getRelevantData.bind(this);
         this.changeCondense = this.changeCondense.bind(this);
         this.changeView = this.changeView.bind(this);
-        this.state = { condensed: false, listView: true };
+
+        this.state = { listView: true };
     }
 
     getRelevantData() {
@@ -107,38 +107,31 @@ export class OverviewScheduleList extends React.Component {
         const groups = this.getRelevantData();
 
         return _.get(this.state, 'listView', true) ? (
-            <div>
-                <Button onClick={this.changeCondense}>Condense/Uncondense</Button>
-                <div className="scrollable-list">
-                    <div className="scroll-view">
-                        <List>
-                            {groups.map(([date, { sections, assignments, tasks }]) => {
-                                return (
-                                    <React.Fragment key={date.format()}>
-                                        <ListSubheader style={{ background: colors.grey[300] }}>
-                                            {dateUtils.humanReadableDate(date)}
-                                        </ListSubheader>
-                                        {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
-                                        {sections.map(({ sid }) => (
-                                            <OverviewSectionCell
-                                                condensed={_.get(this.state, 'condensed', false)}
-                                                key={sid}
-                                                sid={sid}
-                                            />
-                                        ))}
-                                        {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
-                                        {assignments.map(({ aid }) => (
-                                            <AssignmentCell key={aid} aid={aid} />
-                                        ))}
-                                        {tasks.length > 0 && this.secondaryHeader('TASKS')}
-                                        {tasks.map(({ tid }) => (
-                                            <TaskCell key={tid} tid={tid} />
-                                        ))}
-                                    </React.Fragment>
-                                );
-                            })}
-                        </List>
-                    </div>
+            <div className="scrollable-list">
+                <div className="scroll-view">
+                    <List style={{ paddingTop: 0 }}>
+                        {groups.map(([date, { sections, assignments, tasks }]) => {
+                            return (
+                                <React.Fragment key={date.format()}>
+                                    <ListSubheader style={{ background: colors.grey[300] }}>
+                                        {dateUtils.humanReadableDate(date)}
+                                    </ListSubheader>
+                                    {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
+                                    {sections.map(({ sid }) => (
+                                        <OverviewSectionCell key={sid} sid={sid} />
+                                    ))}
+                                    {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
+                                    {assignments.map(({ aid }) => (
+                                        <AssignmentCell key={aid} aid={aid} />
+                                    ))}
+                                    {tasks.length > 0 && this.secondaryHeader('TASKS')}
+                                    {tasks.map(({ tid }) => (
+                                        <TaskCell key={tid} tid={tid} />
+                                    ))}
+                                </React.Fragment>
+                            );
+                        })}
+                    </List>
                 </div>
             </div>
         ) : (

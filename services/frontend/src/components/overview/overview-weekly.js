@@ -9,7 +9,6 @@ import moment from 'moment';
 import * as dateUtils from '@logan/core/src/date-utils';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import './overview-weekly.scss';
-import './overview-list.module.scss';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 
 import OverviewScheduleList from './overview-schedule-list';
