@@ -7,7 +7,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { dateUtils } from '@logan/core';
-import { getRemindersSelectors, deleteReminder } from '../../store/reminders';
+import { getRemindersSelectors, deleteReminder } from '@logan/fe-shared/store/reminders';
 
 class ReminderCell extends React.Component {
     constructor(props) {

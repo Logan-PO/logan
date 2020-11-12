@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Paper, List, Divider, ListItem, ListItemText, FormLabel, Fab } from '@material-ui/core';
 import AddAlertIcon from '@material-ui/icons/AddAlert';
-import { getRemindersSelectors, setShouldGoToReminder } from '../../store/reminders';
+import { getRemindersSelectors, setShouldGoToReminder } from '@logan/fe-shared/store/reminders';
 import ReminderCell from './reminder-cell';
 import classes from './reminders-list.module.scss';
 import ReminderModal from './reminder-modal';
