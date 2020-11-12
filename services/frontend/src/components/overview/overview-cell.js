@@ -69,7 +69,7 @@ export class OverviewCell extends React.Component {
     }
 }
 OverviewCell.propTypes = {
-    condensed: PropTypes.boolean,
+    condensed: PropTypes.bool,
     eid: PropTypes.string,
     selectAssignmentFromStore: PropTypes.func,
     selectTaskFromStore: PropTypes.func,
