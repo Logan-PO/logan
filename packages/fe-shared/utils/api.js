@@ -248,6 +248,32 @@ async function deleteAssignment(assignment) {
     return response.data;
 }
 
+/* --- REMINDERS --- */
+
+async function getReminders() {
+    const response = await client.get('/reminders');
+    return response.data;
+}
+
+// Returns the new reminder
+async function createReminder(reminder) {
+    const response = await client.post('/reminders', reminder);
+    return response.data;
+}
+
+// Returns the updated reminder
+async function updateReminder(reminder) {
+    const { rid } = reminder;
+    const response = await client.put(`/reminders/${rid}`, reminder);
+    return response.data;
+}
+
+async function deleteReminder(reminder) {
+    const { rid } = reminder;
+    const response = await client.delete(`/reminder/${rid}`);
+    return response.data;
+}
+
 onStartup();
 
 export default {
@@ -280,4 +306,8 @@ export default {
     createAssignment: wrapWithErrorHandling(createAssignment),
     updateAssignment: wrapWithErrorHandling(updateAssignment),
     deleteAssignment: wrapWithErrorHandling(deleteAssignment),
+    getReminders: wrapWithErrorHandling(getReminders),
+    createReminder: wrapWithErrorHandling(createReminder),
+    updateReminder: wrapWithErrorHandling(updateReminder),
+    deleteReminder: wrapWithErrorHandling(deleteReminder),
 };

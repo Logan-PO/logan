@@ -6,6 +6,7 @@ const tableKeyMap = {
     sections: 'sid',
     assignments: 'aid',
     tasks: 'tid',
+    reminders: 'rid',
 };
 
 const tables = [];

@@ -6,4 +6,5 @@ module.exports = {
     holidays: require('./holidays-controller'),
     courses: require('./courses-controller'),
     sections: require('./sections-controller'),
+    reminders: require('./reminders-controller'),
 };

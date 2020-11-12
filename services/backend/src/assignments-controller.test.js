@@ -55,7 +55,7 @@ describe('getAssignment', () => {
 
         await assignmentsController.getAssignment(req, { json: jsonMock });
 
-        expect(jsonMock).toHaveBeenCalledWith(basicAssignment1);
+        expect(jsonMock).toHaveBeenCalledWith(expect.objectContaining(basicAssignment1));
     });
 
     it('Fetching a nonexistent assignment fails', async () => {
@@ -91,7 +91,12 @@ describe('getAssignments', () => {
 
         await assignmentsController.getAssignments(req, { json: jsonMock });
 
-        expect(jsonMock).toHaveBeenCalledWith(expect.arrayContaining([basicAssignment1, basicAssignment2]));
+        expect(jsonMock).toHaveBeenCalledWith(
+            expect.arrayContaining([
+                expect.objectContaining(basicAssignment1),
+                expect.objectContaining(basicAssignment2),
+            ])
+        );
         expect(jsonMock.mock.calls[0][0]).toHaveLength(2);
     });
 });
@@ -150,7 +155,7 @@ describe('updateAssignment', () => {
 
         await assignmentsController.updateAssignment(req, { json: jsonMock });
 
-        expect(jsonMock).toHaveBeenCalledWith(updatedAssignment);
+        expect(jsonMock).toHaveBeenCalledWith(expect.objectContaining(updatedAssignment));
     });
 });
 
