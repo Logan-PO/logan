@@ -7,10 +7,10 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import * as dateUtils from '@logan/core/src/date-utils';
-import { getScheduleSelectors } from '../../store/schedule';
+import { getScheduleSelectors } from '../../../../../packages/fe-shared/store/schedule';
 import './overview-weekly.scss';
 import './overview-list.module.scss';
-import { getAssignmentsSelectors } from '../../store/assignments';
+import { getAssignmentsSelectors } from '../../../../../packages/fe-shared/store/assignments';
 import OverviewScheduleList from './overview-schedule-list';
 
 const localizer = momentLocalizer(moment);
