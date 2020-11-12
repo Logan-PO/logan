@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
+import { FormLabel, Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { getAssignmentsSelectors, setShouldGoToAssignment } from '../../store/assignments';
+import { getAssignmentsSelectors, setShouldGoToAssignment } from '@logan/fe-shared/store/assignments';
 import { CourseLabel } from '../shared/displays';
 import classes from './assignment-preview.module.scss';
 
@@ -20,10 +20,10 @@ class AssignmentPreview extends React.Component {
         const formattedDueDate = dateUtils.readableDueDate(assignment.dueDate);
 
         return (
-            <React.Fragment>
-                <Typography variant="overline">
-                    <b>Related Assignment</b>
-                </Typography>
+            <div>
+                <FormLabel style={{ fontSize: '0.75rem', marginBottom: '0.5rem', display: 'inline-block' }}>
+                    Related Assignment
+                </FormLabel>
                 <Card variant="outlined" onClick={this.openAssignment.bind(this)}>
                     <CardActionArea>
                         <CardContent className={classes.contentContainer}>
@@ -42,7 +42,7 @@ class AssignmentPreview extends React.Component {
                         </CardContent>
                     </CardActionArea>
                 </Card>
-            </React.Fragment>
+            </div>
         );
     }
 }

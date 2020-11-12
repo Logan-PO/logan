@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
 import { Helmet } from 'react-helmet';
 import { Toolbar } from '@material-ui/core';
-import { LOGIN_STAGE, fetchSelf } from '../../store/login';
+import { LOGIN_STAGE, fetchSelf } from '@logan/fe-shared/store/login';
 import styles from './page.module.scss';
 import { Navbar, Sidebar } from '.';
 

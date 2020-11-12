@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { getScheduleSelectors, asyncActions as asyncScheduleActions } from '@logan/fe-shared/store/schedule';
 import { Page } from '../shared';
-import { getScheduleSelectors, asyncActions as asyncScheduleActions } from '../../store/schedule';
 import TermsList from './terms-list';
 import TermChildrenList from './term-children-list';
 import SectionsList from './sections-list';

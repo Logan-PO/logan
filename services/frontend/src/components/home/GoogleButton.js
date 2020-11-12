@@ -2,8 +2,8 @@ import React from 'react';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import api from '../../utils/api';
-import { verifyIdToken, LOGIN_STAGE, setLoginStage } from '../../store/login';
+import api from '@logan/fe-shared/utils/api';
+import { verifyIdToken, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
 
 const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
 
@@ -21,7 +21,7 @@ class GoogleBtn extends React.Component {
      If all conditions are met, then create a login action and update the state
      */
     async onLogin(response) {
-        await this.props.verifyIdToken(response.tokenId);
+        await this.props.verifyIdToken({ idToken: response.tokenId, clientType: 'web' });
     }
 
     async onLogout() {

@@ -1,33 +1,36 @@
 import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
-import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
-import { ListItem, ListItemText, Typography, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import {
+    ListItem,
+    ListItemText,
+    Typography,
+    ListItemIcon,
+    ListItemSecondaryAction,
+    IconButton,
+} from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
-import { CourseLabel, PriorityDisplay, TagsDisplay } from '../shared/displays';
+import { CourseLabel, TagsDisplay } from '../shared/displays';
 import { Checkbox } from '../shared/controls';
-import styles from './task-cell.module.scss';
+import styles from '../tasks/task-cell.module.scss';
+import priorities from '../shared/displays/priority-constants';
 
 const {
     dayjs,
     constants: { DB_DATE_FORMAT, DB_DATETIME_FORMAT },
 } = dateUtils;
 
-class TaskCell extends React.Component {
+class OverviewTaskCell extends React.Component {
     constructor(props) {
         super(props);
 
         this.select = this.select.bind(this);
-        this.deleted = this.deleted.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.openRelatedAssignment = this.openRelatedAssignment.bind(this);
-
         this.shouldShowOverdueLabel = this.shouldShowOverdueLabel.bind(this);
         this.overdueLabelContent = this.overdueLabelContent.bind(this);
 
@@ -40,17 +43,6 @@ class TaskCell extends React.Component {
         if (this.props.onSelect) {
             this.props.onSelect(this.props.tid);
         }
-    }
-
-    deleted() {
-        if (this.props.onDelete) {
-            this.props.onDelete(this.state.task);
-        }
-    }
-
-    openRelatedAssignment() {
-        this.props.setShouldGoToTask(this.props.tid);
-        navigate('/tasks');
     }
 
     componentDidUpdate() {
@@ -102,6 +94,14 @@ class TaskCell extends React.Component {
             return `Due ${days} days ago`;
         }
     }
+    determineBoxColor() {
+        const priority = _.get(this.state.task, 'priority');
+        const p = _.defaultTo(
+            _.find(_.values(priorities), ([num]) => num === priority),
+            ['white', 'white']
+        );
+        return p[1];
+    }
 
     render() {
         const assignment = this.props.getAssignment(_.get(this.state.task, 'aid'));
@@ -114,14 +114,17 @@ class TaskCell extends React.Component {
 
         return (
             <div className={`list-cell ${styles.taskCell}`}>
-                <PriorityDisplay priority={_.get(this.state.task, 'priority')} />
                 <ListItem button selected={this.props.selected} onClick={this.select}>
-                    <Checkbox
-                        cid={_.get(this.state.task, 'cid')}
-                        checked={_.get(this.state, 'task.complete', false)}
-                        onChange={this.handleChange}
-                        marginRight="1rem"
-                    />
+                    {!this.props.subtaskCell && (
+                        <ListItemIcon>
+                            <Checkbox
+                                color={this.determineBoxColor()}
+                                cid={_.get(this.state.task, 'cid')}
+                                checked={_.get(this.state, 'task.complete', false)}
+                                onChange={this.handleChange}
+                            />
+                        </ListItemIcon>
+                    )}
                     <ListItemText
                         primary={
                             <React.Fragment>
@@ -146,7 +149,6 @@ class TaskCell extends React.Component {
                                 )}
                             </React.Fragment>
                         }
-                        secondary={_.get(this.state, 'task.description')}
                     />
                     <ListItemSecondaryAction className="actions">
                         {this.props.subtaskCell && (
@@ -154,11 +156,6 @@ class TaskCell extends React.Component {
                                 <EditIcon fontSize="small" />
                             </IconButton>
                         )}
-                        {this.props.onDelete ? (
-                            <IconButton edge="end" onClick={this.deleted}>
-                                <DeleteIcon color="error" />
-                            </IconButton>
-                        ) : null}
                     </ListItemSecondaryAction>
                 </ListItem>
             </div>
@@ -166,7 +163,7 @@ class TaskCell extends React.Component {
     }
 }
 
-TaskCell.propTypes = {
+OverviewTaskCell.propTypes = {
     subtaskCell: PropTypes.bool,
     tid: PropTypes.string,
     showOverdueLabel: PropTypes.bool,
@@ -177,7 +174,6 @@ TaskCell.propTypes = {
     getAssignment: PropTypes.func,
     selected: PropTypes.bool,
     onSelect: PropTypes.func,
-    onDelete: PropTypes.func,
     setShouldGoToTask: PropTypes.func,
 };
 
@@ -191,4 +187,4 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = { updateTask, updateTaskLocal, setShouldGoToTask };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TaskCell);
+export default connect(mapStateToProps, mapDispatchToProps)(OverviewTaskCell);

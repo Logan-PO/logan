@@ -2,55 +2,148 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader } from '@material-ui/core';
-import dayjs from 'dayjs';
-import * as dateUtils from '@logan/core/src/date-utils';
-import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
+import { List, ListSubheader, ListItem, Typography, Button, colors } from '@material-ui/core';
+import { dateUtils } from '@logan/core';
+import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import './overview-list.module.scss';
-import { fetchTasks, getTasksSelectors, compareDueDates } from '../../store/tasks';
-import { getScheduleSelectors } from '../../store/schedule';
+import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
+import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import OverviewCell from './overview-cell';
+
+const {
+    dayjs,
+    constants: { DB_DATE_FORMAT, DB_TIME_FORMAT },
+} = dateUtils;
 
 export class OverviewScheduleList extends React.Component {
     constructor(props) {
         super(props);
+
+        this.getRelevantData = this.getRelevantData.bind(this);
+        this.changeCondense = this.changeCondense.bind(this);
+        this.state = { condensed: false };
+    }
+
+    getRelevantData() {
+        const groups = [];
+
+        const allAssignments = this.props.assignmentSelectors.selectAll();
+        const allTasks = this.props.taskSelectors.selectAll();
+        const allSections = this.props.scheduleSelectors.baseSelectors.sections.selectAll();
+
+        function sectionsForDate(date) {
+            const sections = [];
+
+            for (const section of allSections) {
+                const start = dayjs(section.startDate, DB_DATE_FORMAT);
+                const end = dayjs(section.endDate, DB_DATE_FORMAT);
+
+                if (!date.isBetween(start, end, 'day', '[]')) continue;
+
+                const weeksSinceStart = date.diff(start, 'week');
+                if (weeksSinceStart % section.weeklyRepeat !== 0) continue;
+                if (!section.daysOfWeek.includes(date.weekday())) continue;
+
+                sections.push(section);
+            }
+
+            return _.sortBy(sections, section => dayjs(section.startTime, DB_TIME_FORMAT));
+        }
+
+        function filterByDate(arr, date) {
+            return _.filter(
+                arr,
+                el => dateUtils.dueDateIsDate(el.dueDate) && dayjs(el.dueDate, DB_DATE_FORMAT).isSame(date, 'day')
+            );
+        }
+
+        let runner = dayjs();
+        let end = dayjs().add(7, 'days');
+
+        while (runner.isSameOrBefore(end, 'day')) {
+            const sections = sectionsForDate(runner);
+            const assignments = filterByDate(allAssignments, runner);
+            const tasks = _.reject(filterByDate(allTasks, runner), 'complete');
+
+            if (!_.isEmpty(sections) || !_.isEmpty(assignments) || !_.isEmpty(tasks)) {
+                groups.push([runner, { sections, assignments, tasks }]);
+            }
+
+            runner = runner.add(1, 'day');
+        }
+
+        return groups;
+    }
+
+    changeCondense() {
+        console.log('click');
+        this.setState({ condensed: !_.get(this.state, 'condensed', false) });
+    }
+
+    secondaryHeader(title) {
+        return (
+            <ListItem style={{ background: colors.grey[100] }} dense key={title}>
+                <Typography variant="button">
+                    <b>{title}</b>
+                </Typography>
+            </ListItem>
+        );
     }
 
     render() {
+        const groups = this.getRelevantData();
+
         return (
-            <div className="scrollable-list">
-                <div className="scroll-view">
-                    <List>
-                        {this.props.sections.map(section => {
-                            const [dueDate, eids] = section;
-                            return dayjs(dueDate).diff(dateUtils.dayjs()) >= 0 ||
-                                ['asap', 'eventually'].find(dd => dd === dueDate) ? (
-                                <div className="background-color">
-                                    <React.Fragment key={section[0]}>
-                                        <ListSubheader>{dueDate}</ListSubheader>
-                                        {eids.map(eid => (
-                                            <OverviewCell key={eid} eid={eid} />
+            <div>
+                <Button onClick={this.changeCondense}>Condense/Uncondense</Button>
+                <div className="scrollable-list">
+                    <div className="scroll-view">
+                        <List>
+                            {groups.map(([date, { sections, assignments, tasks }]) => {
+                                return (
+                                    <React.Fragment key={date.format()}>
+                                        <ListSubheader style={{ background: colors.grey[300] }}>
+                                            {dateUtils.humanReadableDate(date)}
+                                        </ListSubheader>
+                                        {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
+                                        {sections.map(({ sid }) => (
+                                            <OverviewCell
+                                                condensed={_.get(this.state, 'condensed', false)}
+                                                key={sid}
+                                                eid={sid}
+                                            />
+                                        ))}
+                                        {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
+                                        {assignments.map(({ aid }) => (
+                                            <OverviewCell
+                                                condensed={_.get(this.state, 'condensed', false)}
+                                                key={aid}
+                                                eid={aid}
+                                            />
+                                        ))}
+                                        {tasks.length > 0 && this.secondaryHeader('TASKS')}
+                                        {tasks.map(({ tid }) => (
+                                            <OverviewCell
+                                                condensed={_.get(this.state, 'condensed', false)}
+                                                key={tid}
+                                                eid={tid}
+                                            />
                                         ))}
                                     </React.Fragment>
-                                </div>
-                            ) : null;
-                        })}
-                    </List>
+                                );
+                            })}
+                        </List>
+                    </div>
                 </div>
             </div>
         );
     }
 }
-OverviewScheduleList.propTypes = {
-    sections: PropTypes.arrayOf(PropTypes.array),
-    fetchAssignments: PropTypes.func,
-    fetchTasks: PropTypes.func,
-};
 
-const getID = scheduleEvent => {
-    if (scheduleEvent.tid) return scheduleEvent.tid;
-    else if (scheduleEvent.aid) return scheduleEvent.aid;
-    else return scheduleEvent.section.sid;
+OverviewScheduleList.propTypes = {
+    assignmentSelectors: PropTypes.object,
+    taskSelectors: PropTypes.object,
+    scheduleSelectors: PropTypes.object,
 };
 
 const mapStateToProps = state => {
@@ -58,79 +151,10 @@ const mapStateToProps = state => {
     const taskSelectors = getTasksSelectors(state.tasks);
     const scheduleSelectors = getScheduleSelectors(state.schedule);
 
-    const eventSelectors = [];
-
-    for (const task of taskSelectors.selectAll()) {
-        if (!task.complete) eventSelectors.push(task);
-    }
-
-    for (const assignment of assignmentSelectors.selectAll()) {
-        eventSelectors.push(assignment);
-    }
-    /* title: 'New section',
-            cid: this.props.cid,
-            tid: course.tid,
-            startDate: term.startDate,2020-12-11
-            endDate: term.endDate,2020-8-27
-            startTime: '08:00',
-            endTime: '09:00',
-            daysOfWeek: [1, 3, 5],
-            weeklyRepeat: 1,*/
-    function isDuringTerm(section, date) {
-        return dayjs(section.endDate).diff(date) >= 0 && dayjs(section.startDate).diff(date) < 0;
-    }
-    function isSameWeekDay(date, daysOfWeek) {
-        return _.find(daysOfWeek, element => element === date.weekday()) != null;
-    }
-    function isThisWeek(curDate, finDate, repeatMod) {
-        let duration = dayjs.duration(finDate.diff(curDate));
-        return _.floor(duration.asWeeks()) % repeatMod === 0;
-    }
-    function mapSectionToDates(section) {
-        //generate a list of dayjs objects that have day js formatted dueDates/dates
-        let sectionCellData = [];
-
-        let finalDate = dayjs(section.endDate);
-
-        //get the current date and set the hours min and secs to 0
-        let currentDate = dateUtils.dayjs().hour(0).minute(0).second(0);
-        console.log(currentDate);
-        while (isDuringTerm(section, currentDate)) {
-            if (
-                isSameWeekDay(currentDate, section.daysOfWeek) &&
-                isThisWeek(currentDate, finalDate, section.weeklyRepeat)
-            ) {
-                let tempDate = dayjs(section.startTime, 'HH:mm');
-                let sectionDate = currentDate.add(tempDate.hour(), 'hour');
-                sectionDate = sectionDate.add(tempDate.minute(), 'minute');
-                sectionCellData.push({ section: section, dueDate: sectionDate });
-            }
-            currentDate = currentDate.add(1, 'day');
-            //break;
-        }
-        return sectionCellData;
-    } //TODO: Going to have the overview cell parse out which lower level cell it needs to display, e.g. overview-assignment or overview-task
-
-    for (const section of scheduleSelectors.baseSelectors.sections.selectAll()) {
-        //TODO: Map from its start day to days for the week and then add those event into the eventSelectors
-        console.log(section.title);
-        const tempSectionCellData = mapSectionToDates(section);
-        for (const scheduledTime of tempSectionCellData) {
-            eventSelectors.push(scheduledTime);
-        }
-    }
-
-    const eventSections = {};
-    for (const scheduleEvent of eventSelectors) {
-        const key = dateUtils.dueDateIsDate(scheduleEvent.dueDate)
-            ? dateUtils.dayjs(scheduleEvent.dueDate)
-            : scheduleEvent.dueDate;
-        if (eventSections[key]) eventSections[key].push(getID(scheduleEvent));
-        else eventSections[key] = [getID(scheduleEvent)];
-    }
-
     return {
-        sections: Object.entries(eventSections).sort((a, b) => compareDueDates(a[0], b[0])),
+        assignmentSelectors,
+        taskSelectors,
+        scheduleSelectors,
     };
 };
 

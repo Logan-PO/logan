@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { getTasksSelectors, deleteTask, setShouldGoToTask } from '../../store/tasks';
-import { setShouldGoToAssignment } from '../../store/assignments';
+import { getTasksSelectors, deleteTask, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
+import { setShouldGoToAssignment } from '@logan/fe-shared/store/assignments';
 import TaskCell from './task-cell';
 import '../shared/list.scss';
 import styles from './tasks-list.module.scss';
@@ -29,8 +29,8 @@ class TasksList extends React.Component {
         };
     }
 
-    componentDidMount() {
-        if (this.props.shouldGoToTask) {
+    componentDidUpdate(prevProps) {
+        if (this.props.shouldGoToTask && this.props.shouldGoToTask !== prevProps.shouldGoToTask) {
             const selectedTask = this.props.getTask(this.props.shouldGoToTask);
 
             this.setState({ showingCompletedTasks: selectedTask.complete });

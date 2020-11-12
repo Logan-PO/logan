@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Grid } from '@material-ui/core';
+import { fetchTasks } from '@logan/fe-shared/store/tasks';
 import { Page } from '../shared';
-import { fetchTasks } from '../../store/tasks';
+import EmptySticker from '../shared/displays/empty-sticker';
 import TasksList from './tasks-list';
 import TaskEditor from './task-editor';
 import styles from './tasks-page.module.scss';
@@ -28,7 +29,11 @@ class TasksPage extends React.Component {
                         <TasksList onTaskSelected={this.didSelectTask} />
                     </Grid>
                     <Grid item sm={6} md={8} lg={7} className={styles.taskEditorContainer}>
-                        <TaskEditor tid={this.state.selectedTid} />
+                        {this.state.selectedTid ? (
+                            <TaskEditor tid={this.state.selectedTid} />
+                        ) : (
+                            <EmptySticker message="Nothing selected" />
+                        )}
                     </Grid>
                 </Grid>
             </Page>

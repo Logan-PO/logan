@@ -13,8 +13,8 @@ import {
     Button,
     CircularProgress,
 } from '@material-ui/core';
+import { createTask } from '@logan/fe-shared/store/tasks';
 import { CoursePicker, DueDatePicker, PriorityPicker, TagEditor } from '../shared/controls';
-import { createTask } from '../../store/tasks';
 import styles from './task-modal.module.scss';
 
 const {
@@ -31,10 +31,13 @@ class TaskModal extends React.Component {
 
         const newTitle = props.aid ? 'New subtask' : 'New task';
 
+        this._titleRef = React.createRef();
+
         this.state = {
             fakeId: Math.random().toString(),
             isCreating: false,
             showLoader: false,
+            justOpened: false,
             task: {
                 aid: props.aid,
                 title: newTitle,
@@ -47,6 +50,8 @@ class TaskModal extends React.Component {
     componentDidUpdate(prevProps) {
         if (!prevProps.open && this.props.open) {
             this.componentWillOpen();
+        } else if (this.state.justOpened) {
+            this.componentDidOpen();
         }
     }
 
@@ -57,6 +62,7 @@ class TaskModal extends React.Component {
             fakeId: Math.random().toString(),
             isCreating: false,
             showLoader: false,
+            justOpened: true,
             task: {
                 aid: this.props.aid,
                 title: newTitle,
@@ -64,6 +70,11 @@ class TaskModal extends React.Component {
                 priority: 0,
             },
         });
+    }
+
+    componentDidOpen() {
+        this._titleRef.current && this._titleRef.current.select();
+        this.setState({ justOpened: false });
     }
 
     close() {
@@ -117,6 +128,7 @@ class TaskModal extends React.Component {
                                 onChange={this.handleChange.bind(this, 'title')}
                                 value={_.get(this.state.task, 'title')}
                                 fullWidth
+                                inputRef={this._titleRef}
                             />
                         </Grid>
                         <Grid item xs={12}>
