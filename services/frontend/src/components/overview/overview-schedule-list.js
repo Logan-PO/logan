@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, ListSubheader, ListItem, Typography, colors, Button } from '@material-ui/core';
 import { dateUtils } from '@logan/core';
-import { fetchAssignments, getAssignmentsSelectors } from '../../store/assignments';
+import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import './overview-list.module.scss';
-import { fetchTasks, getTasksSelectors } from '../../store/tasks';
-import { getScheduleSelectors } from '../../store/schedule';
+import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
+import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import OverviewCell from './overview-cell';
 import OverviewWeekly from './overview-weekly';
 

@@ -1,5 +1,5 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import dayjs from 'dayjs';
+import { dateUtils } from '@logan/core';
 import { createAsyncSlice, wrapAdapter } from '../utils/redux-utils';
 import api from '../utils/api';
 
@@ -11,11 +11,7 @@ export function compareAssignments(assignment1, assignment2) {
 }
 
 export function compareDueDates(dueDate1, dueDate2) {
-    const date1 = dayjs(dueDate1, 'M/D/YYYY');
-    const date2 = dayjs(dueDate2, 'M/D/YYYY');
-    if (date1.isBefore(date2)) return -1;
-    else if (date1.isAfter(date2)) return 1;
-    else return 0;
+    return dateUtils.compareDates(dueDate1, dueDate2, dateUtils.constants.DB_DATE_FORMAT);
 }
 
 const adapter = createEntityAdapter({

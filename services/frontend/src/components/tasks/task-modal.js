@@ -13,8 +13,8 @@ import {
     Button,
     CircularProgress,
 } from '@material-ui/core';
+import { createTask } from '@logan/fe-shared/store/tasks';
 import { CoursePicker, DueDatePicker, PriorityPicker, TagEditor } from '../shared/controls';
-import { createTask } from '../../store/tasks';
 import styles from './task-modal.module.scss';
 
 const {

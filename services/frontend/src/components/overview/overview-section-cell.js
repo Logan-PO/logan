@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { dateUtils } from '@logan/core';
 import { Grid, ListItem, ListItemText } from '@material-ui/core';
+import { getSectionSelectors } from '@logan/fe-shared/store/schedule';
 import { CourseLabel } from '../shared/displays';
-import { getSectionSelectors } from '../../store/schedule';
 
 const {
     dayjs,

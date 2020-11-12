@@ -3,8 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ListItem, ListItemText } from '@material-ui/core';
-import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '../../store/assignments';
-import { getScheduleSelectors } from '../../store/schedule';
+import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '@logan/fe-shared/store/assignments';
+import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { CourseLabel } from '../shared/displays';
 import globalStyles from '../../globals/global.scss';
 
