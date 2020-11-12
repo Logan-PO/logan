@@ -196,7 +196,17 @@ class OverviewWeekly extends React.Component {
                                 dateFormat: 'D',
                                 timeGutterFormat: 'h:mma',
                                 weekdayFormat: 'dddd',
-                                dayFormat: 'ddd (M/D)',
+                                dayFormat: date => dayjs(date).format('ddd | D'),
+                                dayRangeHeaderFormat: ({ start, end }) => {
+                                    const startDate = dayjs(start);
+                                    const endDate = dayjs(end);
+
+                                    if (startDate.isSame(endDate, 'month')) {
+                                        return `${startDate.format('MMMM Do')} - ${endDate.format('Do')}`;
+                                    } else {
+                                        return `${startDate.format('MMMM Do')} - ${endDate.format('MMMM Do')}`;
+                                    }
+                                },
                             }}
                         />
                     </div>
