@@ -11,7 +11,6 @@ import { getScheduleSelectors } from '../../store/schedule';
 import './overview-weekly.scss';
 import './overview-list.module.scss';
 import { getAssignmentsSelectors } from '../../store/assignments';
-import { getTasksSelectors } from '../../store/tasks';
 import OverviewScheduleList from './overview-schedule-list';
 
 const localizer = momentLocalizer(moment);
@@ -53,13 +52,9 @@ class OverviewWeekly extends React.Component {
         const events = [];
 
         const allAssignments = this.props.assignmentSelectors.selectAll();
-        const allTasks = this.props.taskSelectors.selectAll();
         const allSections = this.props.scheduleSelectors.baseSelectors.sections.selectAll();
         for (const assignment of allAssignments) {
             events.push(assignment);
-        }
-        for (const task of allTasks) {
-            events.push(task);
         }
         for (const sections of allSections) {
             events.push(sections);
@@ -232,18 +227,15 @@ OverviewWeekly.propTypes = {
     events: PropTypes.array,
     getCourse: PropTypes.func,
     assignmentSelectors: PropTypes.object,
-    taskSelectors: PropTypes.object,
     scheduleSelectors: PropTypes.object,
 };
 
 const mapStateToProps = state => {
     const assignmentSelectors = getAssignmentsSelectors(state.assignments);
-    const taskSelectors = getTasksSelectors(state.tasks);
     const scheduleSelectors = getScheduleSelectors(state.schedule);
 
     return {
         assignmentSelectors,
-        taskSelectors,
         scheduleSelectors,
         getCourse: getScheduleSelectors(state.schedule).baseSelectors.courses.selectById,
     };
