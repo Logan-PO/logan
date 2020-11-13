@@ -42,6 +42,16 @@ const { slice, asyncActions } = createAsyncSlice({
     name: 'schedule',
     initialState: _.mapValues(adapters, adapter => adapter.getInitialState()),
     reducers: {
+        setShouldGoTo: (state, action) => {
+            if (!action.payload) {
+                state.shouldGoTo = {};
+            } else {
+                state.shouldGoTo = {
+                    type: action.payload.type,
+                    eid: action.payload.eid,
+                };
+            }
+        },
         updateTermLocal: (state, action) => {
             termsAdapter.updateOne(state.terms, action.payload);
         },
@@ -181,5 +191,11 @@ export const {
     deleteCourse,
     deleteSection,
 } = asyncActions;
-export const { updateTermLocal, updateHolidayLocal, updateCourseLocal, updateSectionLocal } = slice.actions;
+export const {
+    setShouldGoTo,
+    updateTermLocal,
+    updateHolidayLocal,
+    updateCourseLocal,
+    updateSectionLocal,
+} = slice.actions;
 export default slice.reducer;
