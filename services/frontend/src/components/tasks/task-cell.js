@@ -3,7 +3,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
-import { ListItem, ListItemText, Typography, ListItemSecondaryAction, IconButton, Fab } from '@material-ui/core';
+import {
+    ListItem,
+    ListItemText,
+    Typography,
+    ListItemSecondaryAction,
+    IconButton,
+    Fab,
+    Tooltip,
+} from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TodayIcon from '@material-ui/icons/Today';
@@ -161,20 +169,26 @@ class TaskCell extends React.Component {
                     />
                     <ListItemSecondaryAction className="actions">
                         {this.props.subtaskCell && (
-                            <IconButton edge="end" onClick={this.openRelatedAssignment}>
-                                <EditIcon fontSize="small" />
-                            </IconButton>
+                            <Tooltip title="Edit">
+                                <IconButton edge="end" onClick={this.openRelatedAssignment}>
+                                    <EditIcon fontSize="small" />
+                                </IconButton>
+                            </Tooltip>
                         )}
                         {this.props.onSelect && this.shouldShowOverdueLabel() && (
-                            <IconButton onClick={this.moveToToday}>
-                                <TodayIcon fontSize="small" />
-                            </IconButton>
+                            <Tooltip title="Move to today">
+                                <IconButton onClick={this.moveToToday}>
+                                    <TodayIcon fontSize="small" />
+                                </IconButton>
+                            </Tooltip>
                         )}
-                        {this.props.onDelete ? (
-                            <IconButton edge="end" onClick={this.deleted}>
-                                <DeleteIcon color="error" />
-                            </IconButton>
-                        ) : null}
+                        {this.props.onDelete && (
+                            <Tooltip title="Delete">
+                                <IconButton edge="end" onClick={this.deleted}>
+                                    <DeleteIcon color="error" />
+                                </IconButton>
+                            </Tooltip>
+                        )}
                         {this.props.specialActionsPadding && <Fab size="small" />}
                     </ListItemSecondaryAction>
                 </ListItem>
