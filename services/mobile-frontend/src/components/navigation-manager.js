@@ -1,20 +1,22 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Assignments from '../pages/assignments';
 import Tasks from '../pages/tasks';
 
-const Stack = createStackNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
-export default class NavigationManager extends React.Component {
+class NavigationManager extends React.Component {
     render() {
         return (
             <NavigationContainer>
-                <Stack.Navigator>
-                    <Stack.Screen name={'Assignments'} component={Assignments} />
-                    <Stack.Screen name={'Tasks'} component={Tasks} />
-                </Stack.Navigator>
+                <Tab.Navigator>
+                    <Tab.Screen name="Tasks" component={Tasks} />
+                    <Tab.Screen name="Assignments" component={Assignments} />
+                </Tab.Navigator>
             </NavigationContainer>
         );
     }
 }
+
+export default NavigationManager;
