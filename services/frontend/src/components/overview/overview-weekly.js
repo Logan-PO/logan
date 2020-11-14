@@ -8,17 +8,17 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import * as dateUtils from '@logan/core/src/date-utils';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
-import './overview-weekly.scss';
-import './overview-list.module.scss';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
-
+import './overview-weekly.scss';
+import Toolbar from './toolbar';
 import OverviewScheduleList from './overview-schedule-list';
+import CalendarEvent from './calendar-event';
 
 const localizer = momentLocalizer(moment);
 
 const {
     dayjs,
-    constants: { DB_DATE_FORMAT, DB_TIME_FORMAT },
+    constants: { DB_DATE_FORMAT },
 } = dateUtils;
 let invalidDate;
 
@@ -26,10 +26,16 @@ class OverviewWeekly extends React.Component {
     constructor(props) {
         super(props);
         this.combineEvents = this.combineEvents.bind(this);
-        this.changeView = this.changeView.bind(this);
         this.convertEvents = this.convertEvents.bind(this);
         this.formatEventForCalendar = this.formatEventForCalendar.bind(this);
-        this.state = { listView: false, events: [] };
+        this.viewTypeChanged = this.viewTypeChanged.bind(this);
+
+        this.state = {
+            viewType: 'week',
+            events: [],
+        };
+
+        this._styleRef = React.createRef();
 
         let badDate = dateUtils.dayjs();
         invalidDate = {
@@ -42,11 +48,8 @@ class OverviewWeekly extends React.Component {
         };
     }
 
-    changeView() {
-        this.setState({
-            listView: !_.get(this.state, 'listView', false),
-            events: this.props.events,
-        });
+    viewTypeChanged(newType) {
+        this.setState({ viewType: newType });
     }
 
     combineEvents() {
@@ -73,94 +76,79 @@ class OverviewWeekly extends React.Component {
     isDuringTerm(section, date) {
         return dayjs(section.endDate).diff(date) >= 0 && dayjs(section.startDate).diff(date) < 0;
     }
+
     isSameWeekDay(date, daysOfWeek) {
         return _.find(daysOfWeek, element => element === date.weekday()) != undefined;
     }
+
     isThisWeek(curDate, finDate, repeatMod) {
         let duration = dayjs.duration(finDate.diff(curDate));
         return _.floor(duration.asWeeks()) % repeatMod === 0;
     }
+
     mapSectionToDates(section) {
         const course = this.props.getCourse(section.cid);
+        const startDate = dateUtils.toDate(section.startDate);
+        const endDate = dateUtils.toDate(section.endDate);
+        const startTime = dateUtils.toTime(section.startTime);
+        const endTime = dateUtils.toTime(section.endTime);
+
+        const displayName = _.isEmpty(course.nickname) ? course.title : course.nickname;
+
         //generate a list of dayjs objects that have day js formatted dueDates/dates
         let sectionCellData = [];
 
-        let finalDate = dayjs(section.endDate, DB_DATE_FORMAT);
-
         //get the current date and set the hours min and secs to 0
-        let currentDate = dateUtils.dayjs(section.startDate, DB_DATE_FORMAT).hour(0).minute(0).second(0);
-        currentDate = currentDate.add(1, 'day');
-        while (this.isDuringTerm(section, currentDate)) {
+        let runnerDate = dateUtils.toDate(section.startDate).startOf('day');
+        while (runnerDate.isBetween(startDate, endDate, 'day', '[]')) {
             if (
-                this.isSameWeekDay(currentDate, section.daysOfWeek) &&
-                this.isThisWeek(currentDate, finalDate, section.weeklyRepeat)
+                this.isSameWeekDay(runnerDate, section.daysOfWeek) &&
+                this.isThisWeek(runnerDate, endDate, section.weeklyRepeat)
             ) {
-                let tempDate = dayjs(section.startTime, DB_TIME_FORMAT);
-                let endTime = dayjs(section.endTime, DB_TIME_FORMAT);
-                let sectionDate = currentDate.add(tempDate.hour(), 'hour');
-                sectionDate = sectionDate.add(tempDate.minute(), 'minute');
-                console.log(sectionDate.date());
+                const sectionStart = runnerDate.hour(startTime.hour()).minute(startTime.minute());
+                const sectionEnd = runnerDate.hour(endTime.hour()).minute(endTime.minute());
+
                 sectionCellData.push({
-                    id: section.sid,
-                    title: section.title,
-                    allDay: false,
-                    start: new Date(
-                        sectionDate.year(),
-                        sectionDate.month(),
-                        sectionDate.date(),
-                        sectionDate.hour(),
-                        sectionDate.minute()
-                    ),
-                    end: new Date(
-                        sectionDate.year(),
-                        sectionDate.month(),
-                        sectionDate.date(),
-                        endTime.hour(),
-                        endTime.minute()
-                    ),
-                    desc: section.location,
-                    color: course ? course.color : 'blue',
+                    viewType: this.state.viewType,
+                    type: 'section',
+                    section,
+                    course,
+                    title: displayName,
+                    allDay: this.state.viewType === 'month',
+                    start: sectionStart.toDate(),
+                    end: sectionEnd.toDate(),
                 });
             }
-            currentDate = currentDate.add(1, 'day');
+
+            runnerDate = runnerDate.add(1, 'day');
         }
         return sectionCellData;
     }
 
-    formatEventForCalendar(eevent) {
-        let date = dateUtils.dayjs(eevent.dueDate, DB_DATE_FORMAT);
-        const course = this.props.getCourse(eevent.cid);
+    formatEventForCalendar(event) {
+        let date = dateUtils.dayjs(event.dueDate, DB_DATE_FORMAT);
+        const course = this.props.getCourse(event.cid);
 
-        if (eevent.tid) {
-            //the event is a task
-            return [
-                {
-                    id: eevent.tid,
-                    title: eevent.title,
-                    allDay: true,
-                    start: new Date(date.year(), date.month(), date.date()),
-                    end: new Date(date.year(), date.month(), date.date()),
-                    desc: eevent.description,
-                    color: course ? course.color : 'blue',
-                },
-            ];
-        } else if (eevent.aid) {
+        if (event.aid) {
             //event is an assignment
             return [
                 {
-                    id: eevent.aid,
-                    title: eevent.title,
-                    allDay: true,
-                    start: new Date(date.year(), date.month(), date.date()),
-                    end: new Date(date.year(), date.month(), date.date()),
-                    desc: eevent.description,
-                    color: course ? course.color : 'blue',
+                    viewType: this.state.viewType,
+                    type: 'assignment',
+                    id: event.aid,
+                    title: event.title,
+                    assignment: event,
+                    course,
+                    allDay: this.state.viewType === 'week',
+                    start: date.toDate(),
+                    end: date.toDate(),
+                    desc: event.description,
                 },
             ];
-        } else if (eevent.sid) {
+        } else if (event.sid) {
             //event is a section
             //creates of list of dates to add to the calendar
-            let sectionDateList = this.mapSectionToDates(eevent);
+            let sectionDateList = this.mapSectionToDates(event);
 
             return sectionDateList;
         } else {
@@ -169,7 +157,6 @@ class OverviewWeekly extends React.Component {
     }
 
     convertEvents(events) {
-        console.log(events);
         let formattedEventList = [];
 
         for (const ev of events) {
@@ -179,44 +166,58 @@ class OverviewWeekly extends React.Component {
         }
         return formattedEventList;
     }
-    Event({ event }) {
-        return (
-            //Controls the color of the text
-            <span>
-                <span style={{ color: 'white' }}>{event.title}</span>
-                {event.desc && `:  ${event.desc}`}
-            </span>
-        );
-    }
+
     render() {
         return (
-            <Grid container spacing={0}>
-                <Grid item xs={9} style={{ height: 'calc(100vh - 64px)' }}>
+            <Grid container style={{ background: 'white' }}>
+                {this.state.viewType === 'week' && (
+                    <Grid item xs={3} className="full-overview-height">
+                        <div className="scrollable-list">
+                            <div className="scroll-view">
+                                <OverviewScheduleList />
+                            </div>
+                        </div>
+                    </Grid>
+                )}
+                <Grid item xs={this.state.viewType === 'week' ? 9 : 12} className="full-overview-height">
                     <div className="scroll-view">
                         <Calendar
+                            className="full-overview-height"
                             localizer={localizer}
                             defaultDate={new Date()}
                             defaultView="week"
                             views={['month', 'week']}
-                            style={{ height: 'calc(100vh - 64px)' }}
+                            onView={this.viewTypeChanged}
                             events={this.convertEvents(this.combineEvents())}
-                            eventPropGetter={event => {
-                                const backgroundColor = event ? event.color : '#fff';
-                                return { style: { backgroundColor } };
-                            }}
+                            eventPropGetter={() => ({ className: `view-type-${this.state.viewType}` })}
                             components={{
-                                event: this.Event,
+                                toolbar: Toolbar,
+                                event: CalendarEvent,
                             }}
                             step={60} //how much is one slot worth ( in min)
                             timeslots={1}
+                            formats={{
+                                dateFormat: date => {
+                                    const day = dateUtils.dayjs(date);
+                                    if (day.date() === 1) return day.format('MMM D');
+                                    else return day.format('D');
+                                },
+                                timeGutterFormat: 'h:mma',
+                                weekdayFormat: 'ddd',
+                                dayFormat: date =>
+                                    `${dayjs(date).format('ddd').toUpperCase()} / ${dayjs(date).format('Do')}`,
+                                dayRangeHeaderFormat: ({ start, end }) => {
+                                    const startDate = dayjs(start);
+                                    const endDate = dayjs(end);
+
+                                    if (startDate.isSame(endDate, 'month')) {
+                                        return `${startDate.format('MMMM Do')} - ${endDate.format('Do')}`;
+                                    } else {
+                                        return `${startDate.format('MMMM Do')} - ${endDate.format('MMMM Do')}`;
+                                    }
+                                },
+                            }}
                         />
-                    </div>
-                </Grid>
-                <Grid item xs={3} style={{ height: 'calc(100vh - 64px)' }}>
-                    <div className="scrollable-list">
-                        <div className="scroll-view">
-                            <OverviewScheduleList />
-                        </div>
                     </div>
                 </Grid>
             </Grid>

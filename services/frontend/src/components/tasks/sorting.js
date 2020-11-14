@@ -25,8 +25,10 @@ function makeSectionsIncomplete(tasks) {
     }
 
     for (const task of tasks) {
-        if (task.dueDate === 'asap' || task.dueDate === 'eventually') {
-            addToSection(task, task.dueDate);
+        if (task.dueDate === 'asap') {
+            addToSection(task, 'ASAP');
+        } else if (task.dueDate === 'eventually') {
+            addToSection(task, 'Eventually');
         } else {
             const dueDate = dateUtils.dayjs(task.dueDate, dateUtils.constants.DB_DATE_FORMAT);
 
