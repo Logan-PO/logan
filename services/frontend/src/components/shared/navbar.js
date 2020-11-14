@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, IconButton, Tooltip } from '@material-ui/core';
 import SyncIcon from '@material-ui/icons/Sync';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { fetchTasks } from '@logan/fe-shared/store/tasks';
@@ -55,9 +55,11 @@ class Navbar extends React.Component {
                     </Typography>
                     <div className={styles.flexibleSpace} />
                     {this.props.buttons}
-                    <IconButton onClick={this.fetchAll} color="inherit">
-                        <SyncIcon />
-                    </IconButton>
+                    <Tooltip title="Refresh">
+                        <IconButton onClick={this.fetchAll} color="inherit">
+                            <SyncIcon />
+                        </IconButton>
+                    </Tooltip>
                     <IconButton onClick={this.openAccountModal} color="inherit">
                         <AccountCircleIcon />
                     </IconButton>
