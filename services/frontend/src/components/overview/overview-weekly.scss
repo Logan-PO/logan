@@ -5,6 +5,10 @@
     height: calc(100vh - 64px);
 }
 
+.rbc-calendar, .rbc-calendar * {
+    box-sizing: border-box !important;
+}
+
 .rbc-header {
     border-left: none;
     border-right: none;
