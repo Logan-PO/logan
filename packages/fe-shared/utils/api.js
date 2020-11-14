@@ -56,7 +56,12 @@ function wrapWithErrorHandling(fn) {
 }
 
 function hasStashedBearer() {
-    if (typeof window === 'undefined') return false;
+    try {
+        if (typeof document === 'undefined' || typeof window === 'undefined') return false;
+    } catch (e) {
+        return false;
+    }
+
     return !!localStorage.getItem(STASH_KEY);
 }
 
@@ -85,6 +90,19 @@ async function createNewUser(data) {
 async function getUser(uid) {
     const res = await client.get(`/users/${uid}`);
     return res.data;
+}
+
+// Returns the updated user
+async function updateUser(user) {
+    const { uid } = user;
+    const response = await client.put(`/users/${uid}`, user);
+    return response.data;
+}
+
+async function deleteUser(user) {
+    const { uid } = user;
+    const response = await client.delete(`/users/${uid}`);
+    return response.data;
 }
 
 /* --- TASKS --- */
@@ -282,6 +300,8 @@ export default {
     createNewUser: wrapWithErrorHandling(createNewUser),
     verifyIDToken: wrapWithErrorHandling(verifyIDToken),
     getUser: wrapWithErrorHandling(getUser),
+    updateUser: wrapWithErrorHandling(updateUser),
+    deleteUser: wrapWithErrorHandling(deleteUser),
     getTasks: wrapWithErrorHandling(getTasks),
     createTask: wrapWithErrorHandling(createTask),
     updateTask: wrapWithErrorHandling(updateTask),
