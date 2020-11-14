@@ -10,7 +10,6 @@ import classes from './toolbar.module.scss';
 class Toolbar extends React.Component {
     constructor(props) {
         super(props);
-        console.log(props);
 
         this.goToToday = this.goToToday.bind(this);
         this.previous = this.previous.bind(this);
@@ -18,17 +17,15 @@ class Toolbar extends React.Component {
     }
 
     goToToday() {
-        this.props.onNavigate('TODAY', new Date());
+        this.props.onNavigate('TODAY');
     }
 
     previous() {
-        const currentDate = dateUtils.dayjs(this.props.date);
-        this.props.onNavigate('PREV', currentDate.subtract(1, this.props.view).toDate());
+        this.props.onNavigate('PREV');
     }
 
     next() {
-        const currentDate = dateUtils.dayjs(this.props.date);
-        this.props.onNavigate('NEXT', currentDate.add(1, this.props.view).toDate());
+        this.props.onNavigate('NEXT');
     }
 
     updateViewType(viewType) {
@@ -44,7 +41,7 @@ class Toolbar extends React.Component {
         } else {
             const weekStart = currentDate.weekday(0);
             const weekEnd = currentDate.weekday(6);
-            const weeksDiff = (currentDate.week() - now.week() + (currentDate.year() - now.year()) * 52) / 2;
+            const weeksDiff = currentDate.week() - now.week() + (currentDate.year() - now.year()) * 52;
 
             if (weeksDiff === 0) return 'This Week';
             else if (weeksDiff === 1) return 'Next Week';
