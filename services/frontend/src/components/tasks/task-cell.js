@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { ListItem, ListItemText, Typography, ListItemSecondaryAction, IconButton, Fab } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import TodayIcon from '@material-ui/icons/Today';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
@@ -25,7 +26,9 @@ class TaskCell extends React.Component {
 
         this.select = this.select.bind(this);
         this.deleted = this.deleted.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        this.moveToToday = this.moveToToday.bind(this);
+        this.moveToToday = this.moveToToday.bind(this);
+        this.toggleCompletion = this.toggleCompletion.bind(this);
         this.openRelatedAssignment = this.openRelatedAssignment.bind(this);
 
         this.shouldShowOverdueLabel = this.shouldShowOverdueLabel.bind(this);
@@ -61,10 +64,18 @@ class TaskCell extends React.Component {
         }
     }
 
-    handleChange() {
-        const changes = {
-            complete: !this.state.task.complete,
-        };
+    moveToToday() {
+        this.handleChange('dueDate', dateUtils.formatAsDate(dateUtils.dayjs()));
+    }
+
+    toggleCompletion() {
+        this.handleChange('completion', !this.state.task.complete);
+    }
+
+    handleChange(prop, newVal) {
+        const changes = {};
+
+        changes[prop] = newVal;
 
         if (changes.complete) {
             changes.completionDate = dayjs().format(DB_DATETIME_FORMAT);
@@ -119,7 +130,7 @@ class TaskCell extends React.Component {
                     <Checkbox
                         cid={_.get(this.state.task, 'cid')}
                         checked={_.get(this.state, 'task.complete', false)}
-                        onChange={this.handleChange}
+                        onChange={this.toggleCompletion}
                         marginRight="1rem"
                     />
                     <ListItemText
@@ -152,6 +163,11 @@ class TaskCell extends React.Component {
                         {this.props.subtaskCell && (
                             <IconButton edge="end" onClick={this.openRelatedAssignment}>
                                 <EditIcon fontSize="small" />
+                            </IconButton>
+                        )}
+                        {this.props.onSelect && this.shouldShowOverdueLabel() && (
+                            <IconButton onClick={this.moveToToday}>
+                                <TodayIcon fontSize="small" />
                             </IconButton>
                         )}
                         {this.props.onDelete ? (
