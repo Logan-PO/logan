@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { Paper } from '@material-ui/core';
+import { Paper, colors } from '@material-ui/core';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import './event.scss';
 import { appropriateTextColor, printSectionTimes } from './scheduling-utils';
@@ -10,7 +10,6 @@ import { appropriateTextColor, printSectionTimes } from './scheduling-utils';
 class CalendarEvent extends React.Component {
     constructor(props) {
         super(props);
-        console.log(props.event);
     }
 
     asWeeklySection(isPast) {
@@ -51,6 +50,22 @@ class CalendarEvent extends React.Component {
         );
     }
 
+    asHoliday() {
+        const prior = this.props.continuesPrior ? 'continues-prior' : '';
+        const after = this.props.continuesAfter ? 'continues-after' : '';
+
+        return (
+            <Paper
+                className={`logan-event holiday-event ${prior} ${after}`}
+                variant="outlined"
+                elevation={0}
+                style={{ background: colors.teal[100], borderColor: colors.teal[500] }}
+            >
+                <div className="event-title">{this.props.title}</div>
+            </Paper>
+        );
+    }
+
     render() {
         const type = _.get(this.props.event, 'type');
 
@@ -63,6 +78,8 @@ class CalendarEvent extends React.Component {
                 return this.asWeeklySection(isPast);
             case 'assignment':
                 return this.asAssignment(isPast);
+            case 'holiday':
+                return this.asHoliday();
             default:
                 throw new Error(`Unrecognized event type ${type}`);
         }
@@ -72,6 +89,9 @@ class CalendarEvent extends React.Component {
 CalendarEvent.propTypes = {
     title: PropTypes.string,
     event: PropTypes.object,
+    isAllDay: PropTypes.bool,
+    continuesPrior: PropTypes.bool,
+    continuesAfter: PropTypes.bool,
 };
 
 export default CalendarEvent;

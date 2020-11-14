@@ -10,7 +10,6 @@ import classes from './toolbar.module.scss';
 class Toolbar extends React.Component {
     constructor(props) {
         super(props);
-        console.log(props);
 
         this.goToToday = this.goToToday.bind(this);
         this.previous = this.previous.bind(this);

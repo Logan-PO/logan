@@ -16,35 +16,21 @@ import CalendarEvent from './calendar-event';
 
 const localizer = momentLocalizer(moment);
 
-const {
-    dayjs,
-    constants: { DB_DATE_FORMAT },
-} = dateUtils;
-let invalidDate;
+const { dayjs } = dateUtils;
 
 class OverviewWeekly extends React.Component {
     constructor(props) {
         super(props);
-        this.combineEvents = this.combineEvents.bind(this);
-        this.convertEvents = this.convertEvents.bind(this);
-        this.formatEventForCalendar = this.formatEventForCalendar.bind(this);
+
+        this.getCalendarEvents = this.getCalendarEvents.bind(this);
+        this.formatAssignment = this.formatAssignment.bind(this);
+        this.formatHoliday = this.formatHoliday.bind(this);
+        this.mapSectionToDates = this.mapSectionToDates.bind(this);
         this.viewTypeChanged = this.viewTypeChanged.bind(this);
 
         this.state = {
             viewType: 'week',
             events: [],
-        };
-
-        this._styleRef = React.createRef();
-
-        let badDate = dateUtils.dayjs();
-        invalidDate = {
-            id: 0,
-            title: 'Invalid Event',
-            allDay: true,
-            start: new Date(badDate.year(), badDate.month(), badDate.day()),
-            end: new Date(badDate.year(), badDate.month(), badDate.day()),
-            color: 'red',
         };
     }
 
@@ -52,33 +38,30 @@ class OverviewWeekly extends React.Component {
         this.setState({ viewType: newType });
     }
 
-    combineEvents() {
-        const events = [];
-
+    getCalendarEvents() {
         const allAssignments = this.props.assignmentSelectors.selectAll();
         const allSections = this.props.scheduleSelectors.baseSelectors.sections.selectAll();
-        for (const assignment of allAssignments) {
-            events.push(assignment);
-        }
-        for (const sections of allSections) {
-            events.push(sections);
-        }
-        return events;
-    }
-    /*{
-    id: 0,
-    title: 'All Day Event very long title',
-    allDay: true,
-    start: new Date(2015, 3, 0),
-    end: new Date(2015, 3, 1),
-},*/
+        const allHolidays = this.props.scheduleSelectors.baseSelectors.holidays.selectAll();
 
-    isDuringTerm(section, date) {
-        return dayjs(section.endDate).diff(date) >= 0 && dayjs(section.startDate).diff(date) < 0;
+        const events = [];
+
+        events.push(...allHolidays.map(this.formatHoliday));
+        events.push(...allAssignments.map(this.formatAssignment));
+
+        const holidayDates = allHolidays.map(holiday => ({
+            start: dateUtils.toDate(holiday.startDate),
+            end: dateUtils.toDate(holiday.endDate),
+        }));
+
+        for (const section of allSections) {
+            events.push(...this.mapSectionToDates(section, holidayDates));
+        }
+
+        return events;
     }
 
     isSameWeekDay(date, daysOfWeek) {
-        return _.find(daysOfWeek, element => element === date.weekday()) != undefined;
+        return daysOfWeek.includes(date.weekday());
     }
 
     isThisWeek(curDate, finDate, repeatMod) {
@@ -86,7 +69,15 @@ class OverviewWeekly extends React.Component {
         return _.floor(duration.asWeeks()) % repeatMod === 0;
     }
 
-    mapSectionToDates(section) {
+    mapSectionToDates(section, holidayDates) {
+        function isDuringHoliday(date) {
+            for (const { start, end } of holidayDates) {
+                if (date.isBetween(start, end, 'day', '[]')) return true;
+            }
+
+            return false;
+        }
+
         const course = this.props.getCourse(section.cid);
         const startDate = dateUtils.toDate(section.startDate);
         const endDate = dateUtils.toDate(section.endDate);
@@ -102,6 +93,7 @@ class OverviewWeekly extends React.Component {
         let runnerDate = dateUtils.toDate(section.startDate).startOf('day');
         while (runnerDate.isBetween(startDate, endDate, 'day', '[]')) {
             if (
+                !isDuringHoliday(runnerDate) &&
                 this.isSameWeekDay(runnerDate, section.daysOfWeek) &&
                 this.isThisWeek(runnerDate, endDate, section.weeklyRepeat)
             ) {
@@ -125,46 +117,37 @@ class OverviewWeekly extends React.Component {
         return sectionCellData;
     }
 
-    formatEventForCalendar(event) {
-        let date = dateUtils.dayjs(event.dueDate, DB_DATE_FORMAT);
-        const course = this.props.getCourse(event.cid);
+    formatAssignment(assignment) {
+        const dueDate = dateUtils.toDate(assignment.dueDate);
+        const course = this.props.getCourse(assignment.cid);
 
-        if (event.aid) {
-            //event is an assignment
-            return [
-                {
-                    viewType: this.state.viewType,
-                    type: 'assignment',
-                    id: event.aid,
-                    title: event.title,
-                    assignment: event,
-                    course,
-                    allDay: this.state.viewType === 'week',
-                    start: date.toDate(),
-                    end: date.toDate(),
-                    desc: event.description,
-                },
-            ];
-        } else if (event.sid) {
-            //event is a section
-            //creates of list of dates to add to the calendar
-            let sectionDateList = this.mapSectionToDates(event);
-
-            return sectionDateList;
-        } else {
-            return [invalidDate];
-        }
+        return {
+            viewType: this.state.viewType,
+            type: 'assignment',
+            id: assignment.aid,
+            title: assignment.title,
+            assignment,
+            course,
+            allDay: this.state.viewType === 'week',
+            start: dueDate.toDate(),
+            end: dueDate.toDate(),
+        };
     }
 
-    convertEvents(events) {
-        let formattedEventList = [];
+    formatHoliday(holiday) {
+        const startDate = dateUtils.toDate(holiday.startDate);
+        const endDate = dateUtils.toDate(holiday.endDate);
 
-        for (const ev of events) {
-            for (const item of this.formatEventForCalendar(ev)) {
-                formattedEventList.push(item);
-            }
-        }
-        return formattedEventList;
+        return {
+            viewType: this.state.viewType,
+            type: 'holiday',
+            id: holiday.hid,
+            title: holiday.title,
+            holiday,
+            allDay: true,
+            start: startDate.toDate(),
+            end: endDate.toDate(),
+        };
     }
 
     render() {
@@ -188,7 +171,8 @@ class OverviewWeekly extends React.Component {
                             defaultView="week"
                             views={['month', 'week']}
                             onView={this.viewTypeChanged}
-                            events={this.convertEvents(this.combineEvents())}
+                            events={this.getCalendarEvents()}
+                            popup={true}
                             eventPropGetter={() => ({ className: `view-type-${this.state.viewType}` })}
                             components={{
                                 toolbar: Toolbar,
