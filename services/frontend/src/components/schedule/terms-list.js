@@ -13,10 +13,6 @@ class TermsList extends React.Component {
 
         this.didSelectTerm = this.didSelectTerm.bind(this);
         this.didDeleteTerm = this.didDeleteTerm.bind(this);
-
-        this.state = {
-            selectedTid: undefined,
-        };
     }
 
     randomTerm() {
@@ -28,14 +24,12 @@ class TermsList extends React.Component {
     }
 
     didSelectTerm(tid) {
-        this.setState(() => ({ selectedTid: tid }));
         this.props.onTermSelected(tid);
     }
 
     didDeleteTerm(term) {
         this.props.deleteTerm(term);
         // TODO: Select next term
-        this.setState(() => ({ selectedTid: undefined }));
         this.props.onTermSelected(undefined);
     }
 
@@ -48,7 +42,7 @@ class TermsList extends React.Component {
                         {[
                             ...this.props.tids.map(tid => {
                                 const term = this.props.getTerm(tid);
-                                const isSelected = tid === this.state.selectedTid;
+                                const isSelected = tid === this.props.selectedTid;
 
                                 return (
                                     <div key={tid} className="list-cell">
@@ -86,6 +80,7 @@ class TermsList extends React.Component {
 
 TermsList.propTypes = {
     tids: PropTypes.array,
+    selectedTid: PropTypes.string,
     getTerm: PropTypes.func,
     createTerm: PropTypes.func,
     deleteTerm: PropTypes.func,

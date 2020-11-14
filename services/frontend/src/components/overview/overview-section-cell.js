@@ -11,6 +11,8 @@ class OverviewSectionCell extends React.Component {
     constructor(props) {
         super(props);
 
+        this.getTimingString = this.getTimingString.bind(this);
+
         this.state = {
             section: this.props.selectSectionFromStore(this.props.sid),
             condensed: false,

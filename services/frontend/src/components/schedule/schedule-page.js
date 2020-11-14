@@ -1,6 +1,8 @@
+import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
-import { getScheduleSelectors, asyncActions as asyncScheduleActions } from '@logan/fe-shared/store/schedule';
+import PropTypes from 'prop-types';
+import { setShouldGoTo, getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { Page } from '../shared';
 import TermsList from './terms-list';
 import TermChildrenList from './term-children-list';
@@ -27,6 +29,42 @@ class SchedulePage extends React.Component {
         };
     }
 
+    componentDidMount() {
+        if (!_.isEmpty(this.props.shouldGoTo)) {
+            this.handleShouldGoTo();
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        if (!_.isEmpty(this.props.shouldGoTo) && !_.isEqual(this.props.shouldGoTo, prevProps.shouldGoTo)) {
+            this.handleShouldGoTo();
+        }
+    }
+
+    handleShouldGoTo() {
+        if (_.isEmpty(this.props.shouldGoTo)) return;
+        const { eid, type } = this.props.shouldGoTo;
+        switch (type) {
+            case 'term':
+                this.onTermSelected(eid);
+                break;
+            case 'course':
+                this.onCourseSelected(eid);
+                break;
+            case 'holiday':
+                this.onHolidaySelected(eid);
+                break;
+            case 'section':
+                this.onSectionSelected(eid);
+                break;
+            default:
+                console.warn(`Unrecognized shouldGoTo type ${type}`);
+                break;
+        }
+
+        this.props.setShouldGoTo();
+    }
+
     onTermSelected(tid) {
         this.setState({
             selectedTid: tid,
@@ -37,7 +75,10 @@ class SchedulePage extends React.Component {
     }
 
     onCourseSelected(cid) {
+        const course = this.props.getCourse(cid);
+
         this.setState({
+            selectedTid: course.tid,
             selectedCid: cid,
             selectedHid: undefined,
             selectedSid: undefined,
@@ -45,7 +86,10 @@ class SchedulePage extends React.Component {
     }
 
     onHolidaySelected(hid) {
+        const holiday = this.props.getHoliday(hid);
+
         this.setState({
+            selectedTid: holiday.tid,
             selectedCid: undefined,
             selectedHid: hid,
             selectedSid: undefined,
@@ -53,7 +97,13 @@ class SchedulePage extends React.Component {
     }
 
     onSectionSelected(sid) {
+        const section = this.props.getSection(sid);
+        const course = this.props.getCourse(section.cid);
+
         this.setState({
+            selectedTid: course.tid,
+            selectedCid: section.cid,
+            selectedHid: undefined,
             selectedSid: sid,
         });
     }
@@ -75,7 +125,7 @@ class SchedulePage extends React.Component {
             <Page title="Schedule">
                 <div className={styles.schedulePage}>
                     <div className={styles.list}>
-                        <TermsList onTermSelected={this.onTermSelected} />
+                        <TermsList selectedTid={this.state.selectedTid} onTermSelected={this.onTermSelected} />
                     </div>
                     <div className={styles.list}>
                         <TermChildrenList
@@ -99,16 +149,29 @@ class SchedulePage extends React.Component {
     }
 }
 
+SchedulePage.propTypes = {
+    shouldGoTo: PropTypes.object,
+    setShouldGoTo: PropTypes.func,
+    getTerm: PropTypes.func,
+    getCourse: PropTypes.func,
+    getHoliday: PropTypes.func,
+    getSection: PropTypes.func,
+};
+
 const mapStateToProps = state => {
-    const selectors = getScheduleSelectors(state.schedule);
+    const selectors = getScheduleSelectors(state.schedule).baseSelectors;
 
     return {
-        tids: selectors.baseSelectors.terms.selectIds(),
+        shouldGoTo: state.schedule.shouldGoTo,
+        getTerm: selectors.terms.selectById,
+        getCourse: selectors.courses.selectById,
+        getHoliday: selectors.holidays.selectById,
+        getSection: selectors.sections.selectById,
     };
 };
 
 const mapDispatchToProps = {
-    ...asyncScheduleActions,
+    setShouldGoTo,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SchedulePage);
