@@ -56,7 +56,12 @@ function wrapWithErrorHandling(fn) {
 }
 
 function hasStashedBearer() {
-    if (typeof window === 'undefined') return false;
+    try {
+        if (typeof document === 'undefined' || typeof window === 'undefined') return false;
+    } catch (e) {
+        return false;
+    }
+
     return !!localStorage.getItem(STASH_KEY);
 }
 
