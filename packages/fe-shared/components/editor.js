@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import UpdateTimer from '@logan/fe-shared/utils/update-timer';
-import './editor.scss';
+import UpdateTimer from '../utils/update-timer';
 
 /**
  * @typedef {object} EditorConfig

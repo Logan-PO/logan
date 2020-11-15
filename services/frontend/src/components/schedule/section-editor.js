@@ -6,7 +6,8 @@ import { dateUtils } from '@logan/core';
 import { Grid, Typography, TextField, Breadcrumbs, Divider } from '@material-ui/core';
 import { DatePicker, TimePicker } from '@material-ui/pickers';
 import { getScheduleSelectors, updateSection, updateSectionLocal } from '@logan/fe-shared/store/schedule';
-import Editor from '../shared/editor';
+import Editor from '@logan/fe-shared/components/editor';
+import '../shared/editor.scss';
 import DowPicker from '../shared/controls/dow-picker';
 
 const {
