@@ -64,6 +64,7 @@ class TaskDetails extends Editor {
                             <Checkbox.Android
                                 status={this.state.task.complete ? 'checked' : 'unchecked'}
                                 onPress={() => this.handleChange('complete', !this.state.task.complete)}
+                                color={course && course.color}
                             />
                             <TextInput
                                 style={{ flexGrow: 1, backgroundColor: 'none' }}

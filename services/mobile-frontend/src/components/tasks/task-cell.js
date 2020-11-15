@@ -89,7 +89,7 @@ class TaskCell extends React.Component {
 
         return (
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Checkbox.Android status={checkboxStatus} onPress={this.check} />
+                <Checkbox.Android status={checkboxStatus} onPress={this.check} color={course && course.color} />
                 <View style={{ flexDirection: 'column', marginLeft: 8 }}>
                     {(course || relatedAssignment) && (
                         <View style={{ flexDirection: 'row', marginBottom: 2 }}>
@@ -113,7 +113,7 @@ class TaskCell extends React.Component {
                         </View>
                     )}
                     {!_.isEmpty(this.state.task.description) && (
-                        <View>
+                        <View style={{ marginTop: 2 }}>
                             <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
                                 {this.state.task.description}
                             </Text>
