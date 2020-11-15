@@ -6,6 +6,7 @@ import { View, ScrollView } from 'react-native';
 import { List } from 'react-native-paper';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import ViewController from '../view-controller';
 
 class CoursePicker extends React.Component {
     constructor(props) {
@@ -85,9 +86,11 @@ class CoursePicker extends React.Component {
 
     render() {
         return (
-            <ScrollView>
-                <View style={{ backgroundColor: 'white' }}>{this.generateItems()}</View>
-            </ScrollView>
+            <ViewController title="Select Course" navigation={this.props.navigation} route={this.props.route}>
+                <ScrollView>
+                    <View style={{ backgroundColor: 'white' }}>{this.generateItems()}</View>
+                </ScrollView>
+            </ViewController>
         );
     }
 }

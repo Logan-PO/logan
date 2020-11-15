@@ -5,7 +5,6 @@ import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { createStackNavigator } from '@react-navigation/stack';
 import TasksList from '../components/tasks/tasks-list';
 import TaskDetails from '../components/tasks/task-details';
-import TasksAppbar from '../components/shared/header';
 import CoursePicker from '../components/shared/pickers/course-picker';
 import PriorityPicker from '../components/shared/pickers/priority-picker';
 
@@ -14,14 +13,7 @@ const Stack = createStackNavigator();
 class TasksScreen extends React.Component {
     render() {
         return (
-            <Stack.Navigator
-                headerMode="screen"
-                screenOptions={{
-                    header: ({ scene, previous, navigation }) => (
-                        <TasksAppbar scene={scene} previous={previous} navigation={navigation} />
-                    ),
-                }}
-            >
+            <Stack.Navigator headerMode="screen" screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Tasks" component={TasksList} />
                 <Stack.Screen name="Task" component={TaskDetails} />
                 <Stack.Screen name="Course Picker" component={CoursePicker} />

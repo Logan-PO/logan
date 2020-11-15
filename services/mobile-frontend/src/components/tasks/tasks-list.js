@@ -2,14 +2,14 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { StatusBar } from 'expo-status-bar';
 import { View, SectionList } from 'react-native';
-import { List } from 'react-native-paper';
+import { List, FAB } from 'react-native-paper';
 import SegmentedControl from '@react-native-community/segmented-control';
 import { getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
 import theme from '../../globals/theme';
 import TaskCell from '../../components/tasks/task-cell';
+import ViewController from '../shared/view-controller';
 
 class TasksList extends React.Component {
     constructor(props) {
@@ -32,7 +32,13 @@ class TasksList extends React.Component {
         const listData = sections.map(([name, tids]) => ({ title: name, data: tids }));
 
         return (
-            <View style={{ flex: 1 }}>
+            <ViewController
+                title="Tasks"
+                navigation={this.props.navigation}
+                route={this.props.route}
+                disableBack
+                leftActionIsFetch={true}
+            >
                 <View
                     style={{
                         padding: 12,
@@ -67,8 +73,18 @@ class TasksList extends React.Component {
                         </List.Subheader>
                     )}
                 />
-                <StatusBar style="light" />
-            </View>
+                <FAB
+                    icon="plus"
+                    color="white"
+                    style={{
+                        position: 'absolute',
+                        margin: 16,
+                        bottom: 0,
+                        right: 0,
+                    }}
+                    onPress={() => this.props.navigation.navigate('New Task')}
+                />
+            </ViewController>
         );
     }
 }
@@ -77,6 +93,7 @@ TasksList.propTypes = {
     tasks: PropTypes.array,
     fetchTasks: PropTypes.func,
     navigation: PropTypes.object,
+    route: PropTypes.object,
 };
 
 const mapStateToProps = state => ({

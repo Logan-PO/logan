@@ -3,47 +3,47 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, ScrollView } from 'react-native';
-import { Text, TextInput, Checkbox, List, Colors } from 'react-native-paper';
+import { Text, TextInput, Checkbox, List, Colors, Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { dateUtils } from '@logan/core';
-import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
-import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import { getTasksSelectors, createTask } from '@logan/fe-shared/store/tasks';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
-import Editor from '@logan/fe-shared/components/editor';
 import priorities from '../shared/priority-constants';
 import ViewController from '../shared/view-controller';
 
-class TaskDetails extends Editor {
+class NewTaskModal extends React.Component {
     constructor(props) {
-        super(props, { id: 'tid', entity: 'task', mobile: true });
+        super(props);
+
+        this.close = this.close.bind(this);
+        this.create = this.create.bind(this);
 
         this.state = {
-            task: props.getTask(props.route.params.tid),
+            task: {
+                title: '',
+                description: '',
+                dueDate: dateUtils.formatAsDate(),
+                priority: 0,
+            },
         };
     }
 
-    selectEntity(id) {
-        return this.props.getTask(id);
+    handleChange(prop, value) {
+        const newTask = _.merge({}, this.state.task, { [prop]: value });
+        this.setState({ task: newTask });
     }
 
-    updateEntityLocal({ id, changes }) {
-        this.props.updateTaskLocal({ id, changes });
+    close() {
+        this.props.navigation.goBack();
     }
 
-    updateEntity(task) {
-        this.props.updateTask(task);
-    }
-
-    processChange(changes, prop, e) {
-        changes[prop] = e;
-
-        if (changes.complete) changes.completionDate = dateUtils.formatAsDateTime();
+    async create() {
+        await this.props.createTask(this.state.task);
+        this.close();
     }
 
     render() {
-        const relatedAssignment = this.props.getAssignment(_.get(this.state.task, 'aid'));
-        const cid = relatedAssignment ? relatedAssignment.cid : _.get(this.state.task, 'cid');
-        const course = this.props.getCourse(cid);
+        const course = this.props.getCourse(_.get(this.state.task, 'cid'));
 
         const priorityEntry = _.find(
             _.entries(priorities),
@@ -56,8 +56,23 @@ class TaskDetails extends Editor {
             color: priorityEntry[1][1],
         };
 
+        const leftActions = <Appbar.Action icon="close" onPress={this.close} />;
+        const rightActions = (
+            <Appbar.Action
+                disabled={_.isEmpty(this.state.task.title)}
+                icon={props => <Icon {...props} name="done" color="white" size={24} />}
+                onPress={this.create}
+            />
+        );
+
         return (
-            <ViewController title="Task" navigation={this.props.navigation} route={this.props.route}>
+            <ViewController
+                navigation={this.props.navigation}
+                route={this.props.route}
+                disableBack
+                leftActions={leftActions}
+                rightActions={rightActions}
+            >
                 <ScrollView keyboardDismissMode="on-drag">
                     <View style={{ flexDirection: 'column', padding: 12, paddingBottom: 24, backgroundColor: 'white' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
@@ -161,25 +176,21 @@ class TaskDetails extends Editor {
     }
 }
 
-TaskDetails.propTypes = {
+NewTaskModal.propTypes = {
     navigation: PropTypes.object,
     route: PropTypes.object,
     getTask: PropTypes.func,
-    getAssignment: PropTypes.func,
     getCourse: PropTypes.func,
-    updateTaskLocal: PropTypes.func,
-    updateTask: PropTypes.func,
+    createTask: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
     getTask: getTasksSelectors(state.tasks).selectById,
-    getAssignment: getAssignmentsSelectors(state.assignments).selectById,
     getCourse: getCourseSelectors(state.schedule).selectById,
 });
 
 const mapDispatchToState = {
-    updateTask,
-    updateTaskLocal,
+    createTask,
 };
 
-export default connect(mapStateToProps, mapDispatchToState)(TaskDetails);
+export default connect(mapStateToProps, mapDispatchToState)(NewTaskModal);

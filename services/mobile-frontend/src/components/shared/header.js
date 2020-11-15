@@ -12,6 +12,7 @@ class Header extends React.Component {
         super(props);
 
         this.fetch = this.fetch.bind(this);
+        this.shouldShowBackButton = this.shouldShowBackButton.bind(this);
 
         this.state = {
             isFetching: false,
@@ -39,36 +40,42 @@ class Header extends React.Component {
         await this.setStateSync({ isFetching: false });
     }
 
-    render() {
-        const { options } = this.props.scene.descriptor;
-        const title =
-            options.headerTitle !== undefined
-                ? options.headerTitle
-                : options.title !== undefined
-                ? options.title
-                : this.props.scene.route.name;
+    shouldShowBackButton() {
+        return !this.props.disableBack && this.props.navigation.canGoBack();
+    }
 
+    render() {
         return (
             <Appbar.Header style={{ elevation: 0, shadowOpacity: 0 }}>
-                {this.props.previous ? (
-                    <Appbar.BackAction onPress={this.props.navigation.goBack} />
-                ) : (
+                {this.shouldShowBackButton() && <Appbar.BackAction onPress={this.props.navigation.goBack} />}
+                {this.props.leftActionIsFetch ? (
                     <Appbar.Action disabled={this.state.isFetching} icon="sync" onPress={this.fetch} />
+                ) : (
+                    this.props.leftActions
                 )}
-                <Appbar.Content title={title} />
+                <Appbar.Content title={this.props.title || this.props.route.name} />
+                {this.props.rightActions}
             </Appbar.Header>
         );
     }
 }
 
 Header.propTypes = {
-    scene: PropTypes.object,
-    previous: PropTypes.object,
+    title: PropTypes.string,
     navigation: PropTypes.object,
+    route: PropTypes.object,
+    disableBack: PropTypes.bool,
+    leftActionIsFetch: PropTypes.bool,
+    leftActions: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    rightActions: PropTypes.object,
     fetchTasks: PropTypes.func,
     fetchAssignments: PropTypes.func,
     fetchSchedule: PropTypes.func,
     fetchReminders: PropTypes.func,
+};
+
+Header.defaultProps = {
+    disableBack: false,
 };
 
 const mapDispatchToProps = {

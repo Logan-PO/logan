@@ -1,22 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Provider as ReduxProvider } from 'react-redux';
 import { Provider as PaperProvider } from 'react-native-paper';
+import { NavigationContainer as NavigationProvider } from '@react-navigation/native';
 import { store } from '@logan/fe-shared';
 import theme from './theme';
+import NavigationHierarchy from './navigation-hierarchy';
 
-class Root extends React.Component {
+export default class Root extends React.Component {
     render() {
         return (
             <ReduxProvider store={store}>
-                <PaperProvider theme={theme}>{this.props.children}</PaperProvider>
+                <PaperProvider theme={theme}>
+                    <NavigationProvider>
+                        <NavigationHierarchy />
+                    </NavigationProvider>
+                </PaperProvider>
             </ReduxProvider>
         );
     }
 }
-
-Root.propTypes = {
-    children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-};
-
-export default Root;

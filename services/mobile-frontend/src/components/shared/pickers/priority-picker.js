@@ -5,6 +5,7 @@ import { View, ScrollView } from 'react-native';
 import { List } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import priorities from '../priority-constants';
+import ViewController from '../view-controller';
 
 class PriorityPicker extends React.Component {
     constructor(props) {
@@ -34,19 +35,21 @@ class PriorityPicker extends React.Component {
 
     render() {
         return (
-            <ScrollView>
-                <View style={{ backgroundColor: 'white' }}>
-                    {_.entries(priorities).map(([name, [value, color]]) => (
-                        <List.Item
-                            key={value}
-                            left={() => this.iconToDisplay(value, color)}
-                            title={name}
-                            titleStyle={{ color }}
-                            onPress={this.selectPriority.bind(this, value)}
-                        />
-                    ))}
-                </View>
-            </ScrollView>
+            <ViewController navigation={this.props.navigation} route={this.props.route}>
+                <ScrollView>
+                    <View style={{ backgroundColor: 'white' }}>
+                        {_.entries(priorities).map(([name, [value, color]]) => (
+                            <List.Item
+                                key={value}
+                                left={() => this.iconToDisplay(value, color)}
+                                title={name}
+                                titleStyle={{ color }}
+                                onPress={this.selectPriority.bind(this, value)}
+                            />
+                        ))}
+                    </View>
+                </ScrollView>
+            </ViewController>
         );
     }
 }
