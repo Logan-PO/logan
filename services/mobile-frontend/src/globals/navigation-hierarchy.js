@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import Assignments from '../screens/assignments';
-import Tasks from '../screens/tasks-screen';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import AssignmentsScreen from '../screens/assignments';
+import TasksScreen from '../screens/tasks-screen';
 import NewTaskModalStack from '../components/tasks/new-task-modal-stack';
 
 const RootStack = createStackNavigator();
@@ -14,14 +14,14 @@ class NavigationHierarchy extends React.Component {
         return (
             <BottomTabs.Navigator initialRouteName="Tasks" activeColor="teal" barStyle={{ backgroundColor: 'white' }}>
                 <BottomTabs.Screen
-                    tabBarIcon={({ color }) => <MaterialIcon name="check" color={color} size={26} />}
                     name="Tasks"
-                    component={Tasks}
+                    component={TasksScreen}
+                    tabBarIcon={({ color }) => <Icon name="check" color={color} size={26} />}
                 />
                 <BottomTabs.Screen
-                    tabBarIcon={({ color }) => <MaterialIcon name="assignment" color={color} size={26} />}
                     name="Assignments"
-                    component={Assignments}
+                    component={AssignmentsScreen}
+                    tabBarIcon={({ color }) => <Icon name="assignment" color={color} size={26} />}
                 />
             </BottomTabs.Navigator>
         );
