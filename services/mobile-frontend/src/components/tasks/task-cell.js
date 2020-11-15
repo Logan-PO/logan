@@ -5,9 +5,12 @@ import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { Text, List, Checkbox } from 'react-native-paper';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
+import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import { dateUtils } from '@logan/core';
-import { red } from 'material-ui-colors';
 import PriorityDisplay from '../shared/displays/priority-display';
+import CourseLabel from '../shared/displays/course-label';
+import { typographyStyles, colorStyles } from '../shared/typography';
 
 class TaskCell extends React.Component {
     constructor(props) {
@@ -79,35 +82,57 @@ class TaskCell extends React.Component {
         }
     }
 
+    renderContent() {
+        const checkboxStatus = this.state.task.complete ? 'checked' : 'unchecked';
+        const relatedAssignment = this.props.getAssignment(this.state.task.aid);
+        const course = this.props.getCourse(relatedAssignment ? relatedAssignment.cid : this.state.task.cid);
+
+        return (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Checkbox.Android status={checkboxStatus} onPress={this.check} />
+                <View style={{ flexDirection: 'column' }}>
+                    {(course || relatedAssignment) && (
+                        <View style={{ flexDirection: 'row', marginBottom: 2 }}>
+                            {course && <CourseLabel cid={course.cid} />}
+                            {relatedAssignment && (
+                                <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
+                                    {course && relatedAssignment && ' / '}
+                                    {relatedAssignment.title}
+                                </Text>
+                            )}
+                        </View>
+                    )}
+                    <View>
+                        <Text style={{ ...typographyStyles.body }}>{this.state.task.title}</Text>
+                    </View>
+                    {this.shouldShowOverdueLabel() && (
+                        <View style={{ marginTop: 2 }}>
+                            <Text style={{ ...typographyStyles.body2, ...colorStyles.red }} allowFontScaling>
+                                {this.overdueLabelContent()}
+                            </Text>
+                        </View>
+                    )}
+                    <View>
+                        <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
+                            {this.state.task.description}
+                        </Text>
+                    </View>
+                </View>
+            </View>
+        );
+    }
+
     render() {
         if (!this.state.task) return <List.Item />;
-
-        const checkboxStatus = this.state.task.complete ? 'checked' : 'unchecked';
 
         return (
             <View style={{ flexDirection: 'row' }}>
                 <PriorityDisplay priority={this.state.task.priority} />
                 <View style={{ flexGrow: 1 }}>
                     <List.Item
-                        style={{ backgroundColor: 'white' }}
+                        style={{ backgroundColor: 'white', paddingHorizontal: 0 }}
                         onPress={this.selected}
-                        title={
-                            <View style={{ flexDirection: 'column' }}>
-                                <View>
-                                    <Text style={{ fontSize: 16 }}>{this.state.task.title}</Text>
-                                </View>
-                                {this.shouldShowOverdueLabel() && (
-                                    <View style={{ marginTop: 2 }}>
-                                        <Text style={{ fontSize: 16, color: red[500] }} allowFontScaling>
-                                            {this.overdueLabelContent()}
-                                        </Text>
-                                    </View>
-                                )}
-                            </View>
-                        }
-                        titleNumberOfLines={this.shouldShowOverdueLabel() ? 2 : 1}
-                        description={this.state.task.description}
-                        left={() => <Checkbox.Android status={checkboxStatus} onPress={this.check} />}
+                        title={this.renderContent()}
                     />
                 </View>
             </View>
@@ -118,6 +143,8 @@ class TaskCell extends React.Component {
 TaskCell.propTypes = {
     tid: PropTypes.string,
     getTask: PropTypes.func,
+    getAssignment: PropTypes.func,
+    getCourse: PropTypes.func,
     updateTask: PropTypes.func,
     updateTaskLocal: PropTypes.func,
     showOverdueLabel: PropTypes.bool,
@@ -126,6 +153,8 @@ TaskCell.propTypes = {
 
 const mapStateToProps = state => ({
     getTask: getTasksSelectors(state.tasks).selectById,
+    getAssignment: getAssignmentsSelectors(state.assignments).selectById,
+    getCourse: getCourseSelectors(state.schedule).selectById,
 });
 
 const mapDispatchToProps = {
