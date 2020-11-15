@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Appbar } from 'react-native-paper';
 import { fetchTasks } from '@logan/fe-shared/store/tasks';
+import { fetchAssignments } from '@logan/fe-shared/store/assignments';
+import { fetchSchedule } from '@logan/fe-shared/store/schedule';
+import { fetchReminders } from '@logan/fe-shared/store/reminders';
 
-class TasksAppbar extends React.Component {
+class Header extends React.Component {
     constructor(props) {
         super(props);
 
@@ -15,13 +18,24 @@ class TasksAppbar extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.fetch();
+    }
+
     async setStateSync(update) {
         return new Promise(resolve => this.setState(update, resolve));
     }
 
     async fetch() {
         await this.setStateSync({ isFetching: true });
-        await this.props.fetchTasks();
+
+        await Promise.all([
+            this.props.fetchTasks(),
+            this.props.fetchAssignments(),
+            this.props.fetchSchedule(),
+            this.props.fetchReminders,
+        ]);
+
         await this.setStateSync({ isFetching: false });
     }
 
@@ -47,15 +61,21 @@ class TasksAppbar extends React.Component {
     }
 }
 
-TasksAppbar.propTypes = {
+Header.propTypes = {
     scene: PropTypes.object,
     previous: PropTypes.object,
     navigation: PropTypes.object,
     fetchTasks: PropTypes.func,
+    fetchAssignments: PropTypes.func,
+    fetchSchedule: PropTypes.func,
+    fetchReminders: PropTypes.func,
 };
 
 const mapDispatchToProps = {
     fetchTasks,
+    fetchAssignments,
+    fetchSchedule,
+    fetchReminders,
 };
 
-export default connect(null, mapDispatchToProps)(TasksAppbar);
+export default connect(null, mapDispatchToProps)(Header);

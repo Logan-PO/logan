@@ -5,7 +5,8 @@ import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { createStackNavigator } from '@react-navigation/stack';
 import TasksList from '../components/tasks/tasks-list';
 import TaskDetails from '../components/tasks/task-details';
-import TasksAppbar from '../components/tasks/tasks-appbar';
+import TasksAppbar from '../components/shared/header';
+import CoursePicker from '../components/shared/pickers/course-picker';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ class TasksScreen extends React.Component {
             >
                 <Stack.Screen name="Tasks" component={TasksList} />
                 <Stack.Screen name="Task" component={TaskDetails} />
+                <Stack.Screen name="Course Picker" component={CoursePicker} />
             </Stack.Navigator>
         );
     }

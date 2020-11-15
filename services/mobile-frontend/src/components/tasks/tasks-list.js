@@ -6,7 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import { View, SectionList } from 'react-native';
 import { List } from 'react-native-paper';
 import SegmentedControl from '@react-native-community/segmented-control';
-import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
+import { getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
 import theme from '../../globals/theme';
 import TaskCell from '../../components/tasks/task-cell';
@@ -20,10 +20,6 @@ class TasksList extends React.Component {
         this.state = {
             showingCompletedTasks: false,
         };
-    }
-
-    componentDidMount() {
-        this.props.fetchTasks();
     }
 
     openTask(tid) {
@@ -87,8 +83,4 @@ const mapStateToProps = state => ({
     tasks: getTasksSelectors(state.tasks).selectAll(),
 });
 
-const mapDispatchToProps = {
-    fetchTasks,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TasksList);
+export default connect(mapStateToProps, null)(TasksList);

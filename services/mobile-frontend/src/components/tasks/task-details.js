@@ -2,9 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, ScrollView } from 'react-native';
-import { TextInput, Checkbox } from 'react-native-paper';
+import { TextInput, Checkbox, List } from 'react-native-paper';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
+import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
+import _ from 'lodash';
 
 class TaskDetails extends Editor {
     constructor(props) {
@@ -32,7 +35,9 @@ class TaskDetails extends Editor {
     }
 
     render() {
-        console.log(this.state);
+        const relatedAssignment = this.props.getAssignment(_.get(this.state.task, 'aid'));
+        const cid = relatedAssignment ? relatedAssignment.cid : _.get(this.state.task, 'cid');
+        const course = this.props.getCourse(cid);
 
         return (
             <ScrollView>
@@ -58,6 +63,12 @@ class TaskDetails extends Editor {
                         />
                     </View>
                 </View>
+                <List.Item
+                    style={{ backgroundColor: 'white' }}
+                    title={course ? course.title : 'None'}
+                    titleStyle={{ color: _.get(course, 'color', 'black'), fontWeight: course ? 'bold' : 'normal' }}
+                    onPress={() => this.props.navigation.navigate('Course Picker')}
+                />
             </ScrollView>
         );
     }
@@ -67,12 +78,16 @@ TaskDetails.propTypes = {
     navigation: PropTypes.object,
     route: PropTypes.object,
     getTask: PropTypes.func,
+    getAssignment: PropTypes.func,
+    getCourse: PropTypes.func,
     updateTaskLocal: PropTypes.func,
     updateTask: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
     getTask: getTasksSelectors(state.tasks).selectById,
+    getAssignment: getAssignmentsSelectors(state.assignments).selectById,
+    getCourse: getCourseSelectors(state.schedule).selectById,
 });
 
 const mapDispatchToState = {
