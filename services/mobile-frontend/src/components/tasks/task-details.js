@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { View, ScrollView } from 'react-native';
 import { Text, TextInput, Checkbox, List, Colors } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
@@ -34,6 +35,8 @@ class TaskDetails extends Editor {
 
     processChange(changes, prop, e) {
         changes[prop] = e;
+
+        if (changes.complete) changes.completionDate = dateUtils.formatAsDateTime();
     }
 
     render() {
@@ -56,7 +59,10 @@ class TaskDetails extends Editor {
             <ScrollView>
                 <View style={{ flexDirection: 'column', padding: 12, paddingBottom: 24, backgroundColor: 'white' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-                        <Checkbox.Android />
+                        <Checkbox.Android
+                            status={this.state.task.complete ? 'checked' : 'unchecked'}
+                            onPress={() => this.handleChange('complete', !this.state.task.complete)}
+                        />
                         <TextInput
                             style={{ flexGrow: 1, backgroundColor: 'none' }}
                             mode="flat"

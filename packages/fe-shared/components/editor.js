@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import PropTypes from 'prop-types';
 import UpdateTimer from '../utils/update-timer';
 
 /**
@@ -23,6 +24,10 @@ class Editor extends React.Component {
             this.updateEntity(this.state[this._entity]);
             this.changesExist = false;
         });
+
+        if (this._isMobile && props.navigation) {
+            props.navigation.addListener('blur', this._componentWillExit.bind(this));
+        }
     }
 
     _ownEntityId(props) {
@@ -31,6 +36,11 @@ class Editor extends React.Component {
         } else {
             return _.get(props || this.props, [this._id]);
         }
+    }
+
+    // Mobile only
+    _componentWillExit() {
+        if (this.changesExist) this.updateTimer.fire();
     }
 
     isEmpty() {
@@ -113,5 +123,9 @@ class Editor extends React.Component {
         }
     }
 }
+
+Editor.propTypes = {
+    navigation: PropTypes.object,
+};
 
 export default Editor;
