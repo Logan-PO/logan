@@ -7,6 +7,7 @@ import { Text, List, Checkbox } from 'react-native-paper';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import { dateUtils } from '@logan/core';
 import { red } from 'material-ui-colors';
+import PriorityDisplay from '../shared/displays/priority-display';
 
 class TaskCell extends React.Component {
     constructor(props) {
@@ -84,27 +85,32 @@ class TaskCell extends React.Component {
         const checkboxStatus = this.state.task.complete ? 'checked' : 'unchecked';
 
         return (
-            <List.Item
-                style={{ backgroundColor: 'white' }}
-                onPress={this.selected}
-                title={
-                    <View style={{ flexDirection: 'column' }}>
-                        <View>
-                            <Text style={{ fontSize: 16 }}>{this.state.task.title}</Text>
-                        </View>
-                        {this.shouldShowOverdueLabel() && (
-                            <View style={{ marginTop: 2 }}>
-                                <Text style={{ fontSize: 16, color: red[500] }} allowFontScaling>
-                                    {this.overdueLabelContent()}
-                                </Text>
+            <View style={{ flexDirection: 'row' }}>
+                <PriorityDisplay priority={this.state.task.priority} />
+                <View style={{ flexGrow: 1 }}>
+                    <List.Item
+                        style={{ backgroundColor: 'white' }}
+                        onPress={this.selected}
+                        title={
+                            <View style={{ flexDirection: 'column' }}>
+                                <View>
+                                    <Text style={{ fontSize: 16 }}>{this.state.task.title}</Text>
+                                </View>
+                                {this.shouldShowOverdueLabel() && (
+                                    <View style={{ marginTop: 2 }}>
+                                        <Text style={{ fontSize: 16, color: red[500] }} allowFontScaling>
+                                            {this.overdueLabelContent()}
+                                        </Text>
+                                    </View>
+                                )}
                             </View>
-                        )}
-                    </View>
-                }
-                titleNumberOfLines={this.shouldShowOverdueLabel() ? 2 : 1}
-                description={this.state.task.description}
-                left={() => <Checkbox.Android status={checkboxStatus} onPress={this.check} />}
-            />
+                        }
+                        titleNumberOfLines={this.shouldShowOverdueLabel() ? 2 : 1}
+                        description={this.state.task.description}
+                        left={() => <Checkbox.Android status={checkboxStatus} onPress={this.check} />}
+                    />
+                </View>
+            </View>
         );
     }
 }
