@@ -11,6 +11,8 @@ class CoursePicker extends React.Component {
     constructor(props) {
         super(props);
 
+        this.selectCourse = this.selectCourse.bind(this);
+
         this.state = {
             selectedCid: _.get(this.props.route, 'params.cid'),
         };
@@ -18,7 +20,12 @@ class CoursePicker extends React.Component {
 
     selectCourse(cid) {
         this.setState({ selectedCid: cid });
-        console.log(cid);
+
+        const onSelect = _.get(this.props.route, 'params.onSelect');
+
+        if (onSelect) onSelect(cid);
+
+        this.props.navigation.goBack();
     }
 
     iconToDisplay(course) {
@@ -40,7 +47,7 @@ class CoursePicker extends React.Component {
                 <List.Item
                     key="none"
                     title="None"
-                    onPress={this.selectCourse.bind(this)}
+                    onPress={this.selectCourse.bind(this, undefined)}
                     left={style => this.iconToDisplay({ color: 'black' }, style)}
                 />
             </List.Section>
@@ -88,7 +95,6 @@ class CoursePicker extends React.Component {
 CoursePicker.propTypes = {
     route: PropTypes.object,
     navigation: PropTypes.object,
-    previous: PropTypes.object,
     tids: PropTypes.array,
     getTerm: PropTypes.func,
     getCoursesForTerm: PropTypes.func,

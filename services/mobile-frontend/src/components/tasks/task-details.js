@@ -1,13 +1,15 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, ScrollView } from 'react-native';
-import { TextInput, Checkbox, List } from 'react-native-paper';
+import { Text, TextInput, Checkbox, List, Colors } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
-import _ from 'lodash';
+import priorities from '../shared/priority-constants';
 
 class TaskDetails extends Editor {
     constructor(props) {
@@ -39,6 +41,17 @@ class TaskDetails extends Editor {
         const cid = relatedAssignment ? relatedAssignment.cid : _.get(this.state.task, 'cid');
         const course = this.props.getCourse(cid);
 
+        const priorityEntry = _.find(
+            _.entries(priorities),
+            // eslint-disable-next-line no-unused-vars
+            ([name, [value, color]]) => value === this.state.task.priority
+        );
+
+        const priority = {
+            name: priorityEntry[0],
+            color: priorityEntry[1][1],
+        };
+
         return (
             <ScrollView>
                 <View style={{ flexDirection: 'column', padding: 12, paddingBottom: 24, backgroundColor: 'white' }}>
@@ -65,9 +78,70 @@ class TaskDetails extends Editor {
                 </View>
                 <List.Item
                     style={{ backgroundColor: 'white' }}
-                    title={course ? course.title : 'None'}
-                    titleStyle={{ color: _.get(course, 'color', 'black'), fontWeight: course ? 'bold' : 'normal' }}
-                    onPress={() => this.props.navigation.navigate('Course Picker')}
+                    title={
+                        <View
+                            style={{
+                                height: '100%',
+                                width: '100%',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                paddingRight: 4,
+                            }}
+                        >
+                            <Text style={{ fontSize: 16, lineHeight: 16 }}>Course</Text>
+                            <Text
+                                style={{
+                                    fontSize: 16,
+                                    lineHeight: 16,
+                                    color: _.get(course, 'color', Colors.grey500),
+                                    fontWeight: course ? 'bold' : 'normal',
+                                }}
+                            >
+                                {course ? course.title : 'None'}
+                            </Text>
+                        </View>
+                    }
+                    right={() => <Icon name="chevron-right" size={24} style={{ color: 'gray', alignSelf: 'center' }} />}
+                    onPress={() =>
+                        this.props.navigation.navigate('Course Picker', {
+                            cid: _.get(course, 'cid'),
+                            onSelect: this.handleChange.bind(this, 'cid'),
+                        })
+                    }
+                />
+                <List.Item
+                    style={{ backgroundColor: 'white' }}
+                    title={
+                        <View
+                            style={{
+                                height: '100%',
+                                width: '100%',
+                                flexDirection: 'row',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                paddingRight: 4,
+                            }}
+                        >
+                            <Text style={{ fontSize: 16, lineHeight: 16 }}>Priority</Text>
+                            <Text
+                                style={{
+                                    fontSize: 16,
+                                    lineHeight: 16,
+                                    color: priority.color,
+                                }}
+                            >
+                                {priority.name}
+                            </Text>
+                        </View>
+                    }
+                    right={() => <Icon name="chevron-right" size={24} style={{ color: 'gray', alignSelf: 'center' }} />}
+                    onPress={() =>
+                        this.props.navigation.navigate('Priority Picker', {
+                            value: this.state.task.priority,
+                            onSelect: this.handleChange.bind(this, 'priority'),
+                        })
+                    }
                 />
             </ScrollView>
         );

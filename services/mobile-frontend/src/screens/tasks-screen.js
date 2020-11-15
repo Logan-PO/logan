@@ -7,6 +7,7 @@ import TasksList from '../components/tasks/tasks-list';
 import TaskDetails from '../components/tasks/task-details';
 import TasksAppbar from '../components/shared/header';
 import CoursePicker from '../components/shared/pickers/course-picker';
+import PriorityPicker from '../components/shared/pickers/priority-picker';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ class TasksScreen extends React.Component {
                 <Stack.Screen name="Tasks" component={TasksList} />
                 <Stack.Screen name="Task" component={TaskDetails} />
                 <Stack.Screen name="Course Picker" component={CoursePicker} />
+                <Stack.Screen name="Priority Picker" component={PriorityPicker} />
             </Stack.Navigator>
         );
     }
