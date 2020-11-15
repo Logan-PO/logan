@@ -8,6 +8,7 @@ import { Appbar, List } from 'react-native-paper';
 import SegmentedControl from '@react-native-community/segmented-control';
 import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
+import theme from '../globals/theme';
 import TaskCell from '../components/tasks/task-cell';
 
 class Tasks extends React.Component {
@@ -38,7 +39,7 @@ class Tasks extends React.Component {
                     style={{
                         padding: 12,
                         paddingTop: 0,
-                        backgroundColor: 'teal',
+                        backgroundColor: theme.colors.primary,
                     }}
                 >
                     <SegmentedControl

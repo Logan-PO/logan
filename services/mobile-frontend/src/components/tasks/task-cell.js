@@ -6,6 +6,7 @@ import { View } from 'react-native';
 import { Text, List, Checkbox } from 'react-native-paper';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import { dateUtils } from '@logan/core';
+import { red } from 'material-ui-colors';
 
 class TaskCell extends React.Component {
     constructor(props) {
@@ -87,7 +88,7 @@ class TaskCell extends React.Component {
                         </View>
                         {this.shouldShowOverdueLabel() && (
                             <View style={{ marginTop: 2 }}>
-                                <Text style={{ fontSize: 16, color: 'red' }} allowFontScaling>
+                                <Text style={{ fontSize: 16, color: red[500] }} allowFontScaling>
                                     {this.overdueLabelContent()}
                                 </Text>
                             </View>
