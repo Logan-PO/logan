@@ -10,6 +10,7 @@ import { getTasksSelectors, createTask } from '@logan/fe-shared/store/tasks';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import priorities from '../shared/priority-constants';
 import ViewController from '../shared/view-controller';
+import { typographyStyles } from '../shared/typography';
 
 class NewTaskModal extends React.Component {
     constructor(props) {
@@ -112,11 +113,10 @@ class NewTaskModal extends React.Component {
                                     paddingRight: 4,
                                 }}
                             >
-                                <Text style={{ fontSize: 16, lineHeight: 16 }}>Course</Text>
+                                <Text style={{ ...typographyStyles.body }}>Course</Text>
                                 <Text
                                     style={{
-                                        fontSize: 16,
-                                        lineHeight: 16,
+                                        ...typographyStyles.body,
                                         color: _.get(course, 'color', Colors.grey500),
                                         fontWeight: course ? 'bold' : 'normal',
                                     }}
@@ -148,11 +148,11 @@ class NewTaskModal extends React.Component {
                                     paddingRight: 4,
                                 }}
                             >
-                                <Text style={{ fontSize: 16, lineHeight: 16 }}>Priority</Text>
+                                <Text style={{ ...typographyStyles.body }}>Priority</Text>
                                 <Text
                                     style={{
-                                        fontSize: 16,
-                                        lineHeight: 16,
+                                        ...typographyStyles.body,
+                                        fontWeight: 'bold',
                                         color: priority.color,
                                     }}
                                 >

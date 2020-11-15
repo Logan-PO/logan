@@ -12,6 +12,7 @@ import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
 import priorities from '../shared/priority-constants';
 import ViewController from '../shared/view-controller';
+import { typographyStyles } from '../shared/typography';
 
 class TaskDetails extends Editor {
     constructor(props) {
@@ -98,11 +99,10 @@ class TaskDetails extends Editor {
                                     paddingRight: 4,
                                 }}
                             >
-                                <Text style={{ fontSize: 16, lineHeight: 16 }}>Course</Text>
+                                <Text style={{ ...typographyStyles.body }}>Course</Text>
                                 <Text
                                     style={{
-                                        fontSize: 16,
-                                        lineHeight: 16,
+                                        ...typographyStyles.body,
                                         color: _.get(course, 'color', Colors.grey500),
                                         fontWeight: course ? 'bold' : 'normal',
                                     }}
@@ -134,11 +134,11 @@ class TaskDetails extends Editor {
                                     paddingRight: 4,
                                 }}
                             >
-                                <Text style={{ fontSize: 16, lineHeight: 16 }}>Priority</Text>
+                                <Text style={{ ...typographyStyles.body }}>Priority</Text>
                                 <Text
                                     style={{
-                                        fontSize: 16,
-                                        lineHeight: 16,
+                                        ...typographyStyles.body,
+                                        fontWeight: 'bold',
                                         color: priority.color,
                                     }}
                                 >
