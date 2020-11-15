@@ -112,11 +112,13 @@ class TaskCell extends React.Component {
                             </Text>
                         </View>
                     )}
-                    <View>
-                        <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
-                            {this.state.task.description}
-                        </Text>
-                    </View>
+                    {!_.isEmpty(this.state.task.description) && (
+                        <View>
+                            <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
+                                {this.state.task.description}
+                            </Text>
+                        </View>
+                    )}
                 </View>
             </View>
         );
