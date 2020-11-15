@@ -4,16 +4,18 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 import { View, SectionList } from 'react-native';
-import { Appbar, List } from 'react-native-paper';
+import { List } from 'react-native-paper';
 import SegmentedControl from '@react-native-community/segmented-control';
 import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
-import theme from '../globals/theme';
-import TaskCell from '../components/tasks/task-cell';
+import theme from '../../globals/theme';
+import TaskCell from '../../components/tasks/task-cell';
 
-class Tasks extends React.Component {
+class TasksList extends React.Component {
     constructor(props) {
         super(props);
+
+        this.openTask = this.openTask.bind(this);
 
         this.state = {
             showingCompletedTasks: false,
@@ -24,6 +26,10 @@ class Tasks extends React.Component {
         this.props.fetchTasks();
     }
 
+    openTask(tid) {
+        this.props.navigation.push('Task', { tid });
+    }
+
     render() {
         const tasks = _.filter(this.props.tasks, task => task.complete === this.state.showingCompletedTasks);
         const sections = getSections(tasks, this.state.showingCompletedTasks);
@@ -31,10 +37,6 @@ class Tasks extends React.Component {
 
         return (
             <View style={{ flex: 1 }}>
-                <Appbar.Header dark>
-                    <Appbar.Action icon="sync" onPress={this.props.fetchTasks} />
-                    <Appbar.Content title="Tasks" />
-                </Appbar.Header>
                 <View
                     style={{
                         padding: 12,
@@ -56,7 +58,12 @@ class Tasks extends React.Component {
                     sections={listData}
                     keyExtractor={(item, index) => item + index}
                     renderItem={({ item }) => (
-                        <TaskCell key={item} tid={item} showOverdueLabel={!this.state.showingCompletedTasks} />
+                        <TaskCell
+                            key={item}
+                            tid={item}
+                            showOverdueLabel={!this.state.showingCompletedTasks}
+                            onPress={() => this.openTask(item)}
+                        />
                     )}
                     renderSectionHeader={({ section: { title } }) => (
                         <List.Subheader style={{ backgroundColor: 'white' }} key={title}>
@@ -70,9 +77,10 @@ class Tasks extends React.Component {
     }
 }
 
-Tasks.propTypes = {
+TasksList.propTypes = {
     tasks: PropTypes.array,
     fetchTasks: PropTypes.func,
+    navigation: PropTypes.object,
 };
 
 const mapStateToProps = state => ({
@@ -83,4 +91,4 @@ const mapDispatchToProps = {
     fetchTasks,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tasks);
+export default connect(mapStateToProps, mapDispatchToProps)(TasksList);

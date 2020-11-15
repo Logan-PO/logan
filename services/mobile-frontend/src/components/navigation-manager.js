@@ -2,8 +2,8 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import Assignments from '../pages/assignments';
-import Tasks from '../pages/tasks';
+import Assignments from '../screens/assignments';
+import Tasks from '../screens/tasks-screen';
 
 const Tab = createMaterialBottomTabNavigator();
 

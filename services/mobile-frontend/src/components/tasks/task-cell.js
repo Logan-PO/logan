@@ -13,6 +13,7 @@ class TaskCell extends React.Component {
         super(props);
 
         this.check = this.check.bind(this);
+        this.selected = this.selected.bind(this);
 
         this.state = {
             task: props.getTask(props.tid),
@@ -25,6 +26,10 @@ class TaskCell extends React.Component {
         if (!_.isEqual(storeTask, this.state.task)) {
             this.setState({ task: storeTask });
         }
+    }
+
+    selected() {
+        this.props.onPress && this.props.onPress(this.props.tid);
     }
 
     check() {
@@ -81,6 +86,7 @@ class TaskCell extends React.Component {
         return (
             <List.Item
                 style={{ backgroundColor: 'white' }}
+                onPress={this.selected}
                 title={
                     <View style={{ flexDirection: 'column' }}>
                         <View>
@@ -109,6 +115,7 @@ TaskCell.propTypes = {
     updateTask: PropTypes.func,
     updateTaskLocal: PropTypes.func,
     showOverdueLabel: PropTypes.bool,
+    onPress: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
