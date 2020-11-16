@@ -110,7 +110,7 @@ class AssignmentsList extends React.Component {
                             const [dueDate, aids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader>{dueDate}</ListSubheader>
+                                    <ListSubheader className="list-header">{dueDate}</ListSubheader>
                                     {aids.map(aid => (
                                         <AssignmentCell
                                             key={aid}
