@@ -85,7 +85,8 @@ class TaskCell extends React.Component {
     }
 
     shouldShowOverdueLabel() {
-        if (!this.props.showOverdueLabel) return false;
+        if (_.get(this.state, 'task.complete')) return false;
+        if (!this.props.showOverdueLabel && !this.props.subtaskCell) return false;
         if (!dateUtils.dueDateIsDate(this.state.task.dueDate)) return false;
 
         const dateValue = dayjs(this.state.task.dueDate, DB_DATE_FORMAT);
@@ -146,7 +147,11 @@ class TaskCell extends React.Component {
                                 )}
                             </React.Fragment>
                         }
-                        secondary={_.get(this.state, 'task.description')}
+                        secondary={
+                            this.props.subtaskCell && !this.state.task.complete && !this.shouldShowOverdueLabel()
+                                ? `Due ${dateUtils.readableDueDate(this.state.task.dueDate, true)}`
+                                : _.get(this.state.task, 'description')
+                        }
                     />
                     <ListItemSecondaryAction className="actions">
                         {this.props.subtaskCell && (
