@@ -8,7 +8,7 @@ import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { CourseLabel } from '../shared/displays';
 
-export class AssignmentCell extends React.Component {
+class AssignmentCell extends React.Component {
     constructor(props) {
         super(props);
         this.select = this.select.bind(this);
