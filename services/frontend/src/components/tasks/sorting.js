@@ -46,8 +46,8 @@ function makeSectionsIncomplete(tasks) {
 function makeSectionsComplete(tasks) {
     const groupedEntries = _.entries(_.groupBy(tasks, 'completionDate'));
 
-    const sortedEntries = groupedEntries.sort(
-        ([a], [b]) => -dateUtils.compareDates(a, b, dateUtils.constants.DB_DATE_FORMAT, 'day')
+    const sortedEntries = groupedEntries.sort(([a], [b]) =>
+        dateUtils.compareDates(b, a, dateUtils.constants.DB_DATE_FORMAT, 'day')
     );
 
     const formattedEntries = sortedEntries.map(([date, tasks]) => {
