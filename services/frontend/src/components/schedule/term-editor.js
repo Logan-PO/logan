@@ -6,7 +6,8 @@ import { dateUtils } from '@logan/core';
 import { Grid, Typography, TextField, Breadcrumbs, Divider } from '@material-ui/core';
 import { DatePicker } from '@material-ui/pickers';
 import { getTermSelectors, updateTerm, updateTermLocal } from '@logan/fe-shared/store/schedule';
-import Editor from '../shared/editor';
+import Editor from '@logan/fe-shared/components/editor';
+import '../shared/editor.scss';
 
 const {
     dayjs,

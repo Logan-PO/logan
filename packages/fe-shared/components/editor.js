@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
-import UpdateTimer from '@logan/fe-shared/utils/update-timer';
-import './editor.scss';
+import PropTypes from 'prop-types';
+import UpdateTimer from '../utils/update-timer';
 
 /**
  * @typedef {object} EditorConfig
@@ -15,16 +15,36 @@ class Editor extends React.Component {
         super(props);
         this._id = config.id;
         this._entity = config.entity;
+        this._isMobile = config.mobile || false;
+
+        this._ownEntityId = this._ownEntityId.bind(this);
 
         this.changesExist = false;
         this.updateTimer = new UpdateTimer(config.interval || 1000, () => {
             this.updateEntity(this.state[this._entity]);
             this.changesExist = false;
         });
+
+        if (this._isMobile && props.navigation) {
+            props.navigation.addListener('blur', this._componentWillExit.bind(this));
+        }
+    }
+
+    _ownEntityId(props) {
+        if (this._isMobile) {
+            return _.get(props || this.props, ['route', 'params', this._id]);
+        } else {
+            return _.get(props || this.props, [this._id]);
+        }
+    }
+
+    // Mobile only
+    _componentWillExit() {
+        if (this.changesExist) this.updateTimer.fire();
     }
 
     isEmpty() {
-        return _.isEmpty(this.props[this._id]);
+        return _.isEmpty(this._ownEntityId());
     }
 
     // eslint-disable-next-line no-unused-vars
@@ -57,7 +77,7 @@ class Editor extends React.Component {
         this._applyChangesToState(changes);
 
         this.updateEntityLocal({
-            id: this.props[this._id],
+            id: this._ownEntityId(),
             changes,
         });
 
@@ -74,31 +94,38 @@ class Editor extends React.Component {
     }
 
     componentDidMount() {
-        const entity = this.selectEntity(this.props[this._id]);
+        const entity = this.selectEntity(this._ownEntityId());
         this.updateCurrentEntityState(entity);
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props[this._id] !== prevProps[this._id]) {
+        const currentId = this._ownEntityId();
+        const pastId = this._ownEntityId(prevProps);
+
+        if (currentId !== pastId) {
             // If the user has selected a new task and updates to the existing task haven't been saved yet, save them
-            if (prevProps[this._id] && this.changesExist) {
-                const prev = this.selectEntity(prevProps[this._id]);
+            if (pastId && this.changesExist) {
+                const prev = this.selectEntity(pastId);
 
                 if (prev) this.updateTimer.fire();
 
                 this.updateTimer.stop();
             }
 
-            const current = this.selectEntity(this.props[this._id]);
+            const current = this.selectEntity(currentId);
             this.updateCurrentEntityState(current);
         } else {
             // Also if the task has been updated somewhere else, make sure the state reflects that
-            const stored = this.selectEntity(this.props[this._id]);
+            const stored = this.selectEntity(currentId);
             if (!_.isEqual(stored, this.state[this._entity])) {
                 this.updateCurrentEntityState(stored);
             }
         }
     }
 }
+
+Editor.propTypes = {
+    navigation: PropTypes.object,
+};
 
 export default Editor;
