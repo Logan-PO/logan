@@ -44,9 +44,18 @@ function makeSectionsIncomplete(tasks) {
 }
 
 function makeSectionsComplete(tasks) {
-    return _.groupBy(tasks, task =>
-        dateUtils.humanReadableDate(dateUtils.dayjs(task.completionDate, dateUtils.constants.DB_DATETIME_FORMAT))
+    const groupedEntries = _.entries(_.groupBy(tasks, 'completionDate'));
+
+    const sortedEntries = groupedEntries.sort(
+        ([a], [b]) => -dateUtils.compareDates(a, b, dateUtils.constants.DB_DATE_FORMAT, 'day')
     );
+
+    const formattedEntries = sortedEntries.map(([date, tasks]) => {
+        const completion = dateUtils.humanReadableDate(dateUtils.toDate(date), true);
+        return [`Completed ${completion}`, tasks];
+    });
+
+    return _.fromPairs(formattedEntries);
 }
 
 export function makeSections(showComplete, tasks) {

@@ -89,7 +89,7 @@ class TasksList extends React.Component {
                             const [dueDate, tids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader>{dueDate}</ListSubheader>
+                                    <ListSubheader className="list-header">{dueDate}</ListSubheader>
                                     {tids.map(tid => (
                                         <TaskCell
                                             key={tid}
