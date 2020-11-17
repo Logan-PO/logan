@@ -68,7 +68,7 @@ function toDate(input) {
 }
 
 function formatAsDate(obj) {
-    return obj.format(DB_DATE_FORMAT);
+    return dayjs(obj).format(DB_DATE_FORMAT);
 }
 
 function toTime(input) {
@@ -76,7 +76,7 @@ function toTime(input) {
 }
 
 function formatAsTime(obj) {
-    return obj.format(DB_TIME_FORMAT);
+    return dayjs(obj).format(DB_TIME_FORMAT);
 }
 
 function toDateTime(input) {
@@ -84,7 +84,7 @@ function toDateTime(input) {
 }
 
 function formatAsDateTime(obj) {
-    return obj.format(DB_DATETIME_FORMAT);
+    return dayjs(obj).format(DB_DATETIME_FORMAT);
 }
 
 module.exports = {
