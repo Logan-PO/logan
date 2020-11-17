@@ -43,6 +43,7 @@ class TaskModal extends React.Component {
                 title: newTitle,
                 dueDate: dayjs().format(DB_DATE_FORMAT),
                 priority: 0,
+                tags: [],
             },
         };
     }
@@ -68,6 +69,7 @@ class TaskModal extends React.Component {
                 title: newTitle,
                 dueDate: dayjs().format(DB_DATE_FORMAT),
                 priority: 0,
+                tags: [],
             },
         });
     }
@@ -93,7 +95,7 @@ class TaskModal extends React.Component {
     handleChange(prop, e) {
         const task = this.state.task;
 
-        if (prop === 'dueDate') {
+        if (prop === 'dueDate' || prop === 'tags') {
             task[prop] = e;
         } else if (prop === 'cid') {
             const cid = e.target.value;

@@ -75,9 +75,9 @@ class SubtasksList extends React.Component {
                     >
                         Subtasks
                     </FormLabel>
-                    <Paper variant="outlined" className="subtasks-list">
+                    <Paper variant="outlined" className={classes.subtasksList}>
                         <div className="basic-list">
-                            <List>{this.listContent()}</List>
+                            <List style={{ padding: 0 }}>{this.listContent()}</List>
                         </div>
                     </Paper>
                     <div className={classes.fabContainer}>

@@ -1,6 +1,10 @@
 @import '../../globals/global';
 
 %list-shared {
+    .list-header {
+        background: white;
+    }
+
     .list-cell {
         .actions {
             display: none;
