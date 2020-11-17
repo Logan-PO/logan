@@ -32,8 +32,11 @@
     "url": "https://github.com/beasterbro/logan/issues"
   },
   "dependencies": {
+    "@logan/core": "^1.0.0",
     "@logan/fe-shared": "^1.0.0",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-community/segmented-control": "^2.2.1",
+    "@react-navigation/material-bottom-tabs": "^5.3.9",
     "@react-navigation/native": "^5.8.2",
     "@react-navigation/stack": "^5.11.1",
     "babel-preset-expo": "^8.3.0",
@@ -41,6 +44,8 @@
     "expo-splash-screen": "~0.6.2",
     "expo-status-bar": "^1.0.2",
     "expo-updates": "~0.3.2",
+    "lodash": "^4.17.20",
+    "material-ui-colors": "^1.0.0",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^17.0.1",
@@ -52,6 +57,7 @@
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "^2.10.1",
     "react-native-unimodules": "~0.11.0",
+    "react-native-vector-icons": "^7.1.0",
     "react-native-web": "^0.14.4",
     "react-redux": "^7.2.1",
     "redux": "^4.0.5"

@@ -12,7 +12,7 @@
     "rebootstrap": "bash scripts/fix-node-modules.sh",
     "test": "jest -c jest.config.js",
     "lint": "eslint . --quiet -c .eslintrc.js",
-    "lint-fix": "npm run lint -- --fix",
+    "lint-fix": "eslint . -c .eslintrc.js --fix",
     "deploy:backend": "./scripts/deploy-backend.sh",
     "deploy:frontend": "./scripts/deploy-frontend.sh"
   },

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Grid, Typography, TextField, Breadcrumbs, Divider } from '@material-ui/core';
 import { getScheduleSelectors, updateCourse, updateCourseLocal } from '@logan/fe-shared/store/schedule';
-import Editor from '../shared/editor';
+import Editor from '@logan/fe-shared/components/editor';
+import '../shared/editor.scss';
 import ColorPicker from '../shared/controls/color-picker';
 
 class CourseEditor extends Editor {
