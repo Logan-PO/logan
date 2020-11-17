@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, createTask, deleteTask } from '@logan/fe-shared/store/tasks';
-import { Paper, List, Divider, FormLabel, Fab, ListItem, ListItemText } from '@material-ui/core';
+import { Paper, List, Divider, FormLabel, Fab, ListItem, ListItemText, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import TaskCell from '../tasks/task-cell';
 import '../shared/list.scss';
@@ -81,9 +81,11 @@ class SubtasksList extends React.Component {
                         </div>
                     </Paper>
                     <div className={classes.fabContainer}>
-                        <Fab color="secondary" size="small" className={classes.fab} onClick={this.openNewTaskModal}>
-                            <AddIcon fontSize="small" />
-                        </Fab>
+                        <Tooltip title="New subtask">
+                            <Fab color="secondary" size="small" className={classes.fab} onClick={this.openNewTaskModal}>
+                                <AddIcon fontSize="small" />
+                            </Fab>
+                        </Tooltip>
                     </div>
                 </div>
                 <TaskModal open={this.state.newTaskModalOpen} onClose={this.closeNewTaskModal} aid={this.props.aid} />

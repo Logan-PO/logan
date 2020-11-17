@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { FormLabel, Card, CardActionArea, CardContent, Typography } from '@material-ui/core';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { FormLabel, Card, CardActionArea, CardContent, Typography, Tooltip } from '@material-ui/core';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import { getAssignmentsSelectors, setShouldGoToAssignment } from '@logan/fe-shared/store/assignments';
 import { CourseLabel } from '../shared/displays';
 import classes from './assignment-preview.module.scss';
@@ -24,24 +24,26 @@ class AssignmentPreview extends React.Component {
                 <FormLabel style={{ fontSize: '0.75rem', marginBottom: '0.5rem', display: 'inline-block' }}>
                     Related Assignment
                 </FormLabel>
-                <Card variant="outlined" onClick={this.openAssignment.bind(this)}>
-                    <CardActionArea>
-                        <CardContent className={classes.contentContainer}>
-                            <div className={classes.details}>
-                                {assignment.cid && (
-                                    <div className="cell-upper-label">
-                                        <CourseLabel cid={assignment.cid} />
-                                    </div>
-                                )}
-                                <Typography>{assignment.title}</Typography>
-                                <Typography variant="body2" color="textSecondary">
-                                    Due {formattedDueDate}
-                                </Typography>
-                            </div>
-                            <ExitToAppIcon />
-                        </CardContent>
-                    </CardActionArea>
-                </Card>
+                <Tooltip title="Open related assignment">
+                    <Card variant="outlined" onClick={this.openAssignment.bind(this)}>
+                        <CardActionArea>
+                            <CardContent className={classes.contentContainer}>
+                                <div className={classes.details}>
+                                    {assignment.cid && (
+                                        <div className="cell-upper-label">
+                                            <CourseLabel cid={assignment.cid} />
+                                        </div>
+                                    )}
+                                    <Typography>{assignment.title}</Typography>
+                                    <Typography variant="body2" color="textSecondary">
+                                        Due {formattedDueDate}
+                                    </Typography>
+                                </div>
+                                <AssignmentIcon />
+                            </CardContent>
+                        </CardActionArea>
+                    </Card>
+                </Tooltip>
             </div>
         );
     }

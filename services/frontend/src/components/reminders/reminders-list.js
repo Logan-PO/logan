@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Paper, List, Divider, ListItem, ListItemText, FormLabel, Fab } from '@material-ui/core';
+import { Paper, List, Divider, ListItem, ListItemText, FormLabel, Fab, Tooltip } from '@material-ui/core';
 import AddAlertIcon from '@material-ui/icons/AddAlert';
 import { getRemindersSelectors, setShouldGoToReminder } from '@logan/fe-shared/store/reminders';
 import ReminderCell from './reminder-cell';
@@ -65,14 +65,16 @@ class RemindersList extends React.Component {
                         </div>
                     </Paper>
                     <div className={classes.fabContainer}>
-                        <Fab
-                            color="secondary"
-                            size="small"
-                            className={classes.fab}
-                            onClick={this.setReminderModalState.bind(this, 'create', true)}
-                        >
-                            <AddAlertIcon fontSize="small" />
-                        </Fab>
+                        <Tooltip title="New reminder">
+                            <Fab
+                                color="secondary"
+                                size="small"
+                                className={classes.fab}
+                                onClick={this.setReminderModalState.bind(this, 'create', true)}
+                            >
+                                <AddAlertIcon fontSize="small" />
+                            </Fab>
+                        </Tooltip>
                     </div>
                     <ReminderModal
                         open={this.state.reminderModalOpen}
