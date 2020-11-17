@@ -77,7 +77,7 @@ class TaskCell extends React.Component {
     }
 
     toggleCompletion() {
-        this.handleChange('completion', !this.state.task.complete);
+        this.handleChange('complete', !this.state.task.complete);
     }
 
     handleChange(prop, newVal) {
