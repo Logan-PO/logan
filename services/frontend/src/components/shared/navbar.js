@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { AppBar, Toolbar, Typography, IconButton, Tooltip } from '@material-ui/core';
 import SyncIcon from '@material-ui/icons/Sync';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { beginFetching, finishFetching } from '@logan/fe-shared/store/fetch-status';
 import { fetchTasks } from '@logan/fe-shared/store/tasks';
 import { fetchAssignments } from '@logan/fe-shared/store/assignments';
 import { fetchSchedule } from '@logan/fe-shared/store/schedule';
@@ -29,13 +30,20 @@ class Navbar extends React.Component {
     }
 
     async fetchAll() {
+        if (!this.props.canFetch) return;
+
+        this.props.beginFetching();
+
         const fetchers = [
             this.props.fetchTasks(),
             this.props.fetchAssignments(),
             this.props.fetchSchedule(),
             this.props.fetchReminders(),
         ];
+
         await Promise.all(fetchers);
+
+        this.props.finishFetching();
     }
 
     openAccountModal() {
@@ -56,7 +64,7 @@ class Navbar extends React.Component {
                     <div className={styles.flexibleSpace} />
                     {this.props.buttons}
                     <Tooltip title="Refresh">
-                        <IconButton onClick={this.fetchAll} color="inherit">
+                        <IconButton disabled={!this.props.canFetch} onClick={this.fetchAll} color="inherit">
                             <SyncIcon />
                         </IconButton>
                     </Tooltip>
@@ -77,8 +85,32 @@ Navbar.propTypes = {
     fetchAssignments: PropTypes.func,
     fetchSchedule: PropTypes.func,
     fetchReminders: PropTypes.func,
+    beginFetching: PropTypes.func,
+    finishFetching: PropTypes.func,
+    isFetching: PropTypes.bool,
+    fetchIsBlocked: PropTypes.bool,
+    canFetch: PropTypes.bool,
 };
 
-const mapDispatchToProps = { fetchTasks, fetchAssignments, fetchSchedule, fetchReminders };
+const mapStateToProps = state => {
+    const isFetching = state.fetchStatus.fetching;
+    const fetchIsBlocked = state.fetchStatus.blocked;
+    const canFetch = !isFetching && !fetchIsBlocked;
 
-export default connect(null, mapDispatchToProps)(Navbar);
+    return {
+        isFetching,
+        fetchIsBlocked,
+        canFetch,
+    };
+};
+
+const mapDispatchToProps = {
+    fetchTasks,
+    fetchAssignments,
+    fetchSchedule,
+    fetchReminders,
+    beginFetching,
+    finishFetching,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
