@@ -13,6 +13,10 @@ class DueDatePicker extends React.Component {
         this.handleTypeChange = this.handleTypeChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
 
+        if (props.datesOnly && !dateUtils.dueDateIsDate(props.value)) {
+            console.warn(`Non-date dueDate supplied to a datePicker with datesOnly=true`);
+        }
+
         this.state = {
             currentType: dateUtils.dueDateType(props.value) || 'date',
             currentDate: dateUtils.dueDateIsDate(props.value) ? props.value : dateUtils.formatAsDate(),
