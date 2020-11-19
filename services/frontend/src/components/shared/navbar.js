@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { AppBar, Toolbar, Typography, IconButton, Tooltip } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, IconButton, Tooltip, Snackbar } from '@material-ui/core';
 import SyncIcon from '@material-ui/icons/Sync';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { beginFetching, finishFetching } from '@logan/fe-shared/store/fetch-status';
@@ -28,6 +28,7 @@ class Navbar extends React.Component {
 
         this.state = {
             accountModalOpen: false,
+            fetchMessageOpen: false,
         };
     }
 
@@ -74,6 +75,8 @@ class Navbar extends React.Component {
 
         await Promise.all(fetchers);
 
+        this.setState({ fetchMessageOpen: true });
+
         this.props.finishFetching();
     }
 
@@ -106,6 +109,15 @@ class Navbar extends React.Component {
                     </IconButton>
                 </Toolbar>
                 <AccountDialog open={this.state.accountModalOpen} onClose={this.accountModalClosed} />
+                <Snackbar
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                    open={this.state.fetchMessageOpen}
+                    onClose={() => this.setState({ fetchMessageOpen: false })}
+                    message="Content updated"
+                    autoHideDuration={3000}
+                    disableWindowBlurListener
+                    key="fetch-status"
+                />
             </AppBar>
         );
     }
