@@ -9,8 +9,12 @@ import { fetchTasks } from '@logan/fe-shared/store/tasks';
 import { fetchAssignments } from '@logan/fe-shared/store/assignments';
 import { fetchSchedule } from '@logan/fe-shared/store/schedule';
 import { fetchReminders } from '@logan/fe-shared/store/reminders';
+import UpdateTimer from '@logan/fe-shared/utils/update-timer';
+import { dateUtils } from '@logan/core';
 import styles from './navbar.module.scss';
 import AccountDialog from './account-dialog';
+
+const FETCH_INTERVAL = 10;
 
 class Navbar extends React.Component {
     constructor(props) {
@@ -20,17 +24,44 @@ class Navbar extends React.Component {
         this.openAccountModal = this.openAccountModal.bind(this);
         this.accountModalClosed = this.accountModalClosed.bind(this);
 
+        this.timer = new UpdateTimer(FETCH_INTERVAL * 1000, this.updateTimerCallback.bind(this));
+
         this.state = {
             accountModalOpen: false,
         };
     }
 
     componentDidMount() {
-        this.fetchAll();
+        if (!this.props.lastFetch) {
+            this.timer.fire();
+        } else {
+            const lastFetchDate = dateUtils.toDateTime(this.props.lastFetch);
+            const now = dateUtils.dayjs();
+
+            if (lastFetchDate.isSameOrBefore(now.subtract(FETCH_INTERVAL, 'second'))) {
+                this.timer.fire();
+            }
+        }
+    }
+
+    async updateTimerCallback() {
+        if (this.props.fetchIsBlocked) {
+            this.timer.procrastinate(100);
+            return;
+        }
+
+        await this.fetchAll();
+
+        this.timer.reset();
     }
 
     async fetchAll() {
-        if (!this.props.canFetch) return;
+        if (!this.props.canFetch) {
+            console.debug('Cannot fetch');
+            return;
+        }
+
+        console.debug('Fetching');
 
         this.props.beginFetching();
 
@@ -64,9 +95,11 @@ class Navbar extends React.Component {
                     <div className={styles.flexibleSpace} />
                     {this.props.buttons}
                     <Tooltip title="Refresh">
-                        <IconButton disabled={!this.props.canFetch} onClick={this.fetchAll} color="inherit">
-                            <SyncIcon />
-                        </IconButton>
+                        <span>
+                            <IconButton disabled={!this.props.canFetch} onClick={this.fetchAll} color="inherit">
+                                <SyncIcon />
+                            </IconButton>
+                        </span>
                     </Tooltip>
                     <IconButton onClick={this.openAccountModal} color="inherit">
                         <AccountCircleIcon />
@@ -90,6 +123,7 @@ Navbar.propTypes = {
     isFetching: PropTypes.bool,
     fetchIsBlocked: PropTypes.bool,
     canFetch: PropTypes.bool,
+    lastFetch: PropTypes.string,
 };
 
 const mapStateToProps = state => {
@@ -101,6 +135,7 @@ const mapStateToProps = state => {
         isFetching,
         fetchIsBlocked,
         canFetch,
+        lastFetch: state.fetchStatus.lastFetch,
     };
 };
 

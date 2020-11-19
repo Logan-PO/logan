@@ -4,8 +4,9 @@ export default class UpdateTimer {
         this._callback = callback;
     }
 
-    start() {
-        this._id = setTimeout(this.fire.bind(this), this._timeout);
+    start(procrastinationTimeout) {
+        const timeoutToUse = procrastinationTimeout === undefined ? this._timeout : procrastinationTimeout;
+        this._id = setTimeout(this.fire.bind(this), timeoutToUse);
     }
 
     stop() {
@@ -19,5 +20,10 @@ export default class UpdateTimer {
 
     fire() {
         this._callback();
+    }
+
+    procrastinate(offset) {
+        this.stop();
+        this.start(offset);
     }
 }
