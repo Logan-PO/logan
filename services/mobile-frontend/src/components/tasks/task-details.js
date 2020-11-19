@@ -12,15 +12,23 @@ import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
 import priorities from '../shared/priority-constants';
 import ViewController from '../shared/view-controller';
-import { typographyStyles } from '../shared/typography';
+import { colorStyles, typographyStyles } from '../shared/typography';
+import DueDatePicker from '../shared/pickers/due-date-picker';
 
 class TaskDetails extends Editor {
     constructor(props) {
         super(props, { id: 'tid', entity: 'task', mobile: true });
 
+        this.toggleDueDatePicker = this.toggleDueDatePicker.bind(this);
+
         this.state = {
             task: props.getTask(props.route.params.tid),
+            dueDatePickerOpen: false,
         };
+    }
+
+    toggleDueDatePicker() {
+        this.setState({ dueDatePickerOpen: !this.state.dueDatePickerOpen });
     }
 
     selectEntity(id) {
@@ -86,6 +94,40 @@ class TaskDetails extends Editor {
                             />
                         </View>
                     </View>
+                    <List.Item
+                        style={{ backgroundColor: 'white', paddingTop: 12, paddingBottom: 6 }}
+                        title={
+                            <View
+                                style={{
+                                    height: '100%',
+                                    width: '100%',
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    paddingRight: 8,
+                                }}
+                            >
+                                <Text style={{ ...typographyStyles.body }}>Due Date</Text>
+                                <Text
+                                    style={{
+                                        ...typographyStyles.body,
+                                        ...colorStyles.secondary,
+                                    }}
+                                >
+                                    {dateUtils.readableDueDate(this.state.task.dueDate)}
+                                </Text>
+                            </View>
+                        }
+                        onPress={this.toggleDueDatePicker}
+                    />
+                    {this.state.dueDatePickerOpen && (
+                        <View style={{ backgroundColor: 'white', paddingBottom: 12 }}>
+                            <DueDatePicker
+                                value={this.state.task.dueDate}
+                                onChange={this.handleChange.bind(this, 'dueDate')}
+                            />
+                        </View>
+                    )}
                     <List.Item
                         style={{ backgroundColor: 'white' }}
                         title={
