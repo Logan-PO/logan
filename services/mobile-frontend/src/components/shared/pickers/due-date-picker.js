@@ -54,15 +54,17 @@ class DueDatePicker extends React.Component {
     render() {
         return (
             <View style={{ backgroundColor: 'white' }}>
-                <View style={{ paddingHorizontal: 16 }}>
-                    <SegmentedControl
-                        selectedIndex={this._segmentedControlValue()}
-                        values={['On date', 'ASAP', 'Eventually']}
-                        onChange={this.handleTypeChange}
-                    />
-                </View>
+                {!this.props.datesOnly && (
+                    <View style={{ paddingHorizontal: 16 }}>
+                        <SegmentedControl
+                            selectedIndex={this._segmentedControlValue()}
+                            values={['On date', 'ASAP', 'Eventually']}
+                            onChange={this.handleTypeChange}
+                        />
+                    </View>
+                )}
                 {this.state.currentType === 'date' && (
-                    <View style={{ marginTop: 6 }}>
+                    <View style={{ marginTop: this.props.datesOnly ? 0 : 6 }}>
                         <Calendar
                             current={this.state.currentDate}
                             onDayPress={this.handleDateChange}
