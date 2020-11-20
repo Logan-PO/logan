@@ -10,7 +10,10 @@ class PriorityDisplay extends React.Component {
             _.find(_.values(priorities), ([num]) => num === this.props.priority),
             ['white', 'white']
         );
+
         const style = {
+            position: 'absolute',
+            flex: 0,
             width: 4,
             height: '100%',
             backgroundColor: p[1],
