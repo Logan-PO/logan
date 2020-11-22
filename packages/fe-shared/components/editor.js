@@ -19,11 +19,16 @@ class Editor extends React.Component {
 
         this._ownEntityId = this._ownEntityId.bind(this);
 
-        this.changesExist = false;
-        this.updateTimer = new UpdateTimer(config.interval || 1000, () => {
-            this.updateEntity(this.state[this._entity]);
+        this.isEditor = props.mode !== Editor.Mode.Create;
+        this.isCreator = props.mode === Editor.Mode.Create;
+
+        if (this.isEditor) {
             this.changesExist = false;
-        });
+            this.updateTimer = new UpdateTimer(config.interval || 1000, () => {
+                this.updateEntity(this.state[this._entity]);
+                this.changesExist = false;
+            });
+        }
 
         if (this._isMobile && props.navigation) {
             props.navigation.addListener('blur', this._componentWillExit.bind(this));
@@ -67,7 +72,9 @@ class Editor extends React.Component {
     }
 
     handleChange(prop, e) {
-        this.changesExist = true;
+        if (this.isEditor) {
+            this.changesExist = true;
+        }
 
         const changes = {};
 
@@ -76,12 +83,14 @@ class Editor extends React.Component {
         // Update the state in advance, to avoid the cursor jump bug
         this._applyChangesToState(changes);
 
-        this.updateEntityLocal({
-            id: this._ownEntityId(),
-            changes,
-        });
+        if (this.isEditor) {
+            this.updateEntityLocal({
+                id: this._ownEntityId(),
+                changes,
+            });
 
-        this.updateTimer.reset();
+            this.updateTimer.reset();
+        }
     }
 
     processChange(changes, prop, e) {
@@ -94,11 +103,15 @@ class Editor extends React.Component {
     }
 
     componentDidMount() {
-        const entity = this.selectEntity(this._ownEntityId());
-        this.updateCurrentEntityState(entity);
+        if (this.isEditor) {
+            const entity = this.selectEntity(this._ownEntityId());
+            this.updateCurrentEntityState(entity);
+        }
     }
 
     componentDidUpdate(prevProps) {
+        if (this.isCreator) return;
+
         const currentId = this._ownEntityId();
         const pastId = this._ownEntityId(prevProps);
 
@@ -124,8 +137,18 @@ class Editor extends React.Component {
     }
 }
 
+Editor.Mode = {
+    Edit: 'edit',
+    Create: 'create',
+};
+
 Editor.propTypes = {
     navigation: PropTypes.object,
+    mode: PropTypes.oneOf(_.values(Editor.Mode)),
+};
+
+Editor.defaultProps = {
+    mode: Editor.Mode.Edit,
 };
 
 export default Editor;
