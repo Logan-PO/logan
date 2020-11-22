@@ -1,7 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { createStackNavigator } from '@react-navigation/stack';
 import CoursePicker from '../shared/pickers/course-picker';
 import PriorityPicker from '../shared/pickers/priority-picker';
@@ -23,17 +20,4 @@ class TasksScreen extends React.Component {
     }
 }
 
-TasksScreen.propTypes = {
-    tasks: PropTypes.array,
-    fetchTasks: PropTypes.func,
-};
-
-const mapStateToProps = state => ({
-    tasks: getTasksSelectors(state.tasks).selectAll(),
-});
-
-const mapDispatchToProps = {
-    fetchTasks,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TasksScreen);
+export default TasksScreen;
