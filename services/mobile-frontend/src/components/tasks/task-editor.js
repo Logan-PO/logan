@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
+import { View, LayoutAnimation } from 'react-native';
 import { Text, TextInput, Checkbox, Colors } from 'react-native-paper';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
@@ -36,11 +36,44 @@ class TaskEditor extends Editor {
         this.state = {
             task,
             dueDatePickerOpen: false,
+            dueDatePickerHeight: 0,
         };
     }
 
     toggleDueDatePicker() {
-        this.setState({ dueDatePickerOpen: !this.state.dueDatePickerOpen });
+        if (this.state.dueDatePickerOpen) {
+            return this.closeDatePicker();
+        } else {
+            return this.openDatePicker();
+        }
+    }
+
+    async openDatePicker(duration = 500) {
+        await this.setStateSync({
+            dueDatePickerOpen: true,
+            dueDatePickerHeight: 0,
+        });
+
+        LayoutAnimation.configureNext(
+            LayoutAnimation.create(duration, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
+        );
+
+        this.setState({ dueDatePickerHeight: 'auto' });
+
+        return new Promise(resolve => setTimeout(resolve, duration));
+    }
+
+    async closeDatePicker(duration = 200) {
+        LayoutAnimation.configureNext(
+            LayoutAnimation.create(duration, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
+        );
+
+        this.setState({
+            dueDatePickerOpen: false,
+            dueDatePickerHeight: 0,
+        });
+
+        return new Promise(resolve => setTimeout(resolve, duration));
     }
 
     selectEntity(id) {
@@ -114,14 +147,21 @@ class TaskEditor extends Editor {
                     }
                     onPress={this.toggleDueDatePicker}
                 />
-                {this.state.dueDatePickerOpen && (
-                    <View style={{ backgroundColor: 'white', paddingBottom: 12 }}>
-                        <DueDatePicker
-                            value={this.state.task.dueDate}
-                            onChange={this.handleChange.bind(this, 'dueDate')}
-                        />
-                    </View>
-                )}
+                <View style={{ overflow: 'hidden', height: this.state.dueDatePickerHeight, backgroundColor: 'white' }}>
+                    {this.state.dueDatePickerOpen && (
+                        <View
+                            style={{
+                                height: this.state.dueDatePickerHeight,
+                                paddingBottom: 12,
+                            }}
+                        >
+                            <DueDatePicker
+                                value={this.state.task.dueDate}
+                                onChange={this.handleChange.bind(this, 'dueDate')}
+                            />
+                        </View>
+                    )}
+                </View>
                 <ListItem
                     showRightArrow
                     leftContent={<Text style={{ ...typographyStyles.body }}>Course</Text>}
