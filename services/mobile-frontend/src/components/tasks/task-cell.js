@@ -78,6 +78,12 @@ class TaskCell extends React.Component {
         }
     }
 
+    deletePressed() {
+        if (this.props.onDeletePressed) {
+            this.props.onDeletePressed(this.state.task);
+        }
+    }
+
     render() {
         if (!this.state.task) return <ListItem />;
 
@@ -129,7 +135,7 @@ class TaskCell extends React.Component {
                     {
                         icon: 'delete',
                         backgroundColor: 'red',
-                        action: () => this.props.onDelete && this.props.onDelete(this.state.task),
+                        action: this.deletePressed.bind(this),
                     },
                 ]}
             />
