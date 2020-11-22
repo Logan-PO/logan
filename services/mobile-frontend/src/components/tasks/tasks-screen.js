@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { createStackNavigator } from '@react-navigation/stack';
-import TasksList from '../components/tasks/tasks-list';
-import TaskDetails from '../components/tasks/task-details';
-import CoursePicker from '../components/shared/pickers/course-picker';
-import PriorityPicker from '../components/shared/pickers/priority-picker';
+import CoursePicker from '../shared/pickers/course-picker';
+import PriorityPicker from '../shared/pickers/priority-picker';
+import TasksList from './tasks-list';
+import TaskDetails from './task-details';
 
 const Stack = createStackNavigator();
 
