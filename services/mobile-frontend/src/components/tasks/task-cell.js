@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { Checkbox } from 'react-native-paper';
+import { Checkbox, Colors } from 'react-native-paper';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
@@ -18,6 +18,7 @@ class TaskCell extends React.Component {
         super(props);
 
         this.check = this.check.bind(this);
+        this.moveToToday = this.moveToToday.bind(this);
 
         this.state = {
             task: props.getTask(props.tid),
@@ -34,6 +35,10 @@ class TaskCell extends React.Component {
 
     check() {
         this.handleChange('complete', !this.state.task.complete);
+    }
+
+    moveToToday() {
+        this.handleChange('dueDate', dateUtils.formatAsDate(dateUtils.dayjs()));
     }
 
     handleChange(prop, newValue) {
@@ -132,6 +137,13 @@ class TaskCell extends React.Component {
                 }
                 onPress={this.props.onPress}
                 actions={[
+                    this.shouldShowOverdueLabel()
+                        ? {
+                              icon: 'arrow-downward',
+                              backgroundColor: Colors.blue500,
+                              action: this.moveToToday,
+                          }
+                        : undefined,
                     {
                         icon: 'delete',
                         backgroundColor: 'red',
