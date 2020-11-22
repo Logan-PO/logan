@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { Text, List, Checkbox } from 'react-native-paper';
+import { Text, Checkbox } from 'react-native-paper';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
@@ -11,13 +11,13 @@ import { dateUtils } from '@logan/core';
 import PriorityDisplay from '../shared/displays/priority-display';
 import CourseLabel from '../shared/displays/course-label';
 import { typographyStyles, colorStyles } from '../shared/typography';
+import ListItem from '../shared/list-item';
 
 class TaskCell extends React.Component {
     constructor(props) {
         super(props);
 
         this.check = this.check.bind(this);
-        this.selected = this.selected.bind(this);
 
         this.state = {
             task: props.getTask(props.tid),
@@ -30,10 +30,6 @@ class TaskCell extends React.Component {
         if (!_.isEqual(storeTask, this.state.task)) {
             this.setState({ task: storeTask });
         }
-    }
-
-    selected() {
-        this.props.onPress && this.props.onPress(this.props.tid);
     }
 
     check() {
@@ -82,62 +78,54 @@ class TaskCell extends React.Component {
         }
     }
 
-    renderContent() {
+    render() {
+        if (!this.state.task) return <ListItem />;
+
         const checkboxStatus = this.state.task.complete ? 'checked' : 'unchecked';
         const relatedAssignment = this.props.getAssignment(this.state.task.aid);
         const course = this.props.getCourse(relatedAssignment ? relatedAssignment.cid : this.state.task.cid);
 
         return (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Checkbox.Android status={checkboxStatus} onPress={this.check} color={course && course.color} />
-                <View style={{ flexDirection: 'column', marginLeft: 8 }}>
-                    {(course || relatedAssignment) && (
-                        <View style={{ flexDirection: 'row', marginBottom: 2 }}>
-                            {course && <CourseLabel cid={course.cid} />}
-                            {relatedAssignment && (
-                                <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
-                                    {course && relatedAssignment && ' / '}
-                                    {relatedAssignment.title}
-                                </Text>
+            <ListItem
+                beforeContent={<PriorityDisplay priority={this.state.task.priority} />}
+                contentStyle={{ paddingLeft: 12 }}
+                leftContent={
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Checkbox.Android status={checkboxStatus} onPress={this.check} color={course && course.color} />
+                        <View style={{ flexDirection: 'column', marginLeft: 8 }}>
+                            {(course || relatedAssignment) && (
+                                <View style={{ flexDirection: 'row', marginBottom: 2 }}>
+                                    {course && <CourseLabel cid={course.cid} />}
+                                    {relatedAssignment && (
+                                        <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
+                                            {course && relatedAssignment && ' / '}
+                                            {relatedAssignment.title}
+                                        </Text>
+                                    )}
+                                </View>
+                            )}
+                            <View>
+                                <Text style={{ ...typographyStyles.body }}>{this.state.task.title}</Text>
+                            </View>
+                            {this.shouldShowOverdueLabel() && (
+                                <View style={{ marginTop: 2 }}>
+                                    <Text style={{ ...typographyStyles.body2, ...colorStyles.red }} allowFontScaling>
+                                        {this.overdueLabelContent()}
+                                    </Text>
+                                </View>
+                            )}
+                            {!_.isEmpty(this.state.task.description) && (
+                                <View style={{ marginTop: 2 }}>
+                                    <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
+                                        {this.state.task.description}
+                                    </Text>
+                                </View>
                             )}
                         </View>
-                    )}
-                    <View>
-                        <Text style={{ ...typographyStyles.body }}>{this.state.task.title}</Text>
                     </View>
-                    {this.shouldShowOverdueLabel() && (
-                        <View style={{ marginTop: 2 }}>
-                            <Text style={{ ...typographyStyles.body2, ...colorStyles.red }} allowFontScaling>
-                                {this.overdueLabelContent()}
-                            </Text>
-                        </View>
-                    )}
-                    {!_.isEmpty(this.state.task.description) && (
-                        <View style={{ marginTop: 2 }}>
-                            <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
-                                {this.state.task.description}
-                            </Text>
-                        </View>
-                    )}
-                </View>
-            </View>
-        );
-    }
-
-    render() {
-        if (!this.state.task) return <List.Item />;
-
-        return (
-            <View style={{ flexDirection: 'row' }}>
-                <PriorityDisplay priority={this.state.task.priority} />
-                <View style={{ flexGrow: 1 }}>
-                    <List.Item
-                        style={{ backgroundColor: 'white', paddingHorizontal: 0 }}
-                        onPress={this.selected}
-                        title={this.renderContent()}
-                    />
-                </View>
-            </View>
+                }
+                onPress={this.props.onPress}
+            />
         );
     }
 }

@@ -3,8 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { Text, TextInput, Checkbox, List, Colors } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Text, TextInput, Checkbox, Colors } from 'react-native-paper';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
@@ -13,6 +12,7 @@ import Editor from '@logan/fe-shared/components/editor';
 import priorities from '../shared/priority-constants';
 import { colorStyles, typographyStyles } from '../shared/typography';
 import DueDatePicker from '../shared/pickers/due-date-picker';
+import ListItem from '../shared/list-item';
 
 // A generic task editor, to be used for creation or editing in a ViewController
 class TaskEditor extends Editor {
@@ -105,29 +105,12 @@ class TaskEditor extends Editor {
                         />
                     </View>
                 </View>
-                <List.Item
-                    style={{ backgroundColor: 'white', paddingTop: 12, paddingBottom: 6 }}
-                    title={
-                        <View
-                            style={{
-                                height: '100%',
-                                width: '100%',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                paddingRight: 8,
-                            }}
-                        >
-                            <Text style={{ ...typographyStyles.body }}>Due Date</Text>
-                            <Text
-                                style={{
-                                    ...typographyStyles.body,
-                                    ...colorStyles.secondary,
-                                }}
-                            >
-                                {dateUtils.readableDueDate(this.state.task.dueDate)}
-                            </Text>
-                        </View>
+                <ListItem
+                    leftContent={<Text style={typographyStyles.body}>Due Date</Text>}
+                    rightContent={
+                        <Text style={{ ...typographyStyles.body, ...colorStyles.secondary }}>
+                            {dateUtils.readableDueDate(this.state.task.dueDate)}
+                        </Text>
                     }
                     onPress={this.toggleDueDatePicker}
                 />
@@ -139,32 +122,20 @@ class TaskEditor extends Editor {
                         />
                     </View>
                 )}
-                <List.Item
-                    style={{ backgroundColor: 'white' }}
-                    title={
-                        <View
+                <ListItem
+                    showRightArrow
+                    leftContent={<Text style={{ ...typographyStyles.body }}>Course</Text>}
+                    rightContent={
+                        <Text
                             style={{
-                                height: '100%',
-                                width: '100%',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                paddingRight: 4,
+                                ...typographyStyles.body,
+                                color: _.get(course, 'color', Colors.grey500),
+                                fontWeight: course ? 'bold' : 'normal',
                             }}
                         >
-                            <Text style={{ ...typographyStyles.body }}>Course</Text>
-                            <Text
-                                style={{
-                                    ...typographyStyles.body,
-                                    color: _.get(course, 'color', Colors.grey500),
-                                    fontWeight: course ? 'bold' : 'normal',
-                                }}
-                            >
-                                {course ? course.title : 'None'}
-                            </Text>
-                        </View>
+                            {course ? course.title : 'None'}
+                        </Text>
                     }
-                    right={() => <Icon name="chevron-right" size={24} style={{ color: 'gray', alignSelf: 'center' }} />}
                     onPress={() =>
                         this.props.navigation.navigate('Course Picker', {
                             cid: _.get(course, 'cid'),
@@ -172,32 +143,20 @@ class TaskEditor extends Editor {
                         })
                     }
                 />
-                <List.Item
-                    style={{ backgroundColor: 'white' }}
-                    title={
-                        <View
+                <ListItem
+                    showRightArrow
+                    leftContent={<Text style={typographyStyles.body}>Priority</Text>}
+                    rightContent={
+                        <Text
                             style={{
-                                height: '100%',
-                                width: '100%',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                paddingRight: 4,
+                                ...typographyStyles.body,
+                                fontWeight: 'bold',
+                                color: priority.color,
                             }}
                         >
-                            <Text style={{ ...typographyStyles.body }}>Priority</Text>
-                            <Text
-                                style={{
-                                    ...typographyStyles.body,
-                                    fontWeight: 'bold',
-                                    color: priority.color,
-                                }}
-                            >
-                                {priority.name}
-                            </Text>
-                        </View>
+                            {priority.name}
+                        </Text>
                     }
-                    right={() => <Icon name="chevron-right" size={24} style={{ color: 'gray', alignSelf: 'center' }} />}
                     onPress={() =>
                         this.props.navigation.navigate('Priority Picker', {
                             value: this.state.task.priority,
