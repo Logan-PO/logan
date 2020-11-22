@@ -31,17 +31,24 @@ class TasksList extends React.Component {
         this.props.navigation.push('Task', { tid });
     }
 
-    openDeleteConfirmation(taskToDelete) {
-        this.setState({ taskToDelete });
+    openDeleteConfirmation(taskToDelete, callbacks) {
+        this.setState({
+            taskToDelete,
+            deleteConfirmationCallbacks: callbacks,
+        });
     }
 
     hideDeleteConfirmation() {
-        this.setState({ taskToDelete: undefined });
+        this.state.deleteConfirmationCallbacks.deny();
+        this.setState({ taskToDelete: undefined, deleteConfirmationCallbacks: undefined });
     }
 
-    confirmDeletion() {
-        this.props.deleteTask(this.state.taskToDelete);
-        this.setState({ taskToDelete: undefined });
+    async confirmDeletion() {
+        const callback = this.state.deleteConfirmationCallbacks.confirm;
+        const taskToDelete = this.state.taskToDelete;
+        this.setState({ taskToDelete: undefined, deleteConfirmationCallbacks: undefined });
+        await callback();
+        this.props.deleteTask(taskToDelete);
     }
 
     render() {

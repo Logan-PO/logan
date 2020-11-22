@@ -18,7 +18,7 @@ class TaskCell extends React.Component {
         super(props);
 
         this.check = this.check.bind(this);
-        this.moveToToday = this.moveToToday.bind(this);
+        this.listItem = React.createRef();
 
         this.state = {
             task: props.getTask(props.tid),
@@ -87,7 +87,7 @@ class TaskCell extends React.Component {
         const moveToTodayAction = {
             icon: 'arrow-downward',
             backgroundColor: Colors.blue500,
-            action: this.moveToToday,
+            action: this.moveToToday.bind(this),
         };
 
         const deleteAction = {
@@ -104,9 +104,12 @@ class TaskCell extends React.Component {
         return actions;
     }
 
-    deletePressed() {
+    async deletePressed() {
         if (this.props.onDeletePressed) {
-            this.props.onDeletePressed(this.state.task);
+            this.props.onDeletePressed(this.state.task, {
+                confirm: this.listItem.current.doDeleteAnimation,
+                deny: this.listItem.current.close,
+            });
         }
     }
 
@@ -119,6 +122,7 @@ class TaskCell extends React.Component {
 
         return (
             <ListItem
+                ref={this.listItem}
                 beforeContent={<PriorityDisplay priority={this.state.task.priority} />}
                 contentStyle={{ paddingLeft: 12 }}
                 leftContent={
