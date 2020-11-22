@@ -41,14 +41,16 @@ class TaskEditor extends Editor {
     }
 
     toggleDueDatePicker() {
+        const duration = 300;
+
         if (this.state.dueDatePickerOpen) {
-            return this.closeDatePicker();
+            return this.closeDatePicker(duration);
         } else {
-            return this.openDatePicker();
+            return this.openDatePicker(duration);
         }
     }
 
-    async openDatePicker(duration = 500) {
+    async openDatePicker(duration) {
         await this.setStateSync({
             dueDatePickerOpen: true,
             dueDatePickerHeight: 0,
@@ -63,7 +65,7 @@ class TaskEditor extends Editor {
         return new Promise(resolve => setTimeout(resolve, duration));
     }
 
-    async closeDatePicker(duration = 200) {
+    async closeDatePicker(duration) {
         LayoutAnimation.configureNext(
             LayoutAnimation.create(duration, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
         );
