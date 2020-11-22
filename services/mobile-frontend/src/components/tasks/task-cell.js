@@ -125,6 +125,13 @@ class TaskCell extends React.Component {
                     </View>
                 }
                 onPress={this.props.onPress}
+                actions={[
+                    {
+                        icon: 'delete',
+                        backgroundColor: 'red',
+                        action: () => this.props.onDelete && this.props.onDelete(this.state.task),
+                    },
+                ]}
             />
         );
     }
@@ -139,6 +146,7 @@ TaskCell.propTypes = {
     updateTaskLocal: PropTypes.func,
     showOverdueLabel: PropTypes.bool,
     onPress: PropTypes.func,
+    onDelete: PropTypes.func,
 };
 
 const mapStateToProps = state => ({

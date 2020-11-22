@@ -2,8 +2,9 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
-import { TouchableRipple } from 'react-native-paper';
+import { Text, TouchableRipple } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 const styles = StyleSheet.create({
     cell: {
@@ -37,9 +38,43 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         minHeight: 48,
     },
+    actionSet: {
+        flex: 0,
+        flexDirection: 'row',
+        backgroundColor: 'blue',
+        alignItems: 'stretch',
+    },
+    action: {
+        height: '100%',
+        justifyContent: 'center',
+        paddingVertical: 16,
+        paddingHorizontal: 18,
+    },
 });
 
 class ListItem extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.updateSwipeableRef = this.updateSwipeableRef.bind(this);
+        this.renderRightActions = this.renderRightActions.bind(this);
+    }
+
+    updateSwipeableRef(ref) {
+        this._swipeable = ref;
+    }
+
+    renderRightActions() {
+        if (!this.props.actions) return;
+        return (
+            <View style={styles.actionSet}>
+                {this.props.actions.map((props, i) => {
+                    return <Action key={i} swipeableRef={this._swipeable} {...props} />;
+                })}
+            </View>
+        );
+    }
+
     render() {
         const leftContentStyle = _.merge({ flex: 1 }, styles.content, this.props.contentStyle);
 
@@ -53,19 +88,23 @@ class ListItem extends React.Component {
         );
 
         return (
-            <TouchableRipple onPress={this.props.onPress} style={styles.cell}>
-                <View style={styles.root}>
-                    {this.props.beforeContent}
-                    <View style={styles.container}>
-                        <View style={styles.contentContainer}>
-                            <View style={leftContentStyle}>{this.props.leftContent}</View>
-                            <View style={rightContentStyle}>{this.props.rightContent}</View>
+            <Swipeable ref={this.updateSwipeableRef} renderRightActions={this.renderRightActions}>
+                <TouchableRipple onPress={this.props.onPress} style={styles.cell}>
+                    <View style={styles.root}>
+                        {this.props.beforeContent}
+                        <View style={styles.container}>
+                            <View style={styles.contentContainer}>
+                                <View style={leftContentStyle}>{this.props.leftContent}</View>
+                                <View style={rightContentStyle}>{this.props.rightContent}</View>
+                            </View>
+                            {this.props.showRightArrow && (
+                                <Icon name="chevron-right" size={24} style={styles.chevron} />
+                            )}
                         </View>
-                        {this.props.showRightArrow && <Icon name="chevron-right" size={24} style={styles.chevron} />}
+                        {this.props.afterContent}
                     </View>
-                    {this.props.afterContent}
-                </View>
-            </TouchableRipple>
+                </TouchableRipple>
+            </Swipeable>
         );
     }
 }
@@ -79,6 +118,43 @@ ListItem.propTypes = {
     showRightArrow: PropTypes.bool,
     beforeContent: PropTypes.object,
     afterContent: PropTypes.object,
+    actions: PropTypes.array,
+};
+
+class Action extends React.Component {
+    constructor(props) {
+        super(props);
+        if (props.icon && props.text) throw new Error('Pass either icon or text to an Action, but not both');
+
+        this.pressed = this.pressed.bind(this);
+    }
+
+    pressed() {
+        this.props.swipeableRef.close();
+        this.props.action && this.props.action();
+    }
+
+    render() {
+        const color = this.props.textColor || 'white';
+
+        return (
+            <TouchableRipple onPress={this.pressed}>
+                <View style={{ ...styles.action, backgroundColor: this.props.backgroundColor }}>
+                    {this.props.text && <Text style={{ color }}>{this.props.text}</Text>}
+                    {this.props.icon && <Icon name={this.props.icon} size={24} color={color} />}
+                </View>
+            </TouchableRipple>
+        );
+    }
+}
+
+Action.propTypes = {
+    swipeableRef: PropTypes.object,
+    icon: PropTypes.string,
+    text: PropTypes.string,
+    backgroundColor: PropTypes.string,
+    textColor: PropTypes.string,
+    action: PropTypes.func,
 };
 
 export default ListItem;

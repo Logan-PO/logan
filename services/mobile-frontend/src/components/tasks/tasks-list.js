@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { View, SectionList } from 'react-native';
 import { List, FAB } from 'react-native-paper';
 import SegmentedControl from '@react-native-community/segmented-control';
-import { getTasksSelectors } from '@logan/fe-shared/store/tasks';
+import { getTasksSelectors, deleteTask, deleteTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
 import theme from '../../globals/theme';
 import TaskCell from '../../components/tasks/task-cell';
@@ -65,6 +65,7 @@ class TasksList extends React.Component {
                             tid={item}
                             showOverdueLabel={!this.state.showingCompletedTasks}
                             onPress={() => this.openTask(item)}
+                            onDelete={task => this.props.deleteTask(task)}
                         />
                     )}
                     renderSectionHeader={({ section: { title } }) => (
@@ -94,10 +95,11 @@ TasksList.propTypes = {
     fetchTasks: PropTypes.func,
     navigation: PropTypes.object,
     route: PropTypes.object,
+    deleteTask: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
     tasks: getTasksSelectors(state.tasks).selectAll(),
 });
 
-export default connect(mapStateToProps, null)(TasksList);
+export default connect(mapStateToProps, { deleteTask, deleteTaskLocal })(TasksList);
