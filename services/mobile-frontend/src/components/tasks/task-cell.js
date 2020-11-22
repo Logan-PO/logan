@@ -3,14 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { Text, Checkbox } from 'react-native-paper';
+import { Checkbox } from 'react-native-paper';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import { dateUtils } from '@logan/core';
 import PriorityDisplay from '../shared/displays/priority-display';
 import CourseLabel from '../shared/displays/course-label';
-import { typographyStyles, colorStyles } from '../shared/typography';
+import Typography from '../shared/typography';
 import ListItem from '../shared/list-item';
 
 class TaskCell extends React.Component {
@@ -97,28 +97,28 @@ class TaskCell extends React.Component {
                                 <View style={{ flexDirection: 'row', marginBottom: 2 }}>
                                     {course && <CourseLabel cid={course.cid} />}
                                     {relatedAssignment && (
-                                        <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
+                                        <Typography variant="body2" color="secondary">
                                             {course && relatedAssignment && ' / '}
                                             {relatedAssignment.title}
-                                        </Text>
+                                        </Typography>
                                     )}
                                 </View>
                             )}
                             <View>
-                                <Text style={{ ...typographyStyles.body }}>{this.state.task.title}</Text>
+                                <Typography variant="body">{this.state.task.title}</Typography>
                             </View>
                             {this.shouldShowOverdueLabel() && (
                                 <View style={{ marginTop: 2 }}>
-                                    <Text style={{ ...typographyStyles.body2, ...colorStyles.red }} allowFontScaling>
+                                    <Typography variant="body2" color="error">
                                         {this.overdueLabelContent()}
-                                    </Text>
+                                    </Typography>
                                 </View>
                             )}
                             {!_.isEmpty(this.state.task.description) && (
                                 <View style={{ marginTop: 2 }}>
-                                    <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
+                                    <Typography variant="body2" color="secondary">
                                         {this.state.task.description}
-                                    </Text>
+                                    </Typography>
                                 </View>
                             )}
                         </View>
@@ -146,7 +146,7 @@ TaskCell.propTypes = {
     updateTaskLocal: PropTypes.func,
     showOverdueLabel: PropTypes.bool,
     onPress: PropTypes.func,
-    onDelete: PropTypes.func,
+    onDeletePressed: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
