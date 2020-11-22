@@ -35,6 +35,10 @@ class Editor extends React.Component {
         }
     }
 
+    async setStateSync(update) {
+        return new Promise(resolve => this.setState(update, resolve));
+    }
+
     _ownEntityId(props) {
         if (this._isMobile) {
             return _.get(props || this.props, ['route', 'params', this._id]);
@@ -71,7 +75,7 @@ class Editor extends React.Component {
         console.warn(`updateEntityLocal not implemented for ${this.constructor.name}`);
     }
 
-    handleChange(prop, e) {
+    async handleChange(prop, e) {
         if (this.isEditor) {
             this.changesExist = true;
         }
@@ -81,7 +85,7 @@ class Editor extends React.Component {
         this.processChange(changes, prop, e);
 
         // Update the state in advance, to avoid the cursor jump bug
-        this._applyChangesToState(changes);
+        await this._applyChangesToState(changes);
 
         if (this.isEditor) {
             this.updateEntityLocal({
@@ -91,6 +95,8 @@ class Editor extends React.Component {
 
             this.updateTimer.reset();
         }
+
+        this.props.onChange(this.state[this._entity]);
     }
 
     processChange(changes, prop, e) {
@@ -99,13 +105,17 @@ class Editor extends React.Component {
 
     _applyChangesToState(changes) {
         const updatedEntity = _.merge({}, this.state[this._entity], changes);
-        this.setState({ [this._entity]: updatedEntity });
+        return this.setStateSync({ [this._entity]: updatedEntity });
     }
 
     componentDidMount() {
         if (this.isEditor) {
             const entity = this.selectEntity(this._ownEntityId());
             this.updateCurrentEntityState(entity);
+        }
+
+        if (this.props.onChange) {
+            this.props.onChange(this.state[this._entity]);
         }
     }
 
@@ -145,10 +155,12 @@ Editor.Mode = {
 Editor.propTypes = {
     navigation: PropTypes.object,
     mode: PropTypes.oneOf(_.values(Editor.Mode)),
+    onChange: PropTypes.func,
 };
 
 Editor.defaultProps = {
     mode: Editor.Mode.Edit,
+    onChange: () => {},
 };
 
 export default Editor;
