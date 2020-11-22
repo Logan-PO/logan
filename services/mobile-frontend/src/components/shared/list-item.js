@@ -45,7 +45,6 @@ const styles = StyleSheet.create({
     actionSet: {
         flex: 0,
         flexDirection: 'row',
-        backgroundColor: 'blue',
         alignItems: 'stretch',
     },
     action: {
@@ -79,13 +78,15 @@ class ListItem extends React.Component {
     }
 
     async doDeleteAnimation() {
-        return new Promise(resolve => {
-            LayoutAnimation.configureNext(
-                LayoutAnimation.create(200, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.scaleY),
-                resolve
-            );
-            this.setState({ cellHeightValue: 0 });
-        });
+        const duration = 200;
+
+        LayoutAnimation.configureNext(
+            LayoutAnimation.create(duration, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.scaleY)
+        );
+
+        this.setState({ cellHeightValue: 0 });
+
+        return new Promise(resolve => setTimeout(resolve, duration));
     }
 
     renderRightActions() {
