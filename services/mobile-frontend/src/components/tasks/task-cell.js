@@ -83,6 +83,27 @@ class TaskCell extends React.Component {
         }
     }
 
+    actionsToShow() {
+        const moveToTodayAction = {
+            icon: 'arrow-downward',
+            backgroundColor: Colors.blue500,
+            action: this.moveToToday,
+        };
+
+        const deleteAction = {
+            icon: 'delete',
+            backgroundColor: 'red',
+            action: this.deletePressed.bind(this),
+        };
+
+        const actions = [];
+
+        if (this.shouldShowOverdueLabel()) actions.push(moveToTodayAction);
+        actions.push(deleteAction);
+
+        return actions;
+    }
+
     deletePressed() {
         if (this.props.onDeletePressed) {
             this.props.onDeletePressed(this.state.task);
@@ -136,20 +157,7 @@ class TaskCell extends React.Component {
                     </View>
                 }
                 onPress={this.props.onPress}
-                actions={[
-                    this.shouldShowOverdueLabel()
-                        ? {
-                              icon: 'arrow-downward',
-                              backgroundColor: Colors.blue500,
-                              action: this.moveToToday,
-                          }
-                        : undefined,
-                    {
-                        icon: 'delete',
-                        backgroundColor: 'red',
-                        action: this.deletePressed.bind(this),
-                    },
-                ]}
+                actions={this.actionsToShow()}
             />
         );
     }
