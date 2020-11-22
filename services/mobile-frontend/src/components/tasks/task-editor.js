@@ -114,32 +114,42 @@ class TaskEditor extends Editor {
 
         return (
             <View style={{ flex: 1 }}>
-                <View style={{ flexDirection: 'column', padding: 12, paddingBottom: 24, backgroundColor: 'white' }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-                        <Checkbox.Android
-                            status={this.state.task.complete ? 'checked' : 'unchecked'}
-                            onPress={() => this.handleChange('complete', !this.state.task.complete)}
-                            color={course && course.color}
-                        />
-                        <TextInput
-                            style={{ flexGrow: 1, backgroundColor: 'none' }}
-                            mode="flat"
-                            label="Title"
-                            value={this.state.task.title}
-                            onChangeText={this.handleChange.bind(this, 'title')}
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            multiline
-                            label="Description"
-                            mode="flat"
-                            style={{ backgroundColor: 'none' }}
-                            value={this.state.task.description}
-                            onChangeText={this.handleChange.bind(this, 'description')}
-                        />
-                    </View>
-                </View>
+                <ListItem
+                    leftContent={
+                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end' }}>
+                            <View style={{ flex: 0, paddingBottom: 2, paddingRight: 6 }}>
+                                <Checkbox.Android
+                                    status={this.state.task.complete ? 'checked' : 'unchecked'}
+                                    onPress={() => this.handleChange('complete', !this.state.task.complete)}
+                                    color={course && course.color}
+                                />
+                            </View>
+                            <TextInput
+                                style={{ paddingHorizontal: 0, flexGrow: 1, backgroundColor: 'none' }}
+                                mode="flat"
+                                label="Title"
+                                value={this.state.task.title}
+                                onChangeText={this.handleChange.bind(this, 'title')}
+                            />
+                        </View>
+                    }
+                    contentStyle={{ paddingVertical: 4, paddingLeft: 4 }}
+                />
+                <ListItem
+                    leftContent={
+                        <View style={{ flex: 1 }}>
+                            <TextInput
+                                multiline
+                                label="Description"
+                                mode="flat"
+                                style={{ backgroundColor: 'none', paddingHorizontal: 0 }}
+                                value={this.state.task.description}
+                                onChangeText={this.handleChange.bind(this, 'description')}
+                            />
+                        </View>
+                    }
+                    contentStyle={{ paddingTop: 4 }}
+                />
                 <ListItem
                     leftContent={<Text style={typographyStyles.body}>Due Date</Text>}
                     rightContent={
