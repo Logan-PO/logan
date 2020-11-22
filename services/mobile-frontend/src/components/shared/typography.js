@@ -1,12 +1,14 @@
-import { Colors } from 'react-native-paper';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Text, Colors } from 'react-native-paper';
 
 export const typographyStyles = {
     h1: {
-        fontWeight: 'light',
+        fontWeight: '300',
         fontSize: 96,
     },
     h2: {
-        fontWeight: 'light',
+        fontWeight: '300',
         fontSize: 60,
     },
     h3: {
@@ -19,14 +21,14 @@ export const typographyStyles = {
         fontSize: 24,
     },
     h6: {
-        fontWeight: 'medium',
+        fontWeight: '500',
         fontSize: 20,
     },
     subtitle1: {
         fontSize: 16,
     },
     subtitle2: {
-        fontWeight: 'medium',
+        fontWeight: '500',
         fontSize: 14,
     },
     body: {
@@ -34,11 +36,13 @@ export const typographyStyles = {
     },
     body2: {
         fontSize: 14,
+        letterSpacing: 0,
     },
     button: {
         fontSize: 14,
-        fontWeight: 'medium',
+        fontWeight: '500',
         textTransform: 'uppercase',
+        letterSpacing: 0.5,
     },
     caption: {
         fontSize: 12,
@@ -59,7 +63,26 @@ export const colorStyles = {
     detail: {
         color: Colors.grey600,
     },
-    red: {
+    error: {
         color: Colors.red500,
     },
 };
+
+const Typography = ({ variant = 'body', color = 'primary', children, ...rest }) => {
+    const variantStyle = typographyStyles[variant];
+    const colorStyle = color ? colorStyles[color] || { color } : colorStyles.primary;
+
+    return (
+        <Text {...rest} style={{ ...variantStyle, ...colorStyle }}>
+            {children}
+        </Text>
+    );
+};
+
+Typography.propTypes = {
+    variant: PropTypes.oneOf(Object.keys(typographyStyles)),
+    color: PropTypes.string,
+    children: PropTypes.node,
+};
+
+export default Typography;
