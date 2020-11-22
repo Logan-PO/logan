@@ -41,7 +41,7 @@ class TaskCell extends React.Component {
         this.handleChange('dueDate', dateUtils.formatAsDate(dateUtils.dayjs()));
     }
 
-    handleChange(prop, newValue) {
+    async handleChange(prop, newValue) {
         const changes = {};
 
         changes[prop] = newValue;
@@ -55,6 +55,8 @@ class TaskCell extends React.Component {
         this.setState({
             task: afterUpdates,
         });
+
+        await this.listItem.current.collapse();
 
         this.props.updateTaskLocal({
             id: this.props.tid,
@@ -107,7 +109,7 @@ class TaskCell extends React.Component {
     async deletePressed() {
         if (this.props.onDeletePressed) {
             this.props.onDeletePressed(this.state.task, {
-                confirm: this.listItem.current.doDeleteAnimation,
+                confirm: this.listItem.current.collapse,
                 deny: this.listItem.current.close,
             });
         }

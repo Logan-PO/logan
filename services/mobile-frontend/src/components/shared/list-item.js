@@ -61,11 +61,12 @@ class ListItem extends React.Component {
 
         this.updateSwipeableRef = this.updateSwipeableRef.bind(this);
         this.renderRightActions = this.renderRightActions.bind(this);
-        this.doDeleteAnimation = this.doDeleteAnimation.bind(this);
+        this.collapse = this.collapse.bind(this);
         this.close = this.close.bind(this);
 
         this.state = {
             cellHeightValue: 'auto',
+            offsetLeft: 0,
         };
     }
 
@@ -77,7 +78,7 @@ class ListItem extends React.Component {
         this._swipeable.close();
     }
 
-    async doDeleteAnimation() {
+    async collapse() {
         const duration = 200;
 
         LayoutAnimation.configureNext(
@@ -116,6 +117,7 @@ class ListItem extends React.Component {
             <View
                 style={{
                     ...styles.animationContainer,
+                    paddingLeft: this.state.offsetLeft,
                     height: this.state.cellHeightValue,
                 }}
             >
