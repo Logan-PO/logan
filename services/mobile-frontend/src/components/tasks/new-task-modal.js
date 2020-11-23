@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, ScrollView } from 'react-native';
-import { Text, TextInput, Checkbox, List, Colors, Appbar } from 'react-native-paper';
+import { Text, TextInput, Checkbox, Colors, Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, createTask } from '@logan/fe-shared/store/tasks';
@@ -11,6 +11,7 @@ import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import priorities from '../shared/priority-constants';
 import ViewController from '../shared/view-controller';
 import { typographyStyles } from '../shared/typography';
+import ListItem from '../shared/list-item';
 
 class NewTaskModal extends React.Component {
     constructor(props) {
@@ -100,34 +101,20 @@ class NewTaskModal extends React.Component {
                             />
                         </View>
                     </View>
-                    <List.Item
-                        style={{ backgroundColor: 'white' }}
-                        title={
-                            <View
+                    <ListItem
+                        showRightArrow
+                        leftContent={<Text style={{ ...typographyStyles.body }}>Course</Text>}
+                        rightContent={
+                            <Text
                                 style={{
-                                    height: '100%',
-                                    width: '100%',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    paddingRight: 4,
+                                    ...typographyStyles.body,
+                                    color: _.get(course, 'color', Colors.grey500),
+                                    fontWeight: course ? 'bold' : 'normal',
                                 }}
                             >
-                                <Text style={{ ...typographyStyles.body }}>Course</Text>
-                                <Text
-                                    style={{
-                                        ...typographyStyles.body,
-                                        color: _.get(course, 'color', Colors.grey500),
-                                        fontWeight: course ? 'bold' : 'normal',
-                                    }}
-                                >
-                                    {course ? course.title : 'None'}
-                                </Text>
-                            </View>
+                                {course ? course.title : 'None'}
+                            </Text>
                         }
-                        right={() => (
-                            <Icon name="chevron-right" size={24} style={{ color: 'gray', alignSelf: 'center' }} />
-                        )}
                         onPress={() =>
                             this.props.navigation.navigate('Course Picker', {
                                 cid: _.get(course, 'cid'),
@@ -135,34 +122,20 @@ class NewTaskModal extends React.Component {
                             })
                         }
                     />
-                    <List.Item
-                        style={{ backgroundColor: 'white' }}
-                        title={
-                            <View
+                    <ListItem
+                        showRightArrow
+                        leftContent={<Text style={typographyStyles.body}>Priority</Text>}
+                        rightContent={
+                            <Text
                                 style={{
-                                    height: '100%',
-                                    width: '100%',
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    paddingRight: 4,
+                                    ...typographyStyles.body,
+                                    fontWeight: 'bold',
+                                    color: priority.color,
                                 }}
                             >
-                                <Text style={{ ...typographyStyles.body }}>Priority</Text>
-                                <Text
-                                    style={{
-                                        ...typographyStyles.body,
-                                        fontWeight: 'bold',
-                                        color: priority.color,
-                                    }}
-                                >
-                                    {priority.name}
-                                </Text>
-                            </View>
+                                {priority.name}
+                            </Text>
                         }
-                        right={() => (
-                            <Icon name="chevron-right" size={24} style={{ color: 'gray', alignSelf: 'center' }} />
-                        )}
                         onPress={() =>
                             this.props.navigation.navigate('Priority Picker', {
                                 value: this.state.task.priority,

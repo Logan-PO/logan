@@ -56,6 +56,9 @@ export const colorStyles = {
     secondary: {
         color: Colors.grey500,
     },
+    detail: {
+        color: Colors.grey600,
+    },
     red: {
         color: Colors.red500,
     },
