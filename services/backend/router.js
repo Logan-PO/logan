@@ -2,14 +2,14 @@ const _ = require('lodash');
 const bodyParser = require('body-parser');
 const auth = require('./utils/auth');
 const { LoganError } = require('./utils/errors');
-const controllers = require('./src/controllers');
+const controllers = require('./src/route-controllers');
 
 const unauthedRoutes = {
     '/ping': {
-        get: require('./src/ping').ping,
+        get: require('./src/route-controllers/ping').ping,
     },
     '/auth/verify': {
-        post: require('./src/verify-id-token').verifyIdToken,
+        post: require('./src/route-controllers/verify-id-token').verifyIdToken,
     },
     '/users': {
         post: {
