@@ -19,15 +19,24 @@ class Editor extends React.Component {
 
         this._ownEntityId = this._ownEntityId.bind(this);
 
-        this.changesExist = false;
-        this.updateTimer = new UpdateTimer(config.interval || 1000, () => {
-            this.updateEntity(this.state[this._entity]);
+        this.isEditor = props.mode !== Editor.Mode.Create;
+        this.isCreator = props.mode === Editor.Mode.Create;
+
+        if (this.isEditor) {
             this.changesExist = false;
-        });
+            this.updateTimer = new UpdateTimer(config.interval || 1000, () => {
+                this.updateEntity(this.state[this._entity]);
+                this.changesExist = false;
+            });
+        }
 
         if (this._isMobile && props.navigation) {
             props.navigation.addListener('blur', this._componentWillExit.bind(this));
         }
+    }
+
+    async setStateSync(update) {
+        return new Promise(resolve => this.setState(update, resolve));
     }
 
     _ownEntityId(props) {
@@ -66,22 +75,28 @@ class Editor extends React.Component {
         console.warn(`updateEntityLocal not implemented for ${this.constructor.name}`);
     }
 
-    handleChange(prop, e) {
-        this.changesExist = true;
+    async handleChange(prop, e) {
+        if (this.isEditor) {
+            this.changesExist = true;
+        }
 
         const changes = {};
 
         this.processChange(changes, prop, e);
 
         // Update the state in advance, to avoid the cursor jump bug
-        this._applyChangesToState(changes);
+        await this._applyChangesToState(changes);
 
-        this.updateEntityLocal({
-            id: this._ownEntityId(),
-            changes,
-        });
+        if (this.isEditor) {
+            this.updateEntityLocal({
+                id: this._ownEntityId(),
+                changes,
+            });
 
-        this.updateTimer.reset();
+            this.updateTimer.reset();
+        }
+
+        this.props.onChange(this.state[this._entity]);
     }
 
     processChange(changes, prop, e) {
@@ -90,15 +105,23 @@ class Editor extends React.Component {
 
     _applyChangesToState(changes) {
         const updatedEntity = _.merge({}, this.state[this._entity], changes);
-        this.setState({ [this._entity]: updatedEntity });
+        return this.setStateSync({ [this._entity]: updatedEntity });
     }
 
     componentDidMount() {
-        const entity = this.selectEntity(this._ownEntityId());
-        this.updateCurrentEntityState(entity);
+        if (this.isEditor) {
+            const entity = this.selectEntity(this._ownEntityId());
+            this.updateCurrentEntityState(entity);
+        }
+
+        if (this.props.onChange) {
+            this.props.onChange(this.state[this._entity]);
+        }
     }
 
     componentDidUpdate(prevProps) {
+        if (this.isCreator) return;
+
         const currentId = this._ownEntityId();
         const pastId = this._ownEntityId(prevProps);
 
@@ -124,8 +147,20 @@ class Editor extends React.Component {
     }
 }
 
+Editor.Mode = {
+    Edit: 'edit',
+    Create: 'create',
+};
+
 Editor.propTypes = {
     navigation: PropTypes.object,
+    mode: PropTypes.oneOf(_.values(Editor.Mode)),
+    onChange: PropTypes.func,
+};
+
+Editor.defaultProps = {
+    mode: Editor.Mode.Edit,
+    onChange: () => {},
 };
 
 export default Editor;

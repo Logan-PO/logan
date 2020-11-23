@@ -127,8 +127,12 @@ class ListItem extends React.Component {
                             {this.props.beforeContent}
                             <View style={styles.container}>
                                 <View style={styles.contentContainer}>
-                                    <View style={leftContentStyle}>{this.props.leftContent}</View>
-                                    <View style={rightContentStyle}>{this.props.rightContent}</View>
+                                    {this.props.leftContent && (
+                                        <View style={leftContentStyle}>{this.props.leftContent}</View>
+                                    )}
+                                    {this.props.rightContent && (
+                                        <View style={rightContentStyle}>{this.props.rightContent}</View>
+                                    )}
                                 </View>
                                 {this.props.showRightArrow && (
                                     <Icon name="chevron-right" size={24} style={styles.chevron} />

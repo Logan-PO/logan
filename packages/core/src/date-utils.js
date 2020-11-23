@@ -49,6 +49,16 @@ function humanReadableDate(date, forSentence = false) {
     }
 }
 
+function dueDateType(dueDate) {
+    if (dueDate === 'asap' || dueDate === 'eventually') {
+        return dueDate;
+    } else if (dayjs(dueDate, DB_DATE_FORMAT).isValid()) {
+        return 'date';
+    } else {
+        return undefined;
+    }
+}
+
 function dueDateIsDate(dueDate) {
     return dueDate !== 'asap' && dueDate !== 'eventually';
 }
@@ -94,6 +104,7 @@ module.exports = {
     compareDates,
     humanReadableDate,
     dueDateIsDate,
+    dueDateType,
     readableDueDate,
     toDate,
     toTime,
