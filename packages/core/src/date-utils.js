@@ -34,6 +34,7 @@ function compareDates(d1, d2, format, granularity = 'day') {
 }
 
 function humanReadableDate(date, forSentence = false) {
+    date = dayjs(date);
     if (date.isToday()) return forSentence ? 'today' : 'Today';
     else if (date.isTomorrow()) return forSentence ? 'tomorrow' : 'Tomorrow';
     else if (date.isYesterday()) return forSentence ? 'yesterday' : 'Yesterday';
@@ -71,7 +72,7 @@ function readableDueDate(dueDate, forSentence = false) {
 // Constants
 const DB_DATE_FORMAT = 'YYYY-M-D';
 const DB_TIME_FORMAT = 'HH:mm';
-const DB_DATETIME_FORMAT = 'YYYY-M-D H:m';
+const DB_DATETIME_FORMAT = 'YYYY-M-D HH:mm';
 
 function toDate(input) {
     return dayjs(input, DB_DATE_FORMAT);
