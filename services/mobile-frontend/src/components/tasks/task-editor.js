@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, LayoutAnimation } from 'react-native';
+import { View } from 'react-native';
 import { Text, TextInput, Checkbox, Colors } from 'react-native-paper';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
@@ -10,15 +10,14 @@ import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
 import priorities from '../shared/priority-constants';
-import { colorStyles, typographyStyles } from '../shared/typography';
-import DueDatePicker from '../shared/pickers/due-date-picker';
+import Typography, { typographyStyles } from '../shared/typography';
 import ListItem from '../shared/list-item';
+import DueDateControl from '../shared/due-date-control';
 
 // A generic task editor, to be used for creation or editing in a ViewController
 class TaskEditor extends Editor {
     constructor(props) {
         super(props, { id: 'tid', entity: 'task', mobile: true });
-        this.toggleDueDatePicker = this.toggleDueDatePicker.bind(this);
 
         let task;
 
@@ -33,49 +32,7 @@ class TaskEditor extends Editor {
             };
         }
 
-        this.state = {
-            task,
-            dueDatePickerOpen: false,
-            dueDatePickerHeight: 0,
-        };
-    }
-
-    toggleDueDatePicker() {
-        const duration = 300;
-
-        if (this.state.dueDatePickerOpen) {
-            return this.closeDatePicker(duration);
-        } else {
-            return this.openDatePicker(duration);
-        }
-    }
-
-    async openDatePicker(duration) {
-        await this.setStateSync({
-            dueDatePickerOpen: true,
-            dueDatePickerHeight: 0,
-        });
-
-        LayoutAnimation.configureNext(
-            LayoutAnimation.create(duration, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
-        );
-
-        this.setState({ dueDatePickerHeight: 'auto' });
-
-        return new Promise(resolve => setTimeout(resolve, duration));
-    }
-
-    async closeDatePicker(duration) {
-        LayoutAnimation.configureNext(
-            LayoutAnimation.create(duration, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
-        );
-
-        this.setState({
-            dueDatePickerOpen: false,
-            dueDatePickerHeight: 0,
-        });
-
-        return new Promise(resolve => setTimeout(resolve, duration));
+        this.state = { task };
     }
 
     selectEntity(id) {
@@ -150,33 +107,10 @@ class TaskEditor extends Editor {
                     }
                     contentStyle={{ paddingTop: 4 }}
                 />
-                <ListItem
-                    leftContent={<Text style={typographyStyles.body}>Due Date</Text>}
-                    rightContent={
-                        <Text style={{ ...typographyStyles.body, ...colorStyles.secondary }}>
-                            {dateUtils.readableDueDate(this.state.task.dueDate)}
-                        </Text>
-                    }
-                    onPress={this.toggleDueDatePicker}
-                />
-                <View style={{ overflow: 'hidden', height: this.state.dueDatePickerHeight, backgroundColor: 'white' }}>
-                    {this.state.dueDatePickerOpen && (
-                        <View
-                            style={{
-                                height: this.state.dueDatePickerHeight,
-                                paddingBottom: 12,
-                            }}
-                        >
-                            <DueDatePicker
-                                value={this.state.task.dueDate}
-                                onChange={this.handleChange.bind(this, 'dueDate')}
-                            />
-                        </View>
-                    )}
-                </View>
+                <DueDateControl value={this.state.task.dueDate} onChange={this.handleChange.bind(this, 'dueDate')} />
                 <ListItem
                     showRightArrow
-                    leftContent={<Text style={{ ...typographyStyles.body }}>Course</Text>}
+                    leftContent={<Typography>Course</Typography>}
                     rightContent={
                         <Text
                             style={{
@@ -197,7 +131,7 @@ class TaskEditor extends Editor {
                 />
                 <ListItem
                     showRightArrow
-                    leftContent={<Text style={typographyStyles.body}>Priority</Text>}
+                    leftContent={<Typography>Priority</Typography>}
                     rightContent={
                         <Text
                             style={{
