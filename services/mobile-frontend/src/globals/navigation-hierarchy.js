@@ -1,13 +1,33 @@
-import * as React from 'react';
+import _ from 'lodash';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AssignmentsScreen from '../screens/assignments';
 import TasksScreen from '../components/tasks/tasks-screen';
 import NewTaskModalStack from '../components/tasks/new-task-modal-stack';
+import ScheduleStack from '../components/schedule/schedule-stack';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
+
+const routes = [
+    {
+        name: 'Tasks',
+        icon: 'check-box',
+        component: TasksScreen,
+    },
+    {
+        name: 'Assignments',
+        icon: 'assignment',
+        component: AssignmentsScreen,
+    },
+    {
+        name: 'Schedule',
+        icon: 'today',
+        component: ScheduleStack,
+    },
+];
 
 class NavigationHierarchy extends React.Component {
     tabs() {
@@ -18,20 +38,14 @@ class NavigationHierarchy extends React.Component {
                 barStyle={{ backgroundColor: 'white' }}
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ color }) => {
-                        let iconName;
-
-                        if (route.name === 'Tasks') {
-                            iconName = 'check-box';
-                        } else if (route.name === 'Assignments') {
-                            iconName = 'assignment';
-                        }
-
+                        const iconName = _.find(routes, navigationRoute => navigationRoute.name === route.name).icon;
                         return <Icon name={iconName} size={22} color={color} />;
                     },
                 })}
             >
-                <BottomTabs.Screen name="Tasks" component={TasksScreen} />
-                <BottomTabs.Screen name="Assignments" component={AssignmentsScreen} />
+                {routes.map(({ name, component }) => (
+                    <BottomTabs.Screen key={name} name={name} component={component} />
+                ))}
             </BottomTabs.Navigator>
         );
     }
