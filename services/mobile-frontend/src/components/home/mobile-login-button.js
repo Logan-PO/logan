@@ -12,6 +12,17 @@ class MobileLoginButton extends React.Component {
         super(props);
     }
 
+    componentDidMount() {
+        this.initAsync();
+    }
+
+    async initAsync() {
+        await GoogleSignIn.initAsync({
+            // You may ommit the clientId when the firebase `googleServicesFile` is configured
+            clientId: ANDROID_CLIENT_ID,
+        });
+    }
+
     async signIn() {}
 
     async signOut() {}
