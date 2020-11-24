@@ -25,6 +25,7 @@ class AssignmentsList extends React.Component {
 
         this.state = {
             assignmentToDelete: undefined,
+            showingPastAssignments: false,
         };
     }
 
@@ -63,7 +64,10 @@ class AssignmentsList extends React.Component {
     }
 
     render() {
-        const assignments = _.filter(this.props.assignments, assignment => this._shouldShowAssignment(assignment));
+        const assignments = _.filter(
+            this.props.assignments,
+            assignment => this._shouldShowAssignment(assignment) === !this.state.showingPastAssignments
+        );
         const sections = getSections(assignments, this.state.showingPastAssignments); //TODO: Move _should to fe-shared
         const listData = sections.map(([name, aids]) => ({ title: name, data: aids }));
 
@@ -99,6 +103,7 @@ class AssignmentsList extends React.Component {
                         <AssignmentCell
                             key={item}
                             aid={item}
+                            showOverdueLabel={!this.state.showingPastAssignments}
                             onPress={() => this.openAssignment(item)}
                             onDeletePressed={this.openDeleteConfirmation}
                         />

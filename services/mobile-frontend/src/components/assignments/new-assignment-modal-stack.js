@@ -9,7 +9,7 @@ const Stack = createStackNavigator();
 export default function NewAssignmentModalStack() {
     return (
         <Stack.Navigator headerMode="screen" screenOptions={{ headerShown: false }}>
-            <Stack.Screen name="New Task" component={NewAssignmentModal} />
+            <Stack.Screen name="New Assignment" component={NewAssignmentModal} />
             <Stack.Screen name="Course Picker" component={CoursePicker} />
             <Stack.Screen name="Priority Picker" component={PriorityPicker} />
         </Stack.Navigator>
