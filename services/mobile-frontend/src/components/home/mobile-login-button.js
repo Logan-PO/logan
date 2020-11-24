@@ -7,7 +7,21 @@ import { setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
 const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
 const DEVICE = 'android';
 
-class MobileLoginButton extends React.Component {}
+class MobileLoginButton extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    async signIn() {}
+
+    async signOut() {}
+
+    onPress() {}
+
+    render() {
+        return <Text onPress={this.onPress}>Toggle Auth</Text>;
+    }
+}
 
 /*
 This is from react-redux
