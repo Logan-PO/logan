@@ -3,27 +3,52 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, SectionList } from 'react-native';
-import { List, FAB } from 'react-native-paper';
+import { List, FAB, Portal, Dialog, Paragraph, Button } from 'react-native-paper';
 import SegmentedControl from '@react-native-community/segmented-control';
-import { getTasksSelectors } from '@logan/fe-shared/store/tasks';
+import { getTasksSelectors, deleteTask, deleteTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
 import theme from '../../globals/theme';
 import TaskCell from '../../components/tasks/task-cell';
 import ViewController from '../shared/view-controller';
+import { typographyStyles } from '../shared/typography';
 
 class TasksList extends React.Component {
     constructor(props) {
         super(props);
 
         this.openTask = this.openTask.bind(this);
+        this.openDeleteConfirmation = this.openDeleteConfirmation.bind(this);
+        this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
+        this.confirmDeletion = this.confirmDeletion.bind(this);
 
         this.state = {
             showingCompletedTasks: false,
+            taskToDelete: undefined,
         };
     }
 
     openTask(tid) {
         this.props.navigation.push('Task', { tid });
+    }
+
+    openDeleteConfirmation(taskToDelete, callbacks) {
+        this.setState({
+            taskToDelete,
+            deleteConfirmationCallbacks: callbacks,
+        });
+    }
+
+    hideDeleteConfirmation() {
+        this.state.deleteConfirmationCallbacks.deny();
+        this.setState({ taskToDelete: undefined, deleteConfirmationCallbacks: undefined });
+    }
+
+    async confirmDeletion() {
+        const callback = this.state.deleteConfirmationCallbacks.confirm;
+        const taskToDelete = this.state.taskToDelete;
+        this.setState({ taskToDelete: undefined, deleteConfirmationCallbacks: undefined });
+        await callback();
+        this.props.deleteTask(taskToDelete);
     }
 
     render() {
@@ -65,6 +90,7 @@ class TasksList extends React.Component {
                             tid={item}
                             showOverdueLabel={!this.state.showingCompletedTasks}
                             onPress={() => this.openTask(item)}
+                            onDeletePressed={this.openDeleteConfirmation}
                         />
                     )}
                     renderSectionHeader={({ section: { title } }) => (
@@ -84,6 +110,22 @@ class TasksList extends React.Component {
                     }}
                     onPress={() => this.props.navigation.navigate('New Task')}
                 />
+                <Portal>
+                    <Dialog visible={!!this.state.taskToDelete} onDismiss={this.hideDeleteConfirmation}>
+                        <Dialog.Title>Are you sure?</Dialog.Title>
+                        <Dialog.Content>
+                            <Paragraph>{`You're about to delete a task.\nThis can't be undone.`}</Paragraph>
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button onPress={this.hideDeleteConfirmation} labelStyle={typographyStyles.button}>
+                                Cancel
+                            </Button>
+                            <Button onPress={this.confirmDeletion} color="red" labelStyle={typographyStyles.button}>
+                                Delete
+                            </Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                </Portal>
             </ViewController>
         );
     }
@@ -94,10 +136,11 @@ TasksList.propTypes = {
     fetchTasks: PropTypes.func,
     navigation: PropTypes.object,
     route: PropTypes.object,
+    deleteTask: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
     tasks: getTasksSelectors(state.tasks).selectAll(),
 });
 
-export default connect(mapStateToProps, null)(TasksList);
+export default connect(mapStateToProps, { deleteTask, deleteTaskLocal })(TasksList);

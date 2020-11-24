@@ -3,35 +3,36 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { Text, TextInput, Checkbox, List, Colors } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { Text, TextInput, Checkbox, Colors } from 'react-native-paper';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
 import priorities from '../shared/priority-constants';
-import { typographyStyles } from '../shared/typography';
+import Typography, { typographyStyles } from '../shared/typography';
+import ListItem from '../shared/list-item';
+import DueDateControl from '../shared/due-date-control';
 
 // A generic task editor, to be used for creation or editing in a ViewController
 class TaskEditor extends Editor {
     constructor(props) {
         super(props, { id: 'tid', entity: 'task', mobile: true });
 
+        let task;
+
         if (this.isEditor) {
-            this.state = {
-                task: props.getTask(props.route.params.tid),
-            };
+            task = props.getTask(props.route.params.tid);
         } else {
-            this.state = {
-                task: {
-                    title: '',
-                    description: '',
-                    dueDate: dateUtils.formatAsDate(),
-                    priority: 0,
-                },
+            task = {
+                title: '',
+                description: '',
+                dueDate: dateUtils.formatAsDate(),
+                priority: 0,
             };
         }
+
+        this.state = { task };
     }
 
     selectEntity(id) {
@@ -70,58 +71,57 @@ class TaskEditor extends Editor {
 
         return (
             <View style={{ flex: 1 }}>
-                <View style={{ flexDirection: 'column', padding: 12, paddingBottom: 24, backgroundColor: 'white' }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
-                        <Checkbox.Android
-                            status={this.state.task.complete ? 'checked' : 'unchecked'}
-                            onPress={() => this.handleChange('complete', !this.state.task.complete)}
-                            color={course && course.color}
-                        />
-                        <TextInput
-                            style={{ flexGrow: 1, backgroundColor: 'none' }}
-                            mode="flat"
-                            label="Title"
-                            value={this.state.task.title}
-                            onChangeText={this.handleChange.bind(this, 'title')}
-                        />
-                    </View>
-                    <View>
-                        <TextInput
-                            multiline
-                            label="Description"
-                            mode="flat"
-                            style={{ backgroundColor: 'none' }}
-                            value={this.state.task.description}
-                            onChangeText={this.handleChange.bind(this, 'description')}
-                        />
-                    </View>
-                </View>
-                <List.Item
-                    style={{ backgroundColor: 'white' }}
-                    title={
-                        <View
-                            style={{
-                                height: '100%',
-                                width: '100%',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                paddingRight: 4,
-                            }}
-                        >
-                            <Text style={{ ...typographyStyles.body }}>Course</Text>
-                            <Text
-                                style={{
-                                    ...typographyStyles.body,
-                                    color: _.get(course, 'color', Colors.grey500),
-                                    fontWeight: course ? 'bold' : 'normal',
-                                }}
-                            >
-                                {course ? course.title : 'None'}
-                            </Text>
+                <ListItem
+                    leftContent={
+                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end' }}>
+                            <View style={{ flex: 0, paddingBottom: 2, paddingRight: 6 }}>
+                                <Checkbox.Android
+                                    status={this.state.task.complete ? 'checked' : 'unchecked'}
+                                    onPress={() => this.handleChange('complete', !this.state.task.complete)}
+                                    color={course && course.color}
+                                />
+                            </View>
+                            <TextInput
+                                style={{ paddingHorizontal: 0, flexGrow: 1, backgroundColor: 'none' }}
+                                mode="flat"
+                                label="Title"
+                                value={this.state.task.title}
+                                onChangeText={this.handleChange.bind(this, 'title')}
+                            />
                         </View>
                     }
-                    right={() => <Icon name="chevron-right" size={24} style={{ color: 'gray', alignSelf: 'center' }} />}
+                    contentStyle={{ paddingVertical: 4, paddingLeft: 4 }}
+                />
+                <ListItem
+                    leftContent={
+                        <View style={{ flex: 1 }}>
+                            <TextInput
+                                multiline
+                                label="Description"
+                                mode="flat"
+                                style={{ backgroundColor: 'none', paddingHorizontal: 0 }}
+                                value={this.state.task.description}
+                                onChangeText={this.handleChange.bind(this, 'description')}
+                            />
+                        </View>
+                    }
+                    contentStyle={{ paddingTop: 4 }}
+                />
+                <DueDateControl value={this.state.task.dueDate} onChange={this.handleChange.bind(this, 'dueDate')} />
+                <ListItem
+                    showRightArrow
+                    leftContent={<Typography>Course</Typography>}
+                    rightContent={
+                        <Text
+                            style={{
+                                ...typographyStyles.body,
+                                color: _.get(course, 'color', Colors.grey500),
+                                fontWeight: course ? 'bold' : 'normal',
+                            }}
+                        >
+                            {course ? course.title : 'None'}
+                        </Text>
+                    }
                     onPress={() =>
                         this.props.navigation.navigate('Course Picker', {
                             cid: _.get(course, 'cid'),
@@ -129,32 +129,20 @@ class TaskEditor extends Editor {
                         })
                     }
                 />
-                <List.Item
-                    style={{ backgroundColor: 'white' }}
-                    title={
-                        <View
+                <ListItem
+                    showRightArrow
+                    leftContent={<Typography>Priority</Typography>}
+                    rightContent={
+                        <Text
                             style={{
-                                height: '100%',
-                                width: '100%',
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                paddingRight: 4,
+                                ...typographyStyles.body,
+                                fontWeight: 'bold',
+                                color: priority.color,
                             }}
                         >
-                            <Text style={{ ...typographyStyles.body }}>Priority</Text>
-                            <Text
-                                style={{
-                                    ...typographyStyles.body,
-                                    fontWeight: 'bold',
-                                    color: priority.color,
-                                }}
-                            >
-                                {priority.name}
-                            </Text>
-                        </View>
+                            {priority.name}
+                        </Text>
                     }
-                    right={() => <Icon name="chevron-right" size={24} style={{ color: 'gray', alignSelf: 'center' }} />}
                     onPress={() =>
                         this.props.navigation.navigate('Priority Picker', {
                             value: this.state.task.priority,

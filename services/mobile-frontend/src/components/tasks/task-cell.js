@@ -3,21 +3,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { Text, List, Checkbox } from 'react-native-paper';
+import { Checkbox, Colors } from 'react-native-paper';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import { dateUtils } from '@logan/core';
 import PriorityDisplay from '../shared/displays/priority-display';
 import CourseLabel from '../shared/displays/course-label';
-import { typographyStyles, colorStyles } from '../shared/typography';
+import Typography from '../shared/typography';
+import ListItem from '../shared/list-item';
 
 class TaskCell extends React.Component {
     constructor(props) {
         super(props);
 
         this.check = this.check.bind(this);
-        this.selected = this.selected.bind(this);
+        this.listItem = React.createRef();
 
         this.state = {
             task: props.getTask(props.tid),
@@ -32,15 +33,15 @@ class TaskCell extends React.Component {
         }
     }
 
-    selected() {
-        this.props.onPress && this.props.onPress(this.props.tid);
-    }
-
     check() {
         this.handleChange('complete', !this.state.task.complete);
     }
 
-    handleChange(prop, newValue) {
+    moveToToday() {
+        this.handleChange('dueDate', dateUtils.formatAsDate(dateUtils.dayjs()));
+    }
+
+    async handleChange(prop, newValue) {
         const changes = {};
 
         changes[prop] = newValue;
@@ -54,6 +55,8 @@ class TaskCell extends React.Component {
         this.setState({
             task: afterUpdates,
         });
+
+        await this.listItem.current.collapse();
 
         this.props.updateTaskLocal({
             id: this.props.tid,
@@ -82,62 +85,86 @@ class TaskCell extends React.Component {
         }
     }
 
-    renderContent() {
+    actionsToShow() {
+        const moveToTodayAction = {
+            icon: 'arrow-downward',
+            backgroundColor: Colors.blue500,
+            action: this.moveToToday.bind(this),
+        };
+
+        const deleteAction = {
+            icon: 'delete',
+            backgroundColor: 'red',
+            action: this.deletePressed.bind(this),
+        };
+
+        const actions = [];
+
+        if (this.shouldShowOverdueLabel()) actions.push(moveToTodayAction);
+        actions.push(deleteAction);
+
+        return actions;
+    }
+
+    async deletePressed() {
+        if (this.props.onDeletePressed) {
+            this.props.onDeletePressed(this.state.task, {
+                confirm: this.listItem.current.collapse,
+                deny: this.listItem.current.close,
+            });
+        }
+    }
+
+    render() {
+        if (!this.state.task) return <ListItem />;
+
         const checkboxStatus = this.state.task.complete ? 'checked' : 'unchecked';
         const relatedAssignment = this.props.getAssignment(this.state.task.aid);
         const course = this.props.getCourse(relatedAssignment ? relatedAssignment.cid : this.state.task.cid);
 
         return (
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Checkbox.Android status={checkboxStatus} onPress={this.check} color={course && course.color} />
-                <View style={{ flexDirection: 'column', marginLeft: 8 }}>
-                    {(course || relatedAssignment) && (
-                        <View style={{ flexDirection: 'row', marginBottom: 2 }}>
-                            {course && <CourseLabel cid={course.cid} />}
-                            {relatedAssignment && (
-                                <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
-                                    {course && relatedAssignment && ' / '}
-                                    {relatedAssignment.title}
-                                </Text>
+            <ListItem
+                ref={this.listItem}
+                beforeContent={<PriorityDisplay priority={this.state.task.priority} />}
+                contentStyle={{ paddingLeft: 12 }}
+                leftContent={
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Checkbox.Android status={checkboxStatus} onPress={this.check} color={course && course.color} />
+                        <View style={{ flexDirection: 'column', marginLeft: 8 }}>
+                            {(course || relatedAssignment) && (
+                                <View style={{ flexDirection: 'row', marginBottom: 2 }}>
+                                    {course && <CourseLabel cid={course.cid} />}
+                                    {relatedAssignment && (
+                                        <Typography variant="body2" color="secondary">
+                                            {course && relatedAssignment && ' / '}
+                                            {relatedAssignment.title}
+                                        </Typography>
+                                    )}
+                                </View>
+                            )}
+                            <View>
+                                <Typography variant="body">{this.state.task.title}</Typography>
+                            </View>
+                            {this.shouldShowOverdueLabel() && (
+                                <View style={{ marginTop: 2 }}>
+                                    <Typography variant="body2" color="error">
+                                        {this.overdueLabelContent()}
+                                    </Typography>
+                                </View>
+                            )}
+                            {!_.isEmpty(this.state.task.description) && (
+                                <View style={{ marginTop: 2 }}>
+                                    <Typography variant="body2" color="secondary">
+                                        {this.state.task.description}
+                                    </Typography>
+                                </View>
                             )}
                         </View>
-                    )}
-                    <View>
-                        <Text style={{ ...typographyStyles.body }}>{this.state.task.title}</Text>
                     </View>
-                    {this.shouldShowOverdueLabel() && (
-                        <View style={{ marginTop: 2 }}>
-                            <Text style={{ ...typographyStyles.body2, ...colorStyles.red }} allowFontScaling>
-                                {this.overdueLabelContent()}
-                            </Text>
-                        </View>
-                    )}
-                    {!_.isEmpty(this.state.task.description) && (
-                        <View style={{ marginTop: 2 }}>
-                            <Text style={{ ...typographyStyles.body2, ...colorStyles.secondary }}>
-                                {this.state.task.description}
-                            </Text>
-                        </View>
-                    )}
-                </View>
-            </View>
-        );
-    }
-
-    render() {
-        if (!this.state.task) return <List.Item />;
-
-        return (
-            <View style={{ flexDirection: 'row' }}>
-                <PriorityDisplay priority={this.state.task.priority} />
-                <View style={{ flexGrow: 1 }}>
-                    <List.Item
-                        style={{ backgroundColor: 'white', paddingHorizontal: 0 }}
-                        onPress={this.selected}
-                        title={this.renderContent()}
-                    />
-                </View>
-            </View>
+                }
+                onPress={this.props.onPress}
+                actions={this.actionsToShow()}
+            />
         );
     }
 }
@@ -151,6 +178,7 @@ TaskCell.propTypes = {
     updateTaskLocal: PropTypes.func,
     showOverdueLabel: PropTypes.bool,
     onPress: PropTypes.func,
+    onDeletePressed: PropTypes.func,
 };
 
 const mapStateToProps = state => ({

@@ -12,17 +12,26 @@ const BottomTabs = createMaterialBottomTabNavigator();
 class NavigationHierarchy extends React.Component {
     tabs() {
         return (
-            <BottomTabs.Navigator initialRouteName="Tasks" activeColor="teal" barStyle={{ backgroundColor: 'white' }}>
-                <BottomTabs.Screen
-                    name="Tasks"
-                    component={TasksScreen}
-                    tabBarIcon={({ color }) => <Icon name="check" color={color} size={26} />}
-                />
-                <BottomTabs.Screen
-                    name="Assignments"
-                    component={AssignmentsScreen}
-                    tabBarIcon={({ color }) => <Icon name="assignment" color={color} size={26} />}
-                />
+            <BottomTabs.Navigator
+                initialRouteName="Tasks"
+                activeColor="teal"
+                barStyle={{ backgroundColor: 'white' }}
+                screenOptions={({ route }) => ({
+                    tabBarIcon: ({ color }) => {
+                        let iconName;
+
+                        if (route.name === 'Tasks') {
+                            iconName = 'check-box';
+                        } else if (route.name === 'Assignments') {
+                            iconName = 'assignment';
+                        }
+
+                        return <Icon name={iconName} size={22} color={color} />;
+                    },
+                })}
+            >
+                <BottomTabs.Screen name="Tasks" component={TasksScreen} />
+                <BottomTabs.Screen name="Assignments" component={AssignmentsScreen} />
             </BottomTabs.Navigator>
         );
     }
