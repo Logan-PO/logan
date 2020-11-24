@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, ScrollView } from 'react-native';
-import { dateUtils } from '@logan/core';
+import { ScrollView } from 'react-native';
 import { getTermSelectors, deleteTerm } from '@logan/fe-shared/store/schedule';
+import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import ViewController from '../shared/view-controller';
-import ListItem from '../shared/list-item';
-import Typography from '../shared/typography';
+import { typographyStyles } from '../shared/typography';
+import TermCell from './term-cell';
 
 class TermsList extends React.Component {
     constructor(props) {
@@ -22,8 +22,8 @@ class TermsList extends React.Component {
         };
     }
 
-    openTerm(tid) {
-        this.props.navigation.push('Term', { tid });
+    openTerm(term) {
+        this.props.navigation.push('Term', { tid: term.tid });
     }
 
     openDeleteConfirmation(termToDelete, callbacks) {
@@ -57,24 +57,35 @@ class TermsList extends React.Component {
             >
                 <ScrollView>
                     {this.props.terms.map(term => (
-                        <ListItem
+                        <TermCell
                             key={term.tid}
-                            leftContent={
-                                <View>
-                                    <Typography variant="h6" style={{ marginBottom: 4 }}>
-                                        {term.title}
-                                    </Typography>
-                                    <Typography color="detail">
-                                        {dateUtils.humanReadableDate(term.startDate)} -{' '}
-                                        {dateUtils.humanReadableDate(term.endDate)}
-                                    </Typography>
-                                </View>
-                            }
-                            showRightArrow
-                            onPress={this.openTerm.bind(this, term.tid)}
+                            term={term}
+                            onPress={() => this.openTerm(term)}
+                            onDeletePressed={this.openDeleteConfirmation}
                         />
                     ))}
                 </ScrollView>
+                <Portal>
+                    <Dialog visible={!!this.state.termToDelete} onDismiss={this.hideDeleteConfirmation}>
+                        <Dialog.Title>Are you sure?</Dialog.Title>
+                        <Dialog.Content>
+                            <Paragraph
+                                style={typographyStyles.body2}
+                            >{`You're about to delete a term. This can't be undone.`}</Paragraph>
+                            <Paragraph
+                                style={{ ...typographyStyles.body2, fontWeight: 'bold' }}
+                            >{`This will also delete any courses and holidays associated with that term.`}</Paragraph>
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button onPress={this.hideDeleteConfirmation} labelStyle={typographyStyles.button}>
+                                Cancel
+                            </Button>
+                            <Button onPress={this.confirmDeletion} color="red" labelStyle={typographyStyles.button}>
+                                Delete
+                            </Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                </Portal>
             </ViewController>
         );
     }
