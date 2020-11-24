@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import AssignmentsScreen from '../screens/assignments';
+import AssignmentsScreen from '../screens/assignments-screen';
 import TasksScreen from '../screens/tasks-screen';
 import NewTaskModalStack from '../components/tasks/new-task-modal-stack';
 
