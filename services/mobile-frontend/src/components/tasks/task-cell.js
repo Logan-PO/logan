@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Checkbox, Colors } from 'react-native-paper';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
@@ -121,7 +121,34 @@ class TaskCell extends React.Component {
         const checkboxStatus = this.state.task.complete ? 'checked' : 'unchecked';
         const relatedAssignment = this.props.getAssignment(this.state.task.aid);
         const course = this.props.getCourse(relatedAssignment ? relatedAssignment.cid : this.state.task.cid);
-
+        const styles = StyleSheet.create({
+            container: {
+                flex: 1,
+                justifyContent: 'space-between',
+                backgroundColor: '#fff',
+                padding: 20,
+                margin: 10,
+            },
+            top: {
+                flex: 0.3,
+                backgroundColor: 'grey',
+                borderWidth: 5,
+                borderTopLeftRadius: 20,
+                borderTopRightRadius: 20,
+            },
+            middle: {
+                flex: 0.3,
+                backgroundColor: 'beige',
+                borderWidth: 5,
+            },
+            bottom: {
+                flex: 0.3,
+                backgroundColor: 'pink',
+                borderWidth: 5,
+                borderBottomLeftRadius: 20,
+                borderBottomRightRadius: 20,
+            },
+        });
         return (
             <ListItem
                 ref={this.listItem}
@@ -142,7 +169,7 @@ class TaskCell extends React.Component {
                                     )}
                                 </View>
                             )}
-                            <View>
+                            <View style={styles.middle}>
                                 <Typography variant="body">{this.state.task.title}</Typography>
                             </View>
                             {this.shouldShowOverdueLabel() && (
