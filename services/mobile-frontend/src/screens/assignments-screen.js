@@ -14,8 +14,8 @@ class AssignmentsScreen extends React.Component {
     render() {
         return (
             <Stack.Navigator headerMode="screen" screenOptions={{ headerShown: false }}>
-                <Stack.Screen name="Tasks" component={AssignmentList} />
-                <Stack.Screen name="Task" component={AssignmentDetails} />
+                <Stack.Screen name="Assignments" component={AssignmentList} />
+                <Stack.Screen name="Assignment" component={AssignmentDetails} />
                 <Stack.Screen name="Course Picker" component={CoursePicker} />
                 <Stack.Screen name="Priority Picker" component={PriorityPicker} />
             </Stack.Navigator>
