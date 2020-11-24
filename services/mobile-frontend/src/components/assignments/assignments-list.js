@@ -52,7 +52,7 @@ class AssignmentsList extends React.Component {
 
     hideDeleteConfirmation() {
         this.state.deleteConfirmationCallbacks.deny();
-        this.setState({ taskToDelete: undefined, deleteConfirmationCallbacks: undefined });
+        this.setState({ assignmentToDelete: undefined, deleteConfirmationCallbacks: undefined });
     }
 
     async confirmDeletion() {
@@ -64,10 +64,7 @@ class AssignmentsList extends React.Component {
     }
 
     render() {
-        const assignments = _.filter(
-            this.props.assignments,
-            assignment => this._shouldShowAssignment(assignment) === !this.state.showingPastAssignments
-        );
+        const assignments = _.filter(this.props.assignments, assignment => this._shouldShowAssignment(assignment));
         const sections = getSections(assignments, this.state.showingPastAssignments); //TODO: Move _should to fe-shared
         const listData = sections.map(([name, aids]) => ({ title: name, data: aids }));
 
@@ -87,7 +84,7 @@ class AssignmentsList extends React.Component {
                     }}
                 >
                     <SegmentedControl
-                        values={['Upcoming Assignments', 'Pass Assignments']}
+                        values={['Upcoming', 'Past']}
                         selectedIndex={this.state.showingPastAssignments ? 1 : 0}
                         onChange={event =>
                             this.setState({ showingPastAssignments: !!event.nativeEvent.selectedSegmentIndex })
@@ -103,7 +100,6 @@ class AssignmentsList extends React.Component {
                         <AssignmentCell
                             key={item}
                             aid={item}
-                            showOverdueLabel={!this.state.showingPastAssignments}
                             onPress={() => this.openAssignment(item)}
                             onDeletePressed={this.openDeleteConfirmation}
                         />
@@ -129,7 +125,7 @@ class AssignmentsList extends React.Component {
                     <Dialog visible={!!this.state.assignmentToDelete} onDismiss={this.hideDeleteConfirmation}>
                         <Dialog.Title>Are you sure?</Dialog.Title>
                         <Dialog.Content>
-                            <Paragraph>{`You're about to delete a task.\nThis can't be undone.`}</Paragraph>
+                            <Paragraph>{`You're about to delete an assignment.\nThis can't be undone.`}</Paragraph>
                         </Dialog.Content>
                         <Dialog.Actions>
                             <Button onPress={this.hideDeleteConfirmation} labelStyle={typographyStyles.button}>
