@@ -34,7 +34,7 @@ class MobileLoginButton extends React.Component {
             const { type, user } = await GoogleSignIn.signInAsync();
             if (type === 'success') {
                 //Verifying the ID token on a successful login
-                this.props.verifyIdToken({ idToken: user.auth.idToken, clientType: 'android' });
+                this.props.verifyIdToken({ idToken: user.auth.idToken, clientType: DEVICE });
             }
         } catch ({ message }) {
             console.log(`Login Error: ${message}`);
