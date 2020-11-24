@@ -4,7 +4,7 @@ import * as GoogleSignIn from 'expo-google-sign-in';
 import { connect } from 'react-redux';
 import { setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
 
-const CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
+const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
 const DEVICE = 'android';
 
 class MobileLoginButton extends React.Component {}
