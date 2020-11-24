@@ -68,18 +68,19 @@ export const colorStyles = {
     },
 };
 
-const Typography = ({ variant = 'body', color = 'primary', children, ...rest }) => {
+const Typography = ({ variant = 'body', color = 'primary', style, children, ...rest }) => {
     const variantStyle = typographyStyles[variant];
     const colorStyle = color ? colorStyles[color] || { color } : colorStyles.primary;
 
     return (
-        <Text {...rest} style={{ ...variantStyle, ...colorStyle }}>
+        <Text {...rest} style={{ ...style, ...variantStyle, ...colorStyle }}>
             {children}
         </Text>
     );
 };
 
 Typography.propTypes = {
+    style: PropTypes.object,
     variant: PropTypes.oneOf(Object.keys(typographyStyles)),
     color: PropTypes.string,
     children: PropTypes.node,
