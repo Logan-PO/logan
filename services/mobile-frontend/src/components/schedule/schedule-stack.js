@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import TermsList from './terms-list';
+import TermsList from './terms/terms-list';
 
 const Stack = createStackNavigator();
 

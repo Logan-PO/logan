@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
 import { getTermSelectors, deleteTerm } from '@logan/fe-shared/store/schedule';
 import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
-import ViewController from '../shared/view-controller';
-import { typographyStyles } from '../shared/typography';
+import ViewController from '../../shared/view-controller';
+import { typographyStyles } from '../../shared/typography';
 import TermCell from './term-cell';
 
 class TermsList extends React.Component {

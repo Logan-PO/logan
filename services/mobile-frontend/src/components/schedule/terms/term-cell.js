@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import SyncComponent from '@logan/fe-shared/components/sync-component';
 import { dateUtils } from '@logan/core';
-import ListItem from '../shared/list-item';
-import Typography from '../shared/typography';
+import ListItem from '../../shared/list-item';
+import Typography from '../../shared/typography';
 
 class TermCell extends SyncComponent {
     constructor(props) {
