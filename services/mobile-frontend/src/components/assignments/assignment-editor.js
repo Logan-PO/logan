@@ -86,6 +86,7 @@ class AssignmentEditor extends Editor {
                     contentStyle={{ paddingTop: 4 }}
                 />
                 <DueDateControl
+                    datesOnly={true}
                     value={this.state.assignment.dueDate}
                     onChange={this.handleChange.bind(this, 'dueDate')}
                 />
