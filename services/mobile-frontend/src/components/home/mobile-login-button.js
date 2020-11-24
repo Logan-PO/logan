@@ -2,7 +2,9 @@ import React from 'react';
 import { Text } from 'react-native';
 import * as GoogleSignIn from 'expo-google-sign-in';
 import { connect } from 'react-redux';
-import { setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
+import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
+import PropTypes from 'prop-types';
+import api from '@logan/fe-shared/utils/api';
 
 const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
 const DEVICE = 'android';
@@ -35,7 +37,11 @@ class MobileLoginButton extends React.Component {
         }
     }
 
-    async signOut() {}
+    async signOut() {
+        await GoogleSignIn.signOutAsync();
+        api.setBearerToken(undefined);
+        this.props.setLoginStage(LOGIN_STAGE.LOGIN);
+    }
 
     onPress() {}
 
@@ -43,6 +49,12 @@ class MobileLoginButton extends React.Component {
         return <Text onPress={this.onPress}>Toggle Auth</Text>;
     }
 }
+
+MobileLoginButton.propTypes = {
+    isLoggedIn: PropTypes.bool,
+    setLoginStage: PropTypes.func,
+    verifyIdToken: PropTypes.func,
+};
 
 /*
 This is from react-redux
