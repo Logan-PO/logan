@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import AssignmentsScreen from '../screens/assignments-screen';
 import TasksScreen from '../screens/tasks-screen';
 import NewTaskModalStack from '../components/tasks/new-task-modal-stack';
+import NewAssignmentModalStack from '../components/assignments/new-assignment-modal-stack';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -41,6 +42,7 @@ class NavigationHierarchy extends React.Component {
             <RootStack.Navigator mode="modal" headerMode="screen" screenOptions={{ headerShown: false }}>
                 <RootStack.Screen name="Root" component={this.tabs} />
                 <RootStack.Screen name="New Task" component={NewTaskModalStack} />
+                <RootStack.Screen name="New Assignment" component={NewAssignmentModalStack} />
             </RootStack.Navigator>
         );
     }

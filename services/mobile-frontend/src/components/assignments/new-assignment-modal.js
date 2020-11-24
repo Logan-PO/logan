@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { createTask } from '@logan/fe-shared/store/tasks';
+import { createAssignment } from '@logan/fe-shared/store/assignments';
 import Editor from '@logan/fe-shared/components/editor';
 import ViewController from '../shared/view-controller';
-import TaskEditor from './assignment-editor';
+import AssignmentEditor from './assignment-editor';
 
 class NewAssignmentModal extends React.Component {
     constructor(props) {
@@ -19,7 +19,7 @@ class NewAssignmentModal extends React.Component {
         this.update = this.update.bind(this);
 
         this.state = {
-            task: {},
+            assignment: {},
         };
     }
 
@@ -28,19 +28,19 @@ class NewAssignmentModal extends React.Component {
     }
 
     async create() {
-        await this.props.createTask(this.state.task);
+        await this.props.createAssignment(this.state.assignment);
         this.close();
     }
 
-    update(task) {
-        this.setState({ task });
+    update(assignment) {
+        this.setState({ assignment });
     }
 
     render() {
         const leftActions = <Appbar.Action icon="close" onPress={this.close} />;
         const rightActions = (
             <Appbar.Action
-                disabled={_.isEmpty(this.state.task.title)}
+                disabled={_.isEmpty(this.state.assignment.title)}
                 icon={props => <Icon {...props} name="done" color="white" size={24} />}
                 onPress={this.create}
             />
@@ -55,7 +55,7 @@ class NewAssignmentModal extends React.Component {
                 rightActions={rightActions}
             >
                 <ScrollView keyboardDismissMode="on-drag">
-                    <TaskEditor
+                    <AssignmentEditor
                         navigation={this.props.navigation}
                         route={this.props.route}
                         mode={Editor.Mode.Create}
@@ -70,11 +70,11 @@ class NewAssignmentModal extends React.Component {
 NewAssignmentModal.propTypes = {
     navigation: PropTypes.object,
     route: PropTypes.object,
-    createTask: PropTypes.func,
+    createAssignment: PropTypes.func,
 };
 
 const mapDispatchToState = {
-    createTask,
+    createAssignment,
 };
 
 export default connect(null, mapDispatchToState)(NewAssignmentModal);

@@ -2,14 +2,16 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SectionList } from 'react-native';
+import { SectionList, View } from 'react-native';
 import { List, FAB, Portal, Dialog, Paragraph, Button } from 'react-native-paper';
 import { getAssignmentsSelectors, deleteAssignment, deleteAssignmentLocal } from '@logan/fe-shared/store/assignments';
 import { getSections } from '@logan/fe-shared/sorting/assignments';
 import { dateUtils } from '@logan/core';
+import SegmentedControl from '@react-native-community/segmented-control';
 import AssignmentCell from '../../components/assignments/assignment-cell';
 import ViewController from '../shared/view-controller';
 import { typographyStyles } from '../shared/typography';
+import theme from '../../globals/theme';
 
 class AssignmentsList extends React.Component {
     constructor(props) {
@@ -62,7 +64,7 @@ class AssignmentsList extends React.Component {
 
     render() {
         const assignments = _.filter(this.props.assignments, assignment => this._shouldShowAssignment(assignment));
-        const sections = getSections(assignments, false); //TODO: Move _should to fe-shared
+        const sections = getSections(assignments, this.state.showingPastAssignments); //TODO: Move _should to fe-shared
         const listData = sections.map(([name, aids]) => ({ title: name, data: aids }));
 
         return (
@@ -73,6 +75,22 @@ class AssignmentsList extends React.Component {
                 disableBack
                 leftActionIsFetch={true}
             >
+                <View
+                    style={{
+                        padding: 12,
+                        paddingTop: 0,
+                        backgroundColor: theme.colors.primary,
+                    }}
+                >
+                    <SegmentedControl
+                        values={['Upcoming Assignments', 'Pass Assignments']}
+                        selectedIndex={this.state.showingPastAssignments ? 1 : 0}
+                        onChange={event =>
+                            this.setState({ showingPastAssignments: !!event.nativeEvent.selectedSegmentIndex })
+                        }
+                        tintColor="white"
+                    />
+                </View>
                 <SectionList
                     style={{ height: '100%', backgroundColor: 'white' }}
                     sections={listData}
