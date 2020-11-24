@@ -23,7 +23,17 @@ class MobileLoginButton extends React.Component {
         });
     }
 
-    async signIn() {}
+    async signIn() {
+        try {
+            //This should pop up a modal (only on android) to update google play services if
+            //they aren't already up to date
+            await GoogleSignIn.askForPlayServicesAsync();
+            //Grabbing user data from sign in
+            const { type, user } = await GoogleSignIn.signInAsync();
+        } catch ({ message }) {
+            console.log(`Login Error: ${message}`);
+        }
+    }
 
     async signOut() {}
 
