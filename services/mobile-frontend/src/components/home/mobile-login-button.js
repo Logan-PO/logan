@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { Button } from 'react-native';
 import * as GoogleSignIn from 'expo-google-sign-in';
 import { connect } from 'react-redux';
 import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
@@ -15,6 +15,7 @@ class MobileLoginButton extends React.Component {
 
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
+        this.onPress = this.onPress.bind(this);
     }
 
     componentDidMount() {
@@ -52,15 +53,11 @@ class MobileLoginButton extends React.Component {
     }
 
     onPress() {
-        if (this.props.isLoggedIn === LOGIN_STAGE.LOGIN) {
-            this.signIn();
-        } else if (this.props.isLoggedIn === LOGIN_STAGE.LOGGED_IN) {
-            this.signOut();
-        }
+        this.signIn();
     }
 
     render() {
-        return <Text onPress={this.onPress}>Toggle Auth</Text>;
+        return <Button title="login" onPress={this.onPress} />;
     }
 }
 
