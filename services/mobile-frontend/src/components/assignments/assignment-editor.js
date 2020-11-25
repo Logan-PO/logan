@@ -11,7 +11,6 @@ import Editor from '@logan/fe-shared/components/editor';
 import Typography, { typographyStyles } from '../shared/typography';
 import ListItem from '../shared/list-item';
 import DueDateControl from '../shared/due-date-control';
-import SubtasksList from './subtasks-list';
 
 // A generic assignment editor, to be used for creation or editing in a ViewController
 class AssignmentEditor extends Editor {
@@ -24,7 +23,6 @@ class AssignmentEditor extends Editor {
             assignment = props.getAssignment(props.route.params.aid);
         } else {
             assignment = {
-                //TODO: Fix this to be empty assignment
                 title: '',
                 description: '',
                 dueDate: dateUtils.formatAsDate(),
@@ -112,7 +110,6 @@ class AssignmentEditor extends Editor {
                         })
                     }
                 />
-                <SubtasksList aid={_.get(this.state.assignment, 'aid')} />
             </View>
         );
     }

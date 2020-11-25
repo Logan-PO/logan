@@ -20,19 +20,16 @@ class SubtasksList extends React.Component {
         super(props);
 
         this.createSubTask = this.createSubTask.bind(this);
-
-        this.state = {
-            newTaskModalOpen: false,
-        };
     }
     createSubTask() {
-        this.props.navigation.push('Subtask', this.newTask());
+        let tempTask = this.newTask();
+        this.props.route.push('Subtask', tempTask);
         this.props.navigation.navigate('New Task');
     }
 
     newTask() {
         return {
-            aid: this.props.aid,
+            aid: this.props.route.params.aid,
             title: 'New subtask',
             dueDate: dayjs().format(DB_DATE_FORMAT),
             priority: 0,
@@ -77,7 +74,7 @@ class SubtasksList extends React.Component {
                             bottom: 0,
                             right: 0,
                         }}
-                        onPress={() => this.createSubTask()}
+                        onPress={this.createSubTask()}
                     />
                 </View>
             </React.Fragment>
