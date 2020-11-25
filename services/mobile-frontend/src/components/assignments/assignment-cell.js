@@ -3,9 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { Checkbox, Colors } from 'react-native-paper';
-import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
-import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import { Colors } from 'react-native-paper';
+import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '@logan/fe-shared/store/assignments';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import { dateUtils } from '@logan/core';
 import PriorityDisplay from '../shared/displays/priority-display';
@@ -13,28 +12,23 @@ import CourseLabel from '../shared/displays/course-label';
 import Typography from '../shared/typography';
 import ListItem from '../shared/list-item';
 
-class TaskCell extends React.Component {
+class AssignmentCell extends React.Component {
     constructor(props) {
         super(props);
 
-        this.check = this.check.bind(this);
         this.listItem = React.createRef();
 
         this.state = {
-            task: props.getTask(props.tid),
+            assignment: props.getAssignment(props.aid),
         };
     }
 
     componentDidUpdate() {
-        const storeTask = this.props.getTask(this.props.tid);
+        const storeAssignment = this.props.getAssignment(this.props.aid);
 
-        if (!_.isEqual(storeTask, this.state.task)) {
-            this.setState({ task: storeTask });
+        if (!_.isEqual(storeAssignment, this.state.assignment)) {
+            this.setState({ assignment: storeAssignment });
         }
-    }
-
-    check() {
-        this.handleChange('complete', !this.state.task.complete);
     }
 
     moveToToday() {
@@ -50,32 +44,32 @@ class TaskCell extends React.Component {
             changes.completionDate = dateUtils.formatAsDateTime();
         }
 
-        const afterUpdates = _.merge({}, this.state.task, changes);
+        const afterUpdates = _.merge({}, this.state.assignment, changes);
 
         this.setState({
-            task: afterUpdates,
+            assignment: afterUpdates,
         });
 
         await this.listItem.current.collapse();
 
-        this.props.updateTaskLocal({
-            id: this.props.tid,
+        this.props.updateAssignmentLocal({
+            id: this.props.aid,
             changes,
         });
 
-        this.props.updateTask(afterUpdates);
+        this.props.updateAssignment(afterUpdates);
     }
 
     shouldShowOverdueLabel() {
         if (!this.props.showOverdueLabel) return false;
-        if (!dateUtils.dueDateIsDate(this.state.task.dueDate)) return false;
+        if (!dateUtils.dueDateIsDate(this.state.assignment.dueDate)) return false;
 
-        const dateValue = dateUtils.toDate(this.state.task.dueDate);
+        const dateValue = dateUtils.toDate(this.state.assignment.dueDate);
         return dateValue.isBefore(dateUtils.dayjs(), 'day');
     }
 
     overdueLabelContent() {
-        const dateValue = dateUtils.toDate(this.state.task.dueDate);
+        const dateValue = dateUtils.toDate(this.state.assignment.dueDate);
         const days = dateUtils.dayjs().diff(dateValue, 'day');
 
         if (days === 1) {
@@ -108,7 +102,7 @@ class TaskCell extends React.Component {
 
     async deletePressed() {
         if (this.props.onDeletePressed) {
-            this.props.onDeletePressed(this.state.task, {
+            this.props.onDeletePressed(this.state.assignment, {
                 confirm: this.listItem.current.collapse,
                 deny: this.listItem.current.close,
             });
@@ -116,20 +110,19 @@ class TaskCell extends React.Component {
     }
 
     render() {
-        if (!this.state.task) return <ListItem />;
+        if (!this.state.assignment) return <ListItem />;
+        const cid = _.get(this.state.assignment, 'cid');
+        const course = this.props.getCourse(cid);
 
-        const checkboxStatus = this.state.task.complete ? 'checked' : 'unchecked';
-        const relatedAssignment = this.props.getAssignment(this.state.task.aid);
-        const course = this.props.getCourse(relatedAssignment ? relatedAssignment.cid : this.state.task.cid);
-        const marginSize = 70;
+        const relatedAssignment = this.props.getAssignment(this.state.assignment.aid);
+
         return (
             <ListItem
                 ref={this.listItem}
-                beforeContent={<PriorityDisplay priority={this.state.task.priority} />}
+                beforeContent={<PriorityDisplay priority={this.state.assignment.priority} />}
                 contentStyle={{ paddingLeft: 12 }}
                 leftContent={
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Checkbox.Android status={checkboxStatus} onPress={this.check} color={course && course.color} />
                         <View style={{ flexDirection: 'column', marginLeft: 8 }}>
                             {(course || relatedAssignment) && (
                                 <View style={{ flexDirection: 'row', marginBottom: 2 }}>
@@ -142,8 +135,8 @@ class TaskCell extends React.Component {
                                     )}
                                 </View>
                             )}
-                            <View style={{ marginRight: marginSize }}>
-                                <Typography variant="body">{this.state.task.title}</Typography>
+                            <View>
+                                <Typography variant="body">{this.state.assignment.title}</Typography>
                             </View>
                             {this.shouldShowOverdueLabel() && (
                                 <View style={{ marginTop: 2 }}>
@@ -152,10 +145,10 @@ class TaskCell extends React.Component {
                                     </Typography>
                                 </View>
                             )}
-                            {!_.isEmpty(this.state.task.description) && (
-                                <View style={{ marginTop: 2, marginRight: marginSize }}>
+                            {!_.isEmpty(this.state.assignment.description) && (
+                                <View style={{ marginTop: 2 }}>
                                     <Typography variant="body2" color="secondary">
-                                        {this.state.task.description}
+                                        {this.state.assignment.description}
                                     </Typography>
                                 </View>
                             )}
@@ -169,27 +162,25 @@ class TaskCell extends React.Component {
     }
 }
 
-TaskCell.propTypes = {
-    tid: PropTypes.string,
-    getTask: PropTypes.func,
+AssignmentCell.propTypes = {
+    aid: PropTypes.string,
     getAssignment: PropTypes.func,
     getCourse: PropTypes.func,
-    updateTask: PropTypes.func,
-    updateTaskLocal: PropTypes.func,
+    updateAssignment: PropTypes.func,
+    updateAssignmentLocal: PropTypes.func,
     showOverdueLabel: PropTypes.bool,
     onPress: PropTypes.func,
     onDeletePressed: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
-    getTask: getTasksSelectors(state.tasks).selectById,
     getAssignment: getAssignmentsSelectors(state.assignments).selectById,
     getCourse: getCourseSelectors(state.schedule).selectById,
 });
 
 const mapDispatchToProps = {
-    updateTask,
-    updateTaskLocal,
+    updateAssignment,
+    updateAssignmentLocal,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TaskCell);
+export default connect(mapStateToProps, mapDispatchToProps)(AssignmentCell);
