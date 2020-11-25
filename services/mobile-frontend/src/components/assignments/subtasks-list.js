@@ -2,11 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { View } from 'react-native';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, createTask, deleteTask } from '@logan/fe-shared/store/tasks';
-import { List, FAB, Text } from 'react-native-paper';
+import { FAB, Text } from 'react-native-paper';
 import TaskCell from '../tasks/task-cell';
-import TaskModal from '../tasks/new-task-modal';
 import ListItem from '../shared/list-item';
 import { typographyStyles } from '../shared/typography';
 
@@ -66,10 +66,8 @@ class SubtasksList extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <div>
-                    <div className="basic-list">
-                        <List style={{ padding: 0 }}>{this.listContent()}</List>
-                    </div>
+                <View>
+                    <View>{this.listContent()}</View>
                     <FAB
                         icon="plus"
                         color="white"
@@ -81,8 +79,7 @@ class SubtasksList extends React.Component {
                         }}
                         onPress={() => this.createSubTask()}
                     />
-                </div>
-                <TaskModal open={this.state.newTaskModalOpen} onClose={this.closeNewTaskModal} />
+                </View>
             </React.Fragment>
         );
     }

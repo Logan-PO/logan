@@ -112,11 +112,7 @@ class AssignmentEditor extends Editor {
                         })
                     }
                 />
-                <ListItem
-                    showRightArrow
-                    leftContent={<Typography>Sub Tasks</Typography>}
-                    rightContent={<SubtasksList aid={_.get(this.state.assignment, 'aid')} />}
-                />
+                <SubtasksList aid={_.get(this.state.assignment, 'aid')} />
             </View>
         );
     }
