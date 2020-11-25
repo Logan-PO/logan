@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@logan/fe-shared": "^1.0.0",
+    "@react-native-community/google-signin": "^5.0.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-native-community/segmented-control": "^2.2.1",
     "@react-navigation/material-bottom-tabs": "^5.3.10",
