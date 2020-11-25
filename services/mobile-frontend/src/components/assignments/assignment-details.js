@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import Editor from '@logan/fe-shared/components/editor';
 //import _ from 'lodash';
-import { View } from 'react-native-web';
 import ViewController from '../shared/view-controller';
 import AssignmentEditor from './assignment-editor';
 import SubtasksList from './subtasks-list';
@@ -30,9 +29,7 @@ class AssignmentDetails extends React.Component {
                         onChange={this.onUpdate}
                     />
                 </ScrollView>
-                <View>
-                    <SubtasksList route={this.props.route} navigation={this.props.navigation} />
-                </View>
+                <SubtasksList route={this.props.route} navigation={this.props.navigation} />
             </ViewController>
         );
     }

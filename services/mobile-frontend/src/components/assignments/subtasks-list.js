@@ -23,7 +23,7 @@ class SubtasksList extends React.Component {
     }
     createSubTask() {
         let tempTask = this.newTask();
-        this.props.navigation.push('Subtask', tempTask);
+        this.props.navigation.push('New Task', tempTask);
         this.props.navigation.navigate('New Task');
     }
 
@@ -41,7 +41,7 @@ class SubtasksList extends React.Component {
         if (this.props.route.params.aid && this.props.tasks.length) {
             return this.props.tasks.map((task, index) => (
                 <React.Fragment key={task.tid}>
-                    <TaskCell key={task.tid} tid={task.tid} />
+                    <TaskCell key={task.tid} tid={task.tid} subtaskCell />
                     {index < this.props.tasks.length - 1}
                 </React.Fragment>
             ));
@@ -74,7 +74,7 @@ class SubtasksList extends React.Component {
                             bottom: 0,
                             right: 0,
                         }}
-                        onPress={this.createSubTask()}
+                        onPress={() => this.createSubTask}
                     />
                 </View>
             </React.Fragment>
