@@ -11,6 +11,7 @@ import Editor from '@logan/fe-shared/components/editor';
 import Typography, { typographyStyles } from '../shared/typography';
 import ListItem from '../shared/list-item';
 import DueDateControl from '../shared/due-date-control';
+import SubtasksList from './subtasks-list';
 
 // A generic assignment editor, to be used for creation or editing in a ViewController
 class AssignmentEditor extends Editor {
@@ -110,6 +111,11 @@ class AssignmentEditor extends Editor {
                             onSelect: this.handleChange.bind(this, 'cid'),
                         })
                     }
+                />
+                <ListItem
+                    showRightArrow
+                    leftContent={<Typography>Sub Tasks</Typography>}
+                    rightContent={<SubtasksList aid={_.get(this.state.assignment, 'aid')} />}
                 />
             </View>
         );
