@@ -23,7 +23,6 @@ class AssignmentEditor extends Editor {
             assignment = props.getAssignment(props.route.params.aid);
         } else {
             assignment = {
-                //TODO: Fix this to be empty assignment
                 title: '',
                 description: '',
                 dueDate: dateUtils.formatAsDate(),
