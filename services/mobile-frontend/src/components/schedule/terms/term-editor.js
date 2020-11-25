@@ -5,10 +5,11 @@ import { getScheduleSelectors, updateTerm, updateTermLocal } from '@logan/fe-sha
 import { dateUtils } from '@logan/core';
 import Editor from '@logan/fe-shared/components/editor';
 import { View } from 'react-native';
-import { List, TextInput } from 'react-native-paper';
+import { FAB, List, TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
-import { typographyStyles } from '../../shared/typography';
+import Typography, { typographyStyles } from '../../shared/typography';
 import DueDateControl from '../../shared/due-date-control';
+import CourseCell from './course-cell';
 
 class TermEditor extends Editor {
     constructor(props) {
@@ -45,10 +46,32 @@ class TermEditor extends Editor {
         changes[prop] = e;
     }
 
+    coursesList() {
+        const courses = this.props.getCoursesForTerm(this.state.term);
+
+        return (
+            <React.Fragment>
+                <List.Subheader style={{ marginTop: 8 }}>Courses</List.Subheader>
+                {!courses.length && (
+                    <ListItem
+                        key="none"
+                        leftContent={
+                            <Typography color="secondary" style={{ fontStyle: 'italic' }}>
+                                None
+                            </Typography>
+                        }
+                    />
+                )}
+                {courses.map(course => (
+                    <CourseCell key={course.cid} course={course} />
+                ))}
+            </React.Fragment>
+        );
+    }
+
     render() {
         return (
-            <View style={{ flex: 1, backgroundColor: 'white' }}>
-                {this.isEditor && <List.Subheader style={{ paddingBottom: 0 }}>Details</List.Subheader>}
+            <View style={{ flex: 1 }}>
                 <ListItem
                     leftContent={
                         <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -66,6 +89,7 @@ class TermEditor extends Editor {
                             />
                         </View>
                     }
+                    contentStyle={{ paddingTop: 0 }}
                 />
                 <DueDateControl
                     datesOnly
@@ -79,6 +103,19 @@ class TermEditor extends Editor {
                     value={this.state.term.endDate}
                     onChange={this.handleChange.bind(this, 'endDate')}
                 />
+                {this.isEditor && this.coursesList()}
+                {this.isEditor && (
+                    <FAB
+                        icon="plus"
+                        color="white"
+                        style={{
+                            position: 'absolute',
+                            bottom: -28,
+                            right: 28,
+                        }}
+                        onPress={() => this.props.navigation.navigate('New Term')}
+                    />
+                )}
             </View>
         );
     }
