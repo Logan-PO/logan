@@ -16,36 +16,28 @@ class MobileLoginButton extends React.Component {
 
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
-        this.onPress = this.onPress.bind(this);
-        this.initAsync = this.initAsync.bind(this);
     }
-
-    componentDidMount() {
-        this.initAsync();
-    }
-
-    async initAsync() {}
 
     async signIn() {
         const { type, accessToken, idToken, user } = await Google.logInAsync(config);
         if (type === 'success') {
             console.log(user);
             console.log(idToken);
+            await this.props.verifyIdToken({ idToken: idToken, clientType: DEVICE });
         }
     }
 
-    async signOut(accessToken) {
-        await Google.logOutAsync({ accessToken, ...config });
-        api.setBearerToken(undefined);
+    async signOut() {
+        //await Google.logOutAsync({ accessToken, ...config });
         this.props.setLoginStage(LOGIN_STAGE.LOGIN);
     }
 
-    onPress() {
-        this.signIn();
-    }
-
     render() {
-        return <Button title="login" onPress={this.onPress} />;
+        if (this.props.isLoggedIn) {
+            return <Button title="Logout" onPress={this.signIn} />;
+        } else {
+            return <Button title="Logout" onPress={this.signOut} />;
+        }
     }
 }
 
