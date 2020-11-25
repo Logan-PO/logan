@@ -47,8 +47,6 @@ class AssignmentEditor extends Editor {
 
     processChange(changes, prop, e) {
         changes[prop] = e;
-
-        if (changes.complete) changes.completionDate = dateUtils.formatAsDateTime();
     }
 
     render() {
