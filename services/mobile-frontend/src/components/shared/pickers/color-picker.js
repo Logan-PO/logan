@@ -91,6 +91,7 @@ class ColorPicker extends SyncComponent {
                         backgroundColor: 'white',
                         flexDirection: 'row',
                         flexWrap: 'wrap',
+                        paddingBottom: this.state.open ? 8 : 0,
                     }}
                     onLayout={this.onViewLayout}
                 >
