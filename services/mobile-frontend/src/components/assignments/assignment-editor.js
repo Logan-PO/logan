@@ -46,8 +46,6 @@ class AssignmentEditor extends Editor {
 
     processChange(changes, prop, e) {
         changes[prop] = e;
-
-        if (changes.complete) changes.completionDate = dateUtils.formatAsDateTime();
     }
 
     render() {
@@ -57,9 +55,9 @@ class AssignmentEditor extends Editor {
             <View style={{ flex: 1 }}>
                 <ListItem
                     leftContent={
-                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end' }}>
+                        <View style={{ flex: 1 }}>
                             <TextInput
-                                style={{ paddingHorizontal: 0, flexGrow: 1, backgroundColor: 'none' }}
+                                style={{ paddingHorizontal: 0, backgroundColor: 'none' }}
                                 mode="flat"
                                 label="Title"
                                 value={this.state.assignment.title}
@@ -67,7 +65,7 @@ class AssignmentEditor extends Editor {
                             />
                         </View>
                     }
-                    contentStyle={{ paddingVertical: 4, paddingLeft: 4 }}
+                    contentStyle={{ paddingBottom: 0 }}
                 />
                 <ListItem
                     leftContent={
@@ -82,7 +80,7 @@ class AssignmentEditor extends Editor {
                             />
                         </View>
                     }
-                    contentStyle={{ paddingTop: 4 }}
+                    contentStyle={{ paddingTop: 0 }}
                 />
                 <DueDateControl
                     datesOnly={true}
