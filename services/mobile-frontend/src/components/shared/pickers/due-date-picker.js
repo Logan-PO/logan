@@ -19,8 +19,14 @@ class DueDatePicker extends React.Component {
 
         this.state = {
             currentType: dateUtils.dueDateType(props.value) || 'date',
-            currentDate: dateUtils.dueDateIsDate(props.value) ? props.value : dateUtils.formatAsDate(),
+            currentDate: dateUtils.dueDateIsDate(props.value)
+                ? this.toPickerFormat(props.value)
+                : this.toPickerFormat(),
         };
+    }
+
+    toPickerFormat(date) {
+        return dateUtils.dayjs(date).format('YYYY-MM-DD');
     }
 
     handleTypeChange(event) {
@@ -46,7 +52,7 @@ class DueDatePicker extends React.Component {
 
         this.setState({
             currentType: 'date',
-            currentDate: formatted,
+            currentDate: this.toPickerFormat(formatted),
         });
 
         this.props.onChange(formatted);
