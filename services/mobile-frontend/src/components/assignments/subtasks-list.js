@@ -19,8 +19,6 @@ class SubtasksList extends React.Component {
     constructor(props) {
         super(props);
 
-        this.openNewTaskModal = this.openNewTaskModal.bind(this);
-        this.closeNewTaskModal = this.closeNewTaskModal.bind(this);
         this.createSubTask = this.createSubTask.bind(this);
 
         this.state = {
