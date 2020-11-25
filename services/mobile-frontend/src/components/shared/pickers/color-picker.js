@@ -23,6 +23,8 @@ for (const name of names) {
 
 delete namedColors.white;
 
+export { namedColors as colors };
+
 class ColorPicker extends SyncComponent {
     constructor(props) {
         super(props);
@@ -81,7 +83,11 @@ class ColorPicker extends SyncComponent {
             <React.Fragment>
                 <ListItem
                     leftContent={<Typography>{this.props.label || 'Color'}</Typography>}
-                    rightContent={<Typography color={this.props.value}>{namedColor.name}</Typography>}
+                    rightContent={
+                        <Typography style={{ fontWeight: 'bold' }} color={this.props.value}>
+                            {namedColor.name}
+                        </Typography>
+                    }
                     onPress={this.state.open ? this.close : this.open}
                 />
                 <View

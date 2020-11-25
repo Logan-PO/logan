@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -7,7 +8,7 @@ import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
 import { typographyStyles } from '../../shared/typography';
-import ColorPicker from '../../shared/pickers/color-picker';
+import ColorPicker, { colors } from '../../shared/pickers/color-picker';
 
 class CourseEditor extends Editor {
     constructor(props) {
@@ -24,7 +25,7 @@ class CourseEditor extends Editor {
             course = {
                 title: '',
                 tid: props.route.params.tid,
-                color: '#000000',
+                color: _.sample(colors).color,
             };
         }
 

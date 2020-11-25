@@ -146,7 +146,7 @@ class TermEditor extends Editor {
                             bottom: -28,
                             right: 28,
                         }}
-                        onPress={() => this.props.navigation.navigate('New Course')}
+                        onPress={() => this.props.navigation.navigate('New Course', { tid: this.state.term.tid })}
                     />
                 )}
                 <Portal>

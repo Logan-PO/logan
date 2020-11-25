@@ -8,6 +8,7 @@ import TasksScreen from '../components/tasks/tasks-screen';
 import NewTaskModalStack from '../components/tasks/new-task-modal-stack';
 import ScheduleStack from '../components/schedule/schedule-stack';
 import NewTermModal from '../components/schedule/terms/new-term-modal';
+import NewCourseModal from '../components/schedule/courses/new-course-modal';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -57,6 +58,7 @@ class NavigationHierarchy extends React.Component {
                 <RootStack.Screen name="Root" component={this.tabs} />
                 <RootStack.Screen name="New Task" component={NewTaskModalStack} />
                 <RootStack.Screen name="New Term" component={NewTermModal} />
+                <RootStack.Screen name="New Course" component={NewCourseModal} />
             </RootStack.Navigator>
         );
     }
