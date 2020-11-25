@@ -1,11 +1,12 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getScheduleSelectors, updateTerm, updateTermLocal } from '@logan/fe-shared/store/schedule';
+import { getScheduleSelectors, updateTerm, updateTermLocal, deleteCourse } from '@logan/fe-shared/store/schedule';
 import { dateUtils } from '@logan/core';
 import Editor from '@logan/fe-shared/components/editor';
 import { View } from 'react-native';
-import { FAB, List, TextInput } from 'react-native-paper';
+import { Button, Dialog, FAB, List, Paragraph, Portal, TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
 import Typography, { typographyStyles } from '../../shared/typography';
 import DueDateControl from '../../shared/due-date-control';
@@ -14,6 +15,9 @@ import CourseCell from './course-cell';
 class TermEditor extends Editor {
     constructor(props) {
         super(props, { id: 'tid', entity: 'term', mobile: true });
+
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
 
         let term;
 
@@ -28,6 +32,25 @@ class TermEditor extends Editor {
         }
 
         this.state = { term };
+    }
+
+    openModal({ message, confirm }) {
+        this.setState({
+            modalShown: true,
+            modalMessage: message,
+            modalConfirmation: () => {
+                confirm && confirm();
+                this.closeModal();
+            },
+        });
+    }
+
+    closeModal() {
+        this.setState({
+            modalShown: false,
+            modalMessage: undefined,
+            modalConfirmation: undefined,
+        });
     }
 
     selectEntity(id) {
@@ -63,7 +86,16 @@ class TermEditor extends Editor {
                     />
                 )}
                 {courses.map(course => (
-                    <CourseCell key={course.cid} course={course} />
+                    <CourseCell
+                        key={course.cid}
+                        course={course}
+                        onDeletePressed={() =>
+                            this.openModal({
+                                message: 'You are about to delete a course.\nThis cannot be undone.',
+                                confirm: () => this.props.deleteCourse(course),
+                            })
+                        }
+                    />
                 ))}
             </React.Fragment>
         );
@@ -116,6 +148,30 @@ class TermEditor extends Editor {
                         onPress={() => this.props.navigation.navigate('New Term')}
                     />
                 )}
+                <Portal>
+                    <Dialog visible={this.state.modalShown} onDismiss={this.closeModal}>
+                        <Dialog.Title>Are you sure?</Dialog.Title>
+                        <Dialog.Content>
+                            {_.get(this.state, 'modalMessage', '')
+                                .split('\n')
+                                .map((line, i) => (
+                                    <Paragraph key={i}>{line}</Paragraph>
+                                ))}
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button onPress={this.closeModal} labelStyle={typographyStyles.button}>
+                                Cancel
+                            </Button>
+                            <Button
+                                onPress={this.state.modalConfirmation}
+                                color="red"
+                                labelStyle={typographyStyles.button}
+                            >
+                                Delete
+                            </Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                </Portal>
             </View>
         );
     }
@@ -127,6 +183,7 @@ TermEditor.propTypes = {
     getHolidaysForTerm: PropTypes.func,
     updateTerm: PropTypes.func,
     updateTermLocal: PropTypes.func,
+    deleteCourse: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -142,6 +199,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
     updateTerm,
     updateTermLocal,
+    deleteCourse,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TermEditor);
