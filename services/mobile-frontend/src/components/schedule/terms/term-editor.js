@@ -48,7 +48,7 @@ class TermEditor extends Editor {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: 'white' }}>
-                <List.Subheader style={{ paddingBottom: 0 }}>Details</List.Subheader>
+                {this.isEditor && <List.Subheader style={{ paddingBottom: 0 }}>Details</List.Subheader>}
                 <ListItem
                     leftContent={
                         <View style={{ flex: 1, flexDirection: 'row' }}>

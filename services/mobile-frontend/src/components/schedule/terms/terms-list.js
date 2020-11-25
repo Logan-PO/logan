@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
 import { getTermSelectors, deleteTerm } from '@logan/fe-shared/store/schedule';
-import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
+import { Button, Dialog, FAB, Paragraph, Portal } from 'react-native-paper';
 import ViewController from '../../shared/view-controller';
 import { typographyStyles } from '../../shared/typography';
 import TermCell from './term-cell';
@@ -65,6 +65,17 @@ class TermsList extends React.Component {
                         />
                     ))}
                 </ScrollView>
+                <FAB
+                    icon="plus"
+                    color="white"
+                    style={{
+                        position: 'absolute',
+                        margin: 16,
+                        bottom: 0,
+                        right: 0,
+                    }}
+                    onPress={() => this.props.navigation.navigate('New Term')}
+                />
                 <Portal>
                     <Dialog visible={!!this.state.termToDelete} onDismiss={this.hideDeleteConfirmation}>
                         <Dialog.Title>Are you sure?</Dialog.Title>
