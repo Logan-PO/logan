@@ -12,6 +12,9 @@ const DEVICE = 'android';
 class MobileLoginButton extends React.Component {
     constructor(props) {
         super(props);
+
+        this.signIn = this.signIn.bind(this);
+        this.signOut = this.signOut.bind(this);
     }
 
     componentDidMount() {
@@ -48,7 +51,13 @@ class MobileLoginButton extends React.Component {
         this.props.setLoginStage(LOGIN_STAGE.LOGIN);
     }
 
-    onPress() {}
+    onPress() {
+        if (this.props.isLoggedIn === LOGIN_STAGE.LOGIN) {
+            this.signIn();
+        } else if (this.props.isLoggedIn === LOGIN_STAGE.LOGGED_IN) {
+            this.signOut();
+        }
+    }
 
     render() {
         return <Text onPress={this.onPress}>Toggle Auth</Text>;
