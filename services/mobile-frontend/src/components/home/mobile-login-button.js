@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'react-native';
-import * as GoogleSignIn from 'expo-google-sign-in';
+import * as Google from 'expo-google-app-auth';
 import { connect } from 'react-redux';
 import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
 import PropTypes from 'prop-types';
@@ -8,6 +8,7 @@ import api from '@logan/fe-shared/utils/api';
 
 const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
 const DEVICE = 'android';
+const config = { clientId: ANDROID_CLIENT_ID };
 
 class MobileLoginButton extends React.Component {
     constructor(props) {
@@ -16,38 +17,25 @@ class MobileLoginButton extends React.Component {
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
         this.onPress = this.onPress.bind(this);
+        this.initAsync = this.initAsync.bind(this);
     }
 
     componentDidMount() {
         this.initAsync();
     }
 
-    async initAsync() {
-        await GoogleSignIn.initAsync({
-            // You may ommit the clientId when the firebase `googleServicesFile` is configured
-            clientId: ANDROID_CLIENT_ID,
-        });
-    }
+    async initAsync() {}
 
     async signIn() {
-        try {
-            //This should pop up a modal (only on android) to update google play services if
-            //they aren't already up to date
-            await GoogleSignIn.askForPlayServicesAsync();
-            //Grabbing user data from sign in
-            const { type, user } = await GoogleSignIn.signInAsync();
+        const { type, accessToken, idToken, user } = await Google.logInAsync(config);
+        if (type === 'success') {
             console.log(user);
-            if (type === 'success') {
-                //Verifying the ID token on a successful login
-                //this.props.verifyIdToken({ idToken: user.auth.idToken, clientType: DEVICE });
-            }
-        } catch ({ message }) {
-            console.log(`Login Error: ${message}`);
+            console.log(idToken);
         }
     }
 
-    async signOut() {
-        await GoogleSignIn.signOutAsync();
+    async signOut(accessToken) {
+        await Google.logOutAsync({ accessToken, ...config });
         api.setBearerToken(undefined);
         this.props.setLoginStage(LOGIN_STAGE.LOGIN);
     }
