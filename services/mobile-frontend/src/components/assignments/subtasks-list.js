@@ -22,14 +22,8 @@ class SubtasksList extends React.Component {
         this.createSubTask = this.createSubTask.bind(this);
     }
     createSubTask() {
-        let tempTask = this.newTask();
-        this.props.navigation.push('New Task', tempTask);
-        this.props.navigation.navigate('New Task');
-    }
-
-    newTask() {
         return {
-            aid: this.props.route.params.aid,
+            aid: this.props.aid,
             title: 'New subtask',
             dueDate: dayjs().format(DB_DATE_FORMAT),
             priority: 0,
@@ -38,7 +32,7 @@ class SubtasksList extends React.Component {
 
     listContent() {
         //TODO:do task cells have this prop?
-        if (this.props.route.params.aid && this.props.tasks.length) {
+        if (this.props.aid && this.props.tasks.length) {
             return this.props.tasks.map((task, index) => (
                 <React.Fragment key={task.tid}>
                     <TaskCell key={task.tid} tid={task.tid} subtaskCell />
@@ -74,7 +68,11 @@ class SubtasksList extends React.Component {
                             bottom: 0,
                             right: 0,
                         }}
-                        onPress={() => this.createSubTask}
+                        onPress={() => {
+                            let tempTask = this.createSubTask();
+                            //this.props.navigation.navigate('New Task');
+                            this.props.navigation.push('New Task', tempTask);
+                        }}
                     />
                 </View>
             </React.Fragment>

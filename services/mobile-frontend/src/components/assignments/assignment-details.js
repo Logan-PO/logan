@@ -29,7 +29,11 @@ class AssignmentDetails extends React.Component {
                         onChange={this.onUpdate}
                     />
                 </ScrollView>
-                <SubtasksList route={this.props.route} navigation={this.props.navigation} />
+                <SubtasksList
+                    route={this.props.route}
+                    navigation={this.props.navigation}
+                    aid={this.props.route.params.aid}
+                />
             </ViewController>
         );
     }
