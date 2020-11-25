@@ -23,7 +23,7 @@ class SubtasksList extends React.Component {
     }
     createSubTask() {
         let tempTask = this.newTask();
-        this.props.route.push('Subtask', tempTask);
+        this.props.navigation.push('Subtask', tempTask);
         this.props.navigation.navigate('New Task');
     }
 
@@ -38,10 +38,10 @@ class SubtasksList extends React.Component {
 
     listContent() {
         //TODO:do task cells have this prop?
-        if (this.props.aid && this.props.tasks.length) {
+        if (this.props.route.params.aid && this.props.tasks.length) {
             return this.props.tasks.map((task, index) => (
                 <React.Fragment key={task.tid}>
-                    <TaskCell key={task.tid} tid={task.tid} subtaskCell />
+                    <TaskCell key={task.tid} tid={task.tid} />
                     {index < this.props.tasks.length - 1}
                 </React.Fragment>
             ));
