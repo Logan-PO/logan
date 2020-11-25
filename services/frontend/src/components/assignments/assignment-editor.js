@@ -11,8 +11,9 @@ import {
     updateAssignment,
     updateAssignmentLocal,
 } from '@logan/fe-shared/store/assignments';
+import Editor from '@logan/fe-shared/components/editor';
+import '../shared/editor.scss';
 import { CoursePicker } from '../shared/controls';
-import Editor from '../shared/editor';
 import RemindersList from '../reminders/reminders-list';
 import SubtasksList from './subtasks-list';
 

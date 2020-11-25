@@ -150,9 +150,9 @@ class TermChildrenList extends React.Component {
             <div className="scrollable-list">
                 <div className="scroll-view">
                     <List>
-                        <ListSubheader>Courses</ListSubheader>
+                        <ListSubheader className="list-header">Courses</ListSubheader>
                         {this.getCoursesList()}
-                        <ListSubheader>Holidays</ListSubheader>
+                        <ListSubheader className="list-header">Holidays</ListSubheader>
                         {this.getHolidaysList()}
                     </List>
                 </div>

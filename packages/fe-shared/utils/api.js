@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import axios from 'axios';
+import { sectionToUTC, sectionFromUTC, reminderToUTC, reminderFromUTC } from './utc-translation';
 
 const BASE_URL = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
 const LOCAL_URL = 'http://localhost:3000';
@@ -56,7 +57,12 @@ function wrapWithErrorHandling(fn) {
 }
 
 function hasStashedBearer() {
-    if (typeof window === 'undefined') return false;
+    try {
+        if (typeof document === 'undefined' || typeof window === 'undefined') return false;
+    } catch (e) {
+        return false;
+    }
+
     return !!localStorage.getItem(STASH_KEY);
 }
 
@@ -85,6 +91,19 @@ async function createNewUser(data) {
 async function getUser(uid) {
     const res = await client.get(`/users/${uid}`);
     return res.data;
+}
+
+// Returns the updated user
+async function updateUser(user) {
+    const { uid } = user;
+    const response = await client.put(`/users/${uid}`, user);
+    return response.data;
+}
+
+async function deleteUser(user) {
+    const { uid } = user;
+    const response = await client.delete(`/users/${uid}`);
+    return response.data;
 }
 
 /* --- TASKS --- */
@@ -199,20 +218,20 @@ async function deleteCourse(course) {
 
 async function getSections() {
     const response = await client.get('/sections');
-    return response.data;
+    return response.data.map(sectionFromUTC);
 }
 
 // Returns the new course
 async function createSection(section) {
-    const response = await client.post('/sections', section);
+    const response = await client.post('/sections', sectionToUTC(section));
     return response.data;
 }
 
 // Returns the updated course
 async function updateSection(section) {
     const { sid } = section;
-    const response = await client.put(`/sections/${sid}`, section);
-    return response.data;
+    const response = await client.put(`/sections/${sid}`, sectionToUTC(section));
+    return sectionFromUTC(response.data);
 }
 
 async function deleteSection(section) {
@@ -252,20 +271,20 @@ async function deleteAssignment(assignment) {
 
 async function getReminders() {
     const response = await client.get('/reminders');
-    return response.data;
+    return response.data.map(reminderFromUTC);
 }
 
 // Returns the new reminder
 async function createReminder(reminder) {
-    const response = await client.post('/reminders', reminder);
-    return response.data;
+    const response = await client.post('/reminders', reminderToUTC(reminder));
+    return reminderFromUTC(response.data);
 }
 
 // Returns the updated reminder
 async function updateReminder(reminder) {
     const { rid } = reminder;
-    const response = await client.put(`/reminders/${rid}`, reminder);
-    return response.data;
+    const response = await client.put(`/reminders/${rid}`, reminderToUTC(reminder));
+    return reminderFromUTC(response.data);
 }
 
 async function deleteReminder(reminder) {
@@ -282,6 +301,8 @@ export default {
     createNewUser: wrapWithErrorHandling(createNewUser),
     verifyIDToken: wrapWithErrorHandling(verifyIDToken),
     getUser: wrapWithErrorHandling(getUser),
+    updateUser: wrapWithErrorHandling(updateUser),
+    deleteUser: wrapWithErrorHandling(deleteUser),
     getTasks: wrapWithErrorHandling(getTasks),
     createTask: wrapWithErrorHandling(createTask),
     updateTask: wrapWithErrorHandling(updateTask),

@@ -6,6 +6,7 @@ const plugins = {
     dayOfYear: require('dayjs/plugin/dayOfYear'),
     utc: require('dayjs/plugin/utc'),
     weekday: require('dayjs/plugin/weekday'),
+    weekOfYear: require('dayjs/plugin/weekOfYear'),
     customParseFormat: require('dayjs/plugin/customParseFormat'),
     advancedFormat: require('dayjs/plugin/advancedFormat'),
     duration: require('dayjs/plugin/duration'),
@@ -32,35 +33,53 @@ function compareDates(d1, d2, format, granularity = 'day') {
     else return 1;
 }
 
-function humanReadableDate(date) {
-    if (date.isToday()) return 'Today';
-    else if (date.isTomorrow()) return 'Tomorrow';
-    else if (date.isYesterday()) return 'Yesterday';
-    else if (date.year() === dayjs().year()) return date.format('MMMM Do');
-    else return date.format('MMMM Do, YYYY');
+function humanReadableDate(date, forSentence = false) {
+    date = dayjs(date);
+    if (date.isToday()) return forSentence ? 'today' : 'Today';
+    else if (date.isTomorrow()) return forSentence ? 'tomorrow' : 'Tomorrow';
+    else if (date.isYesterday()) return forSentence ? 'yesterday' : 'Yesterday';
+    else {
+        const now = dayjs();
+        if (date.year() === now.year()) {
+            if (date.week() === now.week()) return date.format('dddd');
+            else return date.format('MMMM Do');
+        } else {
+            return date.format('MMMM Do, YYYY');
+        }
+    }
+}
+
+function dueDateType(dueDate) {
+    if (dueDate === 'asap' || dueDate === 'eventually') {
+        return dueDate;
+    } else if (dayjs(dueDate, DB_DATE_FORMAT).isValid()) {
+        return 'date';
+    } else {
+        return undefined;
+    }
 }
 
 function dueDateIsDate(dueDate) {
     return dueDate !== 'asap' && dueDate !== 'eventually';
 }
 
-function readableDueDate(dueDate) {
-    if (dueDate === 'asap') return 'ASAP';
-    else if (dueDate === 'eventually') return 'Eventually';
-    else return humanReadableDate(dayjs(dueDate));
+function readableDueDate(dueDate, forSentence = false) {
+    if (dueDate === 'asap') return forSentence ? 'asap' : 'ASAP';
+    else if (dueDate === 'eventually') return forSentence ? 'eventually' : 'Eventually';
+    else return humanReadableDate(dayjs(dueDate), forSentence);
 }
 
 // Constants
 const DB_DATE_FORMAT = 'YYYY-M-D';
 const DB_TIME_FORMAT = 'HH:mm';
-const DB_DATETIME_FORMAT = 'YYYY-M-D H:m';
+const DB_DATETIME_FORMAT = 'YYYY-M-D HH:mm';
 
 function toDate(input) {
     return dayjs(input, DB_DATE_FORMAT);
 }
 
 function formatAsDate(obj) {
-    return obj.format(DB_DATE_FORMAT);
+    return dayjs(obj).format(DB_DATE_FORMAT);
 }
 
 function toTime(input) {
@@ -68,7 +87,7 @@ function toTime(input) {
 }
 
 function formatAsTime(obj) {
-    return obj.format(DB_TIME_FORMAT);
+    return dayjs(obj).format(DB_TIME_FORMAT);
 }
 
 function toDateTime(input) {
@@ -76,7 +95,7 @@ function toDateTime(input) {
 }
 
 function formatAsDateTime(obj) {
-    return obj.format(DB_DATETIME_FORMAT);
+    return dayjs(obj).format(DB_DATETIME_FORMAT);
 }
 
 module.exports = {
@@ -85,6 +104,7 @@ module.exports = {
     compareDates,
     humanReadableDate,
     dueDateIsDate,
+    dueDateType,
     readableDueDate,
     toDate,
     toTime,

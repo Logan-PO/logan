@@ -11,11 +11,11 @@ import {
     deleteAssignment,
     setShouldGoToAssignment,
 } from '@logan/fe-shared/store/assignments';
+import { getSections } from '@logan/fe-shared/sorting/assignments';
 import AssignmentModal from './assignment-modal';
 import AssignmentCell from './assignment-cell';
 import '../shared/list.scss';
 import classes from './assignments-list.module.scss';
-import { getSections } from './sorting';
 
 class AssignmentsList extends React.Component {
     constructor(props) {
@@ -110,7 +110,7 @@ class AssignmentsList extends React.Component {
                             const [dueDate, aids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader>{dueDate}</ListSubheader>
+                                    <ListSubheader className="list-header">{dueDate}</ListSubheader>
                                     {aids.map(aid => (
                                         <AssignmentCell
                                             key={aid}

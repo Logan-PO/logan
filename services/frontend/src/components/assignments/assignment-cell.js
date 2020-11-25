@@ -2,13 +2,13 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import { ListItem, ListItemText, ListItemSecondaryAction, IconButton, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '@logan/fe-shared/store/assignments';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { CourseLabel } from '../shared/displays';
 
-export class AssignmentCell extends React.Component {
+class AssignmentCell extends React.Component {
     constructor(props) {
         super(props);
         this.select = this.select.bind(this);
@@ -54,11 +54,13 @@ export class AssignmentCell extends React.Component {
                         secondary={_.get(this.state, 'assignment.description')}
                     />
                     <ListItemSecondaryAction className="actions">
-                        {this.props.onDelete ? (
-                            <IconButton edge="end" onClick={this.deleted}>
-                                <DeleteIcon color="error" />
-                            </IconButton>
-                        ) : null}
+                        {this.props.onDelete && (
+                            <Tooltip title="Delete">
+                                <IconButton edge="end" onClick={this.deleted}>
+                                    <DeleteIcon color="error" />
+                                </IconButton>
+                            </Tooltip>
+                        )}
                     </ListItemSecondaryAction>
                 </ListItem>
             </div>

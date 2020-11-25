@@ -90,7 +90,7 @@ class SectionsList extends React.Component {
             <div className="scrollable-list">
                 <div className="scroll-view">
                     <List>
-                        <ListSubheader>Sections</ListSubheader>
+                        <ListSubheader className="list-header">Sections</ListSubheader>
                         {this.listItems()}
                     </List>
                 </div>

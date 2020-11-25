@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { dateUtils } from '@logan/core';
-import { compareDueDates } from '@logan/fe-shared/store/tasks';
+import { compareDueDates } from '../store/tasks';
 
 export function initialQuickSort(showComplete, a, b) {
     if (showComplete) {
@@ -25,8 +25,10 @@ function makeSectionsIncomplete(tasks) {
     }
 
     for (const task of tasks) {
-        if (task.dueDate === 'asap' || task.dueDate === 'eventually') {
-            addToSection(task, task.dueDate);
+        if (task.dueDate === 'asap') {
+            addToSection(task, 'ASAP');
+        } else if (task.dueDate === 'eventually') {
+            addToSection(task, 'Eventually');
         } else {
             const dueDate = dateUtils.dayjs(task.dueDate, dateUtils.constants.DB_DATE_FORMAT);
 
@@ -42,9 +44,20 @@ function makeSectionsIncomplete(tasks) {
 }
 
 function makeSectionsComplete(tasks) {
-    return _.groupBy(tasks, task =>
-        dateUtils.humanReadableDate(dateUtils.dayjs(task.completionDate, dateUtils.constants.DB_DATETIME_FORMAT))
+    const groupedEntries = _.entries(
+        _.groupBy(tasks, task => dateUtils.formatAsDate(dateUtils.toDate(task.completionDate)))
     );
+
+    const sortedEntries = groupedEntries.sort(([a], [b]) =>
+        dateUtils.compareDates(b, a, dateUtils.constants.DB_DATE_FORMAT, 'day')
+    );
+
+    const formattedEntries = sortedEntries.map(([date, tasks]) => {
+        const completion = dateUtils.humanReadableDate(dateUtils.toDate(date), true);
+        return [`Completed ${completion}`, tasks];
+    });
+
+    return _.fromPairs(formattedEntries);
 }
 
 export function makeSections(showComplete, tasks) {

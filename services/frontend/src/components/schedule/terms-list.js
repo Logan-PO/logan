@@ -38,7 +38,7 @@ class TermsList extends React.Component {
             <div className="scrollable-list">
                 <div className="scroll-view">
                     <List>
-                        <ListSubheader>Terms</ListSubheader>
+                        <ListSubheader className="list-header">Terms</ListSubheader>
                         {[
                             ...this.props.tids.map(tid => {
                                 const term = this.props.getTerm(tid);

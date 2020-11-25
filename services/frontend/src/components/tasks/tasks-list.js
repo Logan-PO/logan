@@ -6,11 +6,11 @@ import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Sw
 import AddIcon from '@material-ui/icons/Add';
 import { getTasksSelectors, deleteTask, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
 import { setShouldGoToAssignment } from '@logan/fe-shared/store/assignments';
+import { getSections } from '@logan/fe-shared/sorting/tasks';
 import TaskCell from './task-cell';
 import '../shared/list.scss';
 import styles from './tasks-list.module.scss';
 import TaskModal from './task-modal';
-import { getSections } from './sorting';
 
 class TasksList extends React.Component {
     constructor(props) {
@@ -89,7 +89,7 @@ class TasksList extends React.Component {
                             const [dueDate, tids] = section;
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader>{dueDate}</ListSubheader>
+                                    <ListSubheader className="list-header">{dueDate}</ListSubheader>
                                     {tids.map(tid => (
                                         <TaskCell
                                             key={tid}

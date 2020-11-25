@@ -1,1 +1,97 @@
 @import '~react-big-calendar/lib/sass/styles';
+@import '~react-big-calendar/lib/sass/variables';
+
+.full-overview-height {
+    height: calc(100vh - 64px);
+}
+
+.rbc-calendar, .rbc-calendar * {
+    box-sizing: border-box !important;
+}
+
+.rbc-header {
+    border-left: none;
+    border-right: none;
+    padding-bottom: 0.2rem;
+}
+
+.rbc-row-segment {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.rbc-time-view, .rbc-month-view {
+    border: none;
+
+    .rbc-month-header {
+        .rbc-header {
+            text-transform: uppercase;
+        }
+    }
+}
+
+.rbc-off-range-bg {
+    background: #eeeeee;
+}
+
+.rbc-time-view {
+    .rbc-time-header-content, .rbc-header {
+        border: none;
+    }
+
+    .rbc-allday-cell {
+        border-left: solid 1px $border-color;
+    }
+}
+
+.rbc-header.rbc-today, .rbc-allday-cell .rbc-day-bg.rbc-today {
+    background: none;
+}
+
+.rbc-time-slot {
+    text-align: right;
+
+    .rbc-label {
+        opacity: 0.6;
+    }
+}
+
+.rbc-time-header {
+    border-right: none !important;
+}
+
+.rbc-date-cell {
+    text-align: center;
+    padding: 0.1rem 0 0.05rem;
+    font-size: 0.8rem;
+    opacity: 0.8;
+
+    &.rbc-off-range {
+        opacity: 1;
+    }
+}
+
+.rbc-events-container, .rbc-allday-cell, .rbc-month-row {
+    .rbc-event {
+        box-sizing: border-box;
+        background: none;
+        padding: 0;
+        border: none;
+        border-radius: 0;
+
+        .rbc-event-label {
+            display: none;
+        }
+    }
+
+    .rbc-show-more {
+        background: none;
+        padding: 0.1rem 0.4rem;
+        text-decoration: none;
+        font-weight: normal;
+    }
+
+    .rbc-row:empty {
+        display: none;
+    }
+}
