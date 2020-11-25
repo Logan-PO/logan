@@ -3,23 +3,23 @@ import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import Editor from '@logan/fe-shared/components/editor';
 import ViewController from '../../shared/view-controller';
-import TermEditor from './term-editor';
+import CourseEditor from './course-editor';
 
-class TermDisplay extends React.Component {
+class CourseDisplay extends React.Component {
     constructor(props) {
         super(props);
         this.onUpdate = this.onUpdate.bind(this);
     }
 
-    onUpdate(term) {
-        this.setState({ term });
+    onUpdate(course) {
+        this.setState({ course });
     }
 
     render() {
         return (
-            <ViewController title="Term Detail" navigation={this.props.navigation} route={this.props.route}>
+            <ViewController title="Course Details" navigation={this.props.navigation} route={this.props.route}>
                 <ScrollView keyboardDismissMode="on-drag">
-                    <TermEditor
+                    <CourseEditor
                         route={this.props.route}
                         navigation={this.props.navigation}
                         mode={Editor.Mode.Edit}
@@ -31,9 +31,9 @@ class TermDisplay extends React.Component {
     }
 }
 
-TermDisplay.propTypes = {
+CourseDisplay.propTypes = {
     navigation: PropTypes.object,
     route: PropTypes.object,
 };
 
-export default TermDisplay;
+export default CourseDisplay;

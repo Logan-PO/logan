@@ -48,6 +48,7 @@ class NewTaskModal extends React.Component {
 
         return (
             <ViewController
+                title="New Task"
                 navigation={this.props.navigation}
                 route={this.props.route}
                 disableBack

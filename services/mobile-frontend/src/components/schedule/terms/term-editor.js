@@ -10,7 +10,7 @@ import { Button, Dialog, FAB, List, Paragraph, Portal, TextInput } from 'react-n
 import ListItem from '../../shared/list-item';
 import Typography, { typographyStyles } from '../../shared/typography';
 import DueDateControl from '../../shared/due-date-control';
-import CourseCell from './course-cell';
+import CourseCell from '../courses/course-cell';
 
 class TermEditor extends Editor {
     constructor(props) {
@@ -89,6 +89,7 @@ class TermEditor extends Editor {
                     <CourseCell
                         key={course.cid}
                         course={course}
+                        onPress={() => this.props.navigation.push('Course', { tid: course.cid, cid: course.cid })}
                         onDeletePressed={() =>
                             this.openModal({
                                 message: 'You are about to delete a course.\nThis cannot be undone.',
@@ -145,7 +146,7 @@ class TermEditor extends Editor {
                             bottom: -28,
                             right: 28,
                         }}
-                        onPress={() => this.props.navigation.navigate('New Term')}
+                        onPress={() => this.props.navigation.navigate('New Course')}
                     />
                 )}
                 <Portal>
@@ -178,6 +179,7 @@ class TermEditor extends Editor {
 }
 
 TermEditor.propTypes = {
+    route: PropTypes.object,
     getTerm: PropTypes.func,
     getCoursesForTerm: PropTypes.func,
     getHolidaysForTerm: PropTypes.func,

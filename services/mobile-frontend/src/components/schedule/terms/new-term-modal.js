@@ -56,6 +56,7 @@ class NewTermModal extends React.Component {
 
         return (
             <ViewController
+                title="New Term"
                 navigation={this.props.navigation}
                 route={this.props.route}
                 disableBack
