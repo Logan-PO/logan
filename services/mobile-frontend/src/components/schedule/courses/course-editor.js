@@ -7,6 +7,7 @@ import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
 import { typographyStyles } from '../../shared/typography';
+import ColorPicker from '../../shared/pickers/color-picker';
 
 class CourseEditor extends Editor {
     constructor(props) {
@@ -105,6 +106,7 @@ class CourseEditor extends Editor {
                     }
                     contentStyle={{ paddingTop: 0 }}
                 />
+                <ColorPicker value={this.state.course.color} onChange={this.handleChange.bind(this, 'color')} />
             </View>
         );
     }
