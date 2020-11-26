@@ -4,6 +4,7 @@ import { createNewUser, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/stor
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal } from 'react-native';
+import Typography from '../shared/typography';
 
 class SignUpForm extends React.Component {
     constructor(props) {
@@ -36,7 +37,11 @@ class SignUpForm extends React.Component {
     }
 
     render() {
-        return <Modal></Modal>;
+        return (
+            <Modal visible={this.props.open} onRequestClose={this.props.onClose}>
+                <Typography variant="h6">Create Account</Typography>
+            </Modal>
+        );
     }
 }
 
