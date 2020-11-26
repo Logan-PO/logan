@@ -5,6 +5,7 @@ import { fetchSelf, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/lo
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import MobileLoginButton from '../components/home/mobile-login-button';
+import Typography from '../components/shared/typography';
 
 class Home extends React.Component {
     constructor(props) {
@@ -30,6 +31,7 @@ class Home extends React.Component {
     render() {
         return (
             <SafeAreaView>
+                <Typography variant="h3">Welcome to Logan</Typography>
                 <MobileLoginButton />
             </SafeAreaView>
         );
