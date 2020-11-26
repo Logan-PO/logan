@@ -2,10 +2,11 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import AssignmentsScreen from '../screens/assignments';
+import Home from '../screens/home';
 import TasksScreen from '../screens/tasks-screen';
 import NewTaskModalStack from '../components/tasks/new-task-modal-stack';
-import Home from '../screens/home';
+import AssignmentsScreen from '../screens/assignments-screen';
+import NewAssignmentModalStack from '../components/assignments/new-assignment-modal-stack';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -43,6 +44,7 @@ class NavigationHierarchy extends React.Component {
                 <RootStack.Screen name="Home" component={Home} />
                 <RootStack.Screen name="Root" component={this.tabs} />
                 <RootStack.Screen name="New Task" component={NewTaskModalStack} />
+                <RootStack.Screen name="New Assignment" component={NewAssignmentModalStack} />
             </RootStack.Navigator>
         );
     }
