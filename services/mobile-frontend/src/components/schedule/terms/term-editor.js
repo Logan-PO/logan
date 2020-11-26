@@ -6,11 +6,12 @@ import { getScheduleSelectors, updateTerm, updateTermLocal, deleteCourse } from 
 import { dateUtils } from '@logan/core';
 import Editor from '@logan/fe-shared/components/editor';
 import { View } from 'react-native';
-import { Button, Dialog, FAB, List, Paragraph, Portal, TextInput } from 'react-native-paper';
+import { Button, Dialog, List, Paragraph, Portal, TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
 import Typography, { typographyStyles } from '../../shared/typography';
 import DueDateControl from '../../shared/due-date-control';
 import CourseCell from '../courses/course-cell';
+import HolidayCell from '../holidays/holiday-cell';
 
 class TermEditor extends Editor {
     constructor(props) {
@@ -102,6 +103,39 @@ class TermEditor extends Editor {
         );
     }
 
+    holidaysList() {
+        const holidays = this.props.getHolidaysForTerm(this.state.term);
+
+        return (
+            <React.Fragment>
+                <List.Subheader style={{ marginTop: 8 }}>Holidays</List.Subheader>
+                {!holidays.length && (
+                    <ListItem
+                        key="none"
+                        leftContent={
+                            <Typography color="secondary" style={{ fontStyle: 'italic' }}>
+                                None
+                            </Typography>
+                        }
+                    />
+                )}
+                {holidays.map(holiday => (
+                    <HolidayCell
+                        key={holiday.hid}
+                        holiday={holiday}
+                        onPress={() => this.props.navigation.push('Holiday', { tid: holiday.hid, hid: holiday.hid })}
+                        onDeletePressed={() =>
+                            this.openModal({
+                                message: 'You are about to delete a holiday.\nThis cannot be undone.',
+                                confirm: () => this.props.deleteHoliday(holiday),
+                            })
+                        }
+                    />
+                ))}
+            </React.Fragment>
+        );
+    }
+
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -136,18 +170,11 @@ class TermEditor extends Editor {
                     value={this.state.term.endDate}
                     onChange={this.handleChange.bind(this, 'endDate')}
                 />
-                {this.isEditor && this.coursesList()}
                 {this.isEditor && (
-                    <FAB
-                        icon="plus"
-                        color="white"
-                        style={{
-                            position: 'absolute',
-                            bottom: -28,
-                            right: 28,
-                        }}
-                        onPress={() => this.props.navigation.navigate('New Course', { tid: this.state.term.tid })}
-                    />
+                    <View style={{ flex: 1, marginBottom: 16 }}>
+                        {this.coursesList()}
+                        {this.holidaysList()}
+                    </View>
                 )}
                 <Portal>
                     <Dialog visible={this.state.modalShown} onDismiss={this.closeModal}>
