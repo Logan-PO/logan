@@ -4,7 +4,6 @@ import * as Google from 'expo-google-app-auth';
 import { connect } from 'react-redux';
 import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
 import PropTypes from 'prop-types';
-import api from '@logan/fe-shared/utils/api';
 
 const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
 const DEVICE = 'android';
