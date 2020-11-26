@@ -36,7 +36,7 @@ class MobileLoginButton extends React.Component {
         if (this.props.isLoggedIn) {
             return <Button title="Logout" onPress={this.signIn} />;
         } else {
-            return <Button title="Logout" onPress={this.signOut} />;
+            return <Button title="Login with Google" onPress={this.signOut} />;
         }
     }
 }
