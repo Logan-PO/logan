@@ -24,6 +24,10 @@ class TaskEditor extends Editor {
         if (this.isEditor) {
             task = props.getTask(props.route.params.tid);
         } else {
+            console.log(props.route.params);
+            if (_.get(props.route.params, 'newSubtask')) {
+                task = _.get(props.route.params, 'newSubtask');
+            }
             task = {
                 title: '',
                 description: '',

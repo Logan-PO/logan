@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import Editor from '@logan/fe-shared/components/editor';
 //import _ from 'lodash';
 import ViewController from '../shared/view-controller';
@@ -22,18 +22,22 @@ class AssignmentDetails extends React.Component {
         return (
             <ViewController title="Assignment" navigation={this.props.navigation} route={this.props.route}>
                 <ScrollView keyboardDismissMode="on-drag">
-                    <AssignmentEditor
-                        route={this.props.route}
-                        navigation={this.props.navigation}
-                        mode={Editor.Mode.Edit}
-                        onChange={this.onUpdate}
-                    />
+                    <View>
+                        <AssignmentEditor
+                            route={this.props.route}
+                            navigation={this.props.navigation}
+                            mode={Editor.Mode.Edit}
+                            onChange={this.onUpdate}
+                        />
+                    </View>
+                    <View>
+                        <SubtasksList
+                            route={this.props.route}
+                            navigation={this.props.navigation}
+                            aid={this.props.route.params.aid}
+                        />
+                    </View>
                 </ScrollView>
-                <SubtasksList
-                    route={this.props.route}
-                    navigation={this.props.navigation}
-                    aid={this.props.route.params.aid}
-                />
             </ViewController>
         );
     }

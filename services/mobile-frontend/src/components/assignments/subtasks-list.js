@@ -3,31 +3,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
-import { dateUtils } from '@logan/core';
 import { getTasksSelectors, createTask, deleteTask } from '@logan/fe-shared/store/tasks';
 import { FAB, Text } from 'react-native-paper';
 import TaskCell from '../tasks/task-cell';
 import ListItem from '../shared/list-item';
 import { typographyStyles } from '../shared/typography';
 
-const {
-    dayjs,
-    constants: { DB_DATE_FORMAT },
-} = dateUtils;
-
 class SubtasksList extends React.Component {
     constructor(props) {
         super(props);
-
-        this.createSubTask = this.createSubTask.bind(this);
+        this.openSubTask = this.openSubTask.bind(this);
     }
-    createSubTask() {
-        return {
-            aid: this.props.aid,
-            title: 'New subtask',
-            dueDate: dayjs().format(DB_DATE_FORMAT),
-            priority: 0,
-        };
+    openSubTask(aid) {
+        this.props.navigation.push('New Task', aid);
     }
 
     listContent() {
@@ -57,8 +45,8 @@ class SubtasksList extends React.Component {
     render() {
         return (
             <React.Fragment>
+                <View>{this.listContent()}</View>
                 <View>
-                    <View>{this.listContent()}</View>
                     <FAB
                         icon="plus"
                         color="white"
@@ -68,11 +56,7 @@ class SubtasksList extends React.Component {
                             bottom: 0,
                             right: 0,
                         }}
-                        onPress={() => {
-                            let tempTask = this.createSubTask();
-                            //this.props.navigation.navigate('New Task');
-                            this.props.navigation.push('New Task', tempTask);
-                        }}
+                        onPress={() => this.openSubTask(this.props.aid)}
                     />
                 </View>
             </React.Fragment>
