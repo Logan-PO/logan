@@ -7,8 +7,9 @@ import PropTypes from 'prop-types';
 
 const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
 const IOS_CLIENT_ID = '850674143860-mqhkuritdvkmiq53h9963rjmn5gamsgb.apps.googleusercontent.com';
+const CLIENT_ID = Platform.OS === 'ios' ? IOS_CLIENT_ID : ANDROID_CLIENT_ID;
 const DEVICE = 'android';
-const config = { clientId: ANDROID_CLIENT_ID };
+const config = { clientId: CLIENT_ID };
 
 class MobileLoginButton extends React.Component {
     constructor(props) {
