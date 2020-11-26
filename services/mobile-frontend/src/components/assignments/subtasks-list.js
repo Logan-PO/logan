@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { getTasksSelectors, createTask, deleteTask } from '@logan/fe-shared/store/tasks';
-import { FAB, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import TaskCell from '../tasks/task-cell';
 import ListItem from '../shared/list-item';
 import { typographyStyles } from '../shared/typography';
@@ -12,10 +12,6 @@ import { typographyStyles } from '../shared/typography';
 class SubtasksList extends React.Component {
     constructor(props) {
         super(props);
-        this.openSubTask = this.openSubTask.bind(this);
-    }
-    openSubTask(aid) {
-        this.props.navigation.push('New Task', aid);
     }
 
     listContent() {
@@ -46,19 +42,6 @@ class SubtasksList extends React.Component {
         return (
             <React.Fragment>
                 <View>{this.listContent()}</View>
-                <View>
-                    <FAB
-                        icon="plus"
-                        color="white"
-                        style={{
-                            position: 'absolute',
-                            margin: 16,
-                            bottom: 0,
-                            right: 0,
-                        }}
-                        onPress={() => this.openSubTask(this.props.aid)}
-                    />
-                </View>
             </React.Fragment>
         );
     }

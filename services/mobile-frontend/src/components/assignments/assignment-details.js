@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { ScrollView, View } from 'react-native';
 import Editor from '@logan/fe-shared/components/editor';
 //import _ from 'lodash';
+import { FAB } from 'react-native-paper';
 import ViewController from '../shared/view-controller';
 import AssignmentEditor from './assignment-editor';
 import SubtasksList from './subtasks-list';
@@ -11,6 +12,10 @@ class AssignmentDetails extends React.Component {
     constructor(props) {
         super(props, { id: 'aid', entity: 'assignment', mobile: true });
         this.onUpdate = this.onUpdate.bind(this);
+        this.openSubTask = this.openSubTask.bind(this);
+    }
+    openSubTask(aid) {
+        this.props.navigation.push('New Task', aid);
     }
 
     onUpdate(assignment) {
@@ -38,6 +43,19 @@ class AssignmentDetails extends React.Component {
                         />
                     </View>
                 </ScrollView>
+                <View>
+                    <FAB
+                        icon="plus"
+                        color="white"
+                        style={{
+                            position: 'absolute',
+                            margin: 16,
+                            bottom: 0,
+                            right: 0,
+                        }}
+                        onPress={() => this.openSubTask(this.props.route.params.aid)}
+                    />
+                </View>
             </ViewController>
         );
     }
