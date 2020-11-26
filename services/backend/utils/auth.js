@@ -12,7 +12,7 @@ async function getClientCreds(clientType) {
         case 'web':
             return secretUtils.getSecret('logan/web-google-creds');
         case 'ios':
-            throw new AuthorizationError('Missing iOS client credentials');
+            return secretUtils.getSecret('logan/ios-google-creds');
         case 'android':
             throw new AuthorizationError('Missing Android client credentials');
         default:

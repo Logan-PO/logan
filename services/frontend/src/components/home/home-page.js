@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { Link, navigate } from 'gatsby';
 import { Container, Typography, Grid } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import api from '@logan/fe-shared/utils/api';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
 import GoogleBtn from './GoogleButton';
 import SignUpForm from './signup-form';
@@ -19,6 +20,13 @@ class HomePage extends React.Component {
         this.state = {
             createModalOpen: false,
         };
+    }
+
+    async componentDidMount() {
+        const hasStashedBearer = await api.hasStashedBearer();
+        if (hasStashedBearer) {
+            this.props.setLoginStage(LOGIN_STAGE.DONE);
+        }
     }
 
     async componentDidUpdate(prevProps) {

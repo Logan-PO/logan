@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import api from '@logan/fe-shared/utils/api';
 import { fetchSelf, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -11,6 +12,16 @@ class Home extends React.Component {
     constructor(props) {
         super(props);
     }
+
+    async componentDidMount() {
+        if (await api.hasStashedBearer()) {
+            this.props.setLoginStage(LOGIN_STAGE.DONE);
+            this.props.navigation.navigate('Root');
+        } else {
+            console.log('No stashed bearer');
+        }
+    }
+
     /*
     When the login stage is updated, we want to either navigate to the tasks screen or
     navigate to the create users screen
@@ -22,7 +33,7 @@ class Home extends React.Component {
         if (this.props.loginStage === LOGIN_STAGE.LOGGED_IN) {
             await this.props.fetchSelf();
             this.props.setLoginStage(LOGIN_STAGE.DONE);
-            //TODO: Go to tasks screen
+            this.props.navigation.navigate('Root');
         } else if (this.props.loginStage === LOGIN_STAGE.CREATE) {
             //TODO: Go to new user screen
         }
@@ -39,6 +50,7 @@ class Home extends React.Component {
 }
 
 Home.propTypes = {
+    navigation: PropTypes.object,
     loginStage: PropTypes.string,
     setLoginStage: PropTypes.func,
     fetchSelf: PropTypes.func,

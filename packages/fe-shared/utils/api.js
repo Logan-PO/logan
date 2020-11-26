@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { sectionToUTC, sectionFromUTC, reminderToUTC, reminderFromUTC } from './utc-translation';
 
 const BASE_URL = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
@@ -14,11 +15,27 @@ const client = axios.create({
     },
 });
 
+let isMobile;
 let bearer;
 
+function determineMobile() {
+    try {
+        isMobile = !localStorage;
+    } catch (e) {
+        isMobile = true;
+    }
+}
+
 async function onStartup() {
-    if (hasStashedBearer()) setBearerToken(localStorage.getItem(STASH_KEY), false);
-    if (process.env.NODE_ENV === 'development') await searchForLocalBackend();
+    determineMobile();
+
+    if (await hasStashedBearer()) {
+        await setBearerToken(await getFromPersistentStorage(STASH_KEY), false);
+    }
+
+    if (process.env.NODE_ENV === 'development') {
+        await searchForLocalBackend();
+    }
 }
 
 // If the backend is running locally, use that instead of the base URL
@@ -31,6 +48,42 @@ async function searchForLocalBackend() {
         }
         // eslint-disable-next-line no-empty
     } catch (e) {}
+}
+
+/* ---- PERSISTENT STORAGE ---- */
+
+async function getFromPersistentStorage(key) {
+    if (isMobile) {
+        return AsyncStorage.getItem(key);
+    } else {
+        try {
+            if (typeof document === 'undefined' || typeof window === 'undefined') return undefined;
+        } catch (e) {
+            return undefined;
+        }
+
+        return localStorage.getItem(key);
+    }
+}
+
+async function setItemInPersistentStorage(key, value) {
+    if (isMobile) {
+        if (value === undefined) {
+            return AsyncStorage.removeItem(key);
+        } else {
+            return AsyncStorage.setItem(key, value);
+        }
+    } else {
+        if (typeof window === 'undefined') {
+            console.warn('Cannot set value in localStorage. window undefined');
+        } else {
+            if (value === undefined) {
+                return localStorage.removeItem(key);
+            } else {
+                return localStorage.setItem(key, value);
+            }
+        }
+    }
 }
 
 /**
@@ -56,26 +109,18 @@ function wrapWithErrorHandling(fn) {
     };
 }
 
-function hasStashedBearer() {
-    try {
-        if (typeof document === 'undefined' || typeof window === 'undefined') return false;
-    } catch (e) {
-        return false;
-    }
-
-    return !!localStorage.getItem(STASH_KEY);
+async function hasStashedBearer() {
+    const stashedValue = await getFromPersistentStorage(STASH_KEY);
+    return !!stashedValue;
 }
 
-function setBearerToken(token, stash = true) {
+async function setBearerToken(token, stash = true) {
     if (token) bearer = `Bearer ${token}`;
     else bearer = undefined;
 
     _.set(client, 'defaults.headers.common.Authorization', bearer);
 
-    if (stash && typeof window !== 'undefined') {
-        if (token) localStorage.setItem(STASH_KEY, token);
-        else localStorage.removeItem(STASH_KEY);
-    }
+    if (stash) return setItemInPersistentStorage(STASH_KEY, token);
 }
 
 async function verifyIDToken({ idToken, clientType }) {

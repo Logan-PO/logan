@@ -9,12 +9,10 @@ const LOGIN_STAGE = {
 };
 
 function getInitialState() {
-    const hasStashedBearer = api.hasStashedBearer();
-
     return {
-        currentStage: hasStashedBearer ? LOGIN_STAGE.DONE : LOGIN_STAGE.LOGIN,
-        isLoggedIn: hasStashedBearer,
-        isUserConnected: hasStashedBearer,
+        currentStage: LOGIN_STAGE.LOGIN,
+        isLoggedIn: false,
+        isUserConnected: false,
         user: undefined,
         userMeta: undefined,
     };
