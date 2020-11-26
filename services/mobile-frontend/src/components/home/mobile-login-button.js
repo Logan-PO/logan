@@ -1,11 +1,12 @@
 import React from 'react';
-import { Button } from 'react-native';
+import { Button, Platform } from 'react-native';
 import * as Google from 'expo-google-app-auth';
 import { connect } from 'react-redux';
 import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
 import PropTypes from 'prop-types';
 
 const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
+const IOS_CLIENT_ID = '850674143860-mqhkuritdvkmiq53h9963rjmn5gamsgb.apps.googleusercontent.com';
 const DEVICE = 'android';
 const config = { clientId: ANDROID_CLIENT_ID };
 
