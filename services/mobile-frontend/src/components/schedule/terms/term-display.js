@@ -42,12 +42,12 @@ class TermDisplay extends React.Component {
                         {
                             icon: 'calendar',
                             label: 'Holiday',
-                            onPress: () => {},
+                            onPress: () => this.props.navigation.navigate('New Holiday', { tid: this.state.term.tid }),
                         },
                         {
                             icon: 'calendar',
                             label: 'Course',
-                            onPress: () => {},
+                            onPress: () => this.props.navigation.navigate('New Course', { tid: this.state.term.tid }),
                         },
                     ]}
                     onStateChange={({ open }) => this.setState({ fabOpen: open })}
