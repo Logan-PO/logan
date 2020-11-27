@@ -11,10 +11,14 @@ class AssignmentDetails extends React.Component {
     constructor(props) {
         super(props, { id: 'aid', entity: 'assignment', mobile: true });
         this.onUpdate = this.onUpdate.bind(this);
-        this.openSubTask = this.openSubTask.bind(this);
+        this.newSubtask = this.newSubtask.bind(this);
     }
-    openSubTask(aid) {
-        this.props.navigation.push('New Task', { aid: aid });
+
+    newSubtask() {
+        this.props.navigation.navigate('New Task', {
+            screen: 'New Task',
+            params: { aid: this.state.assignment.aid },
+        });
     }
 
     onUpdate(assignment) {
@@ -22,6 +26,7 @@ class AssignmentDetails extends React.Component {
     }
 
     render() {
+        //TODO: Generalize this maybe?
         return (
             <ViewController title="Assignment" navigation={this.props.navigation} route={this.props.route}>
                 <ScrollView keyboardDismissMode="on-drag">
@@ -51,7 +56,7 @@ class AssignmentDetails extends React.Component {
                             bottom: 0,
                             right: 0,
                         }}
-                        onPress={() => this.openSubTask(this.props.route.params.aid)}
+                        onPress={this.newSubtask}
                     />
                 </View>
             </ViewController>
