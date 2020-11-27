@@ -87,7 +87,7 @@ class DowPicker extends SyncComponent {
 
 DowPicker.propTypes = {
     label: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.array,
     onChange: PropTypes.func,
 };
 

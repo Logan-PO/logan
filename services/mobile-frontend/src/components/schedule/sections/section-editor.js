@@ -27,6 +27,10 @@ class SectionEditor extends Editor {
                 title: '',
                 startDate: dateUtils.formatAsDate(),
                 endDate: dateUtils.formatAsDate(),
+                startTime: dateUtils.formatAsTime(),
+                endTime: dateUtils.formatAsTime(),
+                weeklyRepeat: 1,
+                daysOfWeek: [],
             };
         }
 
