@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
 import SyncComponent from '@logan/fe-shared/components/sync-component';
-import { View, LayoutAnimation } from 'react-native';
+import { View, LayoutAnimation, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ListItem from '../list-item';
 import Typography from '../typography';
@@ -42,6 +42,11 @@ class TimePicker extends SyncComponent {
         const time = dateUtils.formatAsTime(dateUtils.dayjs(dateString));
         this.props.onChange && this.props.onChange(time);
 
+        if (Platform.OS === 'android') {
+            this.setState({ open: false }); //Close it first so that it does not open again during the duration of the close animation
+            return this.close();
+        }
+
         if (event.type === 'neutralButtonPressed') return this.close();
     }
 
@@ -53,7 +58,7 @@ class TimePicker extends SyncComponent {
                     rightContent={
                         <Typography color="detail">{dateUtils.toTime(this.props.value).format('h:mm a')}</Typography>
                     }
-                    onPress={this.state.open ? this.close : this.open}
+                    onPress={this.open}
                 />
                 <View
                     style={{
