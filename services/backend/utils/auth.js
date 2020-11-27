@@ -25,8 +25,8 @@ async function getAuthSecret(clientType) {
     return secret[clientType];
 }
 
-async function generateBearerToken(payload, clientType) {
-    const authSecret = await getAuthSecret(clientType);
+async function generateBearerToken(payload) {
+    const authSecret = await getAuthSecret('web');
     return jwt.sign(payload, authSecret);
 }
 
