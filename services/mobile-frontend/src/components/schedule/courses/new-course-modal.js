@@ -3,14 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
-import { Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { createTask } from '@logan/fe-shared/store/tasks';
+import { createCourse } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
-import ViewController from '../shared/view-controller';
-import TaskEditor from './task-editor';
+import { Appbar } from 'react-native-paper';
+import ViewController from '../../shared/view-controller';
+import CourseEditor from './course-editor';
 
-class NewTaskModal extends React.Component {
+class NewCourseModal extends React.Component {
     constructor(props) {
         super(props);
 
@@ -19,7 +19,7 @@ class NewTaskModal extends React.Component {
         this.update = this.update.bind(this);
 
         this.state = {
-            task: {},
+            course: {},
         };
     }
 
@@ -28,19 +28,19 @@ class NewTaskModal extends React.Component {
     }
 
     async create() {
-        await this.props.createTask(this.state.task);
+        await this.props.createCourse(this.state.course);
         this.close();
     }
 
-    update(task) {
-        this.setState({ task });
+    update(course) {
+        this.setState({ course });
     }
 
     render() {
         const leftActions = <Appbar.Action icon="close" onPress={this.close} />;
         const rightActions = (
             <Appbar.Action
-                disabled={_.isEmpty(this.state.task.title)}
+                disabled={_.isEmpty(this.state.course.title)}
                 icon={props => <Icon {...props} name="done" color="white" size={24} />}
                 onPress={this.create}
             />
@@ -48,7 +48,7 @@ class NewTaskModal extends React.Component {
 
         return (
             <ViewController
-                title="New Task"
+                title="New Course"
                 navigation={this.props.navigation}
                 route={this.props.route}
                 disableBack
@@ -56,7 +56,7 @@ class NewTaskModal extends React.Component {
                 rightActions={rightActions}
             >
                 <ScrollView keyboardDismissMode="on-drag">
-                    <TaskEditor
+                    <CourseEditor
                         navigation={this.props.navigation}
                         route={this.props.route}
                         mode={Editor.Mode.Create}
@@ -68,14 +68,14 @@ class NewTaskModal extends React.Component {
     }
 }
 
-NewTaskModal.propTypes = {
+NewCourseModal.propTypes = {
+    createCourse: PropTypes.func,
     navigation: PropTypes.object,
     route: PropTypes.object,
-    createTask: PropTypes.func,
 };
 
 const mapDispatchToState = {
-    createTask,
+    createCourse,
 };
 
-export default connect(null, mapDispatchToState)(NewTaskModal);
+export default connect(null, mapDispatchToState)(NewCourseModal);

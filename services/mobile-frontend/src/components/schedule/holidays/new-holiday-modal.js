@@ -3,14 +3,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
-import { Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { createTask } from '@logan/fe-shared/store/tasks';
+import { dateUtils } from '@logan/core';
+import { createHoliday } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
-import ViewController from '../shared/view-controller';
-import TaskEditor from './task-editor';
+import { Appbar } from 'react-native-paper';
+import ViewController from '../../shared/view-controller';
+import HolidayEditor from './holiday-editor';
 
-class NewTaskModal extends React.Component {
+class NewHolidayModal extends React.Component {
     constructor(props) {
         super(props);
 
@@ -19,7 +20,7 @@ class NewTaskModal extends React.Component {
         this.update = this.update.bind(this);
 
         this.state = {
-            task: {},
+            holiday: {},
         };
     }
 
@@ -28,19 +29,26 @@ class NewTaskModal extends React.Component {
     }
 
     async create() {
-        await this.props.createTask(this.state.task);
+        await this.props.createHoliday(this.state.holiday);
         this.close();
     }
 
-    update(task) {
-        this.setState({ task });
+    update(course) {
+        this.setState({ course });
     }
 
     render() {
+        let isValid = !_.isEmpty(this.state.holiday.title);
+
+        const start = dateUtils.toDate(this.state.holiday.startDate);
+        const end = dateUtils.toDate(this.state.holiday.endDate);
+
+        if (!start.isBefore(end)) isValid = false;
+
         const leftActions = <Appbar.Action icon="close" onPress={this.close} />;
         const rightActions = (
             <Appbar.Action
-                disabled={_.isEmpty(this.state.task.title)}
+                disabled={!isValid}
                 icon={props => <Icon {...props} name="done" color="white" size={24} />}
                 onPress={this.create}
             />
@@ -48,7 +56,7 @@ class NewTaskModal extends React.Component {
 
         return (
             <ViewController
-                title="New Task"
+                title="New Holiday"
                 navigation={this.props.navigation}
                 route={this.props.route}
                 disableBack
@@ -56,7 +64,7 @@ class NewTaskModal extends React.Component {
                 rightActions={rightActions}
             >
                 <ScrollView keyboardDismissMode="on-drag">
-                    <TaskEditor
+                    <HolidayEditor
                         navigation={this.props.navigation}
                         route={this.props.route}
                         mode={Editor.Mode.Create}
@@ -68,14 +76,14 @@ class NewTaskModal extends React.Component {
     }
 }
 
-NewTaskModal.propTypes = {
+NewHolidayModal.propTypes = {
+    createHoliday: PropTypes.func,
     navigation: PropTypes.object,
     route: PropTypes.object,
-    createTask: PropTypes.func,
 };
 
 const mapDispatchToState = {
-    createTask,
+    createHoliday,
 };
 
-export default connect(null, mapDispatchToState)(NewTaskModal);
+export default connect(null, mapDispatchToState)(NewHolidayModal);
