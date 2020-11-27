@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView, View } from 'react-native';
 import Editor from '@logan/fe-shared/components/editor';
-//import _ from 'lodash';
 import { FAB } from 'react-native-paper';
 import ViewController from '../shared/view-controller';
 import AssignmentEditor from './assignment-editor';
@@ -15,7 +14,7 @@ class AssignmentDetails extends React.Component {
         this.openSubTask = this.openSubTask.bind(this);
     }
     openSubTask(aid) {
-        this.props.navigation.push('New Task', aid);
+        this.props.navigation.push('New Task', { aid });
     }
 
     onUpdate(assignment) {
