@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
-import { printSectionTimes } from '@logan/fe-shared/utils/scheduling-utils';
+import { dateUtils } from '@logan/core';
 import ListItem from '../../shared/list-item';
 import Typography from '../../shared/typography';
 
@@ -30,6 +30,16 @@ class SectionCell extends React.Component {
                 leftContent={
                     <View style={{ flex: 1 }}>
                         <Typography style={{ marginBottom: 4 }}>{this.props.section.title}</Typography>
+                        <Typography color="detail" style={{ marginBottom: 4 }}>
+                            {`${dateUtils.humanReadableDate(
+                                this.props.section.startDate
+                            )} - ${dateUtils.humanReadableDate(this.props.section.endDate)}`}
+                        </Typography>
+                        <Typography color="detail" style={{ marginBottom: 4 }}>
+                            {this.props.section.daysOfWeek
+                                .map(dow => dateUtils.dayjs().weekday(dow).format('ddd'))
+                                .join('/')}
+                        </Typography>
                     </View>
                 }
                 onPress={this.props.onPress}
