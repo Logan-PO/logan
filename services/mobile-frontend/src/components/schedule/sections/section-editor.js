@@ -11,6 +11,7 @@ import { typographyStyles } from '../../shared/typography';
 import DueDateControl from '../../shared/due-date-control';
 import TimePicker from '../../shared/pickers/time-picker';
 import NumberPicker from '../../shared/pickers/number-picker';
+import DowPicker from '../../shared/pickers/dow-picker';
 
 class SectionEditor extends Editor {
     constructor(props) {
@@ -116,6 +117,10 @@ class SectionEditor extends Editor {
                     label="Weekly Interval"
                     value={this.state.section.weeklyRepeat}
                     onChange={this.handleChange.bind(this, 'weeklyRepeat')}
+                />
+                <DowPicker
+                    value={this.state.section.daysOfWeek}
+                    onChange={this.handleChange.bind(this, 'daysOfWeek')}
                 />
                 <List.Subheader>Times</List.Subheader>
                 <TimePicker
