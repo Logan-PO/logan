@@ -12,14 +12,18 @@ import { typographyStyles } from '../shared/typography';
 class SubtasksList extends React.Component {
     constructor(props) {
         super(props);
+
+        this.openTask = this.openTask.bind(this);
+    }
+    openTask(tid) {
+        this.props.navigation.navigate('Task', { tid });
     }
 
     listContent() {
-        //TODO:do task cells have this prop?
         if (this.props.aid && this.props.tasks.length) {
             return this.props.tasks.map((task, index) => (
                 <React.Fragment key={task.tid}>
-                    <TaskCell key={task.tid} tid={task.tid} subtaskCell />
+                    <TaskCell key={task.tid} tid={task.tid} onPress={() => this.openTask(task.tid)} />
                     {index < this.props.tasks.length - 1}
                 </React.Fragment>
             ));
