@@ -18,6 +18,11 @@ const BottomTabs = createMaterialBottomTabNavigator();
 
 const routes = [
     {
+        name: 'Overview',
+        icon: 'golf-course',
+        component: OverviewScreen,
+    },
+    {
         name: 'Tasks',
         icon: 'check-box',
         component: TasksScreen,
@@ -32,18 +37,13 @@ const routes = [
         icon: 'today',
         component: ScheduleStack,
     },
-    {
-        name: 'Overview',
-        icon: 'golf-course',
-        component: OverviewScreen,
-    },
 ];
 
 class NavigationHierarchy extends React.Component {
     tabs() {
         return (
             <BottomTabs.Navigator
-                initialRouteName="Tasks"
+                initialRouteName="Overview"
                 activeColor="teal"
                 barStyle={{ backgroundColor: 'white' }}
                 screenOptions={({ route }) => ({
