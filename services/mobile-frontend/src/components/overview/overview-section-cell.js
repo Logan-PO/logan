@@ -38,11 +38,13 @@ class OverviewSectionCell extends React.Component {
                 <ListItem
                     leftContent={
                         <View container direction="row" alignItems="flex-start">
-                            <View item style={{ minWidth: '9rem' }}>
-                                <Typography primary={printSectionTimes(this.state.section)} />
+                            <View>
+                                <Typography>{printSectionTimes(this.state.section)}</Typography>
                             </View>
-                            <View item>
-                                <Typography primary={<CourseLabel cid={_.get(this.state, 'section.cid')} />} />
+                            <View>
+                                <Typography>
+                                    <CourseLabel cid={_.get(this.state, 'section.cid')} />
+                                </Typography>
                                 {this.state.condensed && section && this.makeDetailText('Section', section)}
                                 {this.state.condensed && location && this.makeDetailText('Location', location)}
                                 {this.state.condensed && instructor && this.makeDetailText('Instructor', instructor)}

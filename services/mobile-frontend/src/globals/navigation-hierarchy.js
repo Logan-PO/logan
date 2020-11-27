@@ -34,7 +34,7 @@ const routes = [
     },
     {
         name: 'Overview',
-        icon: 'eye',
+        icon: 'golf-course',
         component: OverviewScreen,
     },
 ];

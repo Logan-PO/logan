@@ -6,8 +6,9 @@ import { dateUtils } from '@logan/core';
 import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
-import { View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { List } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import Typography from '../shared/typography';
@@ -97,11 +98,13 @@ export class OverviewList extends React.Component {
 
     secondaryHeader(title) {
         return (
-            <ListItem>
-                <Typography variant="button">
-                    <b>{title}</b>
-                </Typography>
-            </ListItem>
+            <ListItem
+                leftContent={
+                    <Typography variant="button">
+                        <Text>{title}</Text>
+                    </Typography>
+                }
+            />
         );
     }
 
@@ -109,7 +112,7 @@ export class OverviewList extends React.Component {
         const groups = this.getRelevantData();
 
         return (
-            <View>
+            <ScrollView keyboardDismissMode="on-drag">
                 {groups.map(([date, { sections, assignments, tasks }]) => {
                     return (
                         <React.Fragment key={date.format()}>
@@ -129,7 +132,7 @@ export class OverviewList extends React.Component {
                         </React.Fragment>
                     );
                 })}
-            </View>
+            </ScrollView>
         );
     }
 }
