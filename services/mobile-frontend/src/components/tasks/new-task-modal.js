@@ -37,7 +37,6 @@ class NewTaskModal extends React.Component {
     }
 
     render() {
-        console.log(this.props.route.params);
         const leftActions = <Appbar.Action icon="close" onPress={this.close} />;
         const rightActions = (
             <Appbar.Action
