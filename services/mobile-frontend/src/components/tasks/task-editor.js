@@ -57,7 +57,6 @@ class TaskEditor extends Editor {
     }
 
     render() {
-        console.log(this.props.route.params);
         const relatedAssignment = this.props.getAssignment(_.get(this.state.task, 'aid'));
         const cid = relatedAssignment ? relatedAssignment.cid : _.get(this.state.task, 'cid');
         const course = this.props.getCourse(cid);

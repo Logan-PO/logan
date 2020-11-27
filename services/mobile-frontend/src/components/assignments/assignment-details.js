@@ -22,7 +22,6 @@ class AssignmentDetails extends React.Component {
     }
 
     render() {
-        //TODO: Generalize this maybe?
         return (
             <ViewController title="Assignment" navigation={this.props.navigation} route={this.props.route}>
                 <ScrollView keyboardDismissMode="on-drag">
