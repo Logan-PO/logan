@@ -14,7 +14,7 @@ async function getClientCreds(clientType) {
         case 'ios':
             return secretUtils.getSecret('logan/ios-google-creds');
         case 'android':
-            throw new AuthorizationError('Missing Android client credentials');
+            return secretUtils.getSecret('logan/android-google-creds');
         default:
             throw new AuthorizationError(`Unrecognized client type ${clientType}`);
     }
