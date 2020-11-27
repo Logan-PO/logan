@@ -13,6 +13,7 @@ import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import Typography from '../shared/typography';
 import ListItem from '../shared/list-item';
+import ViewController from '../shared/view-controller';
 import OverviewSectionCell from './overview-section-cell';
 
 const {
@@ -112,32 +113,42 @@ export class OverviewList extends React.Component {
         const groups = this.getRelevantData();
 
         return (
-            <ScrollView keyboardDismissMode="on-drag">
-                {groups.map(([date, { sections, assignments, tasks }]) => {
-                    return (
-                        <React.Fragment key={date.format()}>
-                            <List.Subheader>{dateUtils.humanReadableDate(date)}</List.Subheader>
-                            {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
-                            {sections.map(({ sid }) => (
-                                <OverviewSectionCell key={sid} sid={sid} />
-                            ))}
-                            {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
-                            {assignments.map(({ aid }) => (
-                                <AssignmentCell key={aid} aid={aid} />
-                            ))}
-                            {tasks.length > 0 && this.secondaryHeader('TASKS')}
-                            {tasks.map(({ tid }) => (
-                                <TaskCell key={tid} tid={tid} />
-                            ))}
-                        </React.Fragment>
-                    );
-                })}
-            </ScrollView>
+            <ViewController
+                title="Overview"
+                navigation={this.props.navigation}
+                route={this.props.route}
+                disableBack
+                leftActionIsFetch={true}
+            >
+                <ScrollView keyboardDismissMode="on-drag">
+                    {groups.map(([date, { sections, assignments, tasks }]) => {
+                        return (
+                            <React.Fragment key={date.format()}>
+                                <List.Subheader>{dateUtils.humanReadableDate(date)}</List.Subheader>
+                                {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
+                                {sections.map(({ sid }) => (
+                                    <OverviewSectionCell key={sid} sid={sid} />
+                                ))}
+                                {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
+                                {assignments.map(({ aid }) => (
+                                    <AssignmentCell key={aid} aid={aid} />
+                                ))}
+                                {tasks.length > 0 && this.secondaryHeader('TASKS')}
+                                {tasks.map(({ tid }) => (
+                                    <TaskCell key={tid} tid={tid} />
+                                ))}
+                            </React.Fragment>
+                        );
+                    })}
+                </ScrollView>
+            </ViewController>
         );
     }
 }
 
 OverviewList.propTypes = {
+    route: PropTypes.object,
+    navigation: PropTypes.object,
     assignmentSelectors: PropTypes.object,
     taskSelectors: PropTypes.object,
     scheduleSelectors: PropTypes.object,
