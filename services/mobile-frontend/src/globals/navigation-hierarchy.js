@@ -11,6 +11,7 @@ import NewAssignmentModalStack from '../components/assignments/new-assignment-mo
 import NewTermModal from '../components/schedule/terms/new-term-modal';
 import NewCourseModal from '../components/schedule/courses/new-course-modal';
 import NewHolidayModal from '../components/schedule/holidays/new-holiday-modal';
+import OverviewScreen from '../components/overview/overview-screen';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -30,6 +31,11 @@ const routes = [
         name: 'Schedule',
         icon: 'today',
         component: ScheduleStack,
+    },
+    {
+        name: 'Overview',
+        icon: 'eye',
+        component: OverviewScreen,
     },
 ];
 
