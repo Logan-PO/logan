@@ -38,7 +38,12 @@ class SignUpForm extends React.Component {
 
     render() {
         return (
-            <Modal visible={this.props.open} onRequestClose={this.props.onClose}>
+            <Modal
+                visible={this.props.open}
+                onRequestClose={() => {
+                    console.log('Modal closed');
+                }}
+            >
                 <Typography variant="h6">Create Account</Typography>
             </Modal>
         );
