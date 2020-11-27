@@ -32,7 +32,7 @@ class TaskEditor extends Editor {
             if (this.props.aid) {
                 task = {
                     aid: this.props.aid,
-                    title: 'New subtask',
+                    title: 'New Subtask',
                     dueDate: dayjs().format(DB_DATE_FORMAT),
                     priority: 0,
                 };
