@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { View } from 'react-native';
+import { View, LayoutAnimation } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import SegmentedControl from '@react-native-community/segmented-control';
 import { Colors } from 'react-native-paper';
@@ -19,12 +19,23 @@ class DueDatePicker extends React.Component {
 
         this.state = {
             currentType: dateUtils.dueDateType(props.value) || 'date',
-            currentDate: dateUtils.dueDateIsDate(props.value) ? props.value : dateUtils.formatAsDate(),
+            currentDate: dateUtils.dueDateIsDate(props.value)
+                ? this.toPickerFormat(props.value)
+                : this.toPickerFormat(),
         };
+    }
+
+    toPickerFormat(date) {
+        return dateUtils.dayjs(date).format('YYYY-MM-DD');
     }
 
     handleTypeChange(event) {
         let nextType = ['date', 'asap', 'eventually'][event.nativeEvent.selectedSegmentIndex];
+
+        LayoutAnimation.configureNext(
+            LayoutAnimation.create(150, LayoutAnimation.Types.easeInEaseOut, LayoutAnimation.Properties.opacity)
+        );
+
         this.setState({ currentType: nextType });
 
         if (nextType === 'date') {
@@ -32,6 +43,8 @@ class DueDatePicker extends React.Component {
         } else {
             this.props.onChange(nextType);
         }
+
+        return new Promise(resolve => setTimeout(resolve, 150));
     }
 
     handleDateChange(day) {
@@ -39,7 +52,7 @@ class DueDatePicker extends React.Component {
 
         this.setState({
             currentType: 'date',
-            currentDate: formatted,
+            currentDate: this.toPickerFormat(formatted),
         });
 
         this.props.onChange(formatted);
