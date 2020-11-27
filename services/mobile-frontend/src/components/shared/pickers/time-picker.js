@@ -60,11 +60,13 @@ class TimePicker extends SyncComponent {
                         backgroundColor: 'white',
                     }}
                 >
-                    <DateTimePicker
-                        value={dateUtils.toTime(this.props.value).toDate()}
-                        mode="time"
-                        onChange={this.valueChanged}
-                    />
+                    {this.state.open && (
+                        <DateTimePicker
+                            value={dateUtils.toTime(this.props.value).toDate()}
+                            mode="time"
+                            onChange={this.valueChanged}
+                        />
+                    )}
                 </View>
             </React.Fragment>
         );
