@@ -41,6 +41,8 @@ class TimePicker extends SyncComponent {
     valueChanged(event, dateString) {
         const time = dateUtils.formatAsTime(dateUtils.dayjs(dateString));
         this.props.onChange && this.props.onChange(time);
+
+        if (event.type === 'neutralButtonPressed') return this.close();
     }
 
     render() {
