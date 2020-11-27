@@ -57,6 +57,7 @@ class NewTaskModal extends React.Component {
             >
                 <ScrollView keyboardDismissMode="on-drag">
                     <TaskEditor
+                        aid={aid}
                         navigation={this.props.navigation}
                         route={this.props.route}
                         mode={Editor.Mode.Create}
