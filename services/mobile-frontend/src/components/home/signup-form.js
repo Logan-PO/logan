@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { createNewUser, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Modal } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import Typography from '../shared/typography';
 
 class SignUpForm extends React.Component {
@@ -38,14 +38,9 @@ class SignUpForm extends React.Component {
 
     render() {
         return (
-            <Modal
-                visible={this.props.open}
-                onRequestClose={() => {
-                    console.log('Modal closed');
-                }}
-            >
+            <SafeAreaView>
                 <Typography variant="h6">Create Account</Typography>
-            </Modal>
+            </SafeAreaView>
         );
     }
 }

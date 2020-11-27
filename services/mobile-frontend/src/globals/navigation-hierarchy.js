@@ -12,6 +12,7 @@ import NewTermModal from '../components/schedule/terms/new-term-modal';
 import NewCourseModal from '../components/schedule/courses/new-course-modal';
 import NewHolidayModal from '../components/schedule/holidays/new-holiday-modal';
 import Home from '../screens/home';
+import SignUpForm from '../components/home/signup-form';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -65,6 +66,7 @@ class NavigationHierarchy extends React.Component {
                 <RootStack.Screen name="New Term" component={NewTermModal} />
                 <RootStack.Screen name="New Course" component={NewCourseModal} />
                 <RootStack.Screen name="New Holiday" component={NewHolidayModal} />
+                <RootStack.Screen name="Signup" component={SignUpForm} />
             </RootStack.Navigator>
         );
     }
