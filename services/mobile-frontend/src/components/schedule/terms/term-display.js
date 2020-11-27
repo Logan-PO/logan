@@ -37,15 +37,15 @@ class TermDisplay extends React.Component {
                 <FAB.Group
                     open={this.state.fabOpen}
                     color="white"
-                    icon="plus"
+                    icon={this.state.fabOpen ? 'close' : 'plus'}
                     actions={[
                         {
-                            icon: 'calendar',
+                            icon: 'plus',
                             label: 'Holiday',
                             onPress: () => this.props.navigation.navigate('New Holiday', { tid: this.state.term.tid }),
                         },
                         {
-                            icon: 'calendar',
+                            icon: 'plus',
                             label: 'Course',
                             onPress: () => this.props.navigation.navigate('New Course', { tid: this.state.term.tid }),
                         },
