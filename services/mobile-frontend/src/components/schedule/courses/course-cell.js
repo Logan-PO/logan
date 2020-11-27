@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
@@ -35,9 +34,6 @@ class CourseCell extends React.Component {
                         </View>
                         <View style={{ flex: 1 }}>
                             <Typography style={{ marginBottom: 4 }}>{this.props.course.title}</Typography>
-                            {!_.isEmpty(this.props.course.nickname) && (
-                                <Typography color="detail">{`"${this.props.course.nickname}"`}</Typography>
-                            )}
                         </View>
                     </View>
                 }
