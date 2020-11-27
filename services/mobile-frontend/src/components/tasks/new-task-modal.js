@@ -37,9 +37,7 @@ class NewTaskModal extends React.Component {
     }
 
     render() {
-        const aid = this.props.navigation.state.params.aid;
         const leftActions = <Appbar.Action icon="close" onPress={this.close} />;
-        console.log(this.props.route);
         const rightActions = (
             <Appbar.Action
                 disabled={_.isEmpty(this.state.task.title)}
@@ -58,7 +56,7 @@ class NewTaskModal extends React.Component {
             >
                 <ScrollView keyboardDismissMode="on-drag">
                     <TaskEditor
-                        aid={aid}
+                        aid={this.props.route.params.aid}
                         navigation={this.props.navigation}
                         route={this.props.route}
                         mode={Editor.Mode.Create}

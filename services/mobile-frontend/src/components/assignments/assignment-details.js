@@ -14,7 +14,7 @@ class AssignmentDetails extends React.Component {
         this.openSubTask = this.openSubTask.bind(this);
     }
     openSubTask(aid) {
-        this.props.navigation.push('New Task', { aid });
+        this.props.navigation.push('New Task', { aid: aid });
     }
 
     onUpdate(assignment) {

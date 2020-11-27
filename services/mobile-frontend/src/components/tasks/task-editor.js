@@ -24,7 +24,6 @@ class TaskEditor extends Editor {
         if (this.isEditor) {
             task = props.getTask(props.route.params.tid);
         } else {
-            console.log(props.route.params);
             if (_.get(props.route.params, 'newSubtask')) {
                 task = _.get(props.route.params, 'newSubtask');
             }
@@ -58,9 +57,8 @@ class TaskEditor extends Editor {
     }
 
     render() {
-        const relatedAssignment = this.props.aid
-            ? this.props.aid
-            : this.props.getAssignment(_.get(this.state.task, 'aid'));
+        console.log(this.props.route.params);
+        const relatedAssignment = this.props.getAssignment(_.get(this.state.task, 'aid'));
         const cid = relatedAssignment ? relatedAssignment.cid : _.get(this.state.task, 'cid');
         const course = this.props.getCourse(cid);
 
@@ -162,7 +160,6 @@ class TaskEditor extends Editor {
 }
 
 TaskEditor.propTypes = {
-    aid: PropTypes.string,
     mode: PropTypes.oneOf(_.values(Editor.Mode)),
     navigation: PropTypes.object,
     route: PropTypes.object,
