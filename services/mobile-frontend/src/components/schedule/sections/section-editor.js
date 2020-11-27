@@ -10,6 +10,7 @@ import ListItem from '../../shared/list-item';
 import { typographyStyles } from '../../shared/typography';
 import DueDateControl from '../../shared/due-date-control';
 import TimePicker from '../../shared/pickers/time-picker';
+import NumberPicker from '../../shared/pickers/number-picker';
 
 class SectionEditor extends Editor {
     constructor(props) {
@@ -110,6 +111,11 @@ class SectionEditor extends Editor {
                     label="End Date"
                     value={this.state.section.endDate}
                     onChange={this.handleChange.bind(this, 'endDate')}
+                />
+                <NumberPicker
+                    label="Weekly Interval"
+                    value={this.state.section.weeklyRepeat}
+                    onChange={this.handleChange.bind(this, 'weeklyRepeat')}
                 />
                 <List.Subheader>Times</List.Subheader>
                 <TimePicker
