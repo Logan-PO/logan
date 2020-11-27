@@ -17,19 +17,20 @@ class MobileLoginButton extends React.Component {
 
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
+
+        //this.state = { accessToken: '' };
     }
 
     async signIn() {
-        const { type, accessToken, idToken, user } = await Google.logInAsync(config);
+        const { type, accessToken, idToken } = await Google.logInAsync(config);
         if (type === 'success') {
-            console.log(user);
-            console.log(idToken);
+            //this.setState({ accessToken: accessToken });
             await this.props.verifyIdToken({ idToken: idToken, clientType: DEVICE });
         }
     }
 
     async signOut() {
-        //await Google.logOutAsync({ accessToken, ...config });
+        //await Google.logOutAsync({ accessToken: this.state.accessToken, ...config });
         this.props.setLoginStage(LOGIN_STAGE.LOGIN);
     }
 
