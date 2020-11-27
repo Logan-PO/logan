@@ -7,14 +7,14 @@ const { NotFoundError, ValidationError, PermissionDeniedError } = require('../ut
 
 function fromDbFormat(db) {
     return {
-        ..._.pick(db, ['uid', 'name', 'email']),
+        ..._.pick(db, ['uid', 'name', 'email', 'tokens']),
         username: db.uname,
     };
 }
 
 function toDbFormat(user) {
     return {
-        ..._.pick(user, ['uid', 'name', 'email']),
+        ..._.pick(user, ['uid', 'name', 'email', 'tokens']),
         uname: user.username,
     };
 }
@@ -42,9 +42,11 @@ async function getUser(req, res) {
 
 async function createUser(req, res) {
     const uid = uuid();
+    const tokens = ['tokens'];
 
     const user = requestValidator.requireBodyParams(req, ['name', 'email', 'username']);
     user.uid = uid;
+    user.tokens = tokens;
 
     // Make sure uid, email, and username are all unique
     const uniquenessResponse = await dynamoUtils.scan({
