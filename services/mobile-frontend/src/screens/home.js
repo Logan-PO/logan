@@ -7,10 +7,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import MobileLoginButton from '../components/home/mobile-login-button';
 import Typography from '../components/shared/typography';
+import SignUpForm from '../components/home/signup-form';
 
 class Home extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = { openModal: false };
     }
 
     async componentDidMount() {
@@ -35,7 +38,7 @@ class Home extends React.Component {
             this.props.setLoginStage(LOGIN_STAGE.DONE);
             this.props.navigation.navigate('Root');
         } else if (this.props.loginStage === LOGIN_STAGE.CREATE) {
-            //TODO: Go to new user screen
+            this.setState({ openModal: true });
         }
     }
 
@@ -44,6 +47,7 @@ class Home extends React.Component {
             <SafeAreaView>
                 <Typography variant="h3">Welcome to Logan</Typography>
                 <MobileLoginButton />
+                <SignUpForm open={this.state.openModal} onClose={() => console.log('onClose')} />
             </SafeAreaView>
         );
     }
