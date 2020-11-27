@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import TermsList from './terms/terms-list';
 import TermDisplay from './terms/term-display';
 import CourseDisplay from './courses/course-display';
+import HolidayDisplay from './holidays/holiday-display';
 
 const Stack = createStackNavigator();
 
@@ -11,6 +12,7 @@ const ScheduleStack = () => (
         <Stack.Screen name="Terms" component={TermsList} />
         <Stack.Screen name="Term" component={TermDisplay} />
         <Stack.Screen name="Course" component={CourseDisplay} />
+        <Stack.Screen name="Holiday" component={HolidayDisplay} />
     </Stack.Navigator>
 );
 
