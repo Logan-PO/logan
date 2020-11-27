@@ -163,13 +163,14 @@ class TaskCell extends React.Component {
                     </View>
                 }
                 onPress={this.props.onPress}
-                actions={this.actionsToShow()}
+                actions={this.props.subTask ? undefined : this.actionsToShow()}
             />
         );
     }
 }
 
 TaskCell.propTypes = {
+    subTask: PropTypes.bool,
     tid: PropTypes.string,
     getTask: PropTypes.func,
     getAssignment: PropTypes.func,
