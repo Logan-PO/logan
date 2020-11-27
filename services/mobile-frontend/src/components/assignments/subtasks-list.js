@@ -23,7 +23,7 @@ class SubtasksList extends React.Component {
         if (this.props.aid && this.props.tasks.length) {
             return this.props.tasks.map((task, index) => (
                 <React.Fragment key={task.tid}>
-                    <TaskCell key={task.tid} tid={task.tid} onPress={() => this.openTask(task.tid)} />
+                    <TaskCell key={task.tid} tid={task.tid} subTask={true} onPress={() => this.openTask(task.tid)} />
                     {index < this.props.tasks.length - 1}
                 </React.Fragment>
             ));
