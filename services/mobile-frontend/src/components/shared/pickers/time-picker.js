@@ -43,7 +43,8 @@ class TimePicker extends SyncComponent {
         this.props.onChange && this.props.onChange(time);
 
         if (Platform.OS === 'android') {
-            this.setState({ open: false }); //Close it first so that it does not open again during the duration of the close animation
+            //It opens again during the closing animation and chooses the later time value
+            //This makes it only open twice versus never closing
             return this.close();
         }
 
@@ -67,7 +68,7 @@ class TimePicker extends SyncComponent {
                         backgroundColor: 'white',
                     }}
                 >
-                    {this.state.open && (
+                    {this.state.open && ( //TODO: We need to check on closed instead of on changed for android
                         <DateTimePicker
                             value={dateUtils.toTime(this.props.value).toDate()}
                             mode="time"
