@@ -110,27 +110,16 @@ class AssignmentCell extends React.Component {
 
     render() {
         if (!this.state.assignment) return <ListItem />;
+
         const cid = _.get(this.state.assignment, 'cid');
         const course = this.props.getCourse(cid);
-
-        const relatedAssignment = this.props.getAssignment(this.state.assignment.aid);
 
         return (
             <ListItem
                 ref={this.listItem}
                 leftContent={
                     <View style={{ flex: 1 }}>
-                        {(course || relatedAssignment) && (
-                            <View style={{ flexDirection: 'row', marginBottom: 2 }}>
-                                {course && <CourseLabel cid={course.cid} />}
-                                {relatedAssignment && (
-                                    <Typography variant="body2" color="secondary">
-                                        {course && relatedAssignment && ' / '}
-                                        {relatedAssignment.title}
-                                    </Typography>
-                                )}
-                            </View>
-                        )}
+                        {course && <CourseLabel cid={course.cid} />}
                         <View>
                             <Typography variant="body">{this.state.assignment.title}</Typography>
                         </View>
