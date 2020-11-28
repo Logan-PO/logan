@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import SyncComponent from '@logan/fe-shared/components/sync-component';
 import { Appbar } from 'react-native-paper';
+import { beginFetching, finishFetching } from '@logan/fe-shared/store/fetch-status';
 import { fetchTasks } from '@logan/fe-shared/store/tasks';
 import { fetchAssignments } from '@logan/fe-shared/store/assignments';
 import { fetchSchedule } from '@logan/fe-shared/store/schedule';
 import { fetchReminders } from '@logan/fe-shared/store/reminders';
 
-class Header extends SyncComponent {
+class Header extends React.Component {
     constructor(props) {
         super(props);
 
@@ -25,16 +25,20 @@ class Header extends SyncComponent {
     }
 
     async fetch() {
-        await this.setStateSync({ isFetching: true });
+        if (this.props.isFetching) return;
 
-        await Promise.all([
+        this.props.beginFetching();
+
+        const fetchers = [
             this.props.fetchTasks(),
             this.props.fetchAssignments(),
             this.props.fetchSchedule(),
-            this.props.fetchReminders,
-        ]);
+            this.props.fetchReminders(),
+        ];
 
-        await this.setStateSync({ isFetching: false });
+        await Promise.all(fetchers);
+
+        this.props.finishFetching();
     }
 
     shouldShowBackButton() {
@@ -69,17 +73,28 @@ Header.propTypes = {
     fetchAssignments: PropTypes.func,
     fetchSchedule: PropTypes.func,
     fetchReminders: PropTypes.func,
+    beginFetching: PropTypes.func,
+    finishFetching: PropTypes.func,
+    isFetching: PropTypes.bool,
+    lastFetch: PropTypes.string,
 };
 
 Header.defaultProps = {
     disableBack: false,
 };
 
+const mapStateToProps = state => ({
+    isFetching: state.fetchStatus.fetching,
+    lastFetch: state.fetchStatus.lastFetch,
+});
+
 const mapDispatchToProps = {
+    beginFetching,
+    finishFetching,
     fetchTasks,
     fetchAssignments,
     fetchSchedule,
     fetchReminders,
 };
 
-export default connect(null, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
