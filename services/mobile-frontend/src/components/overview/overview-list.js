@@ -3,14 +3,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dateUtils } from '@logan/core';
-import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
-import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
+import { fetchAssignments, getAssignmentsSelectors, deleteAssignment } from '@logan/fe-shared/store/assignments';
+import { fetchTasks, getTasksSelectors, deleteTask } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { View, SectionList } from 'react-native';
-import { Colors, List } from 'react-native-paper';
+import { Button, Colors, Dialog, List, Paragraph, Portal } from 'react-native-paper';
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import ViewController from '../shared/view-controller';
+import { typographyStyles } from '../shared/typography';
 import OverviewSectionCell from './overview-section-cell';
 
 const {
@@ -22,11 +23,33 @@ export class OverviewList extends React.Component {
     constructor(props) {
         super(props);
 
+        this.openModal = this.openModal.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+
         this.getRelevantData = this.getRelevantData.bind(this);
         this.changeCondense = this.changeCondense.bind(this);
         this.changeView = this.changeView.bind(this);
 
         this.state = { listView: true };
+    }
+
+    openModal({ message, confirm }) {
+        this.setState({
+            modalShown: true,
+            modalMessage: message,
+            modalConfirmation: () => {
+                confirm && confirm();
+                this.closeModal();
+            },
+        });
+    }
+
+    closeModal() {
+        this.setState({
+            modalShown: false,
+            modalMessage: undefined,
+            modalConfirmation: undefined,
+        });
     }
 
     getRelevantData() {
@@ -140,16 +163,36 @@ export class OverviewList extends React.Component {
                                 {assignments.length > 0 && (
                                     <React.Fragment>
                                         {this.secondaryHeader('ASSIGNMENTS')}
-                                        {assignments.map(({ aid }) => (
-                                            <AssignmentCell key={aid} aid={aid} />
+                                        {assignments.map(assignment => (
+                                            <AssignmentCell
+                                                key={assignment.aid}
+                                                aid={assignment.aid}
+                                                onDeletePressed={() =>
+                                                    this.openModal({
+                                                        message:
+                                                            'You are about to delete an assignment.\nThis cannot be undone.',
+                                                        confirm: () => this.props.deleteAssignment(assignment),
+                                                    })
+                                                }
+                                            />
                                         ))}
                                     </React.Fragment>
                                 )}
                                 {tasks.length > 0 && (
                                     <React.Fragment>
                                         {this.secondaryHeader('TASKS')}
-                                        {tasks.map(({ tid }) => (
-                                            <TaskCell key={tid} tid={tid} />
+                                        {tasks.map(task => (
+                                            <TaskCell
+                                                key={task.tid}
+                                                tid={task.tid}
+                                                onDeletePressed={() =>
+                                                    this.openModal({
+                                                        message:
+                                                            'You are about to delete a task.\nThis cannot be undone.',
+                                                        confirm: () => this.props.deleteTask(task),
+                                                    })
+                                                }
+                                            />
                                         ))}
                                     </React.Fragment>
                                 )}
@@ -157,6 +200,30 @@ export class OverviewList extends React.Component {
                         );
                     }}
                 />
+                <Portal>
+                    <Dialog visible={this.state.modalShown} onDismiss={this.closeModal}>
+                        <Dialog.Title>Are you sure?</Dialog.Title>
+                        <Dialog.Content>
+                            {_.get(this.state, 'modalMessage', '')
+                                .split('\n')
+                                .map((line, i) => (
+                                    <Paragraph key={i}>{line}</Paragraph>
+                                ))}
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button onPress={this.closeModal} labelStyle={typographyStyles.button}>
+                                Cancel
+                            </Button>
+                            <Button
+                                onPress={this.state.modalConfirmation}
+                                color="red"
+                                labelStyle={typographyStyles.button}
+                            >
+                                Delete
+                            </Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                </Portal>
             </ViewController>
         );
     }
@@ -168,6 +235,8 @@ OverviewList.propTypes = {
     assignmentSelectors: PropTypes.object,
     taskSelectors: PropTypes.object,
     scheduleSelectors: PropTypes.object,
+    deleteAssignment: PropTypes.func,
+    deleteTask: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -182,6 +251,11 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = { fetchAssignments, fetchTasks };
+const mapDispatchToProps = {
+    fetchAssignments,
+    fetchTasks,
+    deleteAssignment,
+    deleteTask,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(OverviewList);
