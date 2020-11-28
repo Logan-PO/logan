@@ -2,11 +2,11 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { setLoginStage } from '@logan/fe-shared/store/login';
+import { fetchSelf, setLoginStage } from '@logan/fe-shared/store/login';
 import { Button, TextInput } from 'react-native-paper';
 import { View } from 'react-native';
+import { deleteUser, updateUser } from '@logan/fe-shared/store/settings';
 import ViewController from '../shared/view-controller';
-import UsernameModal from './username-modal';
 import DeleteModal from './delete-modal';
 import LogOutModal from './logout-modal';
 
@@ -15,42 +15,40 @@ export class Settings extends React.Component {
         //TODO: Need to have modals only render when needed
         super(props);
 
-        this.openNewUsernameModal = this.openNewUsernameModal.bind(this);
-        this.closeNewUsernameModal = this.closeNewUsernameModal.bind(this);
-        this.openNewDeleteModal = this.openNewDeleteModal.bind(this);
-        this.closeNewDeleteModal = this.closeNewDeleteModal.bind(this);
-        this.openNewLogOutModal = this.openNewLogOutModal.bind(this);
-        this.closeNewLogOutModal = this.closeNewLogOutModal.bind(this);
+        this.updateUser = this.updateUser.bind(this);
+        this.openUsernameChange = this.openUsernameChange.bind(this);
+        this.closeUsernameChange = this.closeUsernameChange.bind(this);
 
         this.state = {
-            newUsernameModal: false,
+            user: props.user,
+            changeUserName: false,
             newDeleteModal: false,
             newLogOutModal: false,
         };
     }
 
-    openNewUsernameModal() {
-        this.setState({ newUsernameModal: true });
+    async updateUser() {
+        await this.props.updateUser(this.state.user);
+        this.props.fetchSelf();
+        this.props.onClose();
     }
 
-    closeNewUsernameModal() {
-        this.setState({ newUsernameModal: false });
+    handleChange(prop, e) {
+        console.log(e);
+        console.log(prop);
+        const user = this.state.user;
+        _.set(user, prop, e);
+        console.log(user);
+        this.setState({ user });
     }
 
-    openNewDeleteModal() {
-        this.setState({ newDeleteModal: true });
+    openUsernameChange() {
+        this.setState({ changeUserName: true });
     }
 
-    closeNewDeleteModal() {
-        this.setState({ newDeleteModal: false });
-    }
-
-    openNewLogOutModal() {
-        this.setState({ newLogOutModal: true });
-    }
-
-    closeNewLogOutModal() {
-        this.setState({ newLogOutModal: false });
+    closeUsernameChange() {
+        this.setState({ changeUserName: false });
+        return this.updateUser();
     }
 
     render() {
@@ -64,34 +62,23 @@ export class Settings extends React.Component {
             >
                 <View>
                     <View>
-                        <TextInput
-                            label="Username"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            value={_.get(this.props, 'user.username', '')}
-                        />
+                        {this.state.changeUserName && (
+                            <View>
+                                <TextInput
+                                    multiline
+                                    label="Username"
+                                    mode="flat"
+                                    style={{ backgroundColor: 'none', paddingHorizontal: 0 }}
+                                    value={this.state.user.username}
+                                    onChangeText={this.handleChange.bind(this, 'username')}
+                                />
+                                <Button onPress={this.closeUsernameChange}>Confirm</Button>
+                            </View>
+                        )}
                     </View>
+                    <Button onPress={this.openUsernameChange}>Change Username</Button>
                     <View>
-                        <TextInput
-                            label="Name"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            value={_.get(this.props, 'user.name', '')}
-                        />
-                    </View>
-                    <View>
-                        <Button onClick={this.openNewUsernameModal}>Change Username</Button>
-                        <UsernameModal
-                            route={this.props.route}
-                            navigation={this.props.navigation}
-                            open={this.state.newUsernameModal}
-                            onClose={this.closeNewUsernameModal}
-                        />
-                    </View>
-                    <View>
-                        <Button onClick={this.openNewLogOutModal}>Logout</Button>
+                        <Button onPress={this.openNewLogOutModal}>Logout</Button>
                         <LogOutModal
                             route={this.props.route}
                             navigation={this.props.navigation}
@@ -118,7 +105,10 @@ Settings.propTypes = {
     route: PropTypes.object,
     navigation: PropTypes.object,
     user: PropTypes.object,
+    open: PropTypes.bool,
+    onClose: PropTypes.func,
     updateUser: PropTypes.func,
+    fetchSelf: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -126,7 +116,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
+    deleteUser,
     setLoginStage,
+    updateUser,
+    fetchSelf,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);
