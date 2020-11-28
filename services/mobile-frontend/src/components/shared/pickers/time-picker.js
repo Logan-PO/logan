@@ -56,7 +56,7 @@ class TimePicker extends SyncComponent {
                     rightContent={
                         <Typography color="detail">{dateUtils.toTime(this.props.value).format('h:mm a')}</Typography>
                     }
-                    onPress={this.open}
+                    onPress={this.state.open ? this.close : this.open}
                 />
                 <View
                     style={{

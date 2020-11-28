@@ -49,7 +49,7 @@ class NumberPicker extends SyncComponent {
 
 NumberPicker.propTypes = {
     label: PropTypes.string,
-    value: PropTypes.string,
+    value: PropTypes.number,
     onChange: PropTypes.func,
 };
 
