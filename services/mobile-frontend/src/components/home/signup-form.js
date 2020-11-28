@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
-import { TextInput, Button, Card, Title } from 'react-native-paper';
+import { TextInput, Button, Card } from 'react-native-paper';
 import Typography from '../shared/typography';
 
 class SignUpForm extends React.Component {
