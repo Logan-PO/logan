@@ -135,7 +135,7 @@ export class OverviewList extends React.Component {
             <React.Fragment>
                 {sections.length > 0 && (
                     <React.Fragment>
-                        {this.secondaryHeader('SCHEDULE')}
+                        {this.secondaryHeader('Schedule')}
                         <View style={{ paddingVertical: 4 }}>
                             {sections.map(({ sid }) => (
                                 <OverviewSectionCell key={sid} sid={sid} />
@@ -145,7 +145,7 @@ export class OverviewList extends React.Component {
                 )}
                 {assignments.length > 0 && (
                     <React.Fragment>
-                        {this.secondaryHeader('ASSIGNMENTS')}
+                        {this.secondaryHeader('Assignments')}
                         {assignments.map(assignment => (
                             <AssignmentCell
                                 key={assignment.aid}
@@ -163,7 +163,7 @@ export class OverviewList extends React.Component {
                 )}
                 {tasks.length > 0 && (
                     <React.Fragment>
-                        {this.secondaryHeader('TASKS')}
+                        {this.secondaryHeader('Tasks')}
                         {tasks.map(task => (
                             <TaskCell
                                 key={task.tid}
