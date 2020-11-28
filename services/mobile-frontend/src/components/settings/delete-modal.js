@@ -7,8 +7,6 @@ import { Button, Dialog } from 'react-native-paper';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
 import { View } from 'react-native-web';
 
-import styles from './settings-page.module.scss';
-
 class DeleteModal extends React.Component {
     constructor(props) {
         super(props);
@@ -47,7 +45,7 @@ class DeleteModal extends React.Component {
                 <Dialog.Content>
                     <Dialog.Title>Are you sure?</Dialog.Title>
                 </Dialog.Content>
-                <Dialog.Actions className={styles.yes}>
+                <Dialog.Actions>
                     <View>
                         <Button variant="contained" color="primary" disableElevation onClick={this.deleteUser}>
                             Yes

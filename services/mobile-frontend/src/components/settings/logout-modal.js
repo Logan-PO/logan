@@ -5,8 +5,6 @@ import PropTypes from 'prop-types';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
 import { Button, Dialog } from 'react-native-paper';
 import { View } from 'react-native-web';
-import Typography, { typographyStyles } from '../shared/typography';
-import styles from './settings-page.module.scss';
 
 class LogOutModal extends React.Component {
     constructor(props) {
@@ -40,7 +38,7 @@ class LogOutModal extends React.Component {
                 <Dialog.Content>
                     <Dialog.Title>Are you sure?</Dialog.Title>
                 </Dialog.Content>
-                <Dialog.Actions className={styles.yes}>
+                <Dialog.Actions>
                     <View>
                         <Button variant="contained" color="primary" disableElevation onClick={this.logout}>
                             Yes

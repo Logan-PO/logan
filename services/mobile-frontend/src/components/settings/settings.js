@@ -8,7 +8,6 @@ import { View } from 'react-native-web';
 import UsernameModal from './username-modal';
 import DeleteModal from './delete-modal';
 import LogOutModal from './logout-modal';
-import styles from './settings-page.module.scss';
 
 export class Settings extends React.Component {
     constructor(props) {
@@ -55,7 +54,7 @@ export class Settings extends React.Component {
     render() {
         return (
             <View>
-                <View className={styles.username}>
+                <View>
                     <TextInput
                         label="Username"
                         InputProps={{
@@ -64,7 +63,7 @@ export class Settings extends React.Component {
                         value={_.get(this.props, 'user.username', '')}
                     />
                 </View>
-                <View className={styles.name}>
+                <View>
                     <TextInput
                         label="Name"
                         InputProps={{
@@ -73,7 +72,7 @@ export class Settings extends React.Component {
                         value={_.get(this.props, 'user.name', '')}
                     />
                 </View>
-                <View className={styles.email}>
+                <View>
                     <TextInput
                         label="Email"
                         InputProps={{
@@ -82,7 +81,7 @@ export class Settings extends React.Component {
                         value={_.get(this.props, 'user.email', '')}
                     />
                 </View>
-                <View className={styles.change}>
+                <View>
                     <Button variant="contained" color="primary" disableElevation onClick={this.openNewUsernameModal}>
                         Change Username
                     </Button>
@@ -93,7 +92,7 @@ export class Settings extends React.Component {
                         onClose={this.closeNewUsernameModal}
                     />
                 </View>
-                <View className={styles.logout}>
+                <View>
                     <Button variant="contained" color="primary" disableElevation onClick={this.openNewLogOutModal}>
                         Logout
                     </Button>
@@ -104,7 +103,7 @@ export class Settings extends React.Component {
                         onClose={this.closeNewLogOutModal}
                     />
                 </View>
-                <View className={styles.delete}>
+                <View>
                     <Button variant="contained" color="primary" disableElevation onClick={this.openNewDeleteModal}>
                         Delete Account
                     </Button>

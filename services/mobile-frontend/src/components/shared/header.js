@@ -15,6 +15,7 @@ class Header extends React.Component {
         super(props);
 
         this.fetch = this.fetch.bind(this);
+        this.openSettings = this.openSettings.bind(this);
         this.shouldShowBackButton = this.shouldShowBackButton.bind(this);
 
         this.state = {
@@ -82,7 +83,7 @@ class Header extends React.Component {
                 )}
                 <Appbar.Content title={this.props.title || this.props.route.name} />
                 {this.props.rightActionIsSetting ? (
-                    <Appbar.Action icon="cog" onPress={this.openSettings} />
+                    <Appbar.Action icon="sync" onPress={this.openSettings} />
                 ) : (
                     this.props.rightActions
                 )}
