@@ -9,6 +9,7 @@ import { fetchTasks } from '@logan/fe-shared/store/tasks';
 import { fetchAssignments } from '@logan/fe-shared/store/assignments';
 import { fetchSchedule } from '@logan/fe-shared/store/schedule';
 import { fetchReminders } from '@logan/fe-shared/store/reminders';
+import { fetchSelf } from '@logan/fe-shared/store/login';
 
 class Header extends React.Component {
     constructor(props) {
@@ -56,6 +57,7 @@ class Header extends React.Component {
             this.props.fetchAssignments(),
             this.props.fetchSchedule(),
             this.props.fetchReminders(),
+            this.props.fetchSelf(),
         ];
 
         await Promise.all(fetchers);
@@ -99,6 +101,7 @@ Header.propTypes = {
     finishFetching: PropTypes.func,
     isFetching: PropTypes.bool,
     lastFetch: PropTypes.string,
+    fetchSelf: PropTypes.func,
 };
 
 Header.defaultProps = {
@@ -117,6 +120,7 @@ const mapDispatchToProps = {
     fetchAssignments,
     fetchSchedule,
     fetchReminders,
+    fetchSelf,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
