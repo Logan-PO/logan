@@ -11,7 +11,7 @@ import NewAssignmentModalStack from '../components/assignments/new-assignment-mo
 import NewTermModal from '../components/schedule/terms/new-term-modal';
 import NewCourseModal from '../components/schedule/courses/new-course-modal';
 import NewHolidayModal from '../components/schedule/holidays/new-holiday-modal';
-import Home from '../screens/home';
+import Home from '../components/home/home';
 import SignUpForm from '../components/home/signup-form';
 
 const RootStack = createStackNavigator();

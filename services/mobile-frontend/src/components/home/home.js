@@ -5,8 +5,8 @@ import api from '@logan/fe-shared/utils/api';
 import { fetchSelf, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import MobileLoginButton from '../components/home/mobile-login-button';
-import Typography from '../components/shared/typography';
+import Typography from '../shared/typography';
+import MobileLoginButton from './mobile-login-button';
 
 class Home extends React.Component {
     constructor(props) {
