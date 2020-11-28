@@ -16,6 +16,7 @@ class Home extends React.Component {
 
     async componentDidMount() {
         if (await api.hasStashedBearer()) {
+            await new Promise(resolve => setTimeout(resolve, 150));
             this.props.setLoginStage(LOGIN_STAGE.DONE);
             this.props.navigation.navigate('Root');
         } else {
@@ -32,7 +33,6 @@ class Home extends React.Component {
         if (_.isEqual(this.props, prevProps)) return;
 
         if (this.props.loginStage === LOGIN_STAGE.LOGGED_IN) {
-            await this.props.fetchSelf();
             this.props.setLoginStage(LOGIN_STAGE.DONE);
             this.props.navigation.navigate('Root');
         } else if (this.props.loginStage === LOGIN_STAGE.CREATE) {
