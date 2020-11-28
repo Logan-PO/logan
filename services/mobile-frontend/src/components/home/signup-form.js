@@ -3,8 +3,9 @@ import _ from 'lodash';
 import { createNewUser, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { SafeAreaView } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
+import { TextInput, Button, Card } from 'react-native-paper';
 import Typography from '../shared/typography';
 
 class SignUpForm extends React.Component {
@@ -41,31 +42,50 @@ class SignUpForm extends React.Component {
     }
 
     render() {
+        let textWidth = '70%';
         return (
-            <SafeAreaView>
-                <Typography variant="h6">Create Account</Typography>
-                <TextInput
-                    style={{ paddingHorizontal: 0, flexGrow: 1, backgroundColor: 'none' }}
-                    mode="flat"
-                    label="Name"
-                    value={this.state.name}
-                    onChangeText={this.handleChange.bind(this, 'name')}
-                />
-                <TextInput
-                    style={{ paddingHorizontal: 0, flexGrow: 1, backgroundColor: 'none' }}
-                    mode="flat"
-                    label="Username"
-                    value={this.state.username}
-                    onChangeText={this.handleChange.bind(this, 'username')}
-                />
-                <TextInput
-                    style={{ paddingHorizontal: 0, flexGrow: 1, backgroundColor: 'none' }}
-                    mode="flat"
-                    label="Email"
-                    value={this.state.email}
-                    onChangeText={this.handleChange.bind(this, 'email')}
-                />
-                <Button onPress={this.handleSubmit}>Submit</Button>
+            <SafeAreaView style={{ backgroundColor: 'teal', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ alignSelf: 'center' }}>
+                    <Typography color="white" variant="h6">
+                        Create Account
+                    </Typography>
+                </View>
+                <Card style={{ width: '90%' }}>
+                    <Card.Content>
+                        <View style={{ width: textWidth }}>
+                            <TextInput
+                                style={{ paddingHorizontal: 0, flexGrow: 1, backgroundColor: 'none' }}
+                                mode="flat"
+                                label="Name"
+                                value={this.state.name}
+                                onChangeText={this.handleChange.bind(this, 'name')}
+                            />
+                        </View>
+                        <View style={{ width: textWidth }}>
+                            <TextInput
+                                style={{ paddingHorizontal: 0, flexGrow: 1, backgroundColor: 'none' }}
+                                mode="flat"
+                                label="Username"
+                                value={this.state.username}
+                                onChangeText={this.handleChange.bind(this, 'username')}
+                            />
+                        </View>
+                        <View style={{ width: textWidth }}>
+                            <TextInput
+                                style={{ paddingHorizontal: 0, flexGrow: 1, backgroundColor: 'none' }}
+                                mode="flat"
+                                label="Email"
+                                value={this.state.email}
+                                onChangeText={this.handleChange.bind(this, 'email')}
+                            />
+                        </View>
+                        <View>
+                            <Button color="teal" mode="contained" onPress={this.handleSubmit}>
+                                Submit
+                            </Button>
+                        </View>
+                    </Card.Content>
+                </Card>
             </SafeAreaView>
         );
     }
