@@ -7,7 +7,6 @@ import { Colors } from 'react-native-paper';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '@logan/fe-shared/store/assignments';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import { dateUtils } from '@logan/core';
-import PriorityDisplay from '../shared/displays/priority-display';
 import CourseLabel from '../shared/displays/course-label';
 import Typography from '../shared/typography';
 import ListItem from '../shared/list-item';
@@ -111,48 +110,33 @@ class AssignmentCell extends React.Component {
 
     render() {
         if (!this.state.assignment) return <ListItem />;
+
         const cid = _.get(this.state.assignment, 'cid');
         const course = this.props.getCourse(cid);
-
-        const relatedAssignment = this.props.getAssignment(this.state.assignment.aid);
 
         return (
             <ListItem
                 ref={this.listItem}
-                beforeContent={<PriorityDisplay priority={this.state.assignment.priority} />}
-                contentStyle={{ paddingLeft: 12 }}
                 leftContent={
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <View style={{ flexDirection: 'column', marginLeft: 8 }}>
-                            {(course || relatedAssignment) && (
-                                <View style={{ flexDirection: 'row', marginBottom: 2 }}>
-                                    {course && <CourseLabel cid={course.cid} />}
-                                    {relatedAssignment && (
-                                        <Typography variant="body2" color="secondary">
-                                            {course && relatedAssignment && ' / '}
-                                            {relatedAssignment.title}
-                                        </Typography>
-                                    )}
-                                </View>
-                            )}
-                            <View>
-                                <Typography variant="body">{this.state.assignment.title}</Typography>
-                            </View>
-                            {this.shouldShowOverdueLabel() && (
-                                <View style={{ marginTop: 2 }}>
-                                    <Typography variant="body2" color="error">
-                                        {this.overdueLabelContent()}
-                                    </Typography>
-                                </View>
-                            )}
-                            {!_.isEmpty(this.state.assignment.description) && (
-                                <View style={{ marginTop: 2 }}>
-                                    <Typography variant="body2" color="secondary">
-                                        {this.state.assignment.description}
-                                    </Typography>
-                                </View>
-                            )}
+                    <View style={{ flex: 1 }}>
+                        {course && <CourseLabel cid={course.cid} />}
+                        <View>
+                            <Typography variant="body">{this.state.assignment.title}</Typography>
                         </View>
+                        {this.shouldShowOverdueLabel() && (
+                            <View style={{ marginTop: 2 }}>
+                                <Typography variant="body2" color="error">
+                                    {this.overdueLabelContent()}
+                                </Typography>
+                            </View>
+                        )}
+                        {!_.isEmpty(this.state.assignment.description) && (
+                            <View style={{ marginTop: 2 }}>
+                                <Typography variant="body2" color="secondary">
+                                    {this.state.assignment.description}
+                                </Typography>
+                            </View>
+                        )}
                     </View>
                 }
                 onPress={this.props.onPress}

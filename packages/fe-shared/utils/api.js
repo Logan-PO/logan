@@ -17,6 +17,10 @@ const client = axios.create({
 let bearer;
 
 async function onStartup() {
+    setBearerToken(
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI5ZTBjYTVjNy02NjlmLTQxM2UtYmM1OS1mYzdjZWM0NDA2YmQiLCJpYXQiOjE2MDQ2ODg3OTB9.BdTd9tfNHRpBlsQIe9jMF0Kspp-8OT6XQdRbB184rUE',
+        false
+    );
     if (hasStashedBearer()) setBearerToken(localStorage.getItem(STASH_KEY), false);
     if (process.env.NODE_ENV === 'development') await searchForLocalBackend();
 }

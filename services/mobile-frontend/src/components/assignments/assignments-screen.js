@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { createStackNavigator } from '@react-navigation/stack';
-import AssignmentList from '../components/assignments/assignments-list';
-import AssignmentDetails from '../components/assignments/assignment-details';
-import CoursePicker from '../components/shared/pickers/course-picker';
-import PriorityPicker from '../components/shared/pickers/priority-picker';
+import CoursePicker from '../shared/pickers/course-picker';
+import PriorityPicker from '../shared/pickers/priority-picker';
+import AssignmentList from './assignments-list';
+import AssignmentDetails from './assignment-details';
 
 const Stack = createStackNavigator();
 
