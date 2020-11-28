@@ -40,7 +40,6 @@ class TimePicker extends SyncComponent {
 
     valueChanged(event, dateString) {
         const time = dateUtils.formatAsTime(dateUtils.dayjs(dateString));
-        console.log(event);
         if (Platform.OS === 'android') {
             //This is what must be done to avoid double time picker DO NOT CHANGE until a better solution is found
             this.close();
