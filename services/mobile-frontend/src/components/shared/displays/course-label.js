@@ -2,9 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Text } from 'react-native-paper';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
-import { typographyStyles } from '../typography';
+import Typography from '../typography';
 
 class CourseLabel extends React.Component {
     render() {
@@ -12,21 +11,16 @@ class CourseLabel extends React.Component {
         const displayName = _.isEmpty(course.nickname) ? course.title : course.nickname;
 
         return (
-            <Text
-                style={{
-                    ...typographyStyles.body2,
-                    fontWeight: 'bold',
-                    color: course.color,
-                }}
-            >
+            <Typography variant={this.props.variant || 'body2'} style={{ fontWeight: 'bold' }} color={course.color}>
                 {displayName}
-            </Text>
+            </Typography>
         );
     }
 }
 
 CourseLabel.propTypes = {
     cid: PropTypes.string,
+    variant: PropTypes.string,
     getCourse: PropTypes.func,
 };
 
