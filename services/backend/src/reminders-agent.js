@@ -1,8 +1,38 @@
+const _ = require('lodash');
 const { Expo } = require('expo-server-sdk');
 const { dynamoUtils } = require('@logan/aws');
-const { dateUtils } = require('@logan/aws');
+const { dateUtils } = require('@logan/core');
 
 let expo = new Expo();
+let timeoutId;
+let intervalId;
+
+const MINUTE_INTERVAL = 15;
+
+function scheduleFirstRun() {
+    const now = dateUtils.dayjs();
+    const minutesFloored = Math.floor(now.minute() / MINUTE_INTERVAL) * MINUTE_INTERVAL;
+
+    if (minutesFloored === now.minute()) {
+        return firstRun();
+    } else {
+        const firstRunTs = now.startOf('hour').minute(minutesFloored).add(MINUTE_INTERVAL, 'minute').add(5, 'second');
+        const msToFirstRun = firstRunTs.diff(dateUtils.dayjs(), 'ms');
+
+        clearTimeout(timeoutId);
+        clearInterval(intervalId);
+
+        console.debug(`Scheduling first reminder batch for ${dateUtils.formatAsDateTime(firstRunTs)}`);
+
+        timeoutId = setTimeout(firstRun, msToFirstRun);
+    }
+}
+
+function firstRun() {
+    clearTimeout(timeoutId);
+    intervalId = setInterval(sendReminders, MINUTE_INTERVAL * 60 * 1000);
+    return sendReminders();
+}
 
 async function sendReminders() {
     const currentTime = dateUtils.formatAsDateTime(dateUtils.dayjs().utc());
@@ -11,22 +41,36 @@ async function sendReminders() {
     const { Items: reminders } = await dynamoUtils.scan({
         TableName: dynamoUtils.TABLES.REMINDERS,
         FilterExpression: ':ts = ts',
-        ExpressionAttributeVales: { ':ts': currentTime },
+        ExpressionAttributeValues: { ':ts': currentTime },
     });
+
+    const uids = _.uniq(_.map(reminders, 'uid'));
+
+    const {
+        Responses: { users },
+    } = await dynamoUtils.batchGet({
+        RequestItems: {
+            users: {
+                Keys: uids.map(uid => ({ uid })),
+            },
+        },
+    });
+
+    const usersMap = {};
+
+    for (const user of users) {
+        usersMap[user.uid] = user;
+    }
 
     // much of this from https://github.com/expo/expo-server-sdk-node
     let messages = [];
 
     // loop through reminders to be sent
     for (let reminder of reminders) {
-        // get user for current reminder
-        let user = await dynamoUtils.get({
-            TableName: dynamoUtils.TABLES.USERS,
-            Key: { uid: reminder.uid },
-        });
+        const user = usersMap[reminder.uid];
 
         // get device tokens for current user
-        let tokens = user.tokens;
+        let tokens = _.get(user, 'tokens', []);
 
         for (let pushToken of tokens) {
             if (!Expo.isExpoPushToken(pushToken)) {
@@ -60,5 +104,5 @@ async function sendReminders() {
 }
 
 module.exports = {
-    sendReminders,
+    scheduleFirstRun,
 };
