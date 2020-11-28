@@ -82,15 +82,6 @@ export class Settings extends React.Component {
                         />
                     </View>
                     <View>
-                        <TextInput
-                            label="Email"
-                            InputProps={{
-                                readOnly: true,
-                            }}
-                            value={_.get(this.props, 'user.email', '')}
-                        />
-                    </View>
-                    <View>
                         <Button onClick={this.openNewUsernameModal}>Change Username</Button>
                         <UsernameModal
                             route={this.props.route}
