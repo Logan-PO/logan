@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { AppBar, Toolbar, Typography, IconButton, Tooltip } from '@material-ui/core';
 import SyncIcon from '@material-ui/icons/Sync';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { dateUtils } from '@logan/core';
 import { beginFetching, finishFetching } from '@logan/fe-shared/store/fetch-status';
 import { fetchTasks } from '@logan/fe-shared/store/tasks';
 import { fetchAssignments } from '@logan/fe-shared/store/assignments';
@@ -26,11 +27,23 @@ class Navbar extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchAll();
+        window.addEventListener('focus', this.onFocus.bind(this));
+        return this.fetchAll();
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('focus', this.onFocus.bind(this));
+    }
+
+    onFocus() {
+        const lastFetch = dateUtils.toDateTime(this.props.lastFetch);
+        const threshold = dateUtils.dayjs().subtract(5, 'minute');
+
+        if (lastFetch.isBefore(threshold)) return this.fetchAll();
     }
 
     async fetchAll() {
-        if (!this.props.canFetch) return;
+        if (this.props.isFetching) return;
 
         this.props.beginFetching();
 
@@ -64,7 +77,7 @@ class Navbar extends React.Component {
                     <div className={styles.flexibleSpace} />
                     {this.props.buttons}
                     <Tooltip title="Refresh">
-                        <IconButton disabled={!this.props.canFetch} onClick={this.fetchAll} color="inherit">
+                        <IconButton disabled={this.props.isFetching} onClick={this.fetchAll} color="inherit">
                             <SyncIcon />
                         </IconButton>
                     </Tooltip>
@@ -88,21 +101,13 @@ Navbar.propTypes = {
     beginFetching: PropTypes.func,
     finishFetching: PropTypes.func,
     isFetching: PropTypes.bool,
-    fetchIsBlocked: PropTypes.bool,
-    canFetch: PropTypes.bool,
+    lastFetch: PropTypes.string,
 };
 
-const mapStateToProps = state => {
-    const isFetching = state.fetchStatus.fetching;
-    const fetchIsBlocked = state.fetchStatus.blocked;
-    const canFetch = !isFetching && !fetchIsBlocked;
-
-    return {
-        isFetching,
-        fetchIsBlocked,
-        canFetch,
-    };
-};
+const mapStateToProps = state => ({
+    isFetching: state.fetchStatus.fetching,
+    lastFetch: state.fetchStatus.lastFetch,
+});
 
 const mapDispatchToProps = {
     fetchTasks,

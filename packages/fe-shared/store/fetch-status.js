@@ -6,15 +6,8 @@ const slice = createSlice({
     initialState: {
         fetching: false,
         lastFetch: undefined,
-        blocked: false,
     },
     reducers: {
-        blockFetch(state) {
-            state.blocked = true;
-        },
-        unblockFetch(state) {
-            state.blocked = false;
-        },
         beginFetching(state) {
             state.fetching = true;
         },
@@ -25,5 +18,5 @@ const slice = createSlice({
     },
 });
 
-export const { blockFetch, unblockFetch, beginFetching, finishFetching } = slice.actions;
+export const { beginFetching, finishFetching } = slice.actions;
 export default slice.reducer;
