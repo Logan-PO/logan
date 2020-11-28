@@ -24,7 +24,7 @@ async function run() {
     if (response.Items.length) {
         console.log(`User found. Generating token for client type '${clientType}'`);
         const user = _.first(response.Items);
-        const bearer = await generateBearerToken({ uid: user.uid }, clientType);
+        const bearer = await generateBearerToken({ uid: user.uid });
         execSync(`echo ${bearer} | pbcopy`);
         console.log('Bearer token copied to clipboard');
         console.log();
