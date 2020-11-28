@@ -2,10 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { navigate } from 'gatsby';
-import { Dialog, DialogContent, DialogActions, DialogTitle, Button } from '@material-ui/core';
 import { deleteUser } from '@logan/fe-shared/store/settings';
+import { Button, Dialog } from 'react-native-paper';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
+import { View } from 'react-native-web';
+
 import styles from './settings-page.module.scss';
 
 class DeleteModal extends React.Component {
@@ -32,7 +33,7 @@ class DeleteModal extends React.Component {
 
     logout() {
         this.props.setLoginStage(LOGIN_STAGE.LOGIN);
-        navigate('/');
+        this.props.navigation.navigate('Home');
     }
 
     async deleteUser() {
@@ -43,25 +44,27 @@ class DeleteModal extends React.Component {
     render() {
         return (
             <Dialog open={this.props.open} onClose={this.props.onClose} fullWidth maxWidth="sm">
-                <DialogContent>
-                    <DialogTitle>Are you sure?</DialogTitle>
-                </DialogContent>
-                <DialogActions className={styles.yes}>
-                    <div>
+                <Dialog.Content>
+                    <Dialog.Title>Are you sure?</Dialog.Title>
+                </Dialog.Content>
+                <Dialog.Actions className={styles.yes}>
+                    <View>
                         <Button variant="contained" color="primary" disableElevation onClick={this.deleteUser}>
                             Yes
                         </Button>
                         <Button variant="contained" color="primary" disableElevation onClick={this.close}>
                             No
                         </Button>
-                    </div>
-                </DialogActions>
+                    </View>
+                </Dialog.Actions>
             </Dialog>
         );
     }
 }
 
 DeleteModal.propTypes = {
+    route: PropTypes.object,
+    navigation: PropTypes.object,
     user: PropTypes.object,
     open: PropTypes.bool,
     onClose: PropTypes.func,

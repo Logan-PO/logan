@@ -2,9 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Dialog, DialogContent, DialogActions, TextField, Button } from '@material-ui/core';
 import { updateUser } from '@logan/fe-shared/store/settings';
 import { setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
+import { View } from 'react-native-web';
+import { Button, Dialog } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 
 class UsernameModal extends React.Component {
     constructor(props) {
@@ -42,22 +44,24 @@ class UsernameModal extends React.Component {
     render() {
         return (
             <Dialog open={this.props.open} onClose={this.props.onClose} fullWidth maxWidth="sm">
-                <DialogContent>
-                    <TextField label="New Username" fullWidth onChange={this.handleChange.bind(this, 'username')} />
-                </DialogContent>
-                <DialogActions>
-                    <div>
+                <Dialog.Content>
+                    <TextInput label="New Username" fullWidth onChange={this.handleChange.bind(this, 'username')} />
+                </Dialog.Content>
+                <Dialog.Actions>
+                    <View>
                         <Button variant="contained" color="primary" disableElevation onClick={this.updateUser}>
                             Change
                         </Button>
-                    </div>
-                </DialogActions>
+                    </View>
+                </Dialog.Actions>
             </Dialog>
         );
     }
 }
 
 UsernameModal.propTypes = {
+    route: PropTypes.object,
+    navigation: PropTypes.object,
     user: PropTypes.object,
     open: PropTypes.bool,
     onClose: PropTypes.func,
