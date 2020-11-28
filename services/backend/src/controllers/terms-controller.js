@@ -15,8 +15,8 @@ const coursesController = require('./courses-controller');
 function fromDbFormat(db) {
     return {
         ..._.pick(db, ['uid', 'tid', 'title']),
-        startDate: dayjs(db.sd, DB_DATE_FORMAT).startOf('day'),
-        endDate: dayjs(db.ed, DB_DATE_FORMAT).endOf('day'),
+        startDate: db.sd,
+        endDate: db.ed,
     };
 }
 

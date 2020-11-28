@@ -14,6 +14,11 @@ import Typography, { typographyStyles } from '../shared/typography';
 import ListItem from '../shared/list-item';
 import DueDateControl from '../shared/due-date-control';
 
+const {
+    dayjs,
+    constants: { DB_DATE_FORMAT },
+} = dateUtils;
+
 // A generic task editor, to be used for creation or editing in a ViewController
 class TaskEditor extends Editor {
     constructor(props) {
@@ -24,12 +29,21 @@ class TaskEditor extends Editor {
         if (this.isEditor) {
             task = props.getTask(props.route.params.tid);
         } else {
-            task = {
-                title: '',
-                description: '',
-                dueDate: dateUtils.formatAsDate(),
-                priority: 0,
-            };
+            if (this.props.aid) {
+                task = {
+                    aid: this.props.aid,
+                    title: 'New Subtask',
+                    dueDate: dayjs().format(DB_DATE_FORMAT),
+                    priority: 0,
+                };
+            } else {
+                task = {
+                    title: '',
+                    description: '',
+                    dueDate: dateUtils.formatAsDate(),
+                    priority: 0,
+                };
+            }
         }
 
         this.state = { task };
@@ -54,7 +68,9 @@ class TaskEditor extends Editor {
     }
 
     render() {
-        const relatedAssignment = this.props.getAssignment(_.get(this.state.task, 'aid'));
+        const relatedAssignment = this.props.aid
+            ? this.props.getAssignment(this.props.aid)
+            : this.props.getAssignment(_.get(this.state.task, 'aid'));
         const cid = relatedAssignment ? relatedAssignment.cid : _.get(this.state.task, 'cid');
         const course = this.props.getCourse(cid);
 
@@ -108,27 +124,29 @@ class TaskEditor extends Editor {
                     contentStyle={{ paddingTop: 4 }}
                 />
                 <DueDateControl value={this.state.task.dueDate} onChange={this.handleChange.bind(this, 'dueDate')} />
-                <ListItem
-                    showRightArrow
-                    leftContent={<Typography>Course</Typography>}
-                    rightContent={
-                        <Text
-                            style={{
-                                ...typographyStyles.body,
-                                color: _.get(course, 'color', Colors.grey500),
-                                fontWeight: course ? 'bold' : 'normal',
-                            }}
-                        >
-                            {course ? course.title : 'None'}
-                        </Text>
-                    }
-                    onPress={() =>
-                        this.props.navigation.navigate('Course Picker', {
-                            cid: _.get(course, 'cid'),
-                            onSelect: this.handleChange.bind(this, 'cid'),
-                        })
-                    }
-                />
+                {!this.props.aid && (
+                    <ListItem
+                        showRightArrow
+                        leftContent={<Typography>Course</Typography>}
+                        rightContent={
+                            <Text
+                                style={{
+                                    ...typographyStyles.body,
+                                    color: _.get(course, 'color', Colors.grey500),
+                                    fontWeight: course ? 'bold' : 'normal',
+                                }}
+                            >
+                                {course ? course.title : 'None'}
+                            </Text>
+                        }
+                        onPress={() =>
+                            this.props.navigation.navigate('Course Picker', {
+                                cid: _.get(course, 'cid'),
+                                onSelect: this.handleChange.bind(this, 'cid'),
+                            })
+                        }
+                    />
+                )}
                 <ListItem
                     showRightArrow
                     leftContent={<Typography>Priority</Typography>}
@@ -156,6 +174,7 @@ class TaskEditor extends Editor {
 }
 
 TaskEditor.propTypes = {
+    aid: PropTypes.string,
     mode: PropTypes.oneOf(_.values(Editor.Mode)),
     navigation: PropTypes.object,
     route: PropTypes.object,

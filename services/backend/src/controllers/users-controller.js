@@ -62,7 +62,7 @@ async function createUser(req, res) {
     if (uniquenessResponse.Count > 0) throw new ValidationError('uid, email, and username must all be unique');
 
     // Create the new user
-    const bearer = await generateBearerToken({ uid }, 'web');
+    const bearer = await generateBearerToken({ uid });
     await dynamoUtils.put({
         TableName: dynamoUtils.TABLES.USERS,
         Item: toDbFormat(user),

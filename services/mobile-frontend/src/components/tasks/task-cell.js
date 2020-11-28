@@ -121,7 +121,7 @@ class TaskCell extends React.Component {
         const checkboxStatus = this.state.task.complete ? 'checked' : 'unchecked';
         const relatedAssignment = this.props.getAssignment(this.state.task.aid);
         const course = this.props.getCourse(relatedAssignment ? relatedAssignment.cid : this.state.task.cid);
-
+        const marginSize = 70;
         return (
             <ListItem
                 ref={this.listItem}
@@ -142,7 +142,7 @@ class TaskCell extends React.Component {
                                     )}
                                 </View>
                             )}
-                            <View>
+                            <View style={{ marginRight: marginSize }}>
                                 <Typography variant="body">{this.state.task.title}</Typography>
                             </View>
                             {this.shouldShowOverdueLabel() && (
@@ -153,7 +153,7 @@ class TaskCell extends React.Component {
                                 </View>
                             )}
                             {!_.isEmpty(this.state.task.description) && (
-                                <View style={{ marginTop: 2 }}>
+                                <View style={{ marginTop: 2, marginRight: marginSize }}>
                                     <Typography variant="body2" color="secondary">
                                         {this.state.task.description}
                                     </Typography>
@@ -163,13 +163,14 @@ class TaskCell extends React.Component {
                     </View>
                 }
                 onPress={this.props.onPress}
-                actions={this.actionsToShow()}
+                actions={this.props.subTask ? undefined : this.actionsToShow()}
             />
         );
     }
 }
 
 TaskCell.propTypes = {
+    subTask: PropTypes.bool,
     tid: PropTypes.string,
     getTask: PropTypes.func,
     getAssignment: PropTypes.func,

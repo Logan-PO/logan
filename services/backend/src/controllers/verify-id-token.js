@@ -29,7 +29,7 @@ async function verifyIdToken(req, res) {
         res.json({
             exists: false,
             meta: { name, email },
-            token: await auth.generateBearerToken({ action: auth.UNAUTHORIZED_ACTIONS.CREATE_USER }, clientType),
+            token: await auth.generateBearerToken({ action: auth.UNAUTHORIZED_ACTIONS.CREATE_USER }),
         });
     } else {
         // User exists
@@ -37,7 +37,7 @@ async function verifyIdToken(req, res) {
         res.json({
             exists: true,
             user,
-            token: await auth.generateBearerToken({ uid: user.uid }, clientType),
+            token: await auth.generateBearerToken({ uid: user.uid }),
         });
     }
 }

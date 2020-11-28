@@ -37,6 +37,7 @@ class NewTaskModal extends React.Component {
     }
 
     render() {
+        const aid = _.get(this.props, 'route.params.aid');
         const leftActions = <Appbar.Action icon="close" onPress={this.close} />;
         const rightActions = (
             <Appbar.Action
@@ -48,6 +49,7 @@ class NewTaskModal extends React.Component {
 
         return (
             <ViewController
+                title="New Task"
                 navigation={this.props.navigation}
                 route={this.props.route}
                 disableBack
@@ -56,6 +58,7 @@ class NewTaskModal extends React.Component {
             >
                 <ScrollView keyboardDismissMode="on-drag">
                     <TaskEditor
+                        aid={aid}
                         navigation={this.props.navigation}
                         route={this.props.route}
                         mode={Editor.Mode.Create}

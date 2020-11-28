@@ -12,9 +12,9 @@ async function getClientCreds(clientType) {
         case 'web':
             return secretUtils.getSecret('logan/web-google-creds');
         case 'ios':
-            throw new AuthorizationError('Missing iOS client credentials');
+            return secretUtils.getSecret('logan/ios-google-creds');
         case 'android':
-            throw new AuthorizationError('Missing Android client credentials');
+            return secretUtils.getSecret('logan/android-google-creds');
         default:
             throw new AuthorizationError(`Unrecognized client type ${clientType}`);
     }
@@ -25,8 +25,8 @@ async function getAuthSecret(clientType) {
     return secret[clientType];
 }
 
-async function generateBearerToken(payload, clientType) {
-    const authSecret = await getAuthSecret(clientType);
+async function generateBearerToken(payload) {
+    const authSecret = await getAuthSecret('web');
     return jwt.sign(payload, authSecret);
 }
 

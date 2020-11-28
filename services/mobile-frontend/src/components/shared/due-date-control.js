@@ -63,7 +63,7 @@ class DueDateControl extends React.Component {
         return (
             <React.Fragment>
                 <ListItem
-                    leftContent={<Typography>Due Date</Typography>}
+                    leftContent={<Typography>{this.props.label || 'Due Date'}</Typography>}
                     rightContent={<Typography color="detail">{dateUtils.readableDueDate(this.props.value)}</Typography>}
                     onPress={this.toggleDueDatePicker}
                 />
@@ -75,7 +75,11 @@ class DueDateControl extends React.Component {
                                 paddingBottom: 12,
                             }}
                         >
-                            <DueDatePicker {...this.props} />
+                            <DueDatePicker
+                                value={this.props.value}
+                                onChange={this.props.onChange}
+                                datesOnly={this.props.datesOnly}
+                            />
                         </View>
                     )}
                 </View>
@@ -85,6 +89,7 @@ class DueDateControl extends React.Component {
 }
 
 DueDateControl.propTypes = {
+    label: PropTypes.string,
     value: PropTypes.string,
     datesOnly: PropTypes.bool,
     onChange: PropTypes.func,
