@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { updateUser } from '@logan/fe-shared/store/settings';
 import { setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
-import { View } from 'react-native-web';
+import { View } from 'react-native';
 import { Button, Dialog } from 'react-native-paper';
 import { TextInput } from 'react-native-paper';
 

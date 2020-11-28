@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setLoginStage } from '@logan/fe-shared/store/login';
 import { Button, TextInput } from 'react-native-paper';
-import { View } from 'react-native-web';
+import { View } from 'react-native';
 import UsernameModal from './username-modal';
 import DeleteModal from './delete-modal';
 import LogOutModal from './logout-modal';
@@ -82,9 +82,7 @@ export class Settings extends React.Component {
                     />
                 </View>
                 <View>
-                    <Button variant="contained" color="primary" disableElevation onClick={this.openNewUsernameModal}>
-                        Change Username
-                    </Button>
+                    <Button onClick={this.openNewUsernameModal}>Change Username</Button>
                     <UsernameModal
                         route={this.props.route}
                         navigation={this.props.navigation}
@@ -93,9 +91,7 @@ export class Settings extends React.Component {
                     />
                 </View>
                 <View>
-                    <Button variant="contained" color="primary" disableElevation onClick={this.openNewLogOutModal}>
-                        Logout
-                    </Button>
+                    <Button onClick={this.openNewLogOutModal}>Logout</Button>
                     <LogOutModal
                         route={this.props.route}
                         navigation={this.props.navigation}
@@ -104,9 +100,7 @@ export class Settings extends React.Component {
                     />
                 </View>
                 <View>
-                    <Button variant="contained" color="primary" disableElevation onClick={this.openNewDeleteModal}>
-                        Delete Account
-                    </Button>
+                    <Button onClick={this.openNewDeleteModal}>Delete Account</Button>
                     <DeleteModal
                         route={this.props.route}
                         navigation={this.props.navigation}

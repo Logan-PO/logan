@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
 import { Button, Dialog } from 'react-native-paper';
-import { View } from 'react-native-web';
+import { View } from 'react-native';
 
 class LogOutModal extends React.Component {
     constructor(props) {

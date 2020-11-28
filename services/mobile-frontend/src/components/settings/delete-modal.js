@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { deleteUser } from '@logan/fe-shared/store/settings';
 import { Button, Dialog } from 'react-native-paper';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
-import { View } from 'react-native-web';
+import { View } from 'react-native';
 
 class DeleteModal extends React.Component {
     constructor(props) {
