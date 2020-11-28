@@ -127,7 +127,7 @@ export class OverviewList extends React.Component {
                         const { sections, assignments, tasks } = item;
                         return (
                             <React.Fragment>
-                                {sections.length && (
+                                {sections.length > 0 && (
                                     <React.Fragment>
                                         {this.secondaryHeader('SCHEDULE')}
                                         <View style={{ paddingVertical: 4 }}>
@@ -137,14 +137,22 @@ export class OverviewList extends React.Component {
                                         </View>
                                     </React.Fragment>
                                 )}
-                                {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
-                                {assignments.map(({ aid }) => (
-                                    <AssignmentCell key={aid} aid={aid} />
-                                ))}
-                                {tasks.length > 0 && this.secondaryHeader('TASKS')}
-                                {tasks.map(({ tid }) => (
-                                    <TaskCell key={tid} tid={tid} />
-                                ))}
+                                {assignments.length > 0 && (
+                                    <React.Fragment>
+                                        {this.secondaryHeader('ASSIGNMENTS')}
+                                        {assignments.map(({ aid }) => (
+                                            <AssignmentCell key={aid} aid={aid} />
+                                        ))}
+                                    </React.Fragment>
+                                )}
+                                {tasks.length > 0 && (
+                                    <React.Fragment>
+                                        {this.secondaryHeader('TASKS')}
+                                        {tasks.map(({ tid }) => (
+                                            <TaskCell key={tid} tid={tid} />
+                                        ))}
+                                    </React.Fragment>
+                                )}
                             </React.Fragment>
                         );
                     }}
