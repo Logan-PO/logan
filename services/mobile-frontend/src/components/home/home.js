@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 import api from '@logan/fe-shared/utils/api';
 import { fetchSelf, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
 import PropTypes from 'prop-types';
@@ -41,9 +42,15 @@ class Home extends React.Component {
 
     render() {
         return (
-            <SafeAreaView>
-                <Typography variant="h3">Welcome to Logan</Typography>
-                <MobileLoginButton />
+            <SafeAreaView style={{ backgroundColor: 'teal', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <View>
+                    <Typography style={{ height: '30%' }} variant="h3" color="white">
+                        Logan
+                    </Typography>
+                </View>
+                <View>
+                    <MobileLoginButton mode="contained" color="white" />
+                </View>
             </SafeAreaView>
         );
     }

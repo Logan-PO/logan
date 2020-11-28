@@ -37,9 +37,17 @@ class MobileLoginButton extends React.Component {
 
     render() {
         if (this.props.isLoggedIn) {
-            return <Button onPress={this.signOut}>Logout</Button>;
+            return (
+                <Button style={this.props.style} color={this.props.color} mode={this.props.mode} onPress={this.signOut}>
+                    Logout
+                </Button>
+            );
         } else {
-            return <Button onPress={this.signIn}>Login with Google</Button>;
+            return (
+                <Button style={this.props.style} color={this.props.color} mode={this.props.mode} onPress={this.signIn}>
+                    Login with Google
+                </Button>
+            );
         }
     }
 }
@@ -48,6 +56,9 @@ MobileLoginButton.propTypes = {
     isLoggedIn: PropTypes.bool,
     setLoginStage: PropTypes.func,
     verifyIdToken: PropTypes.func,
+    mode: PropTypes.string,
+    color: PropTypes.string,
+    style: PropTypes.object,
 };
 
 /*
