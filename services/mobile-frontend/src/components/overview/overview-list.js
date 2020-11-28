@@ -147,6 +147,7 @@ export class OverviewList extends React.Component {
                             <AssignmentCell
                                 key={assignment.aid}
                                 aid={assignment.aid}
+                                onPress={() => this.props.navigation.push('Assignment', _.pick(assignment, 'aid'))}
                                 onDeletePressed={() =>
                                     this.openModal({
                                         message: 'You are about to delete an assignment.\nThis cannot be undone.',
@@ -164,6 +165,7 @@ export class OverviewList extends React.Component {
                             <TaskCell
                                 key={task.tid}
                                 tid={task.tid}
+                                onPress={() => this.props.navigation.push('Task', _.pick(task, 'tid'))}
                                 onDeletePressed={() =>
                                     this.openModal({
                                         message: 'You are about to delete a task.\nThis cannot be undone.',

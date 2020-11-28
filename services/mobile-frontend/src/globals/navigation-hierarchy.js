@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import TasksScreen from '../components/tasks/tasks-screen';
-import AssignmentsScreen from '../screens/assignments-screen';
+import AssignmentsScreen from '../components/assignments/assignments-screen';
 import ScheduleStack from '../components/schedule/schedule-stack';
 import NewTaskModalStack from '../components/tasks/new-task-modal-stack';
 import NewAssignmentModalStack from '../components/assignments/new-assignment-modal-stack';
