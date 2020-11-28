@@ -44,7 +44,12 @@ class NumberPicker extends SyncComponent {
                         >
                             {this.props.value}
                         </Typography>
-                        <Button mode="text" onPress={this.increment} title="+" />
+                        <Button
+                            mode="text"
+                            onPress={this.increment}
+                            title="+"
+                            style={{ backgroundColor: 'none', textColor: Colors.lightBlue500 }}
+                        />
                     </View>
                 }
                 contentStyle={{ paddingVertical: 0 }}
