@@ -40,15 +40,13 @@ class TimePicker extends SyncComponent {
 
     valueChanged(event, dateString) {
         const time = dateUtils.formatAsTime(dateUtils.dayjs(dateString));
-        this.props.onChange && this.props.onChange(time);
-
+        console.log(event);
         if (Platform.OS === 'android') {
-            //It opens again during the closing animation and chooses the later time value
-            //This makes it only open twice versus never closing
-            return this.close();
-        }
-
-        if (event.type === 'neutralButtonPressed') return this.close();
+            //This is what must be done to avoid double time picker DO NOT CHANGE until a better solution is found
+            this.close();
+            this.setState({ open: false });
+            this.props.onChange && this.props.onChange(time);
+        } else this.props.onChange && this.props.onChange(time);
     }
 
     render() {
@@ -68,27 +66,11 @@ class TimePicker extends SyncComponent {
                         backgroundColor: 'white',
                     }}
                 >
-                    {this.state.open && ( //TODO: We need to check on closed instead of on changed for android
+                    {this.state.open && (
                         <DateTimePicker
                             value={dateUtils.toTime(this.props.value).toDate()}
                             mode="time"
-                            onChange={d => {
-                                if (d && Platform.OS !== 'iOS') {
-                                    const time = dateUtils.formatAsTime(dateUtils.dayjs(d));
-
-                                    this.setState({ date: time });
-                                }
-                            }}
-                            onClosed={date => {
-                                const time = dateUtils.formatAsTime(dateUtils.dayjs(date));
-                                if (date && Platform.OS !== 'iOS') {
-                                    //this.props.onChange && this.props.onChange(time);
-                                    this.setState({ open: false, date: time });
-                                } else {
-                                    //this.props.onChange && this.props.onChange(time);
-                                    this.setState({ open: false });
-                                }
-                            }}
+                            onChange={this.valueChanged}
                         />
                     )}
                 </View>
