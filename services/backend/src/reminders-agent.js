@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const { Expo } = require('expo-server-sdk');
 const { dynamoUtils } = require('@logan/aws');
 const { dateUtils } = require('@logan/aws');
