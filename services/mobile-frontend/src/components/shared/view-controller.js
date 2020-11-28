@@ -20,6 +20,7 @@ class ViewController extends React.Component {
                             'leftActionIsFetch',
                             'leftActions',
                             'rightActions',
+                            'rightActionIsSetting',
                         ])}
                     />
                 )}
@@ -40,6 +41,7 @@ ViewController.propTypes = {
     leftActionIsFetch: PropTypes.bool,
     leftActions: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     rightActions: PropTypes.object,
+    rightActionIsSetting: PropTypes.bool,
 };
 
 ViewController.defaultProps = {

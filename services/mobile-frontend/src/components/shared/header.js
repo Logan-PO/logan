@@ -44,6 +44,10 @@ class Header extends React.Component {
         return !this.props.disableBack && this.props.navigation.canGoBack();
     }
 
+    openSettings() {
+        this.props.navigation.navigate('Settings');
+    }
+
     render() {
         return (
             <Appbar.Header style={{ elevation: 0, shadowOpacity: 0 }}>
@@ -54,7 +58,11 @@ class Header extends React.Component {
                     this.props.leftActions
                 )}
                 <Appbar.Content title={this.props.title || this.props.route.name} />
-                {this.props.rightActions}
+                {this.props.rightActionIsSetting ? (
+                    <Appbar.Action icon="cog" onPress={this.openSettings} />
+                ) : (
+                    this.props.rightActions
+                )}
             </Appbar.Header>
         );
     }
@@ -72,6 +80,7 @@ Header.propTypes = {
     fetchAssignments: PropTypes.func,
     fetchSchedule: PropTypes.func,
     fetchReminders: PropTypes.func,
+    rightActionIsSetting: PropTypes.bool,
 };
 
 Header.defaultProps = {

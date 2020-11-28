@@ -2,15 +2,15 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { TextField, Button } from '@material-ui/core';
 import { setLoginStage } from '@logan/fe-shared/store/login';
-import { Page } from '../shared';
+import { Button, TextInput } from 'react-native-paper';
+import { View } from 'react-native-web';
 import UsernameModal from './username-modal';
 import DeleteModal from './delete-modal';
 import LogOutModal from './logout-modal';
 import styles from './settings-page.module.scss';
 
-export class SettingsPage extends React.Component {
+export class Settings extends React.Component {
     constructor(props) {
         super(props);
 
@@ -54,32 +54,32 @@ export class SettingsPage extends React.Component {
 
     render() {
         return (
-            <Page title="Settings">
+            <View>
                 <div className={styles.username}>
-                    <TextField
+                    <TextInput
                         label="Username"
                         InputProps={{
                             readOnly: true,
                         }}
-                        value={_.get(this.props, 'user.username') || ''}
+                        value={_.get(this.props, 'user.username', '')}
                     />
                 </div>
                 <div className={styles.name}>
-                    <TextField
+                    <TextInput
                         label="Name"
                         InputProps={{
                             readOnly: true,
                         }}
-                        value={_.get(this.props, 'user.name') || ''}
+                        value={_.get(this.props, 'user.name', '')}
                     />
                 </div>
                 <div className={styles.email}>
-                    <TextField
+                    <TextInput
                         label="Email"
                         InputProps={{
                             readOnly: true,
                         }}
-                        value={_.get(this.props, 'user.email') || ''}
+                        value={_.get(this.props, 'user.email', '')}
                     />
                 </div>
                 <div className={styles.change}>
@@ -100,12 +100,12 @@ export class SettingsPage extends React.Component {
                     </Button>
                     <DeleteModal open={this.state.newDeleteModal} onClose={this.closeNewDeleteModal} />
                 </div>
-            </Page>
+            </View>
         );
     }
 }
 
-SettingsPage.propTypes = {
+Settings.propTypes = {
     user: PropTypes.object,
     updateUser: PropTypes.func,
 };
@@ -118,4 +118,4 @@ const mapDispatchToProps = {
     setLoginStage,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SettingsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);
