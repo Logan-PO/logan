@@ -13,8 +13,8 @@ jest.doMock('@logan/aws', () => {
 });
 
 const { dynamoUtils } = require('@logan/aws');
-const testUtils = require('../utils/test-utils');
-const controllers = require('./controllers');
+const testUtils = require('../../utils/test-utils');
+const controllers = require('./index');
 
 const formatting = _.mapValues(controllers, controller => _.pick(controller, '__test_only__'));
 

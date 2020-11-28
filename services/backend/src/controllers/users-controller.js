@@ -1,9 +1,9 @@
 const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
-const { generateBearerToken } = require('../utils/auth');
-const requestValidator = require('../utils/request-validator');
-const { NotFoundError, ValidationError, PermissionDeniedError } = require('../utils/errors');
+const { generateBearerToken } = require('../../utils/auth');
+const requestValidator = require('../../utils/request-validator');
+const { NotFoundError, ValidationError, PermissionDeniedError } = require('../../utils/errors');
 
 function fromDbFormat(db) {
     return {
