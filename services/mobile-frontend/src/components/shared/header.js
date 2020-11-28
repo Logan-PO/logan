@@ -34,7 +34,7 @@ class Header extends React.Component {
             this.props.fetchTasks(),
             this.props.fetchAssignments(),
             this.props.fetchSchedule(),
-            this.props.fetchReminders,
+            this.props.fetchReminders(),
         ]);
 
         await this.setStateSync({ isFetching: false });
