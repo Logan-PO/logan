@@ -11,6 +11,7 @@ module.exports = {
         'react/jsx-uses-vars': 'error',
     },
     globals: {
+        window: 'writeable',
         localStorage: 'writable',
     },
     settings: {
