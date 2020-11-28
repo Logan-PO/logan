@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { AppState } from 'react-native';
 import { Appbar } from 'react-native-paper';
+import { dateUtils } from '@logan/core';
 import { beginFetching, finishFetching } from '@logan/fe-shared/store/fetch-status';
 import { fetchTasks } from '@logan/fe-shared/store/tasks';
 import { fetchAssignments } from '@logan/fe-shared/store/assignments';
@@ -17,11 +19,31 @@ class Header extends React.Component {
 
         this.state = {
             isFetching: false,
+            appState: AppState.currentState,
         };
     }
 
     componentDidMount() {
+        AppState.addEventListener('change', this.handleAppStateChange.bind(this));
         this.fetch();
+    }
+
+    componentWillUnmount() {
+        AppState.removeEventListener('change', this.handleAppStateChange.bind(this));
+    }
+
+    handleAppStateChange(nextState) {
+        if (this.props.leftActionIsFetch) {
+            if (this.state.appState.match(/inactive|background/) && nextState === 'active') {
+                // App has moved to the foreground
+                const lastFetch = dateUtils.toDateTime(this.props.lastFetch);
+                const threshold = dateUtils.dayjs().subtract(5, 'minute');
+
+                if (lastFetch.isBefore(threshold)) this.fetch();
+            }
+        }
+
+        this.setState({ appState: nextState });
     }
 
     async fetch() {
