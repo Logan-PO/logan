@@ -55,7 +55,7 @@ export class Settings extends React.Component {
     render() {
         return (
             <View>
-                <div className={styles.username}>
+                <View className={styles.username}>
                     <TextInput
                         label="Username"
                         InputProps={{
@@ -63,8 +63,8 @@ export class Settings extends React.Component {
                         }}
                         value={_.get(this.props, 'user.username', '')}
                     />
-                </div>
-                <div className={styles.name}>
+                </View>
+                <View className={styles.name}>
                     <TextInput
                         label="Name"
                         InputProps={{
@@ -72,8 +72,8 @@ export class Settings extends React.Component {
                         }}
                         value={_.get(this.props, 'user.name', '')}
                     />
-                </div>
-                <div className={styles.email}>
+                </View>
+                <View className={styles.email}>
                     <TextInput
                         label="Email"
                         InputProps={{
@@ -81,25 +81,25 @@ export class Settings extends React.Component {
                         }}
                         value={_.get(this.props, 'user.email', '')}
                     />
-                </div>
-                <div className={styles.change}>
+                </View>
+                <View className={styles.change}>
                     <Button variant="contained" color="primary" disableElevation onClick={this.openNewUsernameModal}>
                         Change Username
                     </Button>
                     <UsernameModal open={this.state.newUsernameModal} onClose={this.closeNewUsernameModal} />
-                </div>
-                <div className={styles.logout}>
+                </View>
+                <View className={styles.logout}>
                     <Button variant="contained" color="primary" disableElevation onClick={this.openNewLogOutModal}>
                         Logout
                     </Button>
                     <LogOutModal open={this.state.newLogOutModal} onClose={this.closeNewLogOutModal} />
-                </div>
-                <div className={styles.delete}>
+                </View>
+                <View className={styles.delete}>
                     <Button variant="contained" color="primary" disableElevation onClick={this.openNewDeleteModal}>
                         Delete Account
                     </Button>
                     <DeleteModal open={this.state.newDeleteModal} onClose={this.closeNewDeleteModal} />
-                </div>
+                </View>
             </View>
         );
     }
