@@ -26,6 +26,7 @@ export class OverviewList extends React.Component {
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
 
+        this.renderListSection = this.renderListSection.bind(this);
         this.getRelevantData = this.getRelevantData.bind(this);
         this.changeCondense = this.changeCondense.bind(this);
         this.changeView = this.changeView.bind(this);
@@ -126,6 +127,57 @@ export class OverviewList extends React.Component {
         );
     }
 
+    renderListSection({ sections, assignments, tasks }) {
+        return (
+            <React.Fragment>
+                {sections.length > 0 && (
+                    <React.Fragment>
+                        {this.secondaryHeader('SCHEDULE')}
+                        <View style={{ paddingVertical: 4 }}>
+                            {sections.map(({ sid }) => (
+                                <OverviewSectionCell key={sid} sid={sid} />
+                            ))}
+                        </View>
+                    </React.Fragment>
+                )}
+                {assignments.length > 0 && (
+                    <React.Fragment>
+                        {this.secondaryHeader('ASSIGNMENTS')}
+                        {assignments.map(assignment => (
+                            <AssignmentCell
+                                key={assignment.aid}
+                                aid={assignment.aid}
+                                onDeletePressed={() =>
+                                    this.openModal({
+                                        message: 'You are about to delete an assignment.\nThis cannot be undone.',
+                                        confirm: () => this.props.deleteAssignment(assignment),
+                                    })
+                                }
+                            />
+                        ))}
+                    </React.Fragment>
+                )}
+                {tasks.length > 0 && (
+                    <React.Fragment>
+                        {this.secondaryHeader('TASKS')}
+                        {tasks.map(task => (
+                            <TaskCell
+                                key={task.tid}
+                                tid={task.tid}
+                                onDeletePressed={() =>
+                                    this.openModal({
+                                        message: 'You are about to delete a task.\nThis cannot be undone.',
+                                        confirm: () => this.props.deleteTask(task),
+                                    })
+                                }
+                            />
+                        ))}
+                    </React.Fragment>
+                )}
+            </React.Fragment>
+        );
+    }
+
     render() {
         const groups = this.getRelevantData();
 
@@ -146,59 +198,7 @@ export class OverviewList extends React.Component {
                             {title}
                         </List.Subheader>
                     )}
-                    renderItem={({ item }) => {
-                        const { sections, assignments, tasks } = item;
-                        return (
-                            <React.Fragment>
-                                {sections.length > 0 && (
-                                    <React.Fragment>
-                                        {this.secondaryHeader('SCHEDULE')}
-                                        <View style={{ paddingVertical: 4 }}>
-                                            {sections.map(({ sid }) => (
-                                                <OverviewSectionCell key={sid} sid={sid} />
-                                            ))}
-                                        </View>
-                                    </React.Fragment>
-                                )}
-                                {assignments.length > 0 && (
-                                    <React.Fragment>
-                                        {this.secondaryHeader('ASSIGNMENTS')}
-                                        {assignments.map(assignment => (
-                                            <AssignmentCell
-                                                key={assignment.aid}
-                                                aid={assignment.aid}
-                                                onDeletePressed={() =>
-                                                    this.openModal({
-                                                        message:
-                                                            'You are about to delete an assignment.\nThis cannot be undone.',
-                                                        confirm: () => this.props.deleteAssignment(assignment),
-                                                    })
-                                                }
-                                            />
-                                        ))}
-                                    </React.Fragment>
-                                )}
-                                {tasks.length > 0 && (
-                                    <React.Fragment>
-                                        {this.secondaryHeader('TASKS')}
-                                        {tasks.map(task => (
-                                            <TaskCell
-                                                key={task.tid}
-                                                tid={task.tid}
-                                                onDeletePressed={() =>
-                                                    this.openModal({
-                                                        message:
-                                                            'You are about to delete a task.\nThis cannot be undone.',
-                                                        confirm: () => this.props.deleteTask(task),
-                                                    })
-                                                }
-                                            />
-                                        ))}
-                                    </React.Fragment>
-                                )}
-                            </React.Fragment>
-                        );
-                    }}
+                    renderItem={({ item }) => this.renderListSection(item)}
                 />
                 <Portal>
                     <Dialog visible={this.state.modalShown} onDismiss={this.closeModal}>
