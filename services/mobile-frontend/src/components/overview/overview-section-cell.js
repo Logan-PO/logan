@@ -1,7 +1,7 @@
+import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { getSectionSelectors } from '@logan/fe-shared/store/schedule';
 import { View } from 'react-native';
 import CourseLabel from '../shared/displays/course-label';
@@ -29,31 +29,21 @@ class OverviewSectionCell extends React.Component {
     }
 
     render() {
-        const section = _.get(this.state, 'section.title');
-        const location = _.get(this.state, 'section.location');
-        const instructor = _.get(this.state, 'section.instructor');
-
         return (
-            <View>
-                <ListItem
-                    leftContent={
-                        <View container direction="row" alignItems="flex-start">
-                            <View>
-                                <Typography>{printSectionTimes(this.state.section)}</Typography>
-                            </View>
-                            <View>
-                                <Typography>
-                                    <CourseLabel cid={_.get(this.state, 'section.cid')} />
-                                </Typography>
-                                {this.state.condensed && section && this.makeDetailText('Section', section)}
-                                {this.state.condensed && location && this.makeDetailText('Location', location)}
-                                {this.state.condensed && instructor && this.makeDetailText('Instructor', instructor)}
-                            </View>
+            <ListItem
+                leftContent={
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <View style={{ flex: 2 }}>
+                            <Typography variant="body2">{printSectionTimes(this.state.section)}</Typography>
                         </View>
-                    }
-                    onClick={() => this.setState({ condensed: !this.state.condensed })}
-                />
-            </View>
+                        <View style={{ flex: 3 }}>
+                            <CourseLabel cid={_.get(this.state, 'section.cid')} />
+                        </View>
+                    </View>
+                }
+                contentStyle={{ minHeight: 0, paddingVertical: 10 }}
+                onClick={() => this.setState({ condensed: !this.state.condensed })}
+            />
         );
     }
 }

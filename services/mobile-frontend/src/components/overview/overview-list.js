@@ -6,7 +6,7 @@ import { dateUtils } from '@logan/core';
 import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
-import { ScrollView } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { List } from 'react-native-paper';
 import { Text } from 'react-native-paper';
 import AssignmentCell from '../assignments/assignment-cell';
@@ -121,25 +121,27 @@ export class OverviewList extends React.Component {
                 leftActionIsFetch={true}
             >
                 <ScrollView keyboardDismissMode="on-drag">
-                    {groups.map(([date, { sections, assignments, tasks }]) => {
-                        return (
-                            <React.Fragment key={date.format()}>
-                                <List.Subheader>{dateUtils.humanReadableDate(date)}</List.Subheader>
-                                {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
-                                {sections.map(({ sid }) => (
-                                    <OverviewSectionCell key={sid} sid={sid} />
-                                ))}
-                                {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
-                                {assignments.map(({ aid }) => (
-                                    <AssignmentCell key={aid} aid={aid} />
-                                ))}
-                                {tasks.length > 0 && this.secondaryHeader('TASKS')}
-                                {tasks.map(({ tid }) => (
-                                    <TaskCell key={tid} tid={tid} />
-                                ))}
-                            </React.Fragment>
-                        );
-                    })}
+                    <View style={{ backgroundColor: 'white' }}>
+                        {groups.map(([date, { sections, assignments, tasks }]) => {
+                            return (
+                                <React.Fragment key={date.format()}>
+                                    <List.Subheader>{dateUtils.humanReadableDate(date)}</List.Subheader>
+                                    {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
+                                    {sections.map(({ sid }) => (
+                                        <OverviewSectionCell key={sid} sid={sid} />
+                                    ))}
+                                    {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
+                                    {assignments.map(({ aid }) => (
+                                        <AssignmentCell key={aid} aid={aid} />
+                                    ))}
+                                    {tasks.length > 0 && this.secondaryHeader('TASKS')}
+                                    {tasks.map(({ tid }) => (
+                                        <TaskCell key={tid} tid={tid} />
+                                    ))}
+                                </React.Fragment>
+                            );
+                        })}
+                    </View>
                 </ScrollView>
             </ViewController>
         );
