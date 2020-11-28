@@ -11,6 +11,8 @@ import NewAssignmentModalStack from '../components/assignments/new-assignment-mo
 import NewTermModal from '../components/schedule/terms/new-term-modal';
 import NewCourseModal from '../components/schedule/courses/new-course-modal';
 import NewHolidayModal from '../components/schedule/holidays/new-holiday-modal';
+import Home from '../components/home/home';
+import SignUpForm from '../components/home/signup-form';
 import OverviewScreen from '../components/overview/overview-screen';
 import NewSectionModal from '../components/schedule/sections/new-section-modal';
 import SettingsScreen from '../components/settings/settings-screen';
@@ -65,12 +67,14 @@ class NavigationHierarchy extends React.Component {
     render() {
         return (
             <RootStack.Navigator mode="modal" headerMode="screen" screenOptions={{ headerShown: false }}>
+                <RootStack.Screen name="Home" component={Home} />
                 <RootStack.Screen name="Root" component={this.tabs} />
                 <RootStack.Screen name="New Task" component={NewTaskModalStack} />
                 <RootStack.Screen name="New Assignment" component={NewAssignmentModalStack} />
                 <RootStack.Screen name="New Term" component={NewTermModal} />
                 <RootStack.Screen name="New Course" component={NewCourseModal} />
                 <RootStack.Screen name="New Holiday" component={NewHolidayModal} />
+                <RootStack.Screen name="Signup" component={SignUpForm} />
                 <RootStack.Screen name="New Section" component={NewSectionModal} />
                 <RootStack.Screen name="Settings" component={SettingsScreen} />
             </RootStack.Navigator>
