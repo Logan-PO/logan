@@ -27,7 +27,9 @@ export default class TutorialPage extends React.Component {
                             of the screen in turquoise.
                         </Typography>
                         <br />
-                        <img src={image1} className={styles.image} />
+                        <div className={styles.imageContainer}>
+                            <img src={image1} className={styles.image} />
+                        </div>
                         <br />
                         <Typography>
                             The left side of the screen has the buttons that allow you to navigate between the major
@@ -43,7 +45,9 @@ export default class TutorialPage extends React.Component {
                             holidays, and semesters.
                         </Typography>
                         <br />
-                        <img src={image2} className={styles.image} />
+                        <div className={styles.imageContainer}>
+                            <img src={image2} className={styles.image} />
+                        </div>
                         <br />
                         <Typography>
                             First click on the + New term button to create a new term. A new term will appear above the
@@ -65,7 +69,9 @@ export default class TutorialPage extends React.Component {
                             Below is the assignments screen. You can see all of your assignments here.
                         </Typography>
                         <br />
-                        <img src={image3} className={styles.image} />
+                        <div className={styles.imageContainer}>
+                            <img src={image3} className={styles.image} />
+                        </div>
                         <br />
                         <Typography>
                             Click on the orange circle with a plus in it at the bottom of the screen. A popup box will
@@ -86,7 +92,9 @@ export default class TutorialPage extends React.Component {
                             looking at the details for the currnet assignment.
                         </Typography>
                         <br />
-                        <img src={image4} className={styles.image} />
+                        <div className={styles.imageContainer}>
+                            <img src={image4} className={styles.image} />
+                        </div>
                         <br />
                         <Typography>
                             Click on the orange plus button on the right side of the screen near Subtasks. This allows
@@ -101,7 +109,9 @@ export default class TutorialPage extends React.Component {
                         <Typography variant="h4">Tasks</Typography>
                         <Typography>Below is the tasks screen. You can see all of your tasks here.</Typography>
                         <br />
-                        <img src={image5} className={styles.image} />
+                        <div className={styles.imageContainer}>
+                            <img src={image5} className={styles.image} />
+                        </div>
                         <br />
                         <Typography>
                             The tasks page is just like the assignments page except for tasks. You can create a task
@@ -118,7 +128,9 @@ export default class TutorialPage extends React.Component {
                             schedule.
                         </Typography>
                         <br />
-                        <img src={image6} className={styles.image} />
+                        <div className={styles.imageContainer}>
+                            <img src={image6} className={styles.image} />
+                        </div>
                         <br />
                         <Typography>
                             On the top/middle of the screen you can toggle between a week and month view. On the
