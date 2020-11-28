@@ -72,7 +72,23 @@ class TimePicker extends SyncComponent {
                         <DateTimePicker
                             value={dateUtils.toTime(this.props.value).toDate()}
                             mode="time"
-                            onChange={this.valueChanged}
+                            onChange={d => {
+                                if (d && Platform.OS !== 'iOS') {
+                                    const time = dateUtils.formatAsTime(dateUtils.dayjs(d));
+
+                                    this.setState({ date: time });
+                                }
+                            }}
+                            onClosed={date => {
+                                const time = dateUtils.formatAsTime(dateUtils.dayjs(date));
+                                if (date && Platform.OS !== 'iOS') {
+                                    //this.props.onChange && this.props.onChange(time);
+                                    this.setState({ open: false, date: time });
+                                } else {
+                                    //this.props.onChange && this.props.onChange(time);
+                                    this.setState({ open: false });
+                                }
+                            }}
                         />
                     )}
                 </View>
