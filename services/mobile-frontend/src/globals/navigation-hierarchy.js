@@ -19,7 +19,7 @@ const BottomTabs = createMaterialBottomTabNavigator();
 const routes = [
     {
         name: 'Overview',
-        icon: 'golf-course',
+        icon: 'home',
         component: OverviewScreen,
     },
     {

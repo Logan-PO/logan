@@ -6,13 +6,10 @@ import { dateUtils } from '@logan/core';
 import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
-import { ScrollView, View } from 'react-native';
-import { List } from 'react-native-paper';
-import { Text } from 'react-native-paper';
+import { View, SectionList } from 'react-native';
+import { Colors, List } from 'react-native-paper';
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
-import Typography from '../shared/typography';
-import ListItem from '../shared/list-item';
 import ViewController from '../shared/view-controller';
 import OverviewSectionCell from './overview-section-cell';
 
@@ -80,7 +77,10 @@ export class OverviewList extends React.Component {
             runner = runner.add(1, 'day');
         }
 
-        return groups;
+        return groups.map(([date, data]) => ({
+            title: dateUtils.humanReadableDate(date),
+            data: [data],
+        }));
     }
 
     changeCondense() {
@@ -99,13 +99,7 @@ export class OverviewList extends React.Component {
 
     secondaryHeader(title) {
         return (
-            <ListItem
-                leftContent={
-                    <Typography variant="button">
-                        <Text>{title}</Text>
-                    </Typography>
-                }
-            />
+            <List.Subheader style={{ backgroundColor: Colors.blueGrey50, paddingVertical: 6 }}>{title}</List.Subheader>
         );
     }
 
@@ -120,29 +114,41 @@ export class OverviewList extends React.Component {
                 disableBack
                 leftActionIsFetch={true}
             >
-                <ScrollView keyboardDismissMode="on-drag">
-                    <View style={{ backgroundColor: 'white' }}>
-                        {groups.map(([date, { sections, assignments, tasks }]) => {
-                            return (
-                                <React.Fragment key={date.format()}>
-                                    <List.Subheader>{dateUtils.humanReadableDate(date)}</List.Subheader>
-                                    {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
-                                    {sections.map(({ sid }) => (
-                                        <OverviewSectionCell key={sid} sid={sid} />
-                                    ))}
-                                    {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
-                                    {assignments.map(({ aid }) => (
-                                        <AssignmentCell key={aid} aid={aid} />
-                                    ))}
-                                    {tasks.length > 0 && this.secondaryHeader('TASKS')}
-                                    {tasks.map(({ tid }) => (
-                                        <TaskCell key={tid} tid={tid} />
-                                    ))}
-                                </React.Fragment>
-                            );
-                        })}
-                    </View>
-                </ScrollView>
+                <SectionList
+                    style={{ height: '100%', backgroundColor: 'white' }}
+                    sections={groups}
+                    keyExtractor={(item, index) => item + index}
+                    renderSectionHeader={({ section: { title } }) => (
+                        <List.Subheader style={{ backgroundColor: Colors.blueGrey100 }} key={title}>
+                            {title}
+                        </List.Subheader>
+                    )}
+                    renderItem={({ item }) => {
+                        const { sections, assignments, tasks } = item;
+                        return (
+                            <React.Fragment>
+                                {sections.length && (
+                                    <React.Fragment>
+                                        {this.secondaryHeader('SCHEDULE')}
+                                        <View style={{ paddingVertical: 4 }}>
+                                            {sections.map(({ sid }) => (
+                                                <OverviewSectionCell key={sid} sid={sid} />
+                                            ))}
+                                        </View>
+                                    </React.Fragment>
+                                )}
+                                {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
+                                {assignments.map(({ aid }) => (
+                                    <AssignmentCell key={aid} aid={aid} />
+                                ))}
+                                {tasks.length > 0 && this.secondaryHeader('TASKS')}
+                                {tasks.map(({ tid }) => (
+                                    <TaskCell key={tid} tid={tid} />
+                                ))}
+                            </React.Fragment>
+                        );
+                    }}
+                />
             </ViewController>
         );
     }
