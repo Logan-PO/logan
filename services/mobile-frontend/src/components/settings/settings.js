@@ -86,19 +86,34 @@ export class Settings extends React.Component {
                     <Button variant="contained" color="primary" disableElevation onClick={this.openNewUsernameModal}>
                         Change Username
                     </Button>
-                    <UsernameModal open={this.state.newUsernameModal} onClose={this.closeNewUsernameModal} />
+                    <UsernameModal
+                        route={this.props.route}
+                        navigation={this.props.navigation}
+                        open={this.state.newUsernameModal}
+                        onClose={this.closeNewUsernameModal}
+                    />
                 </View>
                 <View className={styles.logout}>
                     <Button variant="contained" color="primary" disableElevation onClick={this.openNewLogOutModal}>
                         Logout
                     </Button>
-                    <LogOutModal open={this.state.newLogOutModal} onClose={this.closeNewLogOutModal} />
+                    <LogOutModal
+                        route={this.props.route}
+                        navigation={this.props.navigation}
+                        open={this.state.newLogOutModal}
+                        onClose={this.closeNewLogOutModal}
+                    />
                 </View>
                 <View className={styles.delete}>
                     <Button variant="contained" color="primary" disableElevation onClick={this.openNewDeleteModal}>
                         Delete Account
                     </Button>
-                    <DeleteModal open={this.state.newDeleteModal} onClose={this.closeNewDeleteModal} />
+                    <DeleteModal
+                        route={this.props.route}
+                        navigation={this.props.navigation}
+                        open={this.state.newDeleteModal}
+                        onClose={this.closeNewDeleteModal}
+                    />
                 </View>
             </View>
         );
@@ -106,6 +121,8 @@ export class Settings extends React.Component {
 }
 
 Settings.propTypes = {
+    route: PropTypes.object,
+    navigation: PropTypes.object,
     user: PropTypes.object,
     updateUser: PropTypes.func,
 };

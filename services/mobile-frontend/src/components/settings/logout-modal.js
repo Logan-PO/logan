@@ -2,9 +2,10 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { navigate } from 'gatsby';
-import { Dialog, DialogContent, DialogActions, DialogTitle, Button } from '@material-ui/core';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
+import { Button, Dialog } from 'react-native-paper';
+import { View } from 'react-native-web';
+import Typography, { typographyStyles } from '../shared/typography';
 import styles from './settings-page.module.scss';
 
 class LogOutModal extends React.Component {
@@ -30,31 +31,33 @@ class LogOutModal extends React.Component {
 
     logout() {
         this.props.setLoginStage(LOGIN_STAGE.LOGIN);
-        navigate('/');
+        this.props.navigation.navigate('Home');
     }
 
     render() {
         return (
             <Dialog open={this.props.open} onClose={this.props.onClose} fullWidth maxWidth="sm">
-                <DialogContent>
-                    <DialogTitle>Are you sure?</DialogTitle>
-                </DialogContent>
-                <DialogActions className={styles.yes}>
-                    <div>
+                <Dialog.Content>
+                    <Dialog.Title>Are you sure?</Dialog.Title>
+                </Dialog.Content>
+                <Dialog.Actions className={styles.yes}>
+                    <View>
                         <Button variant="contained" color="primary" disableElevation onClick={this.logout}>
                             Yes
                         </Button>
                         <Button variant="contained" color="primary" disableElevation onClick={this.close}>
                             No
                         </Button>
-                    </div>
-                </DialogActions>
+                    </View>
+                </Dialog.Actions>
             </Dialog>
         );
     }
 }
 
 LogOutModal.propTypes = {
+    route: PropTypes.object,
+    navigation: PropTypes.object,
     user: PropTypes.object,
     open: PropTypes.bool,
     onClose: PropTypes.func,
