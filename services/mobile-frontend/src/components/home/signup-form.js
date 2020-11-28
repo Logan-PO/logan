@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
-import { TextInput, Button, Card } from 'react-native-paper';
+import { TextInput, Button, Card, Title } from 'react-native-paper';
 import Typography from '../shared/typography';
 
 class SignUpForm extends React.Component {
@@ -42,15 +42,15 @@ class SignUpForm extends React.Component {
     }
 
     render() {
-        let textWidth = '70%';
+        let textWidth = '90%';
         return (
             <SafeAreaView style={{ backgroundColor: 'teal', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <View style={{ alignSelf: 'center' }}>
-                    <Typography color="white" variant="h6">
+                <View style={{ alignSelf: 'center', height: '15%' }}>
+                    <Typography color="white" variant="h4">
                         Create Account
                     </Typography>
                 </View>
-                <Card style={{ width: '90%' }}>
+                <Card style={{ width: '90%', justifyContent: 'center' }}>
                     <Card.Content>
                         <View style={{ width: textWidth }}>
                             <TextInput
@@ -79,11 +79,11 @@ class SignUpForm extends React.Component {
                                 onChangeText={this.handleChange.bind(this, 'email')}
                             />
                         </View>
-                        <View>
+                        <Card.Actions style={{ alignSelf: 'center' }}>
                             <Button color="teal" mode="contained" onPress={this.handleSubmit}>
                                 Submit
                             </Button>
-                        </View>
+                        </Card.Actions>
                     </Card.Content>
                 </Card>
             </SafeAreaView>
