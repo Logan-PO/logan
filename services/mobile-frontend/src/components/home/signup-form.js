@@ -3,8 +3,8 @@ import _ from 'lodash';
 import { createNewUser, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { SafeAreaView, Button } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { SafeAreaView } from 'react-native';
+import { TextInput, Button } from 'react-native-paper';
 import Typography from '../shared/typography';
 
 class SignUpForm extends React.Component {
@@ -65,7 +65,7 @@ class SignUpForm extends React.Component {
                     value={this.state.email}
                     onChangeText={this.handleChange.bind(this, 'email')}
                 />
-                <Button title="Submit" onPress={this.handleSubmit} />
+                <Button onPress={this.handleSubmit}>Submit</Button>
             </SafeAreaView>
         );
     }
