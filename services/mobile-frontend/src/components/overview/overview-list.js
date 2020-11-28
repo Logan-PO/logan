@@ -7,7 +7,7 @@ import { fetchAssignments, getAssignmentsSelectors, deleteAssignment } from '@lo
 import { fetchTasks, getTasksSelectors, deleteTask } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { View, SectionList } from 'react-native';
-import { Button, Colors, Dialog, List, Paragraph, Portal } from 'react-native-paper';
+import { Button, Colors, Dialog, FAB, List, Paragraph, Portal } from 'react-native-paper';
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import ViewController from '../shared/view-controller';
@@ -31,7 +31,10 @@ export class OverviewList extends React.Component {
         this.changeCondense = this.changeCondense.bind(this);
         this.changeView = this.changeView.bind(this);
 
-        this.state = { listView: true };
+        this.state = {
+            listView: true,
+            fabOpen: false,
+        };
     }
 
     openModal({ message, confirm }) {
@@ -184,49 +187,69 @@ export class OverviewList extends React.Component {
         const groups = this.getRelevantData();
 
         return (
-            <ViewController
-                title="Overview"
-                navigation={this.props.navigation}
-                route={this.props.route}
-                disableBack
-                leftActionIsFetch={true}
-            >
-                <SectionList
-                    style={{ height: '100%', backgroundColor: 'white' }}
-                    sections={groups}
-                    keyExtractor={(item, index) => item + index}
-                    renderSectionHeader={({ section: { title } }) => (
-                        <List.Subheader style={{ backgroundColor: Colors.blueGrey100 }} key={title}>
-                            {title}
-                        </List.Subheader>
-                    )}
-                    renderItem={({ item }) => this.renderListSection(item)}
+            <React.Fragment>
+                <ViewController
+                    title="Overview"
+                    navigation={this.props.navigation}
+                    route={this.props.route}
+                    disableBack
+                    leftActionIsFetch={true}
+                >
+                    <SectionList
+                        style={{ height: '100%', backgroundColor: 'white' }}
+                        sections={groups}
+                        keyExtractor={(item, index) => item + index}
+                        renderSectionHeader={({ section: { title } }) => (
+                            <List.Subheader style={{ backgroundColor: Colors.blueGrey100 }} key={title}>
+                                {title}
+                            </List.Subheader>
+                        )}
+                        renderItem={({ item }) => this.renderListSection(item)}
+                    />
+                    <Portal>
+                        <Dialog visible={this.state.modalShown} onDismiss={this.closeModal}>
+                            <Dialog.Title>Are you sure?</Dialog.Title>
+                            <Dialog.Content>
+                                {_.get(this.state, 'modalMessage', '')
+                                    .split('\n')
+                                    .map((line, i) => (
+                                        <Paragraph key={i}>{line}</Paragraph>
+                                    ))}
+                            </Dialog.Content>
+                            <Dialog.Actions>
+                                <Button onPress={this.closeModal} labelStyle={typographyStyles.button}>
+                                    Cancel
+                                </Button>
+                                <Button
+                                    onPress={this.state.modalConfirmation}
+                                    color="red"
+                                    labelStyle={typographyStyles.button}
+                                >
+                                    Delete
+                                </Button>
+                            </Dialog.Actions>
+                        </Dialog>
+                    </Portal>
+                </ViewController>
+                <FAB.Group
+                    open={this.state.fabOpen}
+                    color="white"
+                    icon={this.state.fabOpen ? 'close' : 'plus'}
+                    actions={[
+                        {
+                            icon: 'plus',
+                            label: 'Assignment',
+                            onPress: () => this.props.navigation.navigate('New Assignment'),
+                        },
+                        {
+                            icon: 'plus',
+                            label: 'Task',
+                            onPress: () => this.props.navigation.navigate('New Task'),
+                        },
+                    ]}
+                    onStateChange={({ open }) => this.setState({ fabOpen: open })}
                 />
-                <Portal>
-                    <Dialog visible={this.state.modalShown} onDismiss={this.closeModal}>
-                        <Dialog.Title>Are you sure?</Dialog.Title>
-                        <Dialog.Content>
-                            {_.get(this.state, 'modalMessage', '')
-                                .split('\n')
-                                .map((line, i) => (
-                                    <Paragraph key={i}>{line}</Paragraph>
-                                ))}
-                        </Dialog.Content>
-                        <Dialog.Actions>
-                            <Button onPress={this.closeModal} labelStyle={typographyStyles.button}>
-                                Cancel
-                            </Button>
-                            <Button
-                                onPress={this.state.modalConfirmation}
-                                color="red"
-                                labelStyle={typographyStyles.button}
-                            >
-                                Delete
-                            </Button>
-                        </Dialog.Actions>
-                    </Dialog>
-                </Portal>
-            </ViewController>
+            </React.Fragment>
         );
     }
 }
