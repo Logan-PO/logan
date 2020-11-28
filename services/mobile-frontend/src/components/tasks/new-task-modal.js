@@ -49,7 +49,7 @@ class NewTaskModal extends React.Component {
 
         return (
             <ViewController
-                title="New Task"
+                title={_.get(this.state, 'task.aid') ? 'New Subtask' : 'New Task'}
                 navigation={this.props.navigation}
                 route={this.props.route}
                 disableBack
