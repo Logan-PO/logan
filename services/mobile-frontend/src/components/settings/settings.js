@@ -11,6 +11,7 @@ import LogOutModal from './logout-modal';
 
 export class Settings extends React.Component {
     constructor(props) {
+        //TODO: Need to have modals only render when needed
         super(props);
 
         this.openNewUsernameModal = this.openNewUsernameModal.bind(this);
