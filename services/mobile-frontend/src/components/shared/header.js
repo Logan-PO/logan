@@ -83,7 +83,7 @@ class Header extends React.Component {
                 )}
                 <Appbar.Content title={this.props.title || this.props.route.name} />
                 {this.props.rightActionIsSetting ? (
-                    <Appbar.Action icon="data-matrix" onPress={this.openSettings} />
+                    <Appbar.Action icon="settings" onPress={this.openSettings} />
                 ) : (
                     this.props.rightActions
                 )}

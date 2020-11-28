@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { setLoginStage } from '@logan/fe-shared/store/login';
 import { Button, TextInput } from 'react-native-paper';
 import { View } from 'react-native';
+import ViewController from '../shared/view-controller';
 import UsernameModal from './username-modal';
 import DeleteModal from './delete-modal';
 import LogOutModal from './logout-modal';
@@ -54,62 +55,70 @@ export class Settings extends React.Component {
 
     render() {
         return (
-            <View>
+            <ViewController
+                title="Settings"
+                navigation={this.props.navigation}
+                route={this.props.route}
+                leftActionIsFetch={false}
+                rightActionIsSetting={false}
+            >
                 <View>
-                    <TextInput
-                        label="Username"
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        value={_.get(this.props, 'user.username', '')}
-                    />
+                    <View>
+                        <TextInput
+                            label="Username"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            value={_.get(this.props, 'user.username', '')}
+                        />
+                    </View>
+                    <View>
+                        <TextInput
+                            label="Name"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            value={_.get(this.props, 'user.name', '')}
+                        />
+                    </View>
+                    <View>
+                        <TextInput
+                            label="Email"
+                            InputProps={{
+                                readOnly: true,
+                            }}
+                            value={_.get(this.props, 'user.email', '')}
+                        />
+                    </View>
+                    <View>
+                        <Button onClick={this.openNewUsernameModal}>Change Username</Button>
+                        <UsernameModal
+                            route={this.props.route}
+                            navigation={this.props.navigation}
+                            open={this.state.newUsernameModal}
+                            onClose={this.closeNewUsernameModal}
+                        />
+                    </View>
+                    <View>
+                        <Button onClick={this.openNewLogOutModal}>Logout</Button>
+                        <LogOutModal
+                            route={this.props.route}
+                            navigation={this.props.navigation}
+                            open={this.state.newLogOutModal}
+                            onClose={this.closeNewLogOutModal}
+                        />
+                    </View>
+                    <View>
+                        <Button onClick={this.openNewDeleteModal}>Delete Account</Button>
+                        <DeleteModal
+                            route={this.props.route}
+                            navigation={this.props.navigation}
+                            open={this.state.newDeleteModal}
+                            onClose={this.closeNewDeleteModal}
+                        />
+                    </View>
                 </View>
-                <View>
-                    <TextInput
-                        label="Name"
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        value={_.get(this.props, 'user.name', '')}
-                    />
-                </View>
-                <View>
-                    <TextInput
-                        label="Email"
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        value={_.get(this.props, 'user.email', '')}
-                    />
-                </View>
-                <View>
-                    <Button onClick={this.openNewUsernameModal}>Change Username</Button>
-                    <UsernameModal
-                        route={this.props.route}
-                        navigation={this.props.navigation}
-                        open={this.state.newUsernameModal}
-                        onClose={this.closeNewUsernameModal}
-                    />
-                </View>
-                <View>
-                    <Button onClick={this.openNewLogOutModal}>Logout</Button>
-                    <LogOutModal
-                        route={this.props.route}
-                        navigation={this.props.navigation}
-                        open={this.state.newLogOutModal}
-                        onClose={this.closeNewLogOutModal}
-                    />
-                </View>
-                <View>
-                    <Button onClick={this.openNewDeleteModal}>Delete Account</Button>
-                    <DeleteModal
-                        route={this.props.route}
-                        navigation={this.props.navigation}
-                        open={this.state.newDeleteModal}
-                        onClose={this.closeNewDeleteModal}
-                    />
-                </View>
-            </View>
+            </ViewController>
         );
     }
 }
