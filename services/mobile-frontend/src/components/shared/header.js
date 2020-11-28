@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { AppState } from 'react-native';
 import { Appbar } from 'react-native-paper';
+import { dateUtils } from '@logan/core';
+import { beginFetching, finishFetching } from '@logan/fe-shared/store/fetch-status';
 import { fetchTasks } from '@logan/fe-shared/store/tasks';
 import { fetchAssignments } from '@logan/fe-shared/store/assignments';
 import { fetchSchedule } from '@logan/fe-shared/store/schedule';
@@ -16,28 +19,48 @@ class Header extends React.Component {
 
         this.state = {
             isFetching: false,
+            appState: AppState.currentState,
         };
     }
 
     componentDidMount() {
+        AppState.addEventListener('change', this.handleAppStateChange.bind(this));
         this.fetch();
     }
 
-    async setStateSync(update) {
-        return new Promise(resolve => this.setState(update, resolve));
+    componentWillUnmount() {
+        AppState.removeEventListener('change', this.handleAppStateChange.bind(this));
+    }
+
+    handleAppStateChange(nextState) {
+        if (this.props.leftActionIsFetch) {
+            if (this.state.appState.match(/inactive|background/) && nextState === 'active') {
+                // App has moved to the foreground
+                const lastFetch = dateUtils.toDateTime(this.props.lastFetch);
+                const threshold = dateUtils.dayjs().subtract(5, 'minute');
+
+                if (lastFetch.isBefore(threshold)) this.fetch();
+            }
+        }
+
+        this.setState({ appState: nextState });
     }
 
     async fetch() {
-        await this.setStateSync({ isFetching: true });
+        if (this.props.isFetching) return;
 
-        await Promise.all([
+        this.props.beginFetching();
+
+        const fetchers = [
             this.props.fetchTasks(),
             this.props.fetchAssignments(),
             this.props.fetchSchedule(),
             this.props.fetchReminders(),
-        ]);
+        ];
 
-        await this.setStateSync({ isFetching: false });
+        await Promise.all(fetchers);
+
+        this.props.finishFetching();
     }
 
     shouldShowBackButton() {
@@ -72,17 +95,28 @@ Header.propTypes = {
     fetchAssignments: PropTypes.func,
     fetchSchedule: PropTypes.func,
     fetchReminders: PropTypes.func,
+    beginFetching: PropTypes.func,
+    finishFetching: PropTypes.func,
+    isFetching: PropTypes.bool,
+    lastFetch: PropTypes.string,
 };
 
 Header.defaultProps = {
     disableBack: false,
 };
 
+const mapStateToProps = state => ({
+    isFetching: state.fetchStatus.fetching,
+    lastFetch: state.fetchStatus.lastFetch,
+});
+
 const mapDispatchToProps = {
+    beginFetching,
+    finishFetching,
     fetchTasks,
     fetchAssignments,
     fetchSchedule,
     fetchReminders,
 };
 
-export default connect(null, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
