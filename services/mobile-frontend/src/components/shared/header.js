@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import SyncComponent from '@logan/fe-shared/components/sync-component';
 import { Appbar } from 'react-native-paper';
 import { fetchTasks } from '@logan/fe-shared/store/tasks';
 import { fetchAssignments } from '@logan/fe-shared/store/assignments';
 import { fetchSchedule } from '@logan/fe-shared/store/schedule';
 import { fetchReminders } from '@logan/fe-shared/store/reminders';
 
-class Header extends React.Component {
+class Header extends SyncComponent {
     constructor(props) {
         super(props);
 
@@ -21,10 +22,6 @@ class Header extends React.Component {
 
     componentDidMount() {
         this.fetch();
-    }
-
-    async setStateSync(update) {
-        return new Promise(resolve => this.setState(update, resolve));
     }
 
     async fetch() {
