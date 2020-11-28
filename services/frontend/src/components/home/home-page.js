@@ -66,6 +66,13 @@ class HomePage extends React.Component {
                             </React.Fragment>
                         )}
                     </Grid>
+                    <Grid item xs={12}>
+                        <br />
+                        <br />
+                        <Link to="/tutorial">
+                            Open Tutorial <ExitToAppIcon fontSize="small" />
+                        </Link>
+                    </Grid>
                 </Grid>
                 <SignUpForm open={this.state.createModalOpen} onClose={this.modalClosed} />
             </Container>
