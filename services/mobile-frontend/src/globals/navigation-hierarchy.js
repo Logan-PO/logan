@@ -14,6 +14,7 @@ import NewHolidayModal from '../components/schedule/holidays/new-holiday-modal';
 import Home from '../components/home/home';
 import SignUpForm from '../components/home/signup-form';
 import OverviewScreen from '../components/overview/overview-screen';
+import Tutorial from '../components/tutorial/tutorial-screen';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -65,6 +66,7 @@ class NavigationHierarchy extends React.Component {
     render() {
         return (
             <RootStack.Navigator mode="modal" headerMode="screen" screenOptions={{ headerShown: false }}>
+                <RootStack.Screen name="Tutorial" component={Tutorial} />
                 <RootStack.Screen name="Home" component={Home} />
                 <RootStack.Screen name="Root" component={this.tabs} />
                 <RootStack.Screen name="New Task" component={NewTaskModalStack} />
