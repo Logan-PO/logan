@@ -20,6 +20,9 @@ const unauthedRoutes = {
 };
 
 const authedRoutes = {
+    '/users/validate': {
+        post: controllers.users.validateUniqueness,
+    },
     '/users/:uid': {
         get: controllers.users.getUser,
         put: controllers.users.updateUser,

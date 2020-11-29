@@ -5,6 +5,7 @@ import * as Google from 'expo-google-app-auth';
 import { connect } from 'react-redux';
 import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
 import PropTypes from 'prop-types';
+import { typographyStyles } from '../shared/typography';
 
 const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
 const IOS_CLIENT_ID = '850674143860-mqhkuritdvkmiq53h9963rjmn5gamsgb.apps.googleusercontent.com';
@@ -34,13 +35,25 @@ class MobileLoginButton extends React.Component {
     render() {
         if (this.props.isLoggedIn) {
             return (
-                <Button style={this.props.style} color={this.props.color} mode={this.props.mode} onPress={this.signOut}>
+                <Button
+                    labelStyle={typographyStyles.button}
+                    style={this.props.style}
+                    color={this.props.color}
+                    mode={this.props.mode}
+                    onPress={this.signOut}
+                >
                     Logout
                 </Button>
             );
         } else {
             return (
-                <Button style={this.props.style} color={this.props.color} mode={this.props.mode} onPress={this.signIn}>
+                <Button
+                    labelStyle={typographyStyles.button}
+                    style={this.props.style}
+                    color={this.props.color}
+                    mode={this.props.mode}
+                    onPress={this.signIn}
+                >
                     Login with Google
                 </Button>
             );

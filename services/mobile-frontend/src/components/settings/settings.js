@@ -3,14 +3,16 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fetchSelf, setLoginStage, LOGIN_STAGE } from '@logan/fe-shared/store/login';
-import { Appbar, Button, Dialog, Paragraph, Portal, TextInput } from 'react-native-paper';
-import { View } from 'react-native';
+import { Appbar, Button, Dialog, Paragraph, Portal, TextInput, Card, Colors } from 'react-native-paper';
+import { ScrollView, View } from 'react-native';
 import { deleteUser, updateUser } from '@logan/fe-shared/store/settings';
+import SyncComponent from '@logan/fe-shared/components/sync-component';
+import api from '@logan/fe-shared/utils/api';
 import ViewController from '../shared/view-controller';
 import MobileLoginButton from '../home/mobile-login-button';
-import { typographyStyles } from '../shared/typography';
+import Typography, { typographyStyles } from '../shared/typography';
 
-export class Settings extends React.Component {
+export class Settings extends SyncComponent {
     constructor(props) {
         //TODO: Need to have modals only render when needed
         super(props);
@@ -19,26 +21,32 @@ export class Settings extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.updateUser = this.updateUser.bind(this);
         this.openUsernameChange = this.openUsernameChange.bind(this);
+        this.checkUsernameUniqueness = this.checkUsernameUniqueness.bind(this);
         this.closeUsernameChange = this.closeUsernameChange.bind(this);
         this.openDeleteConfirmation = this.openDeleteConfirmation.bind(this);
         this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
+
         this.state = {
             user: props.user,
+            newUsername: props.user.username,
             changeUserName: false,
             deleteConfirmation: false,
         };
     }
 
     async updateUser() {
-        await this.props.updateUser(_.get(this, 'state.user'));
-        this.props.fetchSelf();
+        const user = _.merge({}, this.state.user, { username: this.state.newUsername });
+
+        this.setState({ user });
+
+        return this.props.updateUser(user);
     }
 
-    handleChange(username) {
-        const user = this.state.user;
-        this.setState({ user: { email: user.email, name: user.name, uid: user.uid, username: username } });
-        return this.updateUser();
+    async handleChange(username) {
+        this.setState({
+            newUsername: username,
+        });
     }
 
     async componentDidUpdate(prevProps) {
@@ -51,17 +59,38 @@ export class Settings extends React.Component {
     }
 
     openUsernameChange() {
-        this.setState({ changeUserName: true });
+        this.setState({
+            newUsername: this.props.user.username,
+            changeUserName: true,
+            isUnique: true,
+        });
+    }
+
+    async checkUsernameUniqueness() {
+        await this.setStateSync({ validatingUniqueness: true });
+        const isUnique = (await api.validateUniqueness(this.state.newUsername)).unique;
+
+        this.setState({
+            validatingUniqueness: false,
+            isUnique,
+        });
+
+        if (isUnique) return this.updateUser();
     }
 
     closeUsernameChange() {
-        this.setState({ changeUserName: false });
-        return this.updateUser();
+        this.uniquenessTimer.stop();
+
+        this.setState({
+            newUsername: this.props.user.username,
+            changeUserName: false,
+        });
     }
 
     hideDeleteConfirmation() {
         this.setState({ deleteConfirmation: false });
     }
+
     openDeleteConfirmation() {
         this.setState({ deleteConfirmation: true });
     }
@@ -79,39 +108,87 @@ export class Settings extends React.Component {
 
     render() {
         return (
-            <ViewController
-                title="Settings"
-                disableBack
-                navigation={this.props.navigation}
-                route={this.props.route}
-                leftActions={<Appbar.Action icon="close" onPress={this.props.navigation.goBack} />}
-            >
-                <View>
-                    <View>
-                        {this.state.changeUserName && (
-                            <View>
-                                <TextInput
-                                    multiline
-                                    label="Username"
-                                    mode="flat"
-                                    style={{ backgroundColor: 'none', paddingHorizontal: 0 }}
-                                    value={this.state.user.username}
-                                    onChangeText={this.handleChange.bind(this)}
-                                />
-                                <Button onPress={this.closeUsernameChange}>Confirm</Button>
-                            </View>
-                        )}
-                    </View>
-                    <Button onPress={this.openUsernameChange}>Change Username</Button>
-                    <View>
-                        <MobileLoginButton />
-                    </View>
-                    <View>
-                        <Button onPress={this.openDeleteConfirmation}>Delete Account</Button>
-                    </View>
-                </View>
+            <React.Fragment>
+                <ViewController
+                    title="Settings"
+                    disableBack
+                    navigation={this.props.navigation}
+                    route={this.props.route}
+                    leftActions={<Appbar.Action icon="close" onPress={this.props.navigation.goBack} />}
+                >
+                    <ScrollView style={{ padding: 16 }}>
+                        <Card>
+                            <Card.Content>
+                                <Typography variant="overline">ACCOUNT</Typography>
+                                <Typography variant="h5" style={{ marginTop: 4 }}>
+                                    {this.props.user.name}
+                                </Typography>
+                                <Typography color="detail" style={{ marginTop: 4 }}>
+                                    @{this.props.user.username}
+                                </Typography>
+                                <Typography color="detail" style={{ marginTop: 4 }}>
+                                    {this.props.user.email}
+                                </Typography>
+                            </Card.Content>
+                            <Card.Actions>
+                                <Button labelStyle={typographyStyles.button} onPress={this.openUsernameChange}>
+                                    Edit
+                                </Button>
+                                <View>
+                                    <MobileLoginButton />
+                                </View>
+                                <View style={{ flex: 1 }} />
+                                <Button
+                                    color={Colors.red500}
+                                    labelStyle={typographyStyles.button}
+                                    onPress={this.openDeleteConfirmation}
+                                >
+                                    Delete
+                                </Button>
+                            </Card.Actions>
+                        </Card>
+                    </ScrollView>
+                </ViewController>
                 <Portal>
-                    <Dialog visible={!!this.state.deleteConfirmation} onDismiss={this.hideDeleteConfirmation}>
+                    <Dialog visible={!!this.state.changeUserName} onDismiss={this.closeUsernameChange}>
+                        <Dialog.Title>Edit account</Dialog.Title>
+                        <Dialog.Content>
+                            <TextInput
+                                label="Username"
+                                mode="flat"
+                                error={!this.state.isUnique}
+                                style={{ backgroundColor: 'none', paddingTop: 0, paddingHorizontal: 0 }}
+                                value={this.state.newUsername}
+                                onChangeText={this.handleChange.bind(this)}
+                            />
+                            {!this.state.isUnique && (
+                                <Typography variant="caption" color="error" style={{ marginTop: 4 }}>
+                                    This username is taken
+                                </Typography>
+                            )}
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button onPress={this.closeUsernameChange} labelStyle={typographyStyles.button}>
+                                Cancel
+                            </Button>
+                            <Button
+                                labelStyle={typographyStyles.button}
+                                onPress={this.checkUsernameUniqueness}
+                                disabled={
+                                    this.state.validatingUniqueness ||
+                                    !this.state.isUnique ||
+                                    this.state.newUsername === this.state.user.username
+                                }
+                            >
+                                Save
+                            </Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                    <Dialog
+                        visible={!!this.state.deleteConfirmation}
+                        onDismiss={this.hideDeleteConfirmation}
+                        dismissable={false}
+                    >
                         <Dialog.Title>Are you sure?</Dialog.Title>
                         <Dialog.Content>
                             <Paragraph>{`You're about to delete your account.\nThis cannot be undone.`}</Paragraph>
@@ -126,7 +203,7 @@ export class Settings extends React.Component {
                         </Dialog.Actions>
                     </Dialog>
                 </Portal>
-            </ViewController>
+            </React.Fragment>
         );
     }
 }

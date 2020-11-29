@@ -70,6 +70,28 @@ async function createUser(req, res) {
     res.json({ user, bearer });
 }
 
+async function validateUniqueness(req, res) {
+    const { Item: user } = await dynamoUtils.get({
+        TableName: dynamoUtils.TABLES.USERS,
+        Key: _.pick(req.auth, 'uid'),
+    });
+
+    const potentialUpdate = _.merge({}, user, req.body);
+
+    const uniquenessResponse = await dynamoUtils.scan({
+        TableName: dynamoUtils.TABLES.USERS,
+        FilterExpression: 'uname = :uname and not uid = :uid',
+        ExpressionAttributeValues: {
+            ':uid': user.uid,
+            ':uname': potentialUpdate.username,
+        },
+    });
+
+    res.json({
+        unique: uniquenessResponse.Count === 0,
+    });
+}
+
 async function updateUser(req, res) {
     if (req.auth.uid !== req.params.uid) throw new PermissionDeniedError('Cannot modify another user');
 
@@ -129,4 +151,5 @@ module.exports = {
     createUser,
     updateUser,
     deleteUser,
+    validateUniqueness,
 };

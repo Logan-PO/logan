@@ -49,7 +49,7 @@ export const typographyStyles = {
     },
     overline: {
         fontSize: 10,
-        letterSpacing: 1.5,
+        letterSpacing: 0.5,
     },
 };
 
