@@ -10,11 +10,13 @@ import NewTaskModalStack from '../components/tasks/new-task-modal-stack';
 import NewAssignmentModalStack from '../components/assignments/new-assignment-modal-stack';
 import NewTermModal from '../components/schedule/terms/new-term-modal';
 import NewCourseModal from '../components/schedule/courses/new-course-modal';
+import NewSectionModal from '../components/schedule/sections/new-section-modal';
 import NewHolidayModal from '../components/schedule/holidays/new-holiday-modal';
 import Home from '../components/home/home';
 import SignUpForm from '../components/home/signup-form';
 import OverviewScreen from '../components/overview/overview-screen';
-import NewSectionModal from '../components/schedule/sections/new-section-modal';
+import ReminderDisplay from '../components/reminders/reminder-display';
+import NewReminderModal from '../components/reminders/new-reminder-modal';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -75,6 +77,8 @@ class NavigationHierarchy extends React.Component {
                 <RootStack.Screen name="New Course" component={NewCourseModal} />
                 <RootStack.Screen name="New Holiday" component={NewHolidayModal} />
                 <RootStack.Screen name="New Section" component={NewSectionModal} />
+                <RootStack.Screen name="New Reminder" component={NewReminderModal} />
+                <RootStack.Screen name="Edit Reminder" component={ReminderDisplay} />
             </RootStack.Navigator>
         );
     }

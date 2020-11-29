@@ -3,23 +3,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
+import { dateUtils } from '@logan/core';
+import Editor from '@logan/fe-shared/components/editor';
 import { Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { createTask } from '@logan/fe-shared/store/tasks';
-import Editor from '@logan/fe-shared/components/editor';
+import { createReminder } from '@logan/fe-shared/store/reminders';
 import ViewController from '../shared/view-controller';
-import TaskEditor from './task-editor';
+import ReminderEditor from './reminder-editor';
 
-class NewTaskModal extends React.Component {
+class NewReminderModal extends React.Component {
     constructor(props) {
         super(props);
 
         this.close = this.close.bind(this);
         this.create = this.create.bind(this);
-        this.update = this.update.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
 
         this.state = {
-            task: {},
+            valid: false,
+            reminder: {},
         };
     }
 
@@ -28,20 +30,25 @@ class NewTaskModal extends React.Component {
     }
 
     async create() {
-        await this.props.createTask(this.state.task);
+        await this.props.createReminder(this.state.reminder);
         this.close();
     }
 
-    update(task) {
-        this.setState({ task });
+    onUpdate(reminder) {
+        const messageValid = !_.isEmpty(reminder.message);
+        const tsValid = dateUtils.toDateTime(reminder.timestamp).isAfter(dateUtils.dayjs());
+
+        this.setState({
+            valid: messageValid && tsValid,
+            reminder,
+        });
     }
 
     render() {
-        const aid = _.get(this.props, 'route.params.aid');
         const leftActions = <Appbar.Action icon="close" onPress={this.close} />;
         const rightActions = (
             <Appbar.Action
-                disabled={_.isEmpty(this.state.task.title)}
+                disabled={!this.state.valid}
                 icon={props => <Icon {...props} name="done" color="white" size={24} />}
                 onPress={this.create}
             />
@@ -49,7 +56,7 @@ class NewTaskModal extends React.Component {
 
         return (
             <ViewController
-                title={_.get(this.state, 'task.aid') ? 'New Subtask' : 'New Task'}
+                title="New Reminder"
                 navigation={this.props.navigation}
                 route={this.props.route}
                 disableBack
@@ -57,12 +64,11 @@ class NewTaskModal extends React.Component {
                 rightActions={rightActions}
             >
                 <ScrollView keyboardDismissMode="on-drag">
-                    <TaskEditor
-                        aid={aid}
-                        navigation={this.props.navigation}
+                    <ReminderEditor
                         route={this.props.route}
+                        navigation={this.props.navigation}
                         mode={Editor.Mode.Create}
-                        onChange={this.update}
+                        onChange={this.onUpdate}
                     />
                 </ScrollView>
             </ViewController>
@@ -70,14 +76,14 @@ class NewTaskModal extends React.Component {
     }
 }
 
-NewTaskModal.propTypes = {
+NewReminderModal.propTypes = {
     navigation: PropTypes.object,
     route: PropTypes.object,
-    createTask: PropTypes.func,
+    createReminder: PropTypes.func,
 };
 
-const mapDispatchToState = {
-    createTask,
+const mapDispatchToLocal = {
+    createReminder,
 };
 
-export default connect(null, mapDispatchToState)(NewTaskModal);
+export default connect(null, mapDispatchToLocal)(NewReminderModal);
