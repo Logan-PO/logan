@@ -79,8 +79,6 @@ export class Settings extends SyncComponent {
     }
 
     closeUsernameChange() {
-        this.uniquenessTimer.stop();
-
         this.setState({
             newUsername: this.props.user.username,
             changeUserName: false,
