@@ -17,6 +17,7 @@ import OverviewScreen from '../components/overview/overview-screen';
 import LoginTutorial from '../components/tutorial/login-tutorial';
 import OverviewTutorial from '../components/tutorial/overview-tutorial';
 import SchedulerTutorial from '../components/tutorial/scheduler-tutorial';
+import AssignmentTutorial from '../components/tutorial/assignment-tutorial';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -79,6 +80,7 @@ class NavigationHierarchy extends React.Component {
                 <RootStack.Screen name="Signup" component={SignUpForm} />
                 <RootStack.Screen name="Overview Tutorial" component={OverviewTutorial} />
                 <RootStack.Screen name="Scheduler Tutorial" component={SchedulerTutorial} />
+                <RootStack.Screen name="Assignment Tutorial" component={AssignmentTutorial} />
             </RootStack.Navigator>
         );
     }

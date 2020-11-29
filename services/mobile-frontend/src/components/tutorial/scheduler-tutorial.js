@@ -77,7 +77,11 @@ class SchedulerTutorial extends React.Component {
                         </Typography>
                     </View>
                     <View>
-                        <NavigationButton destination="Home" text="Next" navigation={this.props.navigation} />
+                        <NavigationButton
+                            destination="Assignment Tutorial"
+                            text="Next"
+                            navigation={this.props.navigation}
+                        />
                     </View>
                 </ScrollView>
             </SafeAreaView>
