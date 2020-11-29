@@ -44,6 +44,14 @@ function get(params) {
 }
 
 /**
+ * @param {DocumentClient.BatchGetItemInput} params
+ * @return {Promise<DocumentClient.BatchGetItemOutput>}
+ */
+async function batchGet(params) {
+    return dynamoClient.batchGet(params).promise();
+}
+
+/**
  * @param {Object} params
  * @param {string} params.TableName
  * @param {string} [params.FilterExpression]
@@ -138,6 +146,7 @@ async function batchWrite(requestItems, { autoPaginate = true, expectFlat = fals
 
 module.exports = {
     get,
+    batchGet,
     scan,
     put,
     delete: deleteItem,

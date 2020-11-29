@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { sectionToUTC, sectionFromUTC, reminderToUTC, reminderFromUTC } from './utc-translation';
 
 const BASE_URL = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
-const LOCAL_URL = 'http://localhost:3000';
+const LOCAL_URL = 'http://192.168.1.149:3000';
 
 const STASH_KEY = 'stashedBearer';
 
