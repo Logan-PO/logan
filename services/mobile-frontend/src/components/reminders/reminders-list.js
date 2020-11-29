@@ -50,6 +50,12 @@ class RemindersList extends React.Component {
                             <ReminderCell
                                 key={reminder.rid}
                                 reminder={reminder}
+                                onPress={() =>
+                                    this.props.navigation.navigate(
+                                        'Edit Reminder',
+                                        _.pick(reminder, ['rid', 'eid', 'entityType'])
+                                    )
+                                }
                                 onDeletePressed={() =>
                                     this.openModal({
                                         message: 'You are about to delete a reminder.\nThis cannot be undone.',

@@ -12,7 +12,7 @@ import TimePicker from '../shared/pickers/time-picker';
 
 class ReminderEditor extends Editor {
     constructor(props) {
-        super({ ...props, mode: Editor.Mode.Create }, { id: 'rid', entity: 'reminder', mobile: true });
+        super(props, { id: 'rid', entity: 'reminder', mobile: true });
 
         let reminder;
 
@@ -29,7 +29,7 @@ class ReminderEditor extends Editor {
                 message: '',
             };
         } else {
-            reminder = props.getRandomPassword(props.route.params.rid);
+            reminder = props.getReminder(props.route.params.rid);
         }
 
         this.state = { reminder };
@@ -63,24 +63,6 @@ class ReminderEditor extends Editor {
             <View style={{ flex: 1, backgroundColor: 'white', marginBottom: 4 }}>
                 <ListItem
                     leftContent={
-                        <View style={{ flex: 1, flexDirection: 'row' }}>
-                            <TextInput
-                                style={{
-                                    paddingHorizontal: 0,
-                                    flexGrow: 1,
-                                    backgroundColor: 'none',
-                                }}
-                                mode="flat"
-                                label="Title"
-                                value={this.state.reminder.title}
-                                onChangeText={this.handleChange.bind(this, 'title')}
-                            />
-                        </View>
-                    }
-                    contentStyle={{ paddingVertical: 0 }}
-                />
-                <ListItem
-                    leftContent={
                         <View style={{ flex: 1 }}>
                             <TextInput
                                 multiline
@@ -103,6 +85,7 @@ class ReminderEditor extends Editor {
 
 // TODO: Add validation
 ReminderEditor.propTypes = {
+    isTrueEditor: PropTypes.bool,
     route: PropTypes.object,
     getReminder: PropTypes.func,
 };
