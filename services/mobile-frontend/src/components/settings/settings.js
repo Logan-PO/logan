@@ -20,7 +20,9 @@ export class Settings extends React.Component {
         this.updateUser = this.updateUser.bind(this);
         this.openUsernameChange = this.openUsernameChange.bind(this);
         this.closeUsernameChange = this.closeUsernameChange.bind(this);
-
+        this.openDeleteConfirmation = this.openDeleteConfirmation.bind(this);
+        this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
+        this.deleteUser = this.deleteUser.bind(this);
         this.state = {
             user: props.user,
             changeUserName: false,
@@ -58,11 +60,10 @@ export class Settings extends React.Component {
     }
 
     hideDeleteConfirmation() {
-        this.state.deleteConfirmationCallbacks.deny();
-        this.setState({ deleteConfirmation: false, deleteConfirmationCallbacks: undefined });
+        this.setState({ deleteConfirmation: false });
     }
-    openDeleteConfirmation(callbacks) {
-        this.setState({ deleteConfirmation: true, deleteConfirmationCallbacks: callbacks });
+    openDeleteConfirmation() {
+        this.setState({ deleteConfirmation: true });
     }
 
     logout() {
@@ -71,9 +72,7 @@ export class Settings extends React.Component {
     }
 
     async deleteUser() {
-        const callback = this.state.deleteConfirmationCallbacks.confirm;
-        this.setState({ deleteConfirmation: false, deleteConfirmationCallbacks: undefined });
-        await callback();
+        this.setState({ deleteConfirmation: false });
         await this.props.deleteUser(this.state.user);
         this.logout();
     }
@@ -112,7 +111,7 @@ export class Settings extends React.Component {
                     </View>
                 </View>
                 <Portal>
-                    <Dialog visible={this.state.deleteConfirmation} onDismiss={this.hideDeleteConfirmation}>
+                    <Dialog visible={!!this.state.deleteConfirmation} onDismiss={this.hideDeleteConfirmation}>
                         <Dialog.Title>Are you sure?</Dialog.Title>
                         <Dialog.Content>
                             <Paragraph>{`You're about to delete your account.\nThis cannot be undone.`}</Paragraph>
