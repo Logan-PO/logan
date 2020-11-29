@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
 import { Helmet } from 'react-helmet';
 import { Toolbar } from '@material-ui/core';
-import { LOGIN_STAGE, fetchSelf } from '@logan/fe-shared/store/login';
+import api from '@logan/fe-shared/utils/api';
+import { setLoginStage, LOGIN_STAGE, fetchSelf } from '@logan/fe-shared/store/login';
 import styles from './page.module.scss';
 import { Navbar, Sidebar } from '.';
 
@@ -13,11 +14,15 @@ class Page extends React.Component {
         super(props);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         if (this.props.loginStage === LOGIN_STAGE.DONE && !this.props.currentUser) {
             this.props.fetchSelf();
         } else if (this.props.loginStage !== LOGIN_STAGE.DONE) {
-            navigate('/');
+            if (await api.hasStashedBearer()) {
+                this.props.setLoginStage(LOGIN_STAGE.DONE);
+            } else {
+                navigate('/');
+            }
         }
     }
 
@@ -47,6 +52,7 @@ Page.propTypes = {
     loginStage: PropTypes.string,
     currentUser: PropTypes.object,
     fetchSelf: PropTypes.func,
+    setLoginStage: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -56,6 +62,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     fetchSelf,
+    setLoginStage,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Page);

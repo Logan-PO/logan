@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { AppBar, Toolbar, Typography, IconButton, Tooltip } from '@material-ui/core';
 import SyncIcon from '@material-ui/icons/Sync';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import { dateUtils } from '@logan/core';
+import { beginFetching, finishFetching } from '@logan/fe-shared/store/fetch-status';
 import { fetchTasks } from '@logan/fe-shared/store/tasks';
 import { fetchAssignments } from '@logan/fe-shared/store/assignments';
 import { fetchSchedule } from '@logan/fe-shared/store/schedule';
@@ -25,17 +27,36 @@ class Navbar extends React.Component {
     }
 
     componentDidMount() {
-        this.fetchAll();
+        window.addEventListener('focus', this.onFocus.bind(this));
+        return this.fetchAll();
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('focus', this.onFocus.bind(this));
+    }
+
+    onFocus() {
+        const lastFetch = dateUtils.toDateTime(this.props.lastFetch);
+        const threshold = dateUtils.dayjs().subtract(5, 'minute');
+
+        if (lastFetch.isBefore(threshold)) return this.fetchAll();
     }
 
     async fetchAll() {
+        if (this.props.isFetching) return;
+
+        this.props.beginFetching();
+
         const fetchers = [
             this.props.fetchTasks(),
             this.props.fetchAssignments(),
             this.props.fetchSchedule(),
             this.props.fetchReminders(),
         ];
+
         await Promise.all(fetchers);
+
+        this.props.finishFetching();
     }
 
     openAccountModal() {
@@ -56,7 +77,7 @@ class Navbar extends React.Component {
                     <div className={styles.flexibleSpace} />
                     {this.props.buttons}
                     <Tooltip title="Refresh">
-                        <IconButton onClick={this.fetchAll} color="inherit">
+                        <IconButton disabled={this.props.isFetching} onClick={this.fetchAll} color="inherit">
                             <SyncIcon />
                         </IconButton>
                     </Tooltip>
@@ -77,8 +98,24 @@ Navbar.propTypes = {
     fetchAssignments: PropTypes.func,
     fetchSchedule: PropTypes.func,
     fetchReminders: PropTypes.func,
+    beginFetching: PropTypes.func,
+    finishFetching: PropTypes.func,
+    isFetching: PropTypes.bool,
+    lastFetch: PropTypes.string,
 };
 
-const mapDispatchToProps = { fetchTasks, fetchAssignments, fetchSchedule, fetchReminders };
+const mapStateToProps = state => ({
+    isFetching: state.fetchStatus.fetching,
+    lastFetch: state.fetchStatus.lastFetch,
+});
 
-export default connect(null, mapDispatchToProps)(Navbar);
+const mapDispatchToProps = {
+    fetchTasks,
+    fetchAssignments,
+    fetchSchedule,
+    fetchReminders,
+    beginFetching,
+    finishFetching,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);
