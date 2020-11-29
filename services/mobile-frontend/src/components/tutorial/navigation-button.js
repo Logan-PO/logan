@@ -14,7 +14,11 @@ class NavigationButton extends React.Component {
     }
 
     render() {
-        return <Button onPress={this.onPress}>{this.props.text}</Button>;
+        return (
+            <Button color={this.props.color} mode={this.props.mode} onPress={this.onPress}>
+                {this.props.text}
+            </Button>
+        );
     }
 }
 
@@ -22,6 +26,8 @@ NavigationButton.propTypes = {
     navigation: PropTypes.object,
     destination: PropTypes.string,
     text: PropTypes.string,
+    mode: PropTypes.string,
+    color: PropTypes.string,
 };
 
 export default NavigationButton;

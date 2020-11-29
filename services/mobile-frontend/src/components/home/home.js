@@ -52,8 +52,13 @@ class Home extends React.Component {
                 <View>
                     <MobileLoginButton mode="contained" color="white" />
                 </View>
-                <View>
-                    <NavigationButton destination="Tutorial Root" text="Tutorial" navigation={this.props.navigation} />
+                <View style={{ paddingTop: '10%' }}>
+                    <NavigationButton
+                        mode="contained"
+                        destination="Tutorial Root"
+                        text="Tutorial"
+                        navigation={this.props.navigation}
+                    />
                 </View>
             </SafeAreaView>
         );
