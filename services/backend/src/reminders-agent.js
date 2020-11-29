@@ -46,6 +46,8 @@ async function sendReminders() {
 
     console.debug(`${reminders.length} reminders found`);
 
+    if (!reminders.length) return;
+
     const uids = _.uniq(_.map(reminders, 'uid'));
 
     const {
@@ -98,6 +100,11 @@ async function sendReminders() {
 
     console.log('Reminders with invalid tokens:');
     console.log(JSON.stringify(invalidTokens, null, 4));
+
+    if (!messages.length) {
+        console.log('No valid messages to send');
+        return;
+    }
 
     // Send reminders
     const chunks = expo.chunkPushNotifications(messages);
