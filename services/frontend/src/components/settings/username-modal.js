@@ -18,6 +18,7 @@ class UsernameModal extends React.Component {
                 uid: _.get(this.props, 'user.uid'),
                 name: _.get(this.props, 'user.name'),
                 email: _.get(this.props, 'user.email'),
+                tokens: _.get(this.props, 'user.tokens'),
                 username: 'empty',
             },
         };

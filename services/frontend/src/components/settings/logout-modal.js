@@ -20,6 +20,7 @@ class LogOutModal extends React.Component {
                 name: _.get(this.props, 'user.name'),
                 email: _.get(this.props, 'user.email'),
                 username: _.get(this.props, 'user.username'),
+                tokens: _.get(this.props, 'user.tokens'),
             },
         };
     }

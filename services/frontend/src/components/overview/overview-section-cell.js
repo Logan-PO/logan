@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Grid, ListItem, ListItemText } from '@material-ui/core';
 import { getSectionSelectors } from '@logan/fe-shared/store/schedule';
+import { printSectionTimes } from '@logan/fe-shared/utils/scheduling-utils';
 import { CourseLabel } from '../shared/displays';
-import { printSectionTimes } from './scheduling-utils';
 
 class OverviewSectionCell extends React.Component {
     constructor(props) {

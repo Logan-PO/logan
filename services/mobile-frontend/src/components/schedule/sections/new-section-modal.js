@@ -3,14 +3,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
-import { Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { createTask } from '@logan/fe-shared/store/tasks';
+import { dateUtils } from '@logan/core';
+import { createSection } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
-import ViewController from '../shared/view-controller';
-import TaskEditor from './task-editor';
+import { Appbar } from 'react-native-paper';
+import ViewController from '../../shared/view-controller';
+import SectionEditor from './section-editor';
 
-class NewTaskModal extends React.Component {
+class NewSectionModal extends React.Component {
     constructor(props) {
         super(props);
 
@@ -19,7 +20,7 @@ class NewTaskModal extends React.Component {
         this.update = this.update.bind(this);
 
         this.state = {
-            task: {},
+            section: {},
         };
     }
 
@@ -28,20 +29,30 @@ class NewTaskModal extends React.Component {
     }
 
     async create() {
-        await this.props.createTask(this.state.task);
+        await this.props.createSection(this.state.section);
         this.close();
     }
 
-    update(task) {
-        this.setState({ task });
+    update(section) {
+        this.setState({ section });
     }
 
     render() {
-        const aid = _.get(this.props, 'route.params.aid');
+        let isValid = !_.isEmpty(this.state.section.title);
+
+        const startDate = dateUtils.toDate(this.state.section.startDate);
+        const endDate = dateUtils.toDate(this.state.section.endDate);
+
+        const startTime = dateUtils.toTime(this.state.section.startTime);
+        const endTime = dateUtils.toTime(this.state.section.endTime);
+
+        if (!startDate.isBefore(endDate)) isValid = false;
+        else if (!startTime.isBefore(endTime)) isValid = false;
+
         const leftActions = <Appbar.Action icon="close" onPress={this.close} />;
         const rightActions = (
             <Appbar.Action
-                disabled={_.isEmpty(this.state.task.title)}
+                disabled={!isValid}
                 icon={props => <Icon {...props} name="done" color="white" size={24} />}
                 onPress={this.create}
             />
@@ -49,7 +60,7 @@ class NewTaskModal extends React.Component {
 
         return (
             <ViewController
-                title={_.get(this.state, 'task.aid') ? 'New Subtask' : 'New Task'}
+                title="New Section"
                 navigation={this.props.navigation}
                 route={this.props.route}
                 disableBack
@@ -57,8 +68,7 @@ class NewTaskModal extends React.Component {
                 rightActions={rightActions}
             >
                 <ScrollView keyboardDismissMode="on-drag">
-                    <TaskEditor
-                        aid={aid}
+                    <SectionEditor
                         navigation={this.props.navigation}
                         route={this.props.route}
                         mode={Editor.Mode.Create}
@@ -70,14 +80,14 @@ class NewTaskModal extends React.Component {
     }
 }
 
-NewTaskModal.propTypes = {
+NewSectionModal.propTypes = {
+    createSection: PropTypes.func,
     navigation: PropTypes.object,
     route: PropTypes.object,
-    createTask: PropTypes.func,
 };
 
 const mapDispatchToState = {
-    createTask,
+    createSection,
 };
 
-export default connect(null, mapDispatchToState)(NewTaskModal);
+export default connect(null, mapDispatchToState)(NewSectionModal);

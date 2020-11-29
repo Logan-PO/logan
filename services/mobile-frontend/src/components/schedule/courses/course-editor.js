@@ -5,10 +5,11 @@ import { connect } from 'react-redux';
 import { getScheduleSelectors, updateCourse, updateCourseLocal, deleteSection } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
 import { View } from 'react-native';
-import { TextInput } from 'react-native-paper';
+import { Button, Dialog, List, Paragraph, Portal, TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
-import { typographyStyles } from '../../shared/typography';
+import Typography, { typographyStyles } from '../../shared/typography';
 import ColorPicker, { colors } from '../../shared/pickers/color-picker';
+import SectionCell from '../sections/section-cell';
 
 class CourseEditor extends Editor {
     constructor(props) {
@@ -67,6 +68,45 @@ class CourseEditor extends Editor {
         changes[prop] = e;
     }
 
+    sectionsList() {
+        const sections = this.props.getSectionsForCourse(this.state.course);
+
+        return (
+            <React.Fragment>
+                {sections.length ? (
+                    sections.map(section => (
+                        <SectionCell
+                            key={section.sid}
+                            section={section}
+                            onPress={() =>
+                                this.props.navigation.push('Section', {
+                                    tid: this.state.course.tid,
+                                    cid: this.state.course.cid,
+                                    sid: section.sid,
+                                })
+                            }
+                            onDeletePressed={() =>
+                                this.openModal({
+                                    message: 'You are about to delete a section.\nThis cannot be undone.',
+                                    confirm: () => this.props.deleteSection(section),
+                                })
+                            }
+                        />
+                    ))
+                ) : (
+                    <ListItem
+                        key="none"
+                        leftContent={
+                            <Typography color="secondary" style={{ fontStyle: 'italic' }}>
+                                None
+                            </Typography>
+                        }
+                    />
+                )}
+            </React.Fragment>
+        );
+    }
+
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -108,6 +148,36 @@ class CourseEditor extends Editor {
                     contentStyle={{ paddingTop: 0 }}
                 />
                 <ColorPicker value={this.state.course.color} onChange={this.handleChange.bind(this, 'color')} />
+                {this.isEditor && (
+                    <React.Fragment>
+                        <List.Subheader style={{ marginTop: 8 }}>Sections</List.Subheader>
+                        {this.sectionsList()}
+                    </React.Fragment>
+                )}
+                <Portal>
+                    <Dialog visible={this.state.modalShown} onDismiss={this.closeModal}>
+                        <Dialog.Title>Are you sure?</Dialog.Title>
+                        <Dialog.Content>
+                            {_.get(this.state, 'modalMessage', '')
+                                .split('\n')
+                                .map((line, i) => (
+                                    <Paragraph key={i}>{line}</Paragraph>
+                                ))}
+                        </Dialog.Content>
+                        <Dialog.Actions>
+                            <Button onPress={this.closeModal} labelStyle={typographyStyles.button}>
+                                Cancel
+                            </Button>
+                            <Button
+                                onPress={this.state.modalConfirmation}
+                                color="red"
+                                labelStyle={typographyStyles.button}
+                            >
+                                Delete
+                            </Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                </Portal>
             </View>
         );
     }

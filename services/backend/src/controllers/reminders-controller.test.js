@@ -16,7 +16,7 @@ jest.doMock('@logan/aws', () => {
 });
 
 const { dynamoUtils } = require('@logan/aws');
-const testUtils = require('../utils/test-utils');
+const testUtils = require('../../utils/test-utils');
 const controller = require('./reminders-controller');
 
 const { toDbFormat, fromDbFormat } = controller.__test_only__;

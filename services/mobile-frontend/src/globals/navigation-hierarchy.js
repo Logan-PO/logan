@@ -10,6 +10,7 @@ import NewTaskModalStack from '../components/tasks/new-task-modal-stack';
 import NewAssignmentModalStack from '../components/assignments/new-assignment-modal-stack';
 import NewTermModal from '../components/schedule/terms/new-term-modal';
 import NewCourseModal from '../components/schedule/courses/new-course-modal';
+import NewSectionModal from '../components/schedule/sections/new-section-modal';
 import NewHolidayModal from '../components/schedule/holidays/new-holiday-modal';
 import Home from '../components/home/home';
 import SignUpForm from '../components/home/signup-form';
@@ -19,6 +20,8 @@ import OverviewTutorial from '../components/tutorial/overview-tutorial';
 import SchedulerTutorial from '../components/tutorial/scheduler-tutorial';
 import AssignmentTutorial from '../components/tutorial/assignment-tutorial';
 import TasksTutorial from '../components/tutorial/tasks-tutorial';
+import ReminderDisplay from '../components/reminders/reminder-display';
+import NewReminderModal from '../components/reminders/new-reminder-modal';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -71,6 +74,7 @@ class NavigationHierarchy extends React.Component {
         return (
             <RootStack.Navigator mode="modal" headerMode="screen" screenOptions={{ headerShown: false }}>
                 <RootStack.Screen name="Home" component={Home} />
+                <RootStack.Screen name="Signup" component={SignUpForm} />
                 <RootStack.Screen name="Root" component={this.tabs} />
                 <RootStack.Screen name="New Task" component={NewTaskModalStack} />
                 <RootStack.Screen name="New Assignment" component={NewAssignmentModalStack} />
@@ -83,6 +87,9 @@ class NavigationHierarchy extends React.Component {
                 <RootStack.Screen name="Scheduler Tutorial" component={SchedulerTutorial} />
                 <RootStack.Screen name="Assignment Tutorial" component={AssignmentTutorial} />
                 <RootStack.Screen name="Task Tutorial" component={TasksTutorial} />
+                <RootStack.Screen name="New Section" component={NewSectionModal} />
+                <RootStack.Screen name="New Reminder" component={NewReminderModal} />
+                <RootStack.Screen name="Edit Reminder" component={ReminderDisplay} />
             </RootStack.Navigator>
         );
     }

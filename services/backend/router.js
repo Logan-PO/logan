@@ -6,10 +6,10 @@ const controllers = require('./src/controllers');
 
 const unauthedRoutes = {
     '/ping': {
-        get: require('./src/ping').ping,
+        get: require('./src/controllers/ping').ping,
     },
     '/auth/verify': {
-        post: require('./src/verify-id-token').verifyIdToken,
+        post: require('./src/controllers/verify-id-token').verifyIdToken,
     },
     '/users': {
         post: {
