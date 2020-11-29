@@ -8,6 +8,8 @@ import UpdateTimer from '../utils/update-timer';
  * @property {number} [interval]
  * @property {string} id
  * @property {string} entity
+ * @property {boolean} mobile
+ * @property {boolean} manualSave
  */
 
 class Editor extends React.Component {
@@ -16,6 +18,7 @@ class Editor extends React.Component {
         this._id = config.id;
         this._entity = config.entity;
         this._isMobile = config.mobile || false;
+        this._manualSave = config.manualSave;
 
         this._ownEntityId = this._ownEntityId.bind(this);
 
@@ -137,7 +140,7 @@ class Editor extends React.Component {
 
             const current = this.selectEntity(currentId);
             this.updateCurrentEntityState(current);
-        } else {
+        } else if (!this._manualSave) {
             // Also if the task has been updated somewhere else, make sure the state reflects that
             const stored = this.selectEntity(currentId);
             if (!_.isEqual(stored, this.state[this._entity])) {

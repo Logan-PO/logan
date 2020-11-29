@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,10 +10,11 @@ import { TextInput } from 'react-native-paper';
 import ListItem from '../shared/list-item';
 import DueDateControl from '../shared/due-date-control';
 import TimePicker from '../shared/pickers/time-picker';
+import Typography from '../shared/typography';
 
 class ReminderEditor extends Editor {
     constructor(props) {
-        super(props, { id: 'rid', entity: 'reminder', mobile: true });
+        super(props, { id: 'rid', entity: 'reminder', mobile: true, manualSave: true });
 
         let reminder;
 
@@ -59,6 +61,10 @@ class ReminderEditor extends Editor {
         const date = dateUtils.formatAsDate(dateUtils.toDateTime(this.state.reminder.timestamp));
         const time = dateUtils.formatAsTime(dateUtils.toDateTime(this.state.reminder.timestamp));
 
+        const showValidation = this.isEditor && !_.isEqual(this.state.reminder, this.selectEntity(this._ownEntityId()));
+        const validMessage = !_.isEmpty(this.state.reminder.message);
+        const validDate = dateUtils.toDateTime(this.state.reminder.timestamp).isAfter(dateUtils.dayjs());
+
         return (
             <View style={{ flex: 1, backgroundColor: 'white', marginBottom: 4 }}>
                 <ListItem
@@ -68,16 +74,32 @@ class ReminderEditor extends Editor {
                                 multiline
                                 label="Message"
                                 mode="flat"
+                                error={showValidation && !validMessage}
                                 style={{ backgroundColor: 'none', paddingHorizontal: 0 }}
                                 value={this.state.reminder.message}
                                 onChangeText={this.handleChange.bind(this, 'message')}
                             />
+                            {showValidation && !validMessage && (
+                                <Typography variant="caption" color="error" style={{ marginTop: 6 }}>
+                                    What good will an empty reminder do you?
+                                </Typography>
+                            )}
                         </View>
                     }
                     contentStyle={{ paddingTop: 4 }}
                 />
                 <DueDateControl label="Date" datesOnly value={date} onChange={this.handleChange.bind(this, 'date')} />
                 <TimePicker label="Time" value={time} onChange={this.handleChange.bind(this, 'time')} />
+                {showValidation && this.isCreator && !validDate && (
+                    <ListItem
+                        leftContent={
+                            <Typography variant="caption" color="error" style={{ marginTop: 6 }}>
+                                Must be in the future
+                            </Typography>
+                        }
+                        contentStyle={{ minHeight: 0, paddingTop: 0 }}
+                    />
+                )}
             </View>
         );
     }
@@ -85,9 +107,9 @@ class ReminderEditor extends Editor {
 
 // TODO: Add validation
 ReminderEditor.propTypes = {
-    isTrueEditor: PropTypes.bool,
     route: PropTypes.object,
     getReminder: PropTypes.func,
+    showValidation: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({

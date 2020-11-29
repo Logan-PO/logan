@@ -53,7 +53,6 @@ class ReminderDisplay extends React.Component {
                     <ReminderEditor
                         route={this.props.route}
                         navigation={this.props.navigation}
-                        isTrueEditor
                         mode={Editor.Mode.Edit}
                         onChange={this.onUpdate}
                     />
