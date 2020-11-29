@@ -31,11 +31,8 @@ class AssignmentDetails extends React.Component {
 
     newReminder() {
         this.props.navigation.navigate('New Reminder', {
-            screen: 'New Reminder',
-            params: {
-                eid: this.state.assignment.aid,
-                entityType: 'assignment',
-            },
+            eid: this.state.assignment.aid,
+            entityType: 'assignment',
         });
     }
 
