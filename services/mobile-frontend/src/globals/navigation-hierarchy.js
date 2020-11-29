@@ -70,7 +70,6 @@ class NavigationHierarchy extends React.Component {
     render() {
         return (
             <RootStack.Navigator mode="modal" headerMode="screen" screenOptions={{ headerShown: false }}>
-                <RootStack.Screen name="Login Tutorial" component={LoginTutorial} />
                 <RootStack.Screen name="Home" component={Home} />
                 <RootStack.Screen name="Root" component={this.tabs} />
                 <RootStack.Screen name="New Task" component={NewTaskModalStack} />
@@ -79,6 +78,7 @@ class NavigationHierarchy extends React.Component {
                 <RootStack.Screen name="New Course" component={NewCourseModal} />
                 <RootStack.Screen name="New Holiday" component={NewHolidayModal} />
                 <RootStack.Screen name="Signup" component={SignUpForm} />
+                <RootStack.Screen name="Tutorial Root" component={LoginTutorial} />
                 <RootStack.Screen name="Overview Tutorial" component={OverviewTutorial} />
                 <RootStack.Screen name="Scheduler Tutorial" component={SchedulerTutorial} />
                 <RootStack.Screen name="Assignment Tutorial" component={AssignmentTutorial} />

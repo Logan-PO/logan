@@ -7,6 +7,7 @@ import { fetchSelf, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/lo
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Typography from '../shared/typography';
+import NavigationButton from '../tutorial/navigation-button';
 import MobileLoginButton from './mobile-login-button';
 
 class Home extends React.Component {
@@ -50,6 +51,9 @@ class Home extends React.Component {
                 </View>
                 <View>
                     <MobileLoginButton mode="contained" color="white" />
+                </View>
+                <View>
+                    <NavigationButton destination="Tutorial Root" text="Tutorial" navigation={this.props.navigation} />
                 </View>
             </SafeAreaView>
         );
