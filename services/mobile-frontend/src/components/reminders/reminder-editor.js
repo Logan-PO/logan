@@ -47,10 +47,10 @@ class ReminderEditor extends Editor {
 
     processChange(changes, prop, e) {
         if (prop === 'date') {
-            const time = dateUtils.formatAsTime(dateUtils.toTime(this.state.reminder.timestamp));
+            const time = dateUtils.formatAsTime(dateUtils.toDateTime(this.state.reminder.timestamp));
             changes.timestamp = `${e} ${time}`;
         } else if (prop === 'time') {
-            const date = dateUtils.formatAsDate(dateUtils.toTime(this.state.reminder.timestamp));
+            const date = dateUtils.formatAsDate(dateUtils.toDateTime(this.state.reminder.timestamp));
             changes.timestamp = `${date} ${e}`;
         } else {
             changes[prop] = e;
