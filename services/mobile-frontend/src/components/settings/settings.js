@@ -7,8 +7,8 @@ import { Button, TextInput } from 'react-native-paper';
 import { View } from 'react-native';
 import { deleteUser, updateUser } from '@logan/fe-shared/store/settings';
 import ViewController from '../shared/view-controller';
+import MobileLoginButton from '../home/mobile-login-button';
 import DeleteModal from './delete-modal';
-import LogOutModal from './logout-modal';
 
 export class Settings extends React.Component {
     constructor(props) {
@@ -75,13 +75,7 @@ export class Settings extends React.Component {
                     </View>
                     <Button onPress={this.openUsernameChange}>Change Username</Button>
                     <View>
-                        <Button onPress={this.openNewLogOutModal}>Logout</Button>
-                        <LogOutModal
-                            route={this.props.route}
-                            navigation={this.props.navigation}
-                            open={this.state.newLogOutModal}
-                            onClose={this.closeNewLogOutModal}
-                        />
+                        <MobileLoginButton />
                     </View>
                     <View>
                         <Button onClick={this.openNewDeleteModal}>Delete Account</Button>
