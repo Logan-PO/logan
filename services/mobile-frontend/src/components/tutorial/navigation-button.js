@@ -10,7 +10,6 @@ class NavigationButton extends React.Component {
     }
 
     onPress() {
-        console.log(this.props);
         this.props.navigation.navigate(this.props.destination);
     }
 
