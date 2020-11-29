@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fetchSelf, setLoginStage, LOGIN_STAGE } from '@logan/fe-shared/store/login';
-import { Button, Dialog, Paragraph, Portal, TextInput } from 'react-native-paper';
+import { Appbar, Button, Dialog, Paragraph, Portal, TextInput } from 'react-native-paper';
 import { View } from 'react-native';
 import { deleteUser, updateUser } from '@logan/fe-shared/store/settings';
 import ViewController from '../shared/view-controller';
@@ -81,10 +81,10 @@ export class Settings extends React.Component {
         return (
             <ViewController
                 title="Settings"
+                disableBack
                 navigation={this.props.navigation}
                 route={this.props.route}
-                leftActionIsFetch={false}
-                rightActionIsSetting={false}
+                leftActions={<Appbar.Action icon="close" onPress={this.props.navigation.goBack} />}
             >
                 <View>
                     <View>
