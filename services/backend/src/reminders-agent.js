@@ -44,6 +44,8 @@ async function sendReminders() {
         ExpressionAttributeValues: { ':ts': currentTime },
     });
 
+    console.debug(`${reminders.length} reminders found`);
+
     const uids = _.uniq(_.map(reminders, 'uid'));
 
     const {
@@ -65,6 +67,8 @@ async function sendReminders() {
     // much of this from https://github.com/expo/expo-server-sdk-node
     let messages = [];
 
+    const invalidTokens = [];
+
     // loop through reminders to be sent
     for (let reminder of reminders) {
         const user = usersMap[reminder.uid];
@@ -74,7 +78,12 @@ async function sendReminders() {
 
         for (let pushToken of tokens) {
             if (!Expo.isExpoPushToken(pushToken)) {
-                console.error(`Push token ${pushToken} is not a valid Expo push token`);
+                console.warn(`Push token ${pushToken} is not a valid Expo push token`);
+                invalidTokens.push({
+                    token: pushToken,
+                    reminder,
+                });
+
                 continue;
             }
 
@@ -87,20 +96,21 @@ async function sendReminders() {
         }
     }
 
-    // send messages
-    let chunks = expo.chunkPushNotifications(messages);
-    let tickets = [];
-    (async () => {
-        for (let chunk of chunks) {
-            try {
-                let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-                console.log(ticketChunk);
-                tickets.push(ticketChunk);
-            } catch (error) {
-                console.error(error);
-            }
+    console.log('Reminders with invalid tokens:');
+    console.log(JSON.stringify(invalidTokens, null, 4));
+
+    // Send reminders
+    const chunks = expo.chunkPushNotifications(messages);
+    const tickets = [];
+
+    for (let chunk of chunks) {
+        try {
+            let ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+            tickets.push(ticketChunk);
+        } catch (error) {
+            console.error(error);
         }
-    })();
+    }
 }
 
 module.exports = {
