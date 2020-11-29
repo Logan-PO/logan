@@ -45,7 +45,9 @@ class TaskDetails extends React.Component {
                         bottom: 0,
                         right: 0,
                     }}
-                    onPress={() => this.props.navigation.navigate('New Reminder', { eid: this.state.task.tid })}
+                    onPress={() =>
+                        this.props.navigation.navigate('New Reminder', { eid: this.state.task.tid, entityType: 'task' })
+                    }
                 />
             </ViewController>
         );

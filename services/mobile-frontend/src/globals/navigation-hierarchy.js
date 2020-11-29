@@ -15,6 +15,7 @@ import Home from '../components/home/home';
 import SignUpForm from '../components/home/signup-form';
 import OverviewScreen from '../components/overview/overview-screen';
 import ReminderDisplay from '../components/reminders/reminder-display';
+import NewReminderModal from '../components/reminders/new-reminder-modal';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -74,6 +75,7 @@ class NavigationHierarchy extends React.Component {
                 <RootStack.Screen name="New Course" component={NewCourseModal} />
                 <RootStack.Screen name="New Holiday" component={NewHolidayModal} />
                 <RootStack.Screen name="Signup" component={SignUpForm} />
+                <RootStack.Screen name="New Reminder" component={NewReminderModal} />
                 <RootStack.Screen name="Edit Reminder" component={ReminderDisplay} />
             </RootStack.Navigator>
         );

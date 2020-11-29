@@ -61,7 +61,8 @@ class ReminderEditor extends Editor {
         const date = dateUtils.formatAsDate(dateUtils.toDateTime(this.state.reminder.timestamp));
         const time = dateUtils.formatAsTime(dateUtils.toDateTime(this.state.reminder.timestamp));
 
-        const showValidation = this.isEditor && !_.isEqual(this.state.reminder, this.selectEntity(this._ownEntityId()));
+        const showValidation =
+            this.isCreator || !_.isEqual(this.state.reminder, this.selectEntity(this._ownEntityId()));
         const validMessage = !_.isEmpty(this.state.reminder.message);
         const validDate = dateUtils.toDateTime(this.state.reminder.timestamp).isAfter(dateUtils.dayjs());
 
@@ -81,7 +82,7 @@ class ReminderEditor extends Editor {
                             />
                             {showValidation && !validMessage && (
                                 <Typography variant="caption" color="error" style={{ marginTop: 6 }}>
-                                    What good will an empty reminder do you?
+                                    Message cannot be empty
                                 </Typography>
                             )}
                         </View>
@@ -89,7 +90,12 @@ class ReminderEditor extends Editor {
                     contentStyle={{ paddingTop: 4 }}
                 />
                 <DueDateControl label="Date" datesOnly value={date} onChange={this.handleChange.bind(this, 'date')} />
-                <TimePicker label="Time" value={time} onChange={this.handleChange.bind(this, 'time')} />
+                <TimePicker
+                    label="Time"
+                    value={time}
+                    onChange={this.handleChange.bind(this, 'time')}
+                    minuteInterval={15}
+                />
                 {showValidation && this.isCreator && !validDate && (
                     <ListItem
                         leftContent={
