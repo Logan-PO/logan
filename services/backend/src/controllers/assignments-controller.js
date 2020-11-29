@@ -8,8 +8,8 @@ const {
 } = require('@logan/core');
 const { v4: uuid } = require('uuid');
 const Promise = require('bluebird');
-const requestValidator = require('../utils/request-validator');
-const { NotFoundError, ValidationError } = require('../utils/errors');
+const requestValidator = require('../../utils/request-validator');
+const { NotFoundError, ValidationError } = require('../../utils/errors');
 const tasksController = require('./tasks-controller');
 const { remindersForEntity } = require('./reminders-controller');
 

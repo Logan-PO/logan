@@ -7,8 +7,8 @@ const {
     },
 } = require('@logan/core');
 const { v4: uuid } = require('uuid');
-const requestValidator = require('../utils/request-validator');
-const { ValidationError } = require('../utils/errors');
+const requestValidator = require('../../utils/request-validator');
+const { ValidationError } = require('../../utils/errors');
 
 /**
  * @typedef {Object} Reminder
