@@ -23,6 +23,8 @@ export class Settings extends SyncComponent {
         this.openUsernameChange = this.openUsernameChange.bind(this);
         this.checkUsernameUniqueness = this.checkUsernameUniqueness.bind(this);
         this.closeUsernameChange = this.closeUsernameChange.bind(this);
+        this.openLogoutConfirmation = this.openLogoutConfirmation.bind(this);
+        this.hideLogoutConfirmation = this.hideLogoutConfirmation.bind(this);
         this.openDeleteConfirmation = this.openDeleteConfirmation.bind(this);
         this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
@@ -31,6 +33,7 @@ export class Settings extends SyncComponent {
             user: props.user,
             newUsername: props.user.username,
             changeUserName: false,
+            logoutConfirmation: false,
             deleteConfirmation: false,
         };
     }
@@ -85,6 +88,14 @@ export class Settings extends SyncComponent {
         });
     }
 
+    openLogoutConfirmation() {
+        this.setState({ logoutConfirmation: true });
+    }
+
+    hideLogoutConfirmation() {
+        this.setState({ logoutConfirmation: false });
+    }
+
     hideDeleteConfirmation() {
         this.setState({ deleteConfirmation: false });
     }
@@ -132,9 +143,9 @@ export class Settings extends SyncComponent {
                                 <Button labelStyle={typographyStyles.button} onPress={this.openUsernameChange}>
                                     Edit
                                 </Button>
-                                <View>
-                                    <MobileLoginButton />
-                                </View>
+                                <Button labelStyle={typographyStyles.button} onPress={this.openLogoutConfirmation}>
+                                    Logout
+                                </Button>
                                 <View style={{ flex: 1 }} />
                                 <Button
                                     color={Colors.red500}
@@ -180,6 +191,15 @@ export class Settings extends SyncComponent {
                             >
                                 Save
                             </Button>
+                        </Dialog.Actions>
+                    </Dialog>
+                    <Dialog visible={!!this.state.logoutConfirmation} onDismiss={this.hideLogoutConfirmation}>
+                        <Dialog.Title>Are you sure?</Dialog.Title>
+                        <Dialog.Actions>
+                            <Button onPress={this.hideLogoutConfirmation} labelStyle={typographyStyles.button}>
+                                Cancel
+                            </Button>
+                            <MobileLoginButton />
                         </Dialog.Actions>
                     </Dialog>
                     <Dialog
