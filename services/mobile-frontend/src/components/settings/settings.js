@@ -15,6 +15,7 @@ export class Settings extends React.Component {
         //TODO: Need to have modals only render when needed
         super(props);
 
+        this.handleChange = this.handleChange.bind(this);
         this.updateUser = this.updateUser.bind(this);
         this.openUsernameChange = this.openUsernameChange.bind(this);
         this.closeUsernameChange = this.closeUsernameChange.bind(this);
@@ -28,18 +29,14 @@ export class Settings extends React.Component {
     }
 
     async updateUser() {
-        await this.props.updateUser(this.state.user);
+        await this.props.updateUser(_.get(this, 'state.user'));
         this.props.fetchSelf();
-        this.props.onClose();
     }
 
-    handleChange(prop, e) {
-        console.log(e);
-        console.log(prop);
+    handleChange(username) {
         const user = this.state.user;
-        _.set(user, prop, e);
-        console.log(user);
-        this.setState({ user });
+        this.setState({ user: { email: user.email, name: user.name, uid: user.uid, username: username } });
+        return this.updateUser();
     }
 
     openUsernameChange() {
