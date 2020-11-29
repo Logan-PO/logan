@@ -66,11 +66,7 @@ class AssignmentTutorial extends React.Component {
                         </Typography>
                     </View>
                     <View>
-                        <NavigationButton
-                            destination="Scheduler Tutorial"
-                            text="Next"
-                            navigation={this.props.navigation}
-                        />
+                        <NavigationButton destination="Task Tutorial" text="Next" navigation={this.props.navigation} />
                     </View>
                 </ScrollView>
             </SafeAreaView>
