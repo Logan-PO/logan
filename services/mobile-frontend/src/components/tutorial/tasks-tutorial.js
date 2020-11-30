@@ -12,7 +12,7 @@ class TasksTutorial extends React.Component {
             <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <ScrollView
                     contentContainerStyle={{
-                        height: Dimensions.get('screen').height * 2.1,
+                        height: Dimensions.get('screen').height * 2.2,
                         width: Dimensions.get('screen').width,
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -39,7 +39,9 @@ class TasksTutorial extends React.Component {
                         <Typography style={{ textAlign: 'center' }} variant="body">
                             {'\n'}The tasks page displays tasks. Toggling the bar at the top changes the display from
                             upcoming tasks to completed tasks. Pressing the box next to a task marks that task as
-                            completed. Clicking the + button or an existing tasks brings up the task editor.{'\n'}
+                            completed. Swiping left on a task opens up an option to delete that task, or, if the task is
+                            overdue, to change the task due-date to today. Clicking the + button or an existing tasks
+                            brings up the task editor.{'\n'}
                         </Typography>
                     </View>
                     <View
