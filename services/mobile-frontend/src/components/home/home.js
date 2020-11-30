@@ -7,6 +7,7 @@ import { fetchSelf, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/lo
 import { updateUser } from '@logan/fe-shared/store/settings';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { StatusBar } from 'expo-status-bar';
 import Typography from '../shared/typography';
 import { handleNotificationsPermissions } from '../../globals/permissions';
 import MobileLoginButton from './mobile-login-button';
@@ -73,6 +74,7 @@ class Home extends React.Component {
     render() {
         return (
             <SafeAreaView style={{ backgroundColor: 'teal', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <StatusBar style="light" />
                 <View>
                     <Typography style={{ height: '30%' }} variant="h3" color="white">
                         Logan

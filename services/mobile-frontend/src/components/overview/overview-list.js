@@ -194,6 +194,7 @@ export class OverviewList extends React.Component {
                     route={this.props.route}
                     disableBack
                     leftActionIsFetch={true}
+                    rightActionIsSetting={true}
                 >
                     <SectionList
                         style={{ height: '100%', backgroundColor: 'white' }}

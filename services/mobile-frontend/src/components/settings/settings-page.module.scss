@@ -1,0 +1,39 @@
+@import '../../globals/global';
+
+.username {
+    padding-top: 2%;
+    padding-left: 5%;
+    padding-bottom: 2%;
+}
+
+.name {
+    padding-top: 2%;
+    padding-left: 5%;
+    padding-bottom: 2%;
+}
+
+.email {
+    padding-top: 2%;
+    padding-left: 5%;
+    padding-bottom: 2%;
+}
+
+.change {
+    padding-bottom: 2%;
+    padding-left: 5%;
+}
+
+.delete {
+    padding-left: 5%;
+}
+
+.logout {
+    padding-left: 5%;
+    padding-bottom: 2%;
+}
+
+.yes {
+    justify-content: center;
+    display: flex;
+}
+
