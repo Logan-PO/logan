@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 import Typography from '../shared/typography';
+import NavigationButton from '../tutorial/navigation-button';
 import { handleNotificationsPermissions } from '../../globals/permissions';
 import MobileLoginButton from './mobile-login-button';
 
@@ -82,6 +83,14 @@ class Home extends React.Component {
                 </View>
                 <View>
                     <MobileLoginButton mode="contained" color="white" />
+                </View>
+                <View style={{ paddingTop: '10%' }}>
+                    <NavigationButton
+                        mode="contained"
+                        destination="Tutorial Root"
+                        text="Tutorial"
+                        navigation={this.props.navigation}
+                    />
                 </View>
             </SafeAreaView>
         );
