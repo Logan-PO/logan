@@ -88,10 +88,12 @@ class TaskEditor extends Editor {
 
         return (
             <View style={{ flex: 1 }}>
-                <AssignmentPreview
-                    assignment={relatedAssignment}
-                    onPress={() => this.props.navigation.push('Assignment', { aid: relatedAssignment.aid })}
-                />
+                {relatedAssignment && (
+                    <AssignmentPreview
+                        assignment={relatedAssignment}
+                        onPress={() => this.props.navigation.push('Assignment', { aid: relatedAssignment.aid })}
+                    />
+                )}
                 <Divider />
                 <ListItem
                     leftContent={
