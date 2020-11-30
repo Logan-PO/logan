@@ -1,10 +1,11 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
 import * as Google from 'expo-google-app-auth';
 import { connect } from 'react-redux';
 import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
 import PropTypes from 'prop-types';
+import { typographyStyles } from '../shared/typography';
 
 const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
 const IOS_CLIENT_ID = '850674143860-mqhkuritdvkmiq53h9963rjmn5gamsgb.apps.googleusercontent.com';
@@ -18,13 +19,19 @@ class MobileLoginButton extends React.Component {
 
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
+
+        this.state = {
+            isLoggingIn: false,
+        };
     }
 
     async signIn() {
+        this.setState({ isLoggingIn: true });
         const { type, idToken } = await Google.logInAsync(config);
         if (type === 'success') {
             await this.props.verifyIdToken({ idToken: idToken, clientType: DEVICE });
         }
+        this.setState({ isLoggingIn: false });
     }
 
     async signOut() {
@@ -34,16 +41,32 @@ class MobileLoginButton extends React.Component {
     render() {
         if (this.props.isLoggedIn) {
             return (
-                <Button style={this.props.style} color={this.props.color} mode={this.props.mode} onPress={this.signOut}>
+                <Button
+                    labelStyle={typographyStyles.button}
+                    style={this.props.style}
+                    color={this.props.color}
+                    mode={this.props.mode}
+                    onPress={this.signOut}
+                >
                     Logout
                 </Button>
             );
         } else {
-            return (
-                <Button style={this.props.style} color={this.props.color} mode={this.props.mode} onPress={this.signIn}>
-                    Login with Google
-                </Button>
-            );
+            if (this.state.isLoggingIn) {
+                return <ActivityIndicator animating={true} color="white" size="large" />;
+            } else {
+                return (
+                    <Button
+                        labelStyle={typographyStyles.button}
+                        style={this.props.style}
+                        color={this.props.color}
+                        mode={this.props.mode}
+                        onPress={this.signIn}
+                    >
+                        Login with Google
+                    </Button>
+                );
+            }
         }
     }
 }

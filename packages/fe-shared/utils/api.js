@@ -138,6 +138,11 @@ async function getUser(uid) {
     return res.data;
 }
 
+async function validateUniqueness(username) {
+    const res = await client.post('/users/validate', { username });
+    return res.data;
+}
+
 // Returns the updated user
 async function updateUser(user) {
     const { uid } = user;
@@ -347,6 +352,7 @@ export default {
     verifyIDToken: wrapWithErrorHandling(verifyIDToken),
     getUser: wrapWithErrorHandling(getUser),
     updateUser: wrapWithErrorHandling(updateUser),
+    validateUniqueness: wrapWithErrorHandling(validateUniqueness),
     deleteUser: wrapWithErrorHandling(deleteUser),
     getTasks: wrapWithErrorHandling(getTasks),
     createTask: wrapWithErrorHandling(createTask),
