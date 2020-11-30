@@ -28,7 +28,7 @@ const basicAssignment2 = {
 };
 
 const { dynamoUtils } = require('@logan/aws');
-const testUtils = require('../utils/test-utils');
+const testUtils = require('../../utils/test-utils');
 const assignmentsController = require('./assignments-controller');
 
 const { toDbFormat } = assignmentsController.__test_only__;

@@ -7,6 +7,11 @@ const rootReducer = combineReducers(reducers);
 
 const store = configureStore({
     reducer: rootReducer,
+    middleware: getDefaultMiddleware =>
+        getDefaultMiddleware({
+            immutableCheck: false,
+            serializableCheck: false,
+        }),
     devTools: [devToolsEnhancer()],
 });
 

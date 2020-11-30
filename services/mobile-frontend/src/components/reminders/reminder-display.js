@@ -1,55 +1,48 @@
-import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
+import Editor from '@logan/fe-shared/components/editor';
 import { Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { createTask } from '@logan/fe-shared/store/tasks';
-import Editor from '@logan/fe-shared/components/editor';
+import { updateReminderLocal, updateReminder } from '@logan/fe-shared/store/reminders';
 import ViewController from '../shared/view-controller';
-import TaskEditor from './task-editor';
+import ReminderEditor from './reminder-editor';
 
-class NewTaskModal extends React.Component {
+class ReminderDisplay extends React.Component {
     constructor(props) {
         super(props);
 
         this.close = this.close.bind(this);
-        this.create = this.create.bind(this);
-        this.update = this.update.bind(this);
-
-        this.state = {
-            task: {},
-        };
+        this.save = this.save.bind(this);
+        this.onUpdate = this.onUpdate.bind(this);
     }
 
     close() {
         this.props.navigation.goBack();
     }
 
-    async create() {
-        await this.props.createTask(this.state.task);
+    async save() {
+        await this.props.updateReminder(this.state.reminder);
         this.close();
     }
 
-    update(task) {
-        this.setState({ task });
+    onUpdate(reminder) {
+        this.setState({ reminder });
     }
 
     render() {
-        const aid = _.get(this.props, 'route.params.aid');
         const leftActions = <Appbar.Action icon="close" onPress={this.close} />;
         const rightActions = (
             <Appbar.Action
-                disabled={_.isEmpty(this.state.task.title)}
                 icon={props => <Icon {...props} name="done" color="white" size={24} />}
-                onPress={this.create}
+                onPress={this.save}
             />
         );
 
         return (
             <ViewController
-                title={_.get(this.state, 'task.aid') ? 'New Subtask' : 'New Task'}
+                title="Edit Reminder"
                 navigation={this.props.navigation}
                 route={this.props.route}
                 disableBack
@@ -57,12 +50,11 @@ class NewTaskModal extends React.Component {
                 rightActions={rightActions}
             >
                 <ScrollView keyboardDismissMode="on-drag">
-                    <TaskEditor
-                        aid={aid}
-                        navigation={this.props.navigation}
+                    <ReminderEditor
                         route={this.props.route}
-                        mode={Editor.Mode.Create}
-                        onChange={this.update}
+                        navigation={this.props.navigation}
+                        mode={Editor.Mode.Edit}
+                        onChange={this.onUpdate}
                     />
                 </ScrollView>
             </ViewController>
@@ -70,14 +62,16 @@ class NewTaskModal extends React.Component {
     }
 }
 
-NewTaskModal.propTypes = {
+ReminderDisplay.propTypes = {
     navigation: PropTypes.object,
     route: PropTypes.object,
-    createTask: PropTypes.func,
+    updateReminder: PropTypes.func,
+    updateReminderLocal: PropTypes.func,
 };
 
-const mapDispatchToState = {
-    createTask,
+const mapDispatchToLocal = {
+    updateReminder,
+    updateReminderLocal,
 };
 
-export default connect(null, mapDispatchToState)(NewTaskModal);
+export default connect(null, mapDispatchToLocal)(ReminderDisplay);

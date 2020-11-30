@@ -1,8 +1,8 @@
 const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const { OAuth2Client } = require('google-auth-library');
-const auth = require('../utils/auth');
-const requestValidator = require('../utils/request-validator');
+const auth = require('../../utils/auth');
+const requestValidator = require('../../utils/request-validator');
 
 async function verifyIdToken(req, res) {
     // Verify the ID token from the request body

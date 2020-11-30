@@ -7,8 +7,8 @@ const {
     },
 } = require('@logan/core');
 const { v4: uuid } = require('uuid');
-const requestValidator = require('../utils/request-validator');
-const { NotFoundError } = require('../utils/errors');
+const requestValidator = require('../../utils/request-validator');
+const { NotFoundError } = require('../../utils/errors');
 
 function fromDbFormat(db) {
     return {

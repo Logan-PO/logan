@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const testUtils = require('../utils/test-utils');
+const testUtils = require('../../utils/test-utils');
 
 const jsonMock = jest.fn();
 
