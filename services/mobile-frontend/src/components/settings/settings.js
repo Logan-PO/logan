@@ -130,13 +130,13 @@ export class Settings extends SyncComponent {
                             <Card.Content>
                                 <Typography variant="overline">ACCOUNT</Typography>
                                 <Typography variant="h5" style={{ marginTop: 4 }}>
-                                    {this.props.user.name}
+                                    {_.get(this.props, 'user.name')}
                                 </Typography>
                                 <Typography color="detail" style={{ marginTop: 4 }}>
-                                    @{this.props.user.username}
+                                    {_.get(this.props, 'user.username')}
                                 </Typography>
                                 <Typography color="detail" style={{ marginTop: 4 }}>
-                                    {this.props.user.email}
+                                    {_.get(this.props, 'user.email')}
                                 </Typography>
                             </Card.Content>
                             <Card.Actions>

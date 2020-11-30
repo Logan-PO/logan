@@ -6,6 +6,7 @@ import api from '@logan/fe-shared/utils/api';
 import { fetchSelf, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { StatusBar } from 'expo-status-bar';
 import Typography from '../shared/typography';
 import MobileLoginButton from './mobile-login-button';
 
@@ -34,7 +35,6 @@ class Home extends React.Component {
 
         if (this.props.loginStage === LOGIN_STAGE.LOGGED_IN) {
             this.props.setLoginStage(LOGIN_STAGE.DONE);
-            this.props.navigation.navigate('Root');
         } else if (this.props.loginStage === LOGIN_STAGE.CREATE) {
             this.props.navigation.navigate('Signup');
         }
@@ -43,6 +43,7 @@ class Home extends React.Component {
     render() {
         return (
             <SafeAreaView style={{ backgroundColor: 'teal', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <StatusBar style="light" />
                 <View>
                     <Typography style={{ height: '30%' }} variant="h3" color="white">
                         Logan
