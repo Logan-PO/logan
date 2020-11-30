@@ -12,6 +12,7 @@ import PriorityDisplay from '../shared/displays/priority-display';
 import CourseLabel from '../shared/displays/course-label';
 import Typography from '../shared/typography';
 import ListItem from '../shared/list-item';
+import TagsDisplay from '../shared/tags/tags-display';
 
 class TaskCell extends React.Component {
     constructor(props) {
@@ -151,6 +152,9 @@ class TaskCell extends React.Component {
                                         {this.overdueLabelContent()}
                                     </Typography>
                                 </View>
+                            )}
+                            {!_.isEmpty(this.state.task.tags) && (
+                                <TagsDisplay style={{ marginTop: 4 }} tags={this.state.task.tags} />
                             )}
                             {!_.isEmpty(this.state.task.description) && (
                                 <View style={{ marginTop: 2, marginRight: marginSize }}>

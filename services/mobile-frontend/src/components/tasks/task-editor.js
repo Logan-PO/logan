@@ -13,6 +13,8 @@ import priorities from '../shared/priority-constants';
 import Typography, { typographyStyles } from '../shared/typography';
 import ListItem from '../shared/list-item';
 import DueDateControl from '../shared/due-date-control';
+import TagsEditor from '../shared/tags/tags-editor';
+import FakeInputLabel from '../shared/fake-input-label';
 
 const {
     dayjs,
@@ -122,6 +124,14 @@ class TaskEditor extends Editor {
                         </View>
                     }
                     contentStyle={{ paddingTop: 4 }}
+                />
+                <ListItem
+                    leftContent={
+                        <View>
+                            <FakeInputLabel>Tags</FakeInputLabel>
+                            <TagsEditor tags={this.state.task.tags} onChange={this.handleChange.bind(this, 'tags')} />
+                        </View>
+                    }
                 />
                 <DueDateControl value={this.state.task.dueDate} onChange={this.handleChange.bind(this, 'dueDate')} />
                 {!this.props.aid && (
