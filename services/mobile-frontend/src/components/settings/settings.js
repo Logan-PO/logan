@@ -14,7 +14,6 @@ import Typography, { typographyStyles } from '../shared/typography';
 
 export class Settings extends SyncComponent {
     constructor(props) {
-        //TODO: Need to have modals only render when needed
         super(props);
 
         this.setState = this.setState.bind(this);
@@ -209,7 +208,7 @@ export class Settings extends SyncComponent {
                     >
                         <Dialog.Title>Are you sure?</Dialog.Title>
                         <Dialog.Content>
-                            <Paragraph>{`You're about to delete your account.\nThis cannot be undone.`}</Paragraph>
+                            <Paragraph>{`You are about to delete your account.\nThis cannot be undone.`}</Paragraph>
                         </Dialog.Content>
                         <Dialog.Actions>
                             <Button onPress={this.hideDeleteConfirmation} labelStyle={typographyStyles.button}>
