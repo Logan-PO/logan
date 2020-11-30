@@ -14,8 +14,9 @@ class SubtasksList extends React.Component {
 
         this.openTask = this.openTask.bind(this);
     }
+
     openTask(tid) {
-        this.props.navigation.navigate('Task', { tid });
+        this.props.navigation.push('Task', { tid });
     }
 
     listContent() {

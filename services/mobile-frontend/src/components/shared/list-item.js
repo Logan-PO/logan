@@ -78,6 +78,10 @@ class ListItem extends React.Component {
         this._swipeable.close();
     }
 
+    resetHeight() {
+        this.setState({ cellHeightValue: 'auto' });
+    }
+
     async collapse() {
         const duration = 200;
 

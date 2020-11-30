@@ -56,6 +56,9 @@ class TasksList extends React.Component {
         const sections = getSections(tasks, this.state.showingCompletedTasks);
         const listData = sections.map(([name, tids]) => ({ title: name, data: tids }));
 
+        console.log('Rendered');
+        console.log(tasks);
+
         return (
             <ViewController
                 title="Tasks"
