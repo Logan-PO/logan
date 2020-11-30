@@ -40,6 +40,7 @@ class AssignmentTutorial extends React.Component {
                             {'\n'}You can find all your assignments on this screen. Toggling the past-upcoming bar at
                             the top of the screen switches from displaying previous assignments and future assignments.
                             Pressing on an existing assignment or hitting the + button brings up the assignment editor.
+                            Swiping on an assignment to the left opens an option to delete that assignment.
                             {'\n'}
                         </Typography>
                     </View>
@@ -61,7 +62,7 @@ class AssignmentTutorial extends React.Component {
                         <Typography style={{ textAlign: 'center' }} variant="body">
                             {'\n'}In the assignment editor, you can change the name of an assignment, its description,
                             give it a due date, and associate it with a course. You can add tasks associated with this
-                            assignment, which are displayed on screen.
+                            assignment, which are displayed on screen. Reminders can also be added to assignments.
                             {'\n'}
                         </Typography>
                     </View>

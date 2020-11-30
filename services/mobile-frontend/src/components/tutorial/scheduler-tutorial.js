@@ -12,7 +12,7 @@ class SchedulerTutorial extends React.Component {
             <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                 <ScrollView
                     contentContainerStyle={{
-                        height: Dimensions.get('screen').height * 3,
+                        height: Dimensions.get('screen').height * 4,
                         width: Dimensions.get('screen').width,
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -74,6 +74,26 @@ class SchedulerTutorial extends React.Component {
                         <Typography style={{ textAlign: 'center' }} variant="body">
                             {'\n'}In the course editor, you can change the course name, course nickname, and color. You
                             can also edit and add sections for the course.{'\n'}
+                        </Typography>
+                    </View>
+                    <View
+                        style={{
+                            width: Dimensions.get('screen').width * scale,
+                            height: Dimensions.get('screen').height * scale,
+                        }}
+                    >
+                        <Image
+                            style={{
+                                width: Dimensions.get('screen').width * scale,
+                                height: Dimensions.get('screen').height * scale,
+                            }}
+                            source={require('./images/section_editor.jpg')}
+                        />
+                    </View>
+                    <View>
+                        <Typography style={{ textAlign: 'center' }} variant="body">
+                            {'\n'}In the section editor, you can have recurring sections (those appear on the overview
+                            page).{'\n'}
                         </Typography>
                     </View>
                     <View>

@@ -96,23 +96,11 @@ class NavigationHierarchy extends React.Component {
                         <RootStack.Screen name="Signup" component={SignUpForm} />
                     </React.Fragment>
                 )}
-                <RootStack.Screen name="Home" component={Home} />
-                <RootStack.Screen name="Signup" component={SignUpForm} />
-                <RootStack.Screen name="Root" component={this.tabs} />
-                <RootStack.Screen name="New Task" component={NewTaskModalStack} />
-                <RootStack.Screen name="New Assignment" component={NewAssignmentModalStack} />
-                <RootStack.Screen name="New Term" component={NewTermModal} />
-                <RootStack.Screen name="New Course" component={NewCourseModal} />
-                <RootStack.Screen name="New Holiday" component={NewHolidayModal} />
-                <RootStack.Screen name="Signup" component={SignUpForm} />
                 <RootStack.Screen name="Tutorial Root" component={LoginTutorial} />
                 <RootStack.Screen name="Overview Tutorial" component={OverviewTutorial} />
                 <RootStack.Screen name="Scheduler Tutorial" component={SchedulerTutorial} />
                 <RootStack.Screen name="Assignment Tutorial" component={AssignmentTutorial} />
                 <RootStack.Screen name="Task Tutorial" component={TasksTutorial} />
-                <RootStack.Screen name="New Section" component={NewSectionModal} />
-                <RootStack.Screen name="New Reminder" component={NewReminderModal} />
-                <RootStack.Screen name="Edit Reminder" component={ReminderDisplay} />
             </RootStack.Navigator>
         );
     }
