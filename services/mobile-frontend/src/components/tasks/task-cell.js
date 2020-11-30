@@ -37,8 +37,10 @@ class TaskCell extends React.Component {
         this.handleChange('complete', !this.state.task.complete);
     }
 
-    moveToToday() {
-        this.handleChange('dueDate', dateUtils.formatAsDate(dateUtils.dayjs()));
+    async moveToToday() {
+        await this.listItem.current.close();
+        await this.handleChange('dueDate', dateUtils.formatAsDate(dateUtils.dayjs()));
+        this.listItem.current.resetHeight();
     }
 
     async handleChange(prop, newValue) {
