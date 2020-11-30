@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fetchSelf, setLoginStage, LOGIN_STAGE } from '@logan/fe-shared/store/login';
 import { Appbar, Button, Dialog, Paragraph, Portal, TextInput, Card, Colors } from 'react-native-paper';
-import { ScrollView, View } from 'react-native';
+import { ScrollView, View, ActivityIndicator } from 'react-native';
 import { deleteUser, updateUser } from '@logan/fe-shared/store/settings';
 import SyncComponent from '@logan/fe-shared/components/sync-component';
 import api from '@logan/fe-shared/utils/api';
@@ -31,6 +31,7 @@ export class Settings extends SyncComponent {
         this.state = {
             user: props.user,
             newUsername: props.user.username,
+            isUpdatingUser: false,
             changeUserName: false,
             logoutConfirmation: false,
             deleteConfirmation: false,
@@ -38,11 +39,17 @@ export class Settings extends SyncComponent {
     }
 
     async updateUser() {
+        this.setState({ isUpdatingUser: true });
+
         const user = _.merge({}, this.state.user, { username: this.state.newUsername });
 
         this.setState({ user });
 
-        return this.props.updateUser(user);
+        await this.props.updateUser(user);
+
+        await this.props.fetchSelf();
+
+        this.setState({ isUpdatingUser: false });
     }
 
     async handleChange(username) {
@@ -77,7 +84,10 @@ export class Settings extends SyncComponent {
             isUnique,
         });
 
-        if (isUnique) return this.updateUser();
+        if (isUnique) {
+            await this.updateUser();
+            this.setState({ changeUserName: false });
+        }
     }
 
     closeUsernameChange() {
@@ -179,17 +189,25 @@ export class Settings extends SyncComponent {
                             <Button onPress={this.closeUsernameChange} labelStyle={typographyStyles.button}>
                                 Cancel
                             </Button>
-                            <Button
-                                labelStyle={typographyStyles.button}
-                                onPress={this.checkUsernameUniqueness}
-                                disabled={
-                                    this.state.validatingUniqueness ||
-                                    !this.state.isUnique ||
-                                    this.state.newUsername === this.state.user.username
-                                }
-                            >
-                                Save
-                            </Button>
+                            <View>
+                                {this.state.isUpdatingUser || this.state.validatingUniqueness ? (
+                                    <View style={{ marginRight: 10 }}>
+                                        <ActivityIndicator animating={true} />
+                                    </View>
+                                ) : (
+                                    <Button
+                                        labelStyle={typographyStyles.button}
+                                        onPress={this.checkUsernameUniqueness}
+                                        disabled={
+                                            this.state.validatingUniqueness ||
+                                            !this.state.isUnique ||
+                                            this.state.newUsername === this.state.user.username
+                                        }
+                                    >
+                                        Save
+                                    </Button>
+                                )}
+                            </View>
                         </Dialog.Actions>
                     </Dialog>
                     <Dialog visible={!!this.state.logoutConfirmation} onDismiss={this.hideLogoutConfirmation}>
