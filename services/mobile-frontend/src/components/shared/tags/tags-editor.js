@@ -25,7 +25,7 @@ class TagsEditor extends SyncComponent {
 
     deleteTag(i) {
         if (this.props.onChange) {
-            const clone = [...this.props.tags];
+            const clone = [...(this.props.tags || [])];
             clone.splice(i, 1);
             this.props.onChange(clone);
         }
@@ -56,7 +56,7 @@ class TagsEditor extends SyncComponent {
         });
 
         if (this.props.onChange) {
-            this.props.onChange([...this.props.tags, newTag]);
+            this.props.onChange([...(this.props.tags || []), newTag]);
         }
     }
 
