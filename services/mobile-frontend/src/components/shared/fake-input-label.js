@@ -12,5 +12,5 @@ export default function FakeInputLabel({ children }) {
 }
 
 FakeInputLabel.propTypes = {
-    children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+    children: PropTypes.node,
 };
