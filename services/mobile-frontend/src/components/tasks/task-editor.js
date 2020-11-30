@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { Text, TextInput, Checkbox, Colors } from 'react-native-paper';
+import { Text, TextInput, Checkbox, Colors, Divider } from 'react-native-paper';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
@@ -13,6 +13,7 @@ import priorities from '../shared/priority-constants';
 import Typography, { typographyStyles } from '../shared/typography';
 import ListItem from '../shared/list-item';
 import DueDateControl from '../shared/due-date-control';
+import AssignmentPreview from '../assignments/assignment-preview';
 
 const {
     dayjs,
@@ -87,9 +88,16 @@ class TaskEditor extends Editor {
 
         return (
             <View style={{ flex: 1 }}>
+                {relatedAssignment && (
+                    <AssignmentPreview
+                        assignment={relatedAssignment}
+                        onPress={() => this.props.navigation.push('Assignment', { aid: relatedAssignment.aid })}
+                    />
+                )}
+                <Divider />
                 <ListItem
                     leftContent={
-                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end' }}>
+                        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginLeft: -8 }}>
                             <View style={{ flex: 0, paddingBottom: 2, paddingRight: 6 }}>
                                 <Checkbox.Android
                                     status={this.state.task.complete ? 'checked' : 'unchecked'}
@@ -106,7 +114,7 @@ class TaskEditor extends Editor {
                             />
                         </View>
                     }
-                    contentStyle={{ paddingVertical: 4, paddingLeft: 4 }}
+                    contentStyle={{ paddingVertical: 4 }}
                 />
                 <ListItem
                     leftContent={
