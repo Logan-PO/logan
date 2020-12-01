@@ -90,9 +90,9 @@ class NavigationHierarchy extends React.Component {
                     <React.Fragment>
                         <RootStack.Screen name="Home" component={Home} />
                         <RootStack.Screen name="Signup" component={SignUpForm} />
-                        <RootStack.Screen name="Tutorial Root" component={TutorialViewer} />
                     </React.Fragment>
                 )}
+                <RootStack.Screen name="Tutorial Root" component={TutorialViewer} />
             </RootStack.Navigator>
         );
     }

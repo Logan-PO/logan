@@ -165,6 +165,15 @@ export class Settings extends SyncComponent {
                                 </Button>
                             </Card.Actions>
                         </Card>
+                        <View style={{ flexDirection: 'row', marginTop: 16 }}>
+                            <Button
+                                mode="contained"
+                                labelStyle={typographyStyles.button}
+                                onPress={() => this.props.navigation.navigate('Tutorial Root')}
+                            >
+                                Show tutorial
+                            </Button>
+                        </View>
                     </ScrollView>
                 </ViewController>
                 <Portal>

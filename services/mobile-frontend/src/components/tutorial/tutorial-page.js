@@ -28,9 +28,9 @@ const TutorialPage = ({ children, onPageChange, previousTitle, previousPage, nex
 TutorialPage.propTypes = {
     children: PropTypes.node,
     onPageChange: PropTypes.func,
-    previousTitle: PropTypes.text,
+    previousTitle: PropTypes.string,
     previousPage: PropTypes.func,
-    nextTitle: PropTypes.text,
+    nextTitle: PropTypes.string,
     nextPage: PropTypes.func,
 };
 
