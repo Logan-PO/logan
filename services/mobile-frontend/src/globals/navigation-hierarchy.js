@@ -17,15 +17,11 @@ import NewHolidayModal from '../components/schedule/holidays/new-holiday-modal';
 import Home from '../components/home/home';
 import SignUpForm from '../components/home/signup-form';
 import OverviewScreen from '../components/overview/overview-screen';
-import LoginTutorial from '../components/tutorial/login-tutorial';
-import OverviewTutorial from '../components/tutorial/overview-tutorial';
-import SchedulerTutorial from '../components/tutorial/scheduler-tutorial';
-import AssignmentTutorial from '../components/tutorial/assignment-tutorial';
-import TasksTutorial from '../components/tutorial/tasks-tutorial';
 import NewSectionModal from '../components/schedule/sections/new-section-modal';
 import SettingsScreen from '../components/settings/settings-screen';
 import ReminderDisplay from '../components/reminders/reminder-display';
 import NewReminderModal from '../components/reminders/new-reminder-modal';
+import TutorialViewer from '../components/tutorial/tutorial-viewer';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -96,11 +92,7 @@ class NavigationHierarchy extends React.Component {
                         <RootStack.Screen name="Signup" component={SignUpForm} />
                     </React.Fragment>
                 )}
-                <RootStack.Screen name="Tutorial Root" component={LoginTutorial} />
-                <RootStack.Screen name="Overview Tutorial" component={OverviewTutorial} />
-                <RootStack.Screen name="Scheduler Tutorial" component={SchedulerTutorial} />
-                <RootStack.Screen name="Assignment Tutorial" component={AssignmentTutorial} />
-                <RootStack.Screen name="Task Tutorial" component={TasksTutorial} />
+                <RootStack.Screen name="Tutorial Root" component={TutorialViewer} />
             </RootStack.Navigator>
         );
     }

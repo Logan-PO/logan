@@ -74,24 +74,32 @@ class Home extends React.Component {
 
     render() {
         return (
-            <SafeAreaView style={{ backgroundColor: 'teal', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <SafeAreaView
+                style={{
+                    backgroundColor: 'teal',
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: 32,
+                }}
+            >
+                <View style={{ flex: 1 }} />
                 <StatusBar style="light" />
-                <View>
-                    <Typography style={{ height: '30%' }} variant="h3" color="white">
-                        Logan
-                    </Typography>
-                </View>
+                <Typography style={{ marginBottom: 30 }} variant="h3" color="white">
+                    Logan
+                </Typography>
                 <View>
                     <MobileLoginButton mode="contained" color="white" />
                 </View>
-                <View style={{ paddingTop: '10%' }}>
-                    <NavigationButton
-                        mode="contained"
-                        destination="Tutorial Root"
-                        text="Tutorial"
-                        navigation={this.props.navigation}
-                    />
-                </View>
+                <View style={{ flex: 1 }} />
+                <NavigationButton
+                    mode="text"
+                    destination="Tutorial Root"
+                    text="Tutorial"
+                    navigation={this.props.navigation}
+                    color="white"
+                    textColor="white"
+                />
             </SafeAreaView>
         );
     }
