@@ -32,7 +32,7 @@ class ViewController extends React.Component {
 
 ViewController.propTypes = {
     statusBarStyle: PropTypes.string,
-    children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    children: PropTypes.node,
     title: PropTypes.string,
     navigation: PropTypes.object,
     route: PropTypes.object,
