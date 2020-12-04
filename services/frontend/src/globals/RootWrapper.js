@@ -9,14 +9,14 @@ import theme from './theme';
 
 function wrapper({ element }) {
     return (
-        <MuiPickersUtilsProvider utils={DayJsUtils}>
-            <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+            <MuiPickersUtilsProvider utils={DayJsUtils}>
                 <Provider store={store}>
                     <CssBaseline />
                     {element}
                 </Provider>
-            </ThemeProvider>
-        </MuiPickersUtilsProvider>
+            </MuiPickersUtilsProvider>
+        </ThemeProvider>
     );
 }
 

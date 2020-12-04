@@ -7,24 +7,43 @@ const secondary = colors.deepOrange;
 const defaultFontFamily = ['Roboto', '-apple-system', 'BlinkMacSystemFont', 'Arial', 'sans-serif'];
 const headingsFontFamily = ['Poppins', ...defaultFontFamily];
 
-const theme = createMuiTheme({
+let isDark = false;
+
+try {
+    isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    // eslint-disable-next-line no-empty
+} catch (e) {}
+
+const palette = {
+    secondary,
+    error: colors.red,
+};
+
+if (isDark) {
+    palette.type = 'dark';
+    palette.primary = {
+        light: primary[700],
+        main: primary[800],
+        dark: primary[900],
+    };
+} else {
+    palette.primary = {
+        light: primary[300],
+        main: primary[500],
+        dark: primary[700],
+    };
+}
+
+const defaultTheme = createMuiTheme({
     palette: {
-        primary: {
-            light: primary[300],
-            main: primary[500],
-            dark: primary[700],
-            contrastText: '#fff',
-        },
-        secondary: {
-            light: secondary[300],
-            main: secondary[500],
-            dark: secondary[700],
-            contrastText: '#fff',
-        },
-        error: {
-            main: colors.red[500],
-        },
+        type: isDark ? 'dark' : undefined,
     },
+});
+
+console.log(defaultTheme);
+
+const theme = createMuiTheme({
+    palette,
     typography: {
         fontFamily: defaultFontFamily.join(', '),
         h1: { fontFamily: headingsFontFamily.join(',') },
