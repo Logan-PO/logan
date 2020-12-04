@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Typography, colors } from '@material-ui/core';
+import { Grid, Typography } from '@material-ui/core';
+import theme from '../../../globals/theme';
 
 class EmptySticker extends React.Component {
     render() {
@@ -13,12 +14,11 @@ class EmptySticker extends React.Component {
                 style={{
                     width: '100%',
                     height: '100%',
-                    background: colors.grey[200],
-                    color: colors.grey[500],
+                    background: theme.palette.action.disabledBackground,
                 }}
             >
                 <Grid item>
-                    <Typography>{this.props.message}</Typography>
+                    <Typography color="textSecondary">{this.props.message}</Typography>
                 </Grid>
             </Grid>
         );
