@@ -66,6 +66,13 @@ const theme = createMuiTheme({
             },
         },
     },
+    props: {
+        ...(isDark && {
+            MuiTextField: {
+                color: 'secondary',
+            },
+        }),
+    },
 });
 
 export default theme;
