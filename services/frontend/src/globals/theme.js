@@ -53,6 +53,19 @@ const theme = createMuiTheme({
         h5: { fontFamily: headingsFontFamily.join(',') },
         h6: { fontFamily: headingsFontFamily.join(',') },
     },
+    overrides: {
+        MuiDrawer: {
+            paper: {
+                background: palette.primary.dark,
+                color: '#fff',
+            },
+        },
+        MuiListSubheader: {
+            sticky: {
+                backgroundColor: defaultTheme.palette.background.default,
+            },
+        },
+    },
 });
 
 export default theme;

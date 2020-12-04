@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
-import { Drawer, Toolbar, List, ListItem, ListItemText, colors } from '@material-ui/core';
+import { Drawer, Toolbar, List, ListItem, ListItemText } from '@material-ui/core';
 import styles from './sidebar.module.scss';
 
 const pages = {
@@ -19,17 +19,7 @@ class Sidebar extends React.Component {
 
     render() {
         return (
-            <Drawer
-                variant="permanent"
-                className={styles.sidebar}
-                PaperProps={{
-                    style: {
-                        background: colors.teal[700],
-                        color: '#fff',
-                    },
-                }}
-                classes={{ paper: styles.sidebarPaper }}
-            >
+            <Drawer variant="permanent" className={styles.sidebar} classes={{ paper: styles.sidebarPaper }}>
                 <Toolbar />
                 <div className={styles.sidebarContainer}>
                     <List>

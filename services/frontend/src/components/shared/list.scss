@@ -2,7 +2,6 @@
 
 %list-shared {
     .list-header {
-        background: white;
     }
 
     .list-cell {
@@ -26,7 +25,6 @@
     @extend %list-shared;
     height: 100%;
     flex-grow: 1;
-    background: white;
     overflow: hidden;
     border-right: solid 1px $border;
 
