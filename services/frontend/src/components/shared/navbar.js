@@ -77,9 +77,11 @@ class Navbar extends React.Component {
                     <div className={styles.flexibleSpace} />
                     {this.props.buttons}
                     <Tooltip title="Refresh">
-                        <IconButton disabled={this.props.isFetching} onClick={this.fetchAll} color="inherit">
-                            <SyncIcon />
-                        </IconButton>
+                        <span>
+                            <IconButton disabled={this.props.isFetching} onClick={this.fetchAll} color="inherit">
+                                <SyncIcon />
+                            </IconButton>
+                        </span>
                     </Tooltip>
                     <IconButton onClick={this.openAccountModal} color="inherit">
                         <AccountCircleIcon />
