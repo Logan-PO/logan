@@ -31,7 +31,6 @@ const theme = createMuiTheme({
         h2: { fontFamily: headingsFontFamily.join(',') },
         h3: { fontFamily: headingsFontFamily.join(',') },
         h4: { fontFamily: headingsFontFamily.join(',') },
-        h5: { fontFamily: headingsFontFamily.join(',') },
         h6: { fontFamily: headingsFontFamily.join(',') },
     },
 });

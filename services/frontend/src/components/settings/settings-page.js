@@ -2,13 +2,12 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { TextField, Button } from '@material-ui/core';
+import { Grid, Card, CardContent, CardActions, Typography, Button, colors } from '@material-ui/core';
 import { setLoginStage } from '@logan/fe-shared/store/login';
 import { Page } from '../shared';
 import UsernameModal from './username-modal';
 import DeleteModal from './delete-modal';
 import LogOutModal from './logout-modal';
-import styles from './settings-page.module.scss';
 
 export class SettingsPage extends React.Component {
     constructor(props) {
@@ -55,51 +54,45 @@ export class SettingsPage extends React.Component {
     render() {
         return (
             <Page title="Settings">
-                <div className={styles.username}>
-                    <TextField
-                        label="Username"
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        value={_.get(this.props, 'user.username') || ''}
-                    />
-                </div>
-                <div className={styles.name}>
-                    <TextField
-                        label="Name"
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        value={_.get(this.props, 'user.name') || ''}
-                    />
-                </div>
-                <div className={styles.email}>
-                    <TextField
-                        label="Email"
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                        value={_.get(this.props, 'user.email') || ''}
-                    />
-                </div>
-                <div className={styles.change}>
-                    <Button variant="contained" color="primary" disableElevation onClick={this.openNewUsernameModal}>
-                        Change Username
-                    </Button>
-                    <UsernameModal open={this.state.newUsernameModal} onClose={this.closeNewUsernameModal} />
-                </div>
-                <div className={styles.logout}>
-                    <Button variant="contained" color="primary" disableElevation onClick={this.openNewLogOutModal}>
-                        Logout
-                    </Button>
-                    <LogOutModal open={this.state.newLogOutModal} onClose={this.closeNewLogOutModal} />
-                </div>
-                <div className={styles.delete}>
-                    <Button variant="contained" color="primary" disableElevation onClick={this.openNewDeleteModal}>
-                        Delete Account
-                    </Button>
-                    <DeleteModal open={this.state.newDeleteModal} onClose={this.closeNewDeleteModal} />
-                </div>
+                <Grid container style={{ padding: '1em' }}>
+                    <Grid item>
+                        <Card style={{ minWidth: 300 }}>
+                            <CardContent style={{ paddingBottom: 0 }}>
+                                <Typography variant="overline" style={{ lineHeight: '0.75rem' }}>
+                                    Account
+                                </Typography>
+                                <Typography variant="h5" component="h2">
+                                    {_.get(this.props, 'user.name')}
+                                </Typography>
+                                <Typography variant="body2" color="textSecondary">
+                                    @{_.get(this.props, 'user.username')}
+                                </Typography>
+                                <Typography variant="body2" color="textSecondary">
+                                    {_.get(this.props, 'user.email')}
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Button size="small" color="primary" onClick={this.openNewUsernameModal}>
+                                    Edit
+                                </Button>
+                                <Button size="small" color="primary" onClick={this.openNewLogOutModal}>
+                                    Logout
+                                </Button>
+                                <div style={{ flexGrow: 1 }} />
+                                <Button
+                                    size="small"
+                                    style={{ color: colors.red[500] }}
+                                    onClick={this.openNewDeleteModal}
+                                >
+                                    Delete
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    </Grid>
+                </Grid>
+                <UsernameModal open={this.state.newUsernameModal} onClose={this.closeNewUsernameModal} />
+                <LogOutModal open={this.state.newLogOutModal} onClose={this.closeNewLogOutModal} />
+                <DeleteModal open={this.state.newDeleteModal} onClose={this.closeNewDeleteModal} />
             </Page>
         );
     }
