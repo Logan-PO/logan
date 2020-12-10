@@ -3,10 +3,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
-import { Dialog, DialogContent, DialogActions, DialogTitle, Button } from '@material-ui/core';
+import { Dialog, DialogContent, DialogActions, DialogTitle, Typography, Button, colors } from '@material-ui/core';
 import { deleteUser } from '@logan/fe-shared/store/settings';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
-import styles from './settings-page.module.scss';
 
 class DeleteModal extends React.Component {
     constructor(props) {
@@ -44,18 +43,19 @@ class DeleteModal extends React.Component {
     render() {
         return (
             <Dialog open={this.props.open} onClose={this.props.onClose} fullWidth maxWidth="sm">
+                <DialogTitle>Are you sure?</DialogTitle>
                 <DialogContent>
-                    <DialogTitle>Are you sure?</DialogTitle>
+                    <Typography>
+                        {`You're about to delete your account, along with all of your data. This cannot be undone.`}
+                    </Typography>
                 </DialogContent>
-                <DialogActions className={styles.yes}>
-                    <div>
-                        <Button variant="contained" color="primary" disableElevation onClick={this.deleteUser}>
-                            Yes
-                        </Button>
-                        <Button variant="contained" color="primary" disableElevation onClick={this.close}>
-                            No
-                        </Button>
-                    </div>
+                <DialogActions>
+                    <Button color="primary" disableElevation onClick={this.close}>
+                        No
+                    </Button>
+                    <Button style={{ color: colors.red[500] }} disableElevation onClick={this.deleteUser}>
+                        Yes
+                    </Button>
                 </DialogActions>
             </Dialog>
         );

@@ -85,8 +85,6 @@ class UsernameModal extends SyncComponent {
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        size="small"
-                        variant="contained"
                         color="primary"
                         disabled={!modified}
                         disableElevation

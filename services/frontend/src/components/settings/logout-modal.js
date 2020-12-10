@@ -3,9 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
-import { Dialog, DialogContent, DialogActions, DialogTitle, Button } from '@material-ui/core';
+import { Dialog, DialogContent, DialogActions, DialogTitle, Typography, Button } from '@material-ui/core';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
-import styles from './settings-page.module.scss';
 
 class LogOutModal extends React.Component {
     constructor(props) {
@@ -36,19 +35,18 @@ class LogOutModal extends React.Component {
 
     render() {
         return (
-            <Dialog open={this.props.open} onClose={this.props.onClose} fullWidth maxWidth="sm">
+            <Dialog open={this.props.open} onClose={this.props.onClose} fullWidth maxWidth="xs">
+                <DialogTitle>Confirm</DialogTitle>
                 <DialogContent>
-                    <DialogTitle>Are you sure?</DialogTitle>
+                    <Typography>Are you sure you want to log out?</Typography>
                 </DialogContent>
-                <DialogActions className={styles.yes}>
-                    <div>
-                        <Button variant="contained" color="primary" disableElevation onClick={this.logout}>
-                            Yes
-                        </Button>
-                        <Button variant="contained" color="primary" disableElevation onClick={this.close}>
-                            No
-                        </Button>
-                    </div>
+                <DialogActions>
+                    <Button color="primary" onClick={this.close}>
+                        No
+                    </Button>
+                    <Button color="primary" onClick={this.logout}>
+                        Yes
+                    </Button>
                 </DialogActions>
             </Dialog>
         );
