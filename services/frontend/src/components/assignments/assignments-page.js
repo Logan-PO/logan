@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
+import { Grid, Divider } from '@material-ui/core';
 import { fetchAssignments } from '@logan/fe-shared/store/assignments';
 import { Page } from '../shared';
 import EmptySticker from '../shared/displays/empty-sticker';
@@ -30,7 +30,8 @@ export class AssignmentsPage extends React.Component {
                     <Grid item sm={6} md={4} lg={5} className={styles.listContainer}>
                         <AssignmentsList onAssignmentSelected={this.didSelectAssignment} />
                     </Grid>
-                    <Grid item sm={6} md={8} lg={7} className={styles.editorContainer}>
+                    <Divider flexItem orientation="vertical" />
+                    <Grid item className={styles.editorContainer}>
                         {this.state.selectedAid ? (
                             <AssignmentEditor aid={this.state.selectedAid} />
                         ) : (
