@@ -1,10 +1,15 @@
-name: Deploy
+name: Deploy Backend
 
 on:
   push:
-    branches:
-      - master
-
+    branches-ignore:
+      - '!master' # Ignore all branches other than master
+    paths:
+      - '!**/node_modules/**'
+      - 'scripts/copy-be-dependencies.js'
+      - 'packages/aws/**'
+      - 'packages/core/**'
+      - 'services/backend/**'
 jobs:
   cancel-previous:
     runs-on: ubuntu-latest
@@ -13,27 +18,7 @@ jobs:
         uses: styfle/cancel-workflow-action@0.6.0
         with:
           access_token: ${{ github.token }}
-  deploy-fe:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-      - name: Install Dependencies & Bootstrap
-        run: |
-          npm ci
-          npm run bootstrap:web
-      - name: Build
-        run: npm run build
-        working-directory: ./services/frontend
-      - name: Configure the AWS CLI
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.EB_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.EB_ACCESS_KEY_SECRET }}
-      - name: Upload to S3
-        run: |
-          aws s3 sync public s3://logan-frontend/ --delete --acl public-read
-        working-directory: ./services/frontend
-  deploy-be:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
