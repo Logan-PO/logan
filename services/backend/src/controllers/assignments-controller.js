@@ -13,6 +13,30 @@ const { NotFoundError, ValidationError } = require('../../utils/errors');
 const tasksController = require('./tasks-controller');
 const { remindersForEntity } = require('./reminders-controller');
 
+/**
+ * @typedef {object} DbAssignment
+ * @property {string} uid User ID
+ * @property {string} aid Assignment ID
+ * @property {string} title
+ * @property {string} desc
+ * @property {string} cid Associated course ID
+ * @property {string} due
+ */
+
+/**
+ * @typedef {object} Assignment
+ * @property {string} uid User ID
+ * @property {string} aid Assignment ID
+ * @property {string} title
+ * @property {string} description
+ * @property {string} cid Associated course ID
+ * @property {string} dueDate
+ */
+
+/**
+ * @param {DbAssignment} db
+ * @return {Assignment}
+ */
 function fromDbFormat(db) {
     return {
         ..._.pick(db, ['aid', 'uid', 'title', 'cid']),
@@ -21,6 +45,10 @@ function fromDbFormat(db) {
     };
 }
 
+/**
+ * @param {Assignment} assignment
+ * @return {DbAssignment}
+ */
 function toDbFormat(assignment) {
     return {
         ..._.pick(assignment, ['aid', 'uid', 'title', 'cid']),
