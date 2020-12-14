@@ -22,6 +22,8 @@ import SettingsScreen from '../components/settings/settings-screen';
 import ReminderDisplay from '../components/reminders/reminder-display';
 import NewReminderModal from '../components/reminders/new-reminder-modal';
 import TutorialViewer from '../components/tutorial/tutorial-viewer';
+import { nameForColor } from '../components/shared/pickers/color-picker';
+import { getCurrentTheme } from './theme';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();
@@ -51,10 +53,13 @@ const routes = [
 
 class NavigationHierarchy extends React.Component {
     tabs() {
+        const theme = getCurrentTheme();
+        const primaryColor = nameForColor(theme.colors.primary);
+
         return (
             <BottomTabs.Navigator
                 initialRouteName="Overview"
-                activeColor="teal"
+                activeColor={primaryColor}
                 barStyle={{ backgroundColor: 'white' }}
                 screenOptions={({ route }) => ({
                     tabBarIcon: ({ color }) => {
