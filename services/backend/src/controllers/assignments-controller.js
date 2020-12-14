@@ -10,6 +10,7 @@ const { v4: uuid } = require('uuid');
 const Promise = require('bluebird');
 const requestValidator = require('../../utils/request-validator');
 const { NotFoundError, ValidationError } = require('../../utils/errors');
+const { makeHandler } = require('../../utils/wrap-handler');
 const tasksController = require('./tasks-controller');
 const { remindersForEntity } = require('./reminders-controller');
 
@@ -63,80 +64,95 @@ function validateDueDate(str) {
     }
 }
 
-async function getAssignment(req, res) {
-    const requestedAid = req.params.aid;
+const getAssignment = makeHandler({
+    config: { authRequired: false },
+    handler: async event => {
+        const requestedAid = event.path.aid;
 
-    const dbResponse = await dynamoUtils.get({
-        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
-        Key: { aid: requestedAid },
-    });
+        const dbResponse = await dynamoUtils.get({
+            TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+            Key: { aid: requestedAid },
+        });
 
-    if (dbResponse.Item) {
-        res.json(fromDbFormat(dbResponse.Item));
-    } else {
-        throw new NotFoundError('Assignment does not exist');
-    }
-}
+        if (dbResponse.Item) {
+            return fromDbFormat(dbResponse.Item);
+        } else {
+            throw new NotFoundError('Assignment does not exist');
+        }
+    },
+});
 
-async function getAssignments(req, res) {
-    const requestedBy = req.auth.uid;
+const getAssignments = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedBy = event.auth.uid;
 
-    const dbResponse = await dynamoUtils.scan({
-        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
-        FilterExpression: 'uid = :uid',
-        ExpressionAttributeValues: { ':uid': requestedBy },
-    });
+        const dbResponse = await dynamoUtils.scan({
+            TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+            FilterExpression: 'uid = :uid',
+            ExpressionAttributeValues: { ':uid': requestedBy },
+        });
 
-    res.json(dbResponse.Items.map(fromDbFormat));
-}
+        return dbResponse.Items.map(fromDbFormat);
+    },
+});
 
-async function createAssignment(req, res) {
-    const aid = uuid();
+const createAssignment = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const aid = uuid();
 
-    requestValidator.requireBodyParams(req, ['title', 'dueDate']);
+        requestValidator.requireBodyParams(event, ['title', 'dueDate']);
 
-    const assignment = _.merge({}, req.body, { aid }, _.pick(req.auth, ['uid']));
+        const assignment = _.merge({}, event.body, { aid }, _.pick(event.auth, ['uid']));
 
-    validateDueDate(assignment.dueDate);
+        validateDueDate(assignment.dueDate);
 
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
-        Item: toDbFormat(assignment),
-    });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+            Item: toDbFormat(assignment),
+        });
 
-    res.json(assignment);
-}
+        return assignment;
+    },
+});
 
-async function updateAssignment(req, res) {
-    const assignment = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
+const updateAssignment = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const assignment = _.merge({}, event.body, event.path, _.pick(event.auth, ['uid']));
 
-    requestValidator.requireBodyParams(req, ['title', 'dueDate']);
-    validateDueDate(assignment.dueDate);
+        requestValidator.requireBodyParams(event, ['title', 'dueDate']);
+        validateDueDate(assignment.dueDate);
 
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
-        Item: toDbFormat(assignment),
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
-        ConditionExpression: 'uid = :uid',
-    });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+            Item: toDbFormat(assignment),
+            ExpressionAttributeValues: { ':uid': event.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        });
 
-    res.json(assignment);
-}
+        return assignment;
+    },
+});
 
-async function deleteAssignment(req, res) {
-    const requestedAid = req.params.aid;
+const deleteAssignment = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedAid = event.path.aid;
 
-    await dynamoUtils.delete({
-        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
-        Key: { aid: requestedAid },
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
-        ConditionExpression: 'uid = :uid',
-    });
+        await dynamoUtils.delete({
+            TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+            Key: { aid: requestedAid },
+            ExpressionAttributeValues: { ':uid': event.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        });
 
-    await handleCascadingDeletes(requestedAid);
+        await handleCascadingDeletes(requestedAid);
 
-    res.json({ success: true });
-}
+        return { success: true };
+    },
+});
 
 async function handleCascadingDeletes(aid) {
     // Delete subtasks
