@@ -2,7 +2,7 @@ const { handleAuth } = require('./auth');
 const { LoganError } = require('./errors');
 
 /**
- * @typedef RouteConfig
+ * @typedef HandlerConfig
  * @property {boolean} authRequired
  * @property {string} [unauthedAction]
  */
@@ -16,14 +16,14 @@ const { LoganError } = require('./errors');
 
 /**
  * Wrap a Lambda handler function with error handling and auth parsing
- * @param {RouteConfig} routeConfig
+ * @param {HandlerConfig} config
  * @param {function} handler
  * @return {function(*=): Promise<LambdaResponse>}
  */
-function wrapHandler(routeConfig, handler) {
+function makeHandler({ config, handler }) {
     return async event => {
         try {
-            await handleAuth(event, routeConfig.authRequired, routeConfig.unauthedAction);
+            await handleAuth(event, config.authRequired, config.unauthedAction);
             const response = await handler(event);
 
             if (typeof response === 'object') {
@@ -54,5 +54,5 @@ function wrapHandler(routeConfig, handler) {
 }
 
 module.exports = {
-    wrapHandler,
+    makeHandler,
 };
