@@ -28,6 +28,7 @@ const { slice, asyncActions } = createAsyncSlice({
     },
 });
 
+export const { selectPrimaryColor, selectAccentColor } = slice.actions;
 export const { updateUser, deleteUser } = asyncActions;
 export { asyncActions };
 export default slice.reducer;

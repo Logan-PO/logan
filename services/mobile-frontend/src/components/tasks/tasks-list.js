@@ -7,7 +7,7 @@ import { List, FAB, Portal, Dialog, Paragraph, Button } from 'react-native-paper
 import SegmentedControl from '@react-native-community/segmented-control';
 import { getTasksSelectors, deleteTask, deleteTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
-import theme from '../../globals/theme';
+import { getCurrentTheme } from '../../globals/theme';
 import TaskCell from '../../components/tasks/task-cell';
 import ViewController from '../shared/view-controller';
 import { typographyStyles } from '../shared/typography';
@@ -52,6 +52,8 @@ class TasksList extends React.Component {
     }
 
     render() {
+        const theme = getCurrentTheme();
+
         const tasks = _.filter(this.props.tasks, task => task.complete === this.state.showingCompletedTasks);
         const sections = getSections(tasks, this.state.showingCompletedTasks);
         const listData = sections.map(([name, tids]) => ({ title: name, data: tids }));

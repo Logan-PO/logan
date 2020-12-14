@@ -5,13 +5,14 @@ import PropTypes from 'prop-types';
 import { fetchSelf, setLoginStage, LOGIN_STAGE } from '@logan/fe-shared/store/login';
 import { Appbar, Button, Dialog, Paragraph, List, Portal, TextInput, Colors } from 'react-native-paper';
 import { ScrollView, View, ActivityIndicator } from 'react-native';
-import { deleteUser, updateUser } from '@logan/fe-shared/store/settings';
+import { deleteUser, updateUser, selectPrimaryColor, selectAccentColor } from '@logan/fe-shared/store/settings';
 import SyncComponent from '@logan/fe-shared/components/sync-component';
 import api from '@logan/fe-shared/utils/api';
 import ViewController from '../shared/view-controller';
 import MobileLoginButton from '../home/mobile-login-button';
 import Typography, { typographyStyles } from '../shared/typography';
 import ListItem from '../shared/list-item';
+import ColorPicker, { nameForColor } from '../shared/pickers/color-picker';
 
 export class Settings extends SyncComponent {
     constructor(props) {
@@ -28,6 +29,8 @@ export class Settings extends SyncComponent {
         this.openDeleteConfirmation = this.openDeleteConfirmation.bind(this);
         this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
+        this.updatePrimary = this.updatePrimary.bind(this);
+        this.updateAccent = this.updateAccent.bind(this);
 
         this.state = {
             user: props.user,
@@ -125,6 +128,15 @@ export class Settings extends SyncComponent {
         this.logout();
     }
 
+    updatePrimary(hex) {
+        console.log(nameForColor(hex));
+        this.props.selectPrimaryColor(nameForColor(hex));
+    }
+
+    updateAccent(hex) {
+        this.props.selectAccentColor(nameForColor(hex));
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -172,6 +184,19 @@ export class Settings extends SyncComponent {
                                     </View>
                                 </View>
                             }
+                        />
+                        <List.Subheader>Theme</List.Subheader>
+                        <ColorPicker
+                            themeablesOnly
+                            label="Primary color"
+                            value={Colors[`${this.props.primary}500`]}
+                            onChange={this.updatePrimary}
+                        />
+                        <ColorPicker
+                            themeablesOnly
+                            label="Accent color"
+                            value={Colors[`${this.props.accent}500`]}
+                            onChange={this.updateAccent}
                         />
                         <List.Subheader>Other</List.Subheader>
                         <ListItem
@@ -268,9 +293,13 @@ Settings.propTypes = {
     onClose: PropTypes.func,
     updateUser: PropTypes.func,
     fetchSelf: PropTypes.func,
+    selectPrimaryColor: PropTypes.func,
+    selectAccentColor: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
+    primary: state.settings.primary,
+    accent: state.settings.accent,
     loginStage: state.login.currentStage,
     user: state.login.user,
 });
@@ -280,6 +309,8 @@ const mapDispatchToProps = {
     setLoginStage,
     updateUser,
     fetchSelf,
+    selectPrimaryColor,
+    selectAccentColor,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

@@ -28,6 +28,11 @@ delete themeableColors.black;
 
 export { namedColors as colors };
 
+export function nameForColor(hex) {
+    const result = _.find(_.entries(namedColors), entry => hex === entry[1].color);
+    return result[0];
+}
+
 class ColorPicker extends SyncComponent {
     constructor(props) {
         super(props);

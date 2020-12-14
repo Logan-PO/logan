@@ -11,7 +11,7 @@ import SegmentedControl from '@react-native-community/segmented-control';
 import AssignmentCell from '../../components/assignments/assignment-cell';
 import ViewController from '../shared/view-controller';
 import { typographyStyles } from '../shared/typography';
-import theme from '../../globals/theme';
+import { getCurrentTheme } from '../../globals/theme';
 
 class AssignmentsList extends React.Component {
     constructor(props) {
@@ -64,6 +64,8 @@ class AssignmentsList extends React.Component {
     }
 
     render() {
+        const theme = getCurrentTheme();
+
         const assignments = _.filter(this.props.assignments, assignment => this._shouldShowAssignment(assignment));
         const sections = getSections(assignments, this.state.showingPastAssignments); //TODO: Move _should to fe-shared
         const listData = sections.map(([name, aids]) => ({ title: name, data: aids }));
