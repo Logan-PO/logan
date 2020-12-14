@@ -7,7 +7,7 @@
     "bootstrap": "lerna bootstrap --hoist && npm run bootstrap:mobile",
     "bootstrap:web": "lerna bootstrap --scope @logan/web-frontend --hoist --include-dependencies",
     "bootstrap:mobile": "lerna bootstrap --scope @logan/mobile-frontend --include-dependencies",
-    "bootstrap:backend": "lerna bootstrap --scope @logan/backend --include-dependencies -- --production --no-optional",
+    "bootstrap:backend": "lerna bootstrap --scope @logan/backend --hoist -- --production --no-optional",
     "clean-all": "lerna clean --yes",
     "rebootstrap": "bash scripts/fix-node-modules.sh",
     "test": "jest -c jest.config.js",
