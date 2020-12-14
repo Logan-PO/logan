@@ -1,11 +1,11 @@
 import React from 'react';
 import { Provider as ReduxProvider } from 'react-redux';
 import { NativeModules } from 'react-native';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer as NavigationProvider } from '@react-navigation/native';
 import { store } from '@logan/fe-shared';
-import theme from './theme';
 import NavigationHierarchy from './navigation-hierarchy';
+import ThemedPaperProvider from './themed-paper-provider';
 
 const { UIManager } = NativeModules;
 UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -13,13 +13,15 @@ UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationE
 export default class Root extends React.Component {
     render() {
         return (
-            <ReduxProvider store={store}>
-                <PaperProvider theme={theme}>
-                    <NavigationProvider>
-                        <NavigationHierarchy />
-                    </NavigationProvider>
-                </PaperProvider>
-            </ReduxProvider>
+            <SafeAreaProvider>
+                <ReduxProvider store={store}>
+                    <ThemedPaperProvider>
+                        <NavigationProvider>
+                            <NavigationHierarchy />
+                        </NavigationProvider>
+                    </ThemedPaperProvider>
+                </ReduxProvider>
+            </SafeAreaProvider>
         );
     }
 }
