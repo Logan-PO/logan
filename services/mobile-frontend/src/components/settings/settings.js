@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fetchSelf, setLoginStage, LOGIN_STAGE } from '@logan/fe-shared/store/login';
-import { Appbar, Button, Dialog, Paragraph, Portal, TextInput, Card, Colors } from 'react-native-paper';
+import { Appbar, Button, Dialog, Paragraph, List, Portal, TextInput, Colors } from 'react-native-paper';
 import { ScrollView, View, ActivityIndicator } from 'react-native';
 import { deleteUser, updateUser } from '@logan/fe-shared/store/settings';
 import SyncComponent from '@logan/fe-shared/components/sync-component';
@@ -11,6 +11,7 @@ import api from '@logan/fe-shared/utils/api';
 import ViewController from '../shared/view-controller';
 import MobileLoginButton from '../home/mobile-login-button';
 import Typography, { typographyStyles } from '../shared/typography';
+import ListItem from '../shared/list-item';
 
 export class Settings extends SyncComponent {
     constructor(props) {
@@ -134,46 +135,50 @@ export class Settings extends SyncComponent {
                     route={this.props.route}
                     leftActions={<Appbar.Action icon="close" onPress={this.props.navigation.goBack} />}
                 >
-                    <ScrollView style={{ padding: 16 }}>
-                        <Card>
-                            <Card.Content>
-                                <Typography variant="overline">ACCOUNT</Typography>
-                                <Typography variant="h5" style={{ marginTop: 4 }}>
-                                    {_.get(this.props, 'user.name')}
-                                </Typography>
-                                <Typography color="detail" style={{ marginTop: 4 }}>
-                                    {_.get(this.props, 'user.username')}
-                                </Typography>
-                                <Typography color="detail" style={{ marginTop: 4 }}>
-                                    {_.get(this.props, 'user.email')}
-                                </Typography>
-                            </Card.Content>
-                            <Card.Actions>
-                                <Button labelStyle={typographyStyles.button} onPress={this.openUsernameChange}>
-                                    Edit
-                                </Button>
-                                <Button labelStyle={typographyStyles.button} onPress={this.openLogoutConfirmation}>
-                                    Logout
-                                </Button>
-                                <View style={{ flex: 1 }} />
-                                <Button
-                                    color={Colors.red500}
-                                    labelStyle={typographyStyles.button}
-                                    onPress={this.openDeleteConfirmation}
-                                >
-                                    Delete
-                                </Button>
-                            </Card.Actions>
-                        </Card>
-                        <View style={{ flexDirection: 'row', marginTop: 16 }}>
-                            <Button
-                                mode="contained"
-                                labelStyle={typographyStyles.button}
-                                onPress={() => this.props.navigation.navigate('Tutorial Root')}
-                            >
-                                Show tutorial
-                            </Button>
-                        </View>
+                    <ScrollView>
+                        <List.Subheader>Account</List.Subheader>
+                        <ListItem
+                            leftContent={
+                                <View style={{ flex: 1 }}>
+                                    <View style={{ flex: 1 }}>
+                                        <Typography variant="h5" style={{ marginTop: 4 }}>
+                                            {_.get(this.props, 'user.name')}
+                                        </Typography>
+                                        <Typography color="detail" style={{ marginTop: 4 }}>
+                                            {_.get(this.props, 'user.username')}
+                                        </Typography>
+                                        <Typography color="detail" style={{ marginTop: 4 }}>
+                                            {_.get(this.props, 'user.email')}
+                                        </Typography>
+                                    </View>
+                                    <View style={{ flexDirection: 'row', marginTop: 12 }}>
+                                        <Button labelStyle={typographyStyles.button} onPress={this.openUsernameChange}>
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            labelStyle={typographyStyles.button}
+                                            onPress={this.openLogoutConfirmation}
+                                        >
+                                            Logout
+                                        </Button>
+                                        <View style={{ flex: 1 }} />
+                                        <Button
+                                            color={Colors.red500}
+                                            labelStyle={typographyStyles.button}
+                                            onPress={this.openDeleteConfirmation}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </View>
+                                </View>
+                            }
+                        />
+                        <List.Subheader>Other</List.Subheader>
+                        <ListItem
+                            onPress={() => this.props.navigation.navigate('Tutorial Root')}
+                            showRightArrow
+                            leftContent={<Typography>Show tutorial</Typography>}
+                        />
                     </ScrollView>
                 </ViewController>
                 <Portal>
