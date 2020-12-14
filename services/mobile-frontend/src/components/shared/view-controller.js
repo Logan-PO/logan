@@ -3,13 +3,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { getCurrentTheme } from '../../globals/theme';
 import Header from './header';
 
 class ViewController extends React.Component {
     render() {
+        const statusBarStyle =
+            this.props.statusBarStyle || (getCurrentTheme().colors.contrastText === 'white' ? 'light' : 'dark');
+
         return (
             <View style={{ flex: 1 }}>
-                <StatusBar style={this.props.statusBarStyle} />
+                <StatusBar style={statusBarStyle} />
                 {!this.props.disableHeader && (
                     <Header
                         {..._.pick(this.props, [
@@ -42,10 +46,6 @@ ViewController.propTypes = {
     leftActions: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     rightActions: PropTypes.object,
     rightActionIsSetting: PropTypes.bool,
-};
-
-ViewController.defaultProps = {
-    statusBarStyle: 'light',
 };
 
 export default ViewController;
