@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { LOGIN_STAGE } from '@logan/fe-shared/store/login';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import TasksScreen from '../components/tasks/tasks-screen';
 import AssignmentsScreen from '../components/assignments/assignments-screen';
 import ScheduleStack from '../components/schedule/schedule-stack';
@@ -52,21 +53,24 @@ const routes = [
 class NavigationHierarchy extends React.Component {
     tabs() {
         return (
-            <BottomTabs.Navigator
-                initialRouteName="Overview"
-                activeColor="teal"
-                barStyle={{ backgroundColor: 'white' }}
-                screenOptions={({ route }) => ({
-                    tabBarIcon: ({ color }) => {
-                        const iconName = _.find(routes, navigationRoute => navigationRoute.name === route.name).icon;
-                        return <Icon name={iconName} size={22} color={color} />;
-                    },
-                })}
-            >
-                {routes.map(({ name, component }) => (
-                    <BottomTabs.Screen key={name} name={name} component={component} />
-                ))}
-            </BottomTabs.Navigator>
+            <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }} edges={['bottom']}>
+                <BottomTabs.Navigator
+                    initialRouteName="Overview"
+                    activeColor="teal"
+                    barStyle={{ backgroundColor: 'white' }}
+                    screenOptions={({ route }) => ({
+                        tabBarIcon: ({ color }) => {
+                            const iconName = _.find(routes, navigationRoute => navigationRoute.name === route.name)
+                                .icon;
+                            return <Icon name={iconName} size={22} color={color} />;
+                        },
+                    })}
+                >
+                    {routes.map(({ name, component }) => (
+                        <BottomTabs.Screen key={name} name={name} component={component} />
+                    ))}
+                </BottomTabs.Navigator>
+            </SafeAreaView>
         );
     }
 
