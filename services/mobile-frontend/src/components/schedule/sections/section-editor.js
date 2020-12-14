@@ -5,13 +5,14 @@ import { getScheduleSelectors, updateSection, updateSectionLocal } from '@logan/
 import { dateUtils } from '@logan/core';
 import Editor from '@logan/fe-shared/components/editor';
 import { View } from 'react-native';
-import { List, TextInput } from 'react-native-paper';
+import { TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
 import { typographyStyles } from '../../shared/typography';
 import DueDateControl from '../../shared/due-date-control';
 import TimePicker from '../../shared/pickers/time-picker';
 import NumberPicker from '../../shared/pickers/number-picker';
 import DowPicker from '../../shared/pickers/dow-picker';
+import ListHeader from '../../shared/list-header';
 
 class SectionEditor extends Editor {
     constructor(props) {
@@ -75,7 +76,7 @@ class SectionEditor extends Editor {
                     }
                     contentStyle={{ paddingTop: 0 }}
                 />
-                <List.Subheader>Details</List.Subheader>
+                <ListHeader>Details</ListHeader>
                 <ListItem
                     leftContent={
                         <View style={{ flex: 1 }}>
@@ -104,7 +105,7 @@ class SectionEditor extends Editor {
                     }
                     contentStyle={{ paddingTop: 0 }}
                 />
-                <List.Subheader>Dates</List.Subheader>
+                <ListHeader>Dates</ListHeader>
                 <DueDateControl
                     datesOnly
                     label="Start Date"
@@ -126,7 +127,7 @@ class SectionEditor extends Editor {
                     value={this.state.section.daysOfWeek}
                     onChange={this.handleChange.bind(this, 'daysOfWeek')}
                 />
-                <List.Subheader>Times</List.Subheader>
+                <ListHeader>Times</ListHeader>
                 <TimePicker
                     label="Start Time"
                     value={this.state.section.startTime}

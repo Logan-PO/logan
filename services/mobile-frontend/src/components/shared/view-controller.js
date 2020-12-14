@@ -32,8 +32,8 @@ class ViewController extends React.Component {
                                 style={{
                                     backgroundColor: 'white',
                                     flex: 1,
-                                    marginLeft: insets.left,
-                                    marginRight: insets.right,
+                                    marginLeft: this.props.useSafeMargins ? insets.left : 0,
+                                    marginRight: this.props.useSafeMargins ? insets.right : 0,
                                 }}
                             >
                                 {this.props.children}
@@ -47,6 +47,7 @@ class ViewController extends React.Component {
 }
 
 ViewController.propTypes = {
+    useSafeMargins: PropTypes.bool,
     statusBarStyle: PropTypes.string,
     children: PropTypes.node,
     title: PropTypes.string,

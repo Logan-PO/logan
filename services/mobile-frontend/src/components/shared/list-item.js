@@ -5,6 +5,7 @@ import { StyleSheet, View, LayoutAnimation } from 'react-native';
 import { Text, TouchableRipple } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const styles = StyleSheet.create({
     animationContainer: {
@@ -127,7 +128,7 @@ class ListItem extends React.Component {
             >
                 <Swipeable ref={this.updateSwipeableRef} renderRightActions={this.renderRightActions}>
                     <TouchableRipple onPress={this.props.onPress} style={styles.cell}>
-                        <View style={styles.root}>
+                        <SafeAreaView style={styles.root} edges={['left', 'right']}>
                             {this.props.beforeContent}
                             <View style={styles.container}>
                                 <View style={styles.contentContainer}>
@@ -143,7 +144,7 @@ class ListItem extends React.Component {
                                 )}
                             </View>
                             {this.props.afterContent}
-                        </View>
+                        </SafeAreaView>
                     </TouchableRipple>
                 </Swipeable>
             </View>
