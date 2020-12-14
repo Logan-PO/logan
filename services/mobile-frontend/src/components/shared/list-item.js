@@ -128,22 +128,24 @@ class ListItem extends React.Component {
             >
                 <Swipeable ref={this.updateSwipeableRef} renderRightActions={this.renderRightActions}>
                     <TouchableRipple onPress={this.props.onPress} style={styles.cell}>
-                        <SafeAreaView style={styles.root} edges={['left', 'right']}>
-                            {this.props.beforeContent}
-                            <View style={styles.container}>
-                                <View style={styles.contentContainer}>
-                                    {this.props.leftContent && (
-                                        <View style={leftContentStyle}>{this.props.leftContent}</View>
-                                    )}
-                                    {this.props.rightContent && (
-                                        <View style={rightContentStyle}>{this.props.rightContent}</View>
+                        <SafeAreaView edges={['left', 'right']}>
+                            <View style={styles.root}>
+                                {this.props.beforeContent}
+                                <View style={styles.container}>
+                                    <View style={styles.contentContainer}>
+                                        {this.props.leftContent && (
+                                            <View style={leftContentStyle}>{this.props.leftContent}</View>
+                                        )}
+                                        {this.props.rightContent && (
+                                            <View style={rightContentStyle}>{this.props.rightContent}</View>
+                                        )}
+                                    </View>
+                                    {this.props.showRightArrow && (
+                                        <Icon name="chevron-right" size={24} style={styles.chevron} />
                                     )}
                                 </View>
-                                {this.props.showRightArrow && (
-                                    <Icon name="chevron-right" size={24} style={styles.chevron} />
-                                )}
+                                {this.props.afterContent}
                             </View>
-                            {this.props.afterContent}
                         </SafeAreaView>
                     </TouchableRipple>
                 </Swipeable>
