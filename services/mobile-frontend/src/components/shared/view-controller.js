@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 import Header from './header';
 
 class ViewController extends React.Component {
@@ -24,7 +25,22 @@ class ViewController extends React.Component {
                         ])}
                     />
                 )}
-                <View style={{ background: 'white', flex: 1 }}>{this.props.children}</View>
+                <View style={{ backgroundColor: 'white', flex: 1 }}>
+                    <SafeAreaInsetsContext.Consumer>
+                        {insets => (
+                            <View
+                                style={{
+                                    backgroundColor: 'white',
+                                    flex: 1,
+                                    marginLeft: insets.left,
+                                    marginRight: insets.right,
+                                }}
+                            >
+                                {this.props.children}
+                            </View>
+                        )}
+                    </SafeAreaInsetsContext.Consumer>
+                </View>
             </View>
         );
     }
