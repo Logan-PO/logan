@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SectionList, View } from 'react-native';
+import { SectionList } from 'react-native';
 import { List, FAB, Portal, Dialog, Paragraph, Button } from 'react-native-paper';
 import { getAssignmentsSelectors, deleteAssignment, deleteAssignmentLocal } from '@logan/fe-shared/store/assignments';
 import { getSections } from '@logan/fe-shared/sorting/assignments';
@@ -10,6 +10,7 @@ import { dateUtils } from '@logan/core';
 import SegmentedControl from '@react-native-community/segmented-control';
 import AssignmentCell from '../../components/assignments/assignment-cell';
 import ViewController from '../shared/view-controller';
+import FullWidthSafeAreaView from '../shared/full-width-safe-area-view';
 import { typographyStyles } from '../shared/typography';
 import theme from '../../globals/theme';
 
@@ -77,7 +78,7 @@ class AssignmentsList extends React.Component {
                 leftActionIsFetch={true}
                 rightActionIsSetting={true}
             >
-                <View
+                <FullWidthSafeAreaView
                     style={{
                         padding: 12,
                         paddingTop: 0,
@@ -92,7 +93,7 @@ class AssignmentsList extends React.Component {
                         }
                         tintColor="white"
                     />
-                </View>
+                </FullWidthSafeAreaView>
                 <SectionList
                     style={{ height: '100%', backgroundColor: 'white' }}
                     sections={listData}

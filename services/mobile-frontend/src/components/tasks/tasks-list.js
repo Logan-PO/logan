@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, SectionList } from 'react-native';
+import { SectionList } from 'react-native';
 import { List, FAB, Portal, Dialog, Paragraph, Button } from 'react-native-paper';
 import SegmentedControl from '@react-native-community/segmented-control';
 import { getTasksSelectors, deleteTask, deleteTaskLocal } from '@logan/fe-shared/store/tasks';
@@ -11,6 +11,7 @@ import theme from '../../globals/theme';
 import TaskCell from '../../components/tasks/task-cell';
 import ViewController from '../shared/view-controller';
 import { typographyStyles } from '../shared/typography';
+import FullWidthSafeAreaView from '../shared/full-width-safe-area-view';
 
 class TasksList extends React.Component {
     constructor(props) {
@@ -65,7 +66,7 @@ class TasksList extends React.Component {
                 leftActionIsFetch={true}
                 rightActionIsSetting={true}
             >
-                <View
+                <FullWidthSafeAreaView
                     style={{
                         padding: 12,
                         paddingTop: 0,
@@ -80,7 +81,7 @@ class TasksList extends React.Component {
                         }
                         tintColor="white"
                     />
-                </View>
+                </FullWidthSafeAreaView>
                 <SectionList
                     style={{ height: '100%', backgroundColor: 'white' }}
                     sections={listData}
