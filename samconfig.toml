@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "logan-backend"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-xcd4s2s9xkps"
+s3_prefix = "logan-backend"
+region = "us-west-2"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"

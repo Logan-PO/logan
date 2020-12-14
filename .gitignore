@@ -1,4 +1,5 @@
 node_modules/
+.aws-sam/**
 
 # Ignore WebStorm stuff. Reference: https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
 .idea/
