@@ -7,6 +7,7 @@ import { List } from 'react-native-paper';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ViewController from '../view-controller';
+import ListHeader from '../list-header';
 
 class CoursePicker extends React.Component {
     constructor(props) {
@@ -75,7 +76,7 @@ class CoursePicker extends React.Component {
 
             sections.push(
                 <List.Section key={sections.length}>
-                    <List.Subheader key={term.tid}>{term.title}</List.Subheader>
+                    <ListHeader key={term.tid}>{term.title}</ListHeader>
                     {items}
                 </List.Section>
             );
