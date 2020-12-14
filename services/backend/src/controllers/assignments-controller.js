@@ -67,7 +67,7 @@ function validateDueDate(str) {
 const getAssignment = makeHandler({
     config: { authRequired: true },
     handler: async event => {
-        const requestedAid = event.path.aid;
+        const requestedAid = event.pathParameters.aid;
 
         const dbResponse = await dynamoUtils.get({
             TableName: dynamoUtils.TABLES.ASSIGNMENTS,
@@ -120,7 +120,7 @@ const createAssignment = makeHandler({
 const updateAssignment = makeHandler({
     config: { authRequired: true },
     handler: async event => {
-        const assignment = _.merge({}, event.body, event.path, _.pick(event.auth, ['uid']));
+        const assignment = _.merge({}, event.body, event.pathParameters, _.pick(event.auth, ['uid']));
 
         requestValidator.requireBodyParams(event, ['title', 'dueDate']);
         validateDueDate(assignment.dueDate);
@@ -139,7 +139,7 @@ const updateAssignment = makeHandler({
 const deleteAssignment = makeHandler({
     config: { authRequired: true },
     handler: async event => {
-        const requestedAid = event.path.aid;
+        const requestedAid = event.pathParameters.aid;
 
         await dynamoUtils.delete({
             TableName: dynamoUtils.TABLES.ASSIGNMENTS,

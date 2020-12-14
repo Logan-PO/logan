@@ -27,14 +27,22 @@ function makeHandler({ config, handler }) {
             const response = await handler(event);
 
             if (typeof response === 'object') {
-                return JSON.stringify(response);
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify(response),
+                };
             } else {
-                return `${response}`;
+                return {
+                    statusCode: 200,
+                    body: `${response}`,
+                };
             }
         } catch (e) {
+            console.error(e);
+
             if (e instanceof LoganError) {
                 return {
-                    statusCode: e.code,
+                    statusCode: 500,
                     body: JSON.stringify({
                         type: e.constructor.name,
                         error: e.message,
