@@ -65,7 +65,7 @@ function validateDueDate(str) {
 }
 
 const getAssignment = makeHandler({
-    config: { authRequired: false },
+    config: { authRequired: true },
     handler: async event => {
         const requestedAid = event.path.aid;
 
