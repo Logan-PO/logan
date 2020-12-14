@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Provider as PaperProvider } from 'react-native-paper';
+import * as MaterialColors from 'material-ui-colors';
 import { makeTheme } from './theme';
 
 const ThemedPaperProvider = ({ primary, accent, children, ...rest }) => {
@@ -20,6 +21,18 @@ ThemedPaperProvider.propTypes = {
     children: PropTypes.node,
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = state => {
+    const props = {};
+
+    if (state.settings.primary) {
+        props.primary = MaterialColors[state.settings.primary];
+    }
+
+    if (state.settings.accent) {
+        props.accent = MaterialColors[state.settings.accent];
+    }
+
+    return props;
+};
 
 export default connect(mapStateToProps, null)(ThemedPaperProvider);

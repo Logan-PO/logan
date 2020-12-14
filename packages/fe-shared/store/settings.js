@@ -1,14 +1,20 @@
-import { createEntityAdapter } from '@reduxjs/toolkit';
 import { createAsyncSlice } from '../utils/redux-utils';
 import api from '../utils/api';
 
-const adapter = createEntityAdapter({
-    selectId: user => user.uid,
-});
-
 const { slice, asyncActions } = createAsyncSlice({
     name: 'settings',
-    initialState: adapter.getInitialState(),
+    initialState: {
+        primary: 'teal',
+        accent: 'deepOrange',
+    },
+    reducers: {
+        selectPrimaryColor(state, action) {
+            state.primary = action.payload;
+        },
+        selectAccentColor(state, action) {
+            state.accent = action.payload;
+        },
+    },
     asyncReducers: {
         updateUser: {
             fn: api.updateUser,
