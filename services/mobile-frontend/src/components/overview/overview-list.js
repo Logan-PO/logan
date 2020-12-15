@@ -7,11 +7,12 @@ import { fetchAssignments, getAssignmentsSelectors, deleteAssignment } from '@lo
 import { fetchTasks, getTasksSelectors, deleteTask } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { View, SectionList } from 'react-native';
-import { Button, Colors, Dialog, FAB, List, Paragraph, Portal } from 'react-native-paper';
+import { Button, Colors, Dialog, FAB, Paragraph, Portal } from 'react-native-paper';
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import ViewController from '../shared/view-controller';
 import { typographyStyles } from '../shared/typography';
+import ListHeader from '../shared/list-header';
 import OverviewSectionCell from './overview-section-cell';
 
 const {
@@ -125,9 +126,7 @@ export class OverviewList extends React.Component {
     }
 
     secondaryHeader(title) {
-        return (
-            <List.Subheader style={{ backgroundColor: Colors.blueGrey50, paddingVertical: 6 }}>{title}</List.Subheader>
-        );
+        return <ListHeader style={{ backgroundColor: Colors.blueGrey50, paddingVertical: 6 }}>{title}</ListHeader>;
     }
 
     renderListSection({ sections, assignments, tasks }) {
@@ -201,9 +200,9 @@ export class OverviewList extends React.Component {
                         sections={groups}
                         keyExtractor={(item, index) => item + index}
                         renderSectionHeader={({ section: { title } }) => (
-                            <List.Subheader style={{ backgroundColor: Colors.blueGrey100 }} key={title}>
+                            <ListHeader style={{ backgroundColor: Colors.blueGrey100 }} key={title}>
                                 {title}
-                            </List.Subheader>
+                            </ListHeader>
                         )}
                         renderItem={({ item }) => this.renderListSection(item)}
                     />
