@@ -15,6 +15,8 @@ const basicUser1 = {
     username: 'basicuser1',
     name: 'Basic User1',
     email: 'basicuser1@gmail.com',
+    primaryColor: 'teal',
+    accentColor: 'deepOrange',
 };
 
 const basicUser2 = {
@@ -22,6 +24,8 @@ const basicUser2 = {
     username: 'basicuser2',
     name: 'Basic User2',
     email: 'basicuser2@gmail.com',
+    primaryColor: 'red',
+    accentColor: 'blue',
 };
 
 // eslint-disable-next-line import/order
