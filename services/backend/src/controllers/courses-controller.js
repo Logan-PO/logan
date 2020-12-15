@@ -31,7 +31,7 @@ function isValidHexString(str) {
 const getCourse = makeHandler({
     config: { authRequired: true },
     handler: async event => {
-        const requestedCid = event.path.cid;
+        const requestedCid = event.pathParameters.cid;
 
         const dbResponse = await dynamoUtils.get({
             TableName: dynamoUtils.TABLES.COURSES,
@@ -84,7 +84,7 @@ const createCourse = makeHandler({
 const updateCourse = makeHandler({
     config: { authRequired: true },
     handler: async event => {
-        const course = _.merge({}, event.body, event.path, _.pick(event.auth, ['uid']));
+        const course = _.merge({}, event.body, event.pathParameters, _.pick(event.auth, ['uid']));
 
         requestValidator.requireBodyParams(event, ['tid', 'title', 'color']);
 
@@ -104,7 +104,7 @@ const updateCourse = makeHandler({
 const deleteCourse = makeHandler({
     config: { authRequired: true },
     handler: async event => {
-        const requestedCid = event.path.cid;
+        const requestedCid = event.pathParameters.cid;
 
         await dynamoUtils.delete({
             TableName: dynamoUtils.TABLES.COURSES,
