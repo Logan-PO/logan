@@ -11,14 +11,14 @@ const { remindersForEntity } = require('./reminders-controller');
  * @property {string} uid User ID
  * @property {string} tid Task ID
  * @property {string} title Title
- * @property {string} desc Description
+ * @property {string} [desc] Description
  * @property {string} due Due date
  * @property {number} pri Priority (-3 through 3)
  * @property {boolean} cmp Completed
- * @property {string} cd Completion date
- * @property {string} aid Related assignment ID
- * @property {string} cid Related course ID
- * @Property {string[]} tags Tags
+ * @property {string} [cd] Completion date
+ * @property {string} [aid] Related assignment ID
+ * @property {string} [cid] Related course ID
+ * @property {string[]} [tags] Tags
  */
 
 /**
@@ -26,14 +26,14 @@ const { remindersForEntity } = require('./reminders-controller');
  * @property {string} uid User ID
  * @property {string} tid Task ID
  * @property {string} title Title
- * @property {string} description Description
+ * @property {string} [description] Description
  * @property {string} dueDate Due date
  * @property {number} priority Priority (-3 through 3)
  * @property {boolean} complete Completed
- * @property {string} completionDate Completion date
- * @property {string} aid Related assignment ID
- * @property {string} cid Related course ID
- * @Property {string[]} tags Tags
+ * @property {string} [completionDate] Completion date
+ * @property {string} [aid] Related assignment ID
+ * @property {string} [cid] Related course ID
+ * @property {string[]} [tags] Tags
  */
 
 /**

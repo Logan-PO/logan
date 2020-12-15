@@ -1,19 +1,15 @@
 const _ = require('lodash');
 
-const mockDbGet = jest.fn(() => ({}));
-const mockDbScan = jest.fn(() => ({ Items: [] }));
-const mockDbPut = jest.fn(() => ({}));
-const mockDbDelete = jest.fn(() => ({}));
-const jsonMock = jest.fn();
-
 // Mock @logan/aws
 jest.doMock('@logan/aws', () => {
     const mocked = jest.requireActual('@logan/aws');
-    mocked.dynamoUtils.get = mockDbGet;
-    mocked.dynamoUtils.scan = mockDbScan;
-    mocked.dynamoUtils.put = mockDbPut;
-    mocked.dynamoUtils.delete = mockDbDelete;
     mocked.secretUtils.getSecret = async () => ({ web: 'mock-secret' });
+    return mocked;
+});
+
+jest.doMock('../../utils/auth', () => {
+    const mocked = jest.requireActual('../../utils/auth');
+    mocked.handleAuth = () => {};
     return mocked;
 });
 
@@ -25,8 +21,8 @@ const basicTask1 = {
     cid: 'cid123',
     description: 'problem 1',
     dueDate: '1/30/21',
-    priority: 'high',
-    complete: 'no',
+    priority: 1,
+    complete: false,
 };
 
 const basicTask2 = {
@@ -37,10 +33,12 @@ const basicTask2 = {
     cid: 'cid123',
     description: 'problem 2',
     dueDate: '1/31/21',
-    priority: 'high',
-    complete: 'no',
+    priority: 1,
+    complete: false,
 };
 
+const { dynamoUtils } = require('@logan/aws');
+const testUtils = require('../../utils/test-utils');
 const tasksController = require('./tasks-controller');
 
 const { toDbFormat } = tasksController.__test_only__;
@@ -51,60 +49,75 @@ beforeEach(() => {
 });
 
 describe('getTask', () => {
+    beforeAll(async () => {
+        await dynamoUtils.put({
+            TableName: 'tasks',
+            Item: toDbFormat(basicTask1),
+        });
+    });
+
+    afterAll(async () => testUtils.clearTable('tasks'));
+
     it('Basic fetch returns the correct task', async () => {
-        const req = {
-            params: { tid: 'tid123' },
+        const event = {
+            pathParameters: { tid: 'tid123' },
         };
 
-        mockDbGet.mockReturnValueOnce({ Item: toDbFormat(basicTask1) });
-        mockDbScan.mockReturnValueOnce({ Items: [] });
+        const response = await tasksController.getTask(event);
 
-        await tasksController.getTask(req, { json: jsonMock });
-
-        expect(mockDbGet).toHaveBeenCalledTimes(1);
-        expect(jsonMock).toHaveBeenCalledWith(expect.objectContaining(basicTask1));
+        expect(response.statusCode).toEqual(200);
+        expect(JSON.parse(response.body)).toEqual(expect.objectContaining(basicTask1));
     });
 
     it('Fetching a nonexistent task fails', async () => {
-        const req = {
-            params: { tid: 'doesnt-exist' },
+        const event = {
+            pathParameters: { tid: 'doesnt-exist' },
         };
 
-        mockDbGet.mockReturnValueOnce({ Item: undefined });
+        const response = await tasksController.getTask(event);
 
-        await expect(tasksController.getTask(req, { json: jsonMock })).rejects.toThrowError('Task does not exist');
-        expect(mockDbGet).toHaveBeenCalledTimes(1);
+        expect(response.statusCode).toEqual(500);
     });
 });
 
 describe('getTasks', () => {
+    beforeAll(async () => {
+        await Promise.all([
+            dynamoUtils.put({
+                TableName: 'tasks',
+                Item: toDbFormat(basicTask1),
+            }),
+            dynamoUtils.put({
+                TableName: 'tasks',
+                Item: toDbFormat(basicTask2),
+            }),
+        ]);
+    });
+
+    afterAll(async () => testUtils.clearTable('tasks'));
+
     it('Basic fetch returns correct tasks', async () => {
-        const req = {
+        const event = {
             auth: { uid: 'usr123' },
         };
 
-        mockDbScan.mockImplementation(({ TableName }) => {
-            if (TableName === 'tasks') return { Items: [toDbFormat(basicTask1), toDbFormat(basicTask2)] };
-            else return { Items: [] };
-        });
+        const response = await tasksController.getTasks(event);
 
-        await tasksController.getTasks(req, { json: jsonMock });
-
-        expect(jsonMock).toHaveBeenCalledWith([
-            expect.objectContaining(basicTask1),
-            expect.objectContaining(basicTask2),
-        ]);
+        expect(JSON.parse(response.body)).toEqual(
+            expect.arrayContaining([expect.objectContaining(basicTask1), expect.objectContaining(basicTask2)])
+        );
     });
 });
 
 describe('createTask', () => {
+    afterEach(async () => testUtils.clearTable('tasks'));
+
     it('Creating a normal task succeeds', async () => {
         const requestBody = _.omit(basicTask1, ['tid']);
 
-        await tasksController.createTask({ body: requestBody }, { json: jsonMock });
+        const response = await tasksController.createTask({ body: requestBody });
 
-        expect(mockDbPut).toHaveBeenCalledTimes(1);
-        expect(jsonMock).toHaveBeenCalledWith(
+        expect(JSON.parse(response.body)).toEqual(
             expect.objectContaining({
                 tid: expect.anything(),
                 ...requestBody,
@@ -116,38 +129,59 @@ describe('createTask', () => {
         const baseTask = _.omit(basicTask1, ['tid']);
 
         // Require title
-        await expect(tasksController.createTask({ body: _.omit(baseTask, ['title']) })).rejects.toThrow('required');
+        const t = await tasksController.createTask({ body: _.omit(baseTask, ['title']) });
+        expect(t.statusCode).toEqual(500);
+        expect(t.body).toContain('required');
 
         // Require dueDate
-        await expect(tasksController.createTask({ body: _.omit(baseTask, ['dueDate']) })).rejects.toThrow('required');
+        const d = await tasksController.createTask({ body: _.omit(baseTask, ['dueDate']) });
+        expect(d.statusCode).toEqual(500);
+        expect(d.body).toContain('required');
 
-        // Required priority
-        // Require dueDate
-        await expect(tasksController.createTask({ body: _.omit(baseTask, ['priority']) })).rejects.toThrow('required');
+        // Require priority
+        const p = await tasksController.createTask({ body: _.omit(baseTask, ['priority']) });
+        expect(p.statusCode).toEqual(500);
+        expect(p.body).toContain('required');
     });
 });
 
 describe('updateTask', () => {
+    beforeAll(async () => {
+        await dynamoUtils.put({
+            TableName: 'tasks',
+            Item: toDbFormat(basicTask1),
+        });
+    });
+
+    afterAll(async () => testUtils.clearTable('tasks'));
+
     it('Update successful', async () => {
         const updatedTask = _.merge({}, basicTask1, { title: 'updated' });
-        const req = {
-            params: _.pick(basicTask1, ['tid']),
+        const event = {
+            pathParameters: _.pick(basicTask1, ['tid']),
             body: updatedTask,
             auth: { uid: 'usr123' },
         };
 
-        mockDbScan.mockReturnValueOnce({ Items: [] });
-        await tasksController.updateTask(req, { json: jsonMock });
+        const response = await tasksController.updateTask(event);
 
-        expect(mockDbPut).toHaveBeenCalledTimes(1);
-        expect(jsonMock).toHaveBeenCalledWith(expect.objectContaining(updatedTask));
+        expect(JSON.parse(response.body)).toEqual(expect.objectContaining(updatedTask));
     });
 });
 
 describe('deleteTask', () => {
+    beforeAll(async () => {
+        await dynamoUtils.put({
+            TableName: 'tasks',
+            Item: toDbFormat(basicTask1),
+        });
+    });
+
+    afterAll(async () => testUtils.clearTable('tasks'));
+
     it('Successful delete', async () => {
-        mockDbScan.mockReturnValueOnce({ Items: [] });
-        await tasksController.deleteTask({ params: basicTask1, auth: 'usr123' }, { json: jsonMock });
-        expect(mockDbDelete).toHaveBeenCalledTimes(1);
+        await tasksController.deleteTask({ pathParameters: basicTask1, auth: { uid: 'usr123' } });
+        const { Count } = await dynamoUtils.scan({ TableName: 'tasks' });
+        expect(Count).toEqual(0);
     });
 });
