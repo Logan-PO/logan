@@ -3,10 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
-import { Button, Dialog, List, Paragraph, Portal } from 'react-native-paper';
+import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
 import { getRemindersSelectors, deleteReminder } from '@logan/fe-shared/store/reminders';
 import ListItem from '../shared/list-item';
 import Typography, { typographyStyles } from '../shared/typography';
+import ListHeader from '../shared/list-header';
 import ReminderCell from './reminder-cell';
 
 class RemindersList extends React.Component {
@@ -43,7 +44,7 @@ class RemindersList extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <List.Subheader>{this.props.title || 'Reminders'}</List.Subheader>
+                <ListHeader>{this.props.title || 'Reminders'}</ListHeader>
                 <View style={{ flex: 1, backgroundColor: 'white' }}>
                     {this.props.reminders.length ? (
                         this.props.reminders.map(reminder => (

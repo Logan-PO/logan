@@ -6,12 +6,13 @@ import { getScheduleSelectors, updateTerm, updateTermLocal, deleteCourse } from 
 import { dateUtils } from '@logan/core';
 import Editor from '@logan/fe-shared/components/editor';
 import { View } from 'react-native';
-import { Button, Dialog, List, Paragraph, Portal, TextInput } from 'react-native-paper';
+import { Button, Dialog, Paragraph, Portal, TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
 import Typography, { typographyStyles } from '../../shared/typography';
 import DueDateControl from '../../shared/due-date-control';
 import CourseCell from '../courses/course-cell';
 import HolidayCell from '../holidays/holiday-cell';
+import ListHeader from '../../shared/list-header';
 
 class TermEditor extends Editor {
     constructor(props) {
@@ -75,7 +76,7 @@ class TermEditor extends Editor {
 
         return (
             <React.Fragment>
-                <List.Subheader style={{ marginTop: 8 }}>Courses</List.Subheader>
+                <ListHeader style={{ marginTop: 8 }}>Courses</ListHeader>
                 {!courses.length && (
                     <ListItem
                         key="none"
@@ -108,7 +109,7 @@ class TermEditor extends Editor {
 
         return (
             <React.Fragment>
-                <List.Subheader style={{ marginTop: 8 }}>Holidays</List.Subheader>
+                <ListHeader style={{ marginTop: 8 }}>Holidays</ListHeader>
                 {!holidays.length && (
                     <ListItem
                         key="none"
