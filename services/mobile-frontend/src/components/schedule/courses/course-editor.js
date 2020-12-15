@@ -5,11 +5,12 @@ import { connect } from 'react-redux';
 import { getScheduleSelectors, updateCourse, updateCourseLocal, deleteSection } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
 import { View } from 'react-native';
-import { Button, Dialog, List, Paragraph, Portal, TextInput } from 'react-native-paper';
+import { Button, Dialog, Paragraph, Portal, TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
 import Typography, { typographyStyles } from '../../shared/typography';
 import ColorPicker, { colors } from '../../shared/pickers/color-picker';
 import SectionCell from '../sections/section-cell';
+import ListHeader from '../../shared/list-header';
 
 class CourseEditor extends Editor {
     constructor(props) {
@@ -150,7 +151,7 @@ class CourseEditor extends Editor {
                 <ColorPicker value={this.state.course.color} onChange={this.handleChange.bind(this, 'color')} />
                 {this.isEditor && (
                     <React.Fragment>
-                        <List.Subheader style={{ marginTop: 8 }}>Sections</List.Subheader>
+                        <ListHeader style={{ marginTop: 8 }}>Sections</ListHeader>
                         {this.sectionsList()}
                     </React.Fragment>
                 )}

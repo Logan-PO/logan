@@ -141,6 +141,7 @@ export class Settings extends SyncComponent {
         return (
             <React.Fragment>
                 <ViewController
+                    useSafeMargins
                     title="Settings"
                     disableBack
                     navigation={this.props.navigation}

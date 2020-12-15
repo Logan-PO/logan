@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import Editor from '@logan/fe-shared/components/editor';
-import { List, FAB } from 'react-native-paper';
+import { FAB } from 'react-native-paper';
 import ViewController from '../shared/view-controller';
 import RemindersList from '../reminders/reminders-list';
+import ListHeader from '../shared/list-header';
 import AssignmentEditor from './assignment-editor';
 import SubtasksList from './subtasks-list';
 
@@ -51,7 +52,7 @@ class AssignmentDetails extends React.Component {
                             mode={Editor.Mode.Edit}
                             onChange={this.onUpdate}
                         />
-                        <List.Subheader>Subtasks</List.Subheader>
+                        <ListHeader>Subtasks</ListHeader>
                         <SubtasksList
                             route={this.props.route}
                             navigation={this.props.navigation}

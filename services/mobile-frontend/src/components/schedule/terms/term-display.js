@@ -24,7 +24,12 @@ class TermDisplay extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <ViewController title="Term Detail" navigation={this.props.navigation} route={this.props.route}>
+                <ViewController
+                    ignoreMargins
+                    title="Term Detail"
+                    navigation={this.props.navigation}
+                    route={this.props.route}
+                >
                     <ScrollView keyboardDismissMode="on-drag">
                         <TermEditor
                             route={this.props.route}
