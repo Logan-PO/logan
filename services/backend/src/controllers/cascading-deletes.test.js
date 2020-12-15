@@ -76,12 +76,8 @@ describe('Tasks', () => {
         await testUtils.clearTables(['tasks', 'reminders']);
     });
 
-    // Delete assignment
     it('Successful delete', async () => {
-        await controllers.tasks.deleteTask(
-            { params: { tid: basicTask1.tid }, auth: { uid: basicTask1.uid } },
-            { json: jsonMock }
-        );
+        await controllers.tasks.deleteTask({ pathParameters: { tid: basicTask1.tid }, auth: { uid: basicTask1.uid } });
 
         // Check that only the other task's reminder remains
         const { Items: remainingReminders } = await dynamoUtils.scan({ TableName: dynamoUtils.TABLES.REMINDERS });
