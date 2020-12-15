@@ -24,8 +24,6 @@ ThemedPaperProvider.propTypes = {
 const mapStateToProps = state => {
     const props = {};
 
-    console.log(state.login.user);
-
     if (state.login.user && state.login.user.primaryColor) {
         props.primary = MaterialColors[state.login.user.primaryColor];
     }

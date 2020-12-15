@@ -191,13 +191,12 @@ export class Settings extends SyncComponent {
                         />
                         <List.Subheader>Theme</List.Subheader>
                         <ColorPicker
-                            themeablesOnly
+                            primaryOnly
                             label="Primary color"
                             value={getCurrentTheme().colors.primary}
                             onChange={this.updatePrimary}
                         />
                         <ColorPicker
-                            themeablesOnly
                             label="Accent color"
                             value={getCurrentTheme().colors.accent}
                             onChange={this.updateAccent}

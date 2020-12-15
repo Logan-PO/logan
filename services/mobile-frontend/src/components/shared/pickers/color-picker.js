@@ -22,9 +22,23 @@ for (const name of names) {
 }
 
 delete namedColors.white;
+delete namedColors.black;
 
-const themeableColors = { ...namedColors };
-delete themeableColors.black;
+const validPrimaryColors = _.pick(namedColors, [
+    'teal',
+    'green',
+    'lightGreen',
+    'orange',
+    'deepOrange',
+    'red',
+    'pink',
+    'purple',
+    'deepPurple',
+    'indigo',
+    'blue',
+    'lightBlue',
+    'blueGrey',
+]);
 
 export { namedColors as colors };
 
@@ -85,7 +99,7 @@ class ColorPicker extends SyncComponent {
     }
 
     render() {
-        const colorsToUse = this.props.themeablesOnly ? themeableColors : namedColors;
+        const colorsToUse = this.props.primaryOnly ? validPrimaryColors : namedColors;
 
         const namedColor = _.find(_.values(namedColors), ({ color }) => this.props.value === color);
 
@@ -139,7 +153,7 @@ class ColorPicker extends SyncComponent {
 }
 
 ColorPicker.propTypes = {
-    themeablesOnly: PropTypes.bool,
+    primaryOnly: PropTypes.bool,
     label: PropTypes.string,
     value: PropTypes.string,
     onChange: PropTypes.func,

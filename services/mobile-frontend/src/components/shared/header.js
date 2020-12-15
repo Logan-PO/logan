@@ -76,7 +76,7 @@ class Header extends React.Component {
 
     render() {
         return (
-            <Appbar.Header style={{ elevation: 0, shadowOpacity: 0 }}>
+            <Appbar.Header style={{ elevation: 0, shadowOpacity: 0 }} dark>
                 {this.shouldShowBackButton() && <Appbar.BackAction onPress={this.props.navigation.goBack} />}
                 {this.props.leftActionIsFetch ? (
                     <Appbar.Action disabled={this.state.isFetching} icon="sync" onPress={this.fetch} />
