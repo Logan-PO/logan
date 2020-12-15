@@ -6,6 +6,12 @@ const {
 
 const jsonMock = jest.fn();
 
+jest.doMock('../../utils/auth', () => {
+    const mocked = jest.requireActual('../../utils/auth');
+    mocked.handleAuth = () => {};
+    return mocked;
+});
+
 jest.doMock('@logan/aws', () => {
     const mocked = jest.requireActual('@logan/aws');
     mocked.secretUtils.getSecret = async () => ({ web: 'mock-secret' });
@@ -151,10 +157,11 @@ describe('Assignments', () => {
 
     // Delete assignment
     it('Successful delete', async () => {
-        await controllers.assignments.deleteAssignment(
-            { params: { aid: basicAssignment1.aid }, auth: { uid: basicAssignment1.uid } },
-            { json: jsonMock }
-        );
+        await controllers.assignments.deleteAssignment({
+            pathParameters: { aid: basicAssignment1.aid },
+            auth: { uid: basicAssignment1.uid },
+        });
+
         // Check that only the other assignment's task remains
         const { Items: remainingAssignments } = await dynamoUtils.scan({ TableName: dynamoUtils.TABLES.ASSIGNMENTS });
         expect(remainingAssignments).toHaveLength(1);
