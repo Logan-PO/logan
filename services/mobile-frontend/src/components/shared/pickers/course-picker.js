@@ -8,6 +8,8 @@ import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ViewController from '../view-controller';
 import ListHeader from '../list-header';
+import ListItem from '../list-item';
+import Typography from '../typography';
 
 class CoursePicker extends React.Component {
     constructor(props) {
@@ -33,7 +35,7 @@ class CoursePicker extends React.Component {
     iconToDisplay(course) {
         const color = this.state.selectedCid === course.cid ? course.color : 'rgba(0, 0, 0, 0)';
 
-        return <Icon name="check" style={{ alignSelf: 'center' }} size={18} color={color} />;
+        return <Icon name="check" style={{ alignSelf: 'center', marginRight: 12 }} size={18} color={color} />;
     }
 
     generateItems() {
@@ -46,11 +48,15 @@ class CoursePicker extends React.Component {
         const sections = [];
         sections.push(
             <List.Section key="none">
-                <List.Item
+                <ListItem
                     key="none"
-                    title="None"
+                    leftContent={
+                        <View style={{ flexDirection: 'row' }}>
+                            {this.iconToDisplay({ color: 'black' })}
+                            <Typography>None</Typography>
+                        </View>
+                    }
                     onPress={this.selectCourse.bind(this, undefined)}
-                    left={style => this.iconToDisplay({ color: 'black' }, style)}
                 />
             </List.Section>
         );
@@ -59,16 +65,17 @@ class CoursePicker extends React.Component {
             const items = [];
 
             for (const course of term.courses) {
-                const itemStyle = {
-                    color: course.color,
-                };
-
                 items.push(
-                    <List.Item
+                    <ListItem
                         key={course.cid}
-                        title={course.nickname || course.title}
-                        titleStyle={itemStyle}
-                        left={style => this.iconToDisplay(course, style)}
+                        leftContent={
+                            <View style={{ flexDirection: 'row' }}>
+                                {this.iconToDisplay(course)}
+                                <Typography style={{ fontWeight: 'bold' }} color={course.color}>
+                                    {course.nickname || course.title}
+                                </Typography>
+                            </View>
+                        }
                         onPress={this.selectCourse.bind(this, course.cid)}
                     />
                 );
