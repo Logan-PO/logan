@@ -86,6 +86,81 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+  GetTaskFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetTask
+      Handler: services/backend/src/controllers/tasks-controller.getTask
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /tasks/{tid}
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  GetTasksFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetTasks
+      Handler: services/backend/src/controllers/tasks-controller.getTasks
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /tasks
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  CreateTaskFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateTask
+      Handler: services/backend/src/controllers/tasks-controller.createTask
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /tasks
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+  UpdateTaskFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateTask
+      Handler: services/backend/src/controllers/tasks-controller.updateTask
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /tasks/{tid}
+            Method: put
+            RestApiId:
+              Ref: ApiGateway
+  DeleteTaskFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: services/backend/src/controllers/tasks-controller.deleteTask
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      FunctionName: DeleteTask
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /tasks/{tid}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
   GetCourseFn:
     Type: AWS::Serverless::Function
     Properties:
