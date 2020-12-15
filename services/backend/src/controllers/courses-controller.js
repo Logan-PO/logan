@@ -4,6 +4,7 @@ const { v4: uuid } = require('uuid');
 const Promise = require('bluebird');
 const requestValidator = require('../../utils/request-validator');
 const { NotFoundError, ValidationError } = require('../../utils/errors');
+const { makeHandler } = require('../../utils/wrap-handler');
 const assignmentsController = require('./assignments-controller');
 const tasksController = require('./tasks-controller');
 
@@ -27,114 +28,129 @@ function isValidHexString(str) {
     return /^#(?:[0-9a-fA-F]{3}){1,2}$/.test(str);
 }
 
-async function getCourse(req, res) {
-    const requestedCid = req.params.cid;
+const getCourse = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedCid = event.path.cid;
 
-    const dbResponse = await dynamoUtils.get({
-        TableName: dynamoUtils.TABLES.COURSES,
-        Key: { cid: requestedCid },
-    });
+        const dbResponse = await dynamoUtils.get({
+            TableName: dynamoUtils.TABLES.COURSES,
+            Key: { cid: requestedCid },
+        });
 
-    if (dbResponse.Item) {
-        res.json(fromDbFormat(dbResponse.Item));
-    } else {
-        throw new NotFoundError('Course does not exist');
-    }
-}
+        if (dbResponse.Item) {
+            return fromDbFormat(dbResponse.Item);
+        } else {
+            throw new NotFoundError('Course does not exist');
+        }
+    },
+});
 
-async function getCourses(req, res) {
-    const requestedBy = req.auth.uid;
+const getCourses = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedBy = event.auth.uid;
 
-    const dbResponse = await dynamoUtils.scan({
-        TableName: dynamoUtils.TABLES.COURSES,
-        FilterExpression: 'uid = :uid',
-        ExpressionAttributeValues: { ':uid': requestedBy },
-    });
+        const dbResponse = await dynamoUtils.scan({
+            TableName: dynamoUtils.TABLES.COURSES,
+            FilterExpression: 'uid = :uid',
+            ExpressionAttributeValues: { ':uid': requestedBy },
+        });
 
-    res.json(dbResponse.Items.map(fromDbFormat));
-}
+        return dbResponse.Items.map(fromDbFormat);
+    },
+});
 
-async function createCourse(req, res) {
-    const cid = uuid();
+const createCourse = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const cid = uuid();
 
-    const course = _.merge({}, req.body, { cid }, _.pick(req.auth, ['uid']));
+        const course = _.merge({}, event.body, { cid }, _.pick(event.auth, ['uid']));
 
-    requestValidator.requireBodyParams(req, ['tid', 'title', 'color']);
+        requestValidator.requireBodyParams(event, ['tid', 'title', 'color']);
 
-    if (!isValidHexString(course.color)) throw new ValidationError(`${course.color} is not a valid hex string`);
+        if (!isValidHexString(course.color)) throw new ValidationError(`${course.color} is not a valid hex string`);
 
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.COURSES,
-        Item: toDbFormat(course),
-    });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.COURSES,
+            Item: toDbFormat(course),
+        });
 
-    res.json(course);
-}
+        return course;
+    },
+});
 
-async function updateCourse(req, res) {
-    const course = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
+const updateCourse = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const course = _.merge({}, event.body, event.path, _.pick(event.auth, ['uid']));
 
-    requestValidator.requireBodyParams(req, ['tid', 'title', 'color']);
+        requestValidator.requireBodyParams(event, ['tid', 'title', 'color']);
 
-    if (!isValidHexString(course.color)) throw new ValidationError(`${course.color} is not a valid hex string`);
+        if (!isValidHexString(course.color)) throw new ValidationError(`${course.color} is not a valid hex string`);
 
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.COURSES,
-        Item: toDbFormat(course),
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
-        ConditionExpression: 'uid = :uid',
-    });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.COURSES,
+            Item: toDbFormat(course),
+            ExpressionAttributeValues: { ':uid': event.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        });
 
-    res.json(course);
-}
+        return course;
+    },
+});
 
-async function deleteCourse(req, res) {
-    const requestedCid = req.params.cid;
+const deleteCourse = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedCid = event.path.cid;
 
-    await dynamoUtils.delete({
-        TableName: dynamoUtils.TABLES.COURSES,
-        Key: { cid: requestedCid },
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
-        ConditionExpression: 'uid = :uid',
-    });
+        await dynamoUtils.delete({
+            TableName: dynamoUtils.TABLES.COURSES,
+            Key: { cid: requestedCid },
+            ExpressionAttributeValues: { ':uid': event.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        });
 
-    // Delete sub-sections
-    const { Items: sections } = await dynamoUtils.scan({
-        TableName: dynamoUtils.TABLES.SECTIONS,
-        ExpressionAttributeValues: { ':cid': requestedCid },
-        FilterExpression: ':cid = cid',
-        AutoPaginate: true,
-    });
+        // Delete sub-sections
+        const { Items: sections } = await dynamoUtils.scan({
+            TableName: dynamoUtils.TABLES.SECTIONS,
+            ExpressionAttributeValues: { ':cid': requestedCid },
+            FilterExpression: ':cid = cid',
+            AutoPaginate: true,
+        });
 
-    const sectionDeletes = dynamoUtils.makeDeleteRequests(sections, 'sid');
-    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.SECTIONS]: sectionDeletes });
+        const sectionDeletes = dynamoUtils.makeDeleteRequests(sections, 'sid');
+        await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.SECTIONS]: sectionDeletes });
 
-    // Delete sub-assignments
-    const { Items: assignments } = await dynamoUtils.scan({
-        TableName: dynamoUtils.TABLES.ASSIGNMENTS,
-        ExpressionAttributeValues: { ':cid': requestedCid },
-        FilterExpression: ':cid = cid',
-        AutoPaginate: true,
-    });
+        // Delete sub-assignments
+        const { Items: assignments } = await dynamoUtils.scan({
+            TableName: dynamoUtils.TABLES.ASSIGNMENTS,
+            ExpressionAttributeValues: { ':cid': requestedCid },
+            FilterExpression: ':cid = cid',
+            AutoPaginate: true,
+        });
 
-    const assignmentDeletes = dynamoUtils.makeDeleteRequests(assignments, 'aid');
-    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.ASSIGNMENTS]: assignmentDeletes });
+        const assignmentDeletes = dynamoUtils.makeDeleteRequests(assignments, 'aid');
+        await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.ASSIGNMENTS]: assignmentDeletes });
 
-    // Delete sub-tasks
-    const { Items: tasks } = await dynamoUtils.scan({
-        TableName: dynamoUtils.TABLES.TASKS,
-        ExpressionAttributeValues: { ':cid': requestedCid },
-        FilterExpression: ':cid = cid',
-        AutoPaginate: true,
-    });
+        // Delete sub-tasks
+        const { Items: tasks } = await dynamoUtils.scan({
+            TableName: dynamoUtils.TABLES.TASKS,
+            ExpressionAttributeValues: { ':cid': requestedCid },
+            FilterExpression: ':cid = cid',
+            AutoPaginate: true,
+        });
 
-    const taskDeletes = dynamoUtils.makeDeleteRequests(tasks, 'tid');
-    await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.TASKS]: taskDeletes });
+        const taskDeletes = dynamoUtils.makeDeleteRequests(tasks, 'tid');
+        await dynamoUtils.batchWrite({ [dynamoUtils.TABLES.TASKS]: taskDeletes });
 
-    await handleCascadingDeletes(requestedCid);
+        await handleCascadingDeletes(requestedCid);
 
-    res.json({ success: true });
-}
+        return { success: true };
+    },
+});
 
 async function handleCascadingDeletes(cid) {
     // Delete sub-sections
