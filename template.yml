@@ -86,3 +86,78 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+  GetCourseFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetCourse
+      Handler: services/backend/src/controllers/courses-controller.getCourse
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /courses/{cid}
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  GetCoursesFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetCourses
+      Handler: services/backend/src/controllers/courses-controller.getCourses
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /courses
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  CreateCourseFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateCourse
+      Handler: services/backend/src/controllers/courses-controller.createCourse
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /courses
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+  UpdateCourseFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateCourse
+      Handler: services/backend/src/controllers/courses-controller.updateCourse
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /courses/{cid}
+            Method: put
+            RestApiId:
+              Ref: ApiGateway
+  DeleteCourseFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: services/backend/src/controllers/courses-controller.deleteCourse
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      FunctionName: DeleteCourse
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /courses/{cid}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
