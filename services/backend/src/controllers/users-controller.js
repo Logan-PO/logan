@@ -9,6 +9,8 @@ function fromDbFormat(db) {
     return {
         ..._.pick(db, ['uid', 'name', 'email', 'tokens']),
         username: db.uname,
+        primaryColor: db.pc,
+        accentColor: db.ac,
     };
 }
 
@@ -16,16 +18,17 @@ function toDbFormat(user) {
     return {
         ..._.pick(user, ['uid', 'name', 'email', 'tokens']),
         uname: user.username,
+        pc: user.primaryColor,
+        ac: user.accentColor,
     };
 }
 
 async function getUser(req, res) {
-    const requestedUid = req.params.uid;
+    let requestedUid = req.params.uid;
 
     // If you request yourself, just return without querying
-    if (requestedUid === 'me' || requestedUid === req.auth.uid) {
-        res.json(_.pick(req.auth, ['uid', 'name', 'email', 'username']));
-        return;
+    if (requestedUid === 'me') {
+        requestedUid = req.auth.uid;
     }
 
     const dbResponse = await dynamoUtils.get({

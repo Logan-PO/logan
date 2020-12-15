@@ -24,12 +24,14 @@ ThemedPaperProvider.propTypes = {
 const mapStateToProps = state => {
     const props = {};
 
-    if (state.settings.primary) {
-        props.primary = MaterialColors[state.settings.primary];
+    console.log(state.login.user);
+
+    if (state.login.user && state.login.user.primaryColor) {
+        props.primary = MaterialColors[state.login.user.primaryColor];
     }
 
-    if (state.settings.accent) {
-        props.accent = MaterialColors[state.settings.accent];
+    if (state.login.user && state.login.user.accentColor) {
+        props.accent = MaterialColors[state.login.user.accentColor];
     }
 
     return props;

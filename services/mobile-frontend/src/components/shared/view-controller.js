@@ -29,12 +29,11 @@ class ViewController extends React.Component {
                         ])}
                     />
                 )}
-                <View style={{ backgroundColor: 'white', flex: 1 }}>
+                <View style={{ flex: 1 }}>
                     <SafeAreaInsetsContext.Consumer>
                         {insets => (
                             <View
                                 style={{
-                                    backgroundColor: 'white',
                                     flex: 1,
                                     marginLeft: this.props.useSafeMargins ? insets.left : 0,
                                     marginRight: this.props.useSafeMargins ? insets.right : 0,

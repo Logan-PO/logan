@@ -2,10 +2,9 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fetchSelf, setLoginStage, LOGIN_STAGE } from '@logan/fe-shared/store/login';
+import { setLoginStage, LOGIN_STAGE, updateUser, deleteUser } from '@logan/fe-shared/store/login';
 import { Appbar, Button, Dialog, Paragraph, List, Portal, TextInput, Colors } from 'react-native-paper';
 import { ScrollView, View, ActivityIndicator } from 'react-native';
-import { deleteUser, updateUser, selectPrimaryColor, selectAccentColor } from '@logan/fe-shared/store/settings';
 import SyncComponent from '@logan/fe-shared/components/sync-component';
 import api from '@logan/fe-shared/utils/api';
 import ViewController from '../shared/view-controller';
@@ -13,6 +12,7 @@ import MobileLoginButton from '../home/mobile-login-button';
 import Typography, { typographyStyles } from '../shared/typography';
 import ListItem from '../shared/list-item';
 import ColorPicker, { nameForColor } from '../shared/pickers/color-picker';
+import { getCurrentTheme } from '../../globals/theme';
 
 export class Settings extends SyncComponent {
     constructor(props) {
@@ -50,8 +50,6 @@ export class Settings extends SyncComponent {
         this.setState({ user });
 
         await this.props.updateUser(user);
-
-        await this.props.fetchSelf();
 
         this.setState({ isUpdatingUser: false });
     }
@@ -128,13 +126,18 @@ export class Settings extends SyncComponent {
         this.logout();
     }
 
-    updatePrimary(hex) {
-        console.log(nameForColor(hex));
-        this.props.selectPrimaryColor(nameForColor(hex));
+    async updatePrimary(hex) {
+        const user = { ...this.state.user };
+        user.primaryColor = nameForColor(hex);
+        this.setState({ user });
+        await this.props.updateUser(user);
     }
 
-    updateAccent(hex) {
-        this.props.selectAccentColor(nameForColor(hex));
+    async updateAccent(hex) {
+        const user = { ...this.state.user };
+        user.accentColor = nameForColor(hex);
+        this.setState({ user });
+        await this.props.updateUser(user);
     }
 
     render() {
@@ -190,13 +193,13 @@ export class Settings extends SyncComponent {
                         <ColorPicker
                             themeablesOnly
                             label="Primary color"
-                            value={Colors[`${this.props.primary}500`]}
+                            value={getCurrentTheme().colors.primary}
                             onChange={this.updatePrimary}
                         />
                         <ColorPicker
                             themeablesOnly
                             label="Accent color"
-                            value={Colors[`${this.props.accent}500`]}
+                            value={getCurrentTheme().colors.accent}
                             onChange={this.updateAccent}
                         />
                         <List.Subheader>Other</List.Subheader>
@@ -293,25 +296,19 @@ Settings.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
     updateUser: PropTypes.func,
-    fetchSelf: PropTypes.func,
     selectPrimaryColor: PropTypes.func,
     selectAccentColor: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
-    primary: state.settings.primary,
-    accent: state.settings.accent,
     loginStage: state.login.currentStage,
     user: state.login.user,
 });
 
 const mapDispatchToProps = {
-    deleteUser,
     setLoginStage,
     updateUser,
-    fetchSelf,
-    selectPrimaryColor,
-    selectAccentColor,
+    deleteUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);
