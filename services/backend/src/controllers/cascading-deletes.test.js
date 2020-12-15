@@ -329,7 +329,7 @@ describe('Courses', () => {
 
     // Delete one of the courses
     it('Successful delete', async () => {
-        await controllers.courses.deleteCourse({ pathParameters: basicCourse1, auth: { uid: 'usr123' } });
+        await controllers.courses.deleteCourse({ pathParameters: { cid: basicCourse1.cid }, auth: { uid: 'usr123' } });
 
         // Check that all the entities for that course are gone
         const { Items: remainingCourses, Count: courseCount } = await dynamoUtils.scan({ TableName: 'courses' });
