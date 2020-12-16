@@ -7,6 +7,7 @@ const {
     },
 } = require('@logan/core');
 const { v4: uuid } = require('uuid');
+const { makeHandler } = require('../../utils/wrap-handler');
 const requestValidator = require('../../utils/request-validator');
 const { ValidationError } = require('../../utils/errors');
 
@@ -62,62 +63,74 @@ function validateTimestamp(ts) {
     }
 }
 
-async function getReminders(req, res) {
-    const requestedBy = req.auth.uid;
+const getReminders = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedBy = event.auth.uid;
 
-    const dbResponse = await dynamoUtils.scan({
-        TableName: dynamoUtils.TABLES.REMINDERS,
-        FilterExpression: 'uid = :uid',
-        ExpressionAttributeValues: { ':uid': requestedBy },
-    });
+        const dbResponse = await dynamoUtils.scan({
+            TableName: dynamoUtils.TABLES.REMINDERS,
+            FilterExpression: 'uid = :uid',
+            ExpressionAttributeValues: { ':uid': requestedBy },
+        });
 
-    res.json(dbResponse.Items.map(fromDbFormat));
-}
+        return dbResponse.Items.map(fromDbFormat);
+    },
+});
 
-async function createReminder(req, res) {
-    const rid = uuid();
+const createReminder = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const rid = uuid();
 
-    requestValidator.requireBodyParams(req, ['eid', 'entityType', 'timestamp', 'message']);
-    validateTimestamp(req.body.timestamp);
+        requestValidator.requireBodyParams(event, ['eid', 'entityType', 'timestamp', 'message']);
+        validateTimestamp(event.body.timestamp);
 
-    const reminder = _.merge({}, req.body, { rid }, _.pick(req.auth, ['uid']));
+        const reminder = _.merge({}, event.body, { rid }, _.pick(event.auth, ['uid']));
 
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.REMINDERS,
-        Item: toDbFormat(reminder),
-    });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.REMINDERS,
+            Item: toDbFormat(reminder),
+        });
 
-    res.json(reminder);
-}
+        return reminder;
+    },
+});
 
-async function updateReminder(req, res) {
-    requestValidator.requireBodyParams(req, ['rid', 'eid', 'entityType', 'timestamp', 'message']);
+const updateReminder = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        requestValidator.requireBodyParams(event, ['rid', 'eid', 'entityType', 'timestamp', 'message']);
 
-    const reminder = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
-    validateTimestamp(reminder.timestamp);
+        const reminder = _.merge({}, event.body, event.pathParameters, _.pick(event.auth, ['uid']));
+        validateTimestamp(reminder.timestamp);
 
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.REMINDERS,
-        Item: toDbFormat(reminder),
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
-        ConditionExpression: 'uid = :uid',
-    });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.REMINDERS,
+            Item: toDbFormat(reminder),
+            ExpressionAttributeValues: { ':uid': event.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        });
 
-    res.json(reminder);
-}
+        return reminder;
+    },
+});
 
-async function deleteReminder(req, res) {
-    const { rid } = req.params;
+const deleteReminder = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const { rid } = event.pathParameters;
 
-    await dynamoUtils.delete({
-        TableName: dynamoUtils.TABLES.REMINDERS,
-        Key: { rid },
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
-        ConditionExpression: 'uid = :uid',
-    });
+        await dynamoUtils.delete({
+            TableName: dynamoUtils.TABLES.REMINDERS,
+            Key: { rid },
+            ExpressionAttributeValues: { ':uid': event.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        });
 
-    res.json({ success: true });
-}
+        return { success: true };
+    },
+});
 
 async function remindersForEntity(type, eid) {
     const { Items: dbReminders } = await dynamoUtils.scan({
