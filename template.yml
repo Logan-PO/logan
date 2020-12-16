@@ -236,3 +236,63 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+  GetUserFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetUser
+      Handler: services/backend/src/controllers/userss-controller.getUser
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /users/{uid}
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  CreateUserFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateUser
+      Handler: services/backend/src/controllers/users-controller.createUser
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /users
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+  UpdateUserFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateUser
+      Handler: services/backend/src/controllers/users-controller.updateUser
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /users/{uid}
+            Method: put
+            RestApiId:
+              Ref: ApiGateway
+  DeleteUserFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: services/backend/src/controllers/users-controller.deleteUser
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      FunctionName: DeleteUser
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /users/{uid}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
