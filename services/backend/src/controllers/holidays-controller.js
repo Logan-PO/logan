@@ -9,6 +9,7 @@ const {
 const { v4: uuid } = require('uuid');
 const requestValidator = require('../../utils/request-validator');
 const { NotFoundError } = require('../../utils/errors');
+const { makeHandler } = require('../../utils/wrap-handler');
 
 function fromDbFormat(db) {
     return {
@@ -26,75 +27,90 @@ function toDbFormat(holiday) {
     };
 }
 
-async function getHoliday(req, res) {
-    const requestedHid = req.params.hid;
+const getHoliday = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedHid = event.pathParameters.hid;
 
-    const dbResponse = await dynamoUtils.get({
-        TableName: dynamoUtils.TABLES.HOLIDAYS,
-        Key: { hid: requestedHid },
-    });
+        const dbResponse = await dynamoUtils.get({
+            TableName: dynamoUtils.TABLES.HOLIDAYS,
+            Key: { hid: requestedHid },
+        });
 
-    if (dbResponse.Item) {
-        res.json(fromDbFormat(dbResponse.Item));
-    } else {
-        throw new NotFoundError('Holiday does not exist');
-    }
-}
+        if (dbResponse.Item) {
+            return fromDbFormat(dbResponse.Item);
+        } else {
+            throw new NotFoundError('Holiday does not exist');
+        }
+    },
+});
 
-async function getHolidays(req, res) {
-    const requestedBy = req.auth.uid;
+const getHolidays = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedBy = event.auth.uid;
 
-    const dbResponse = await dynamoUtils.scan({
-        TableName: dynamoUtils.TABLES.HOLIDAYS,
-        FilterExpression: 'uid = :uid',
-        ExpressionAttributeValues: { ':uid': requestedBy },
-    });
+        const dbResponse = await dynamoUtils.scan({
+            TableName: dynamoUtils.TABLES.HOLIDAYS,
+            FilterExpression: 'uid = :uid',
+            ExpressionAttributeValues: { ':uid': requestedBy },
+        });
 
-    res.json(dbResponse.Items.map(fromDbFormat));
-}
+        return dbResponse.Items.map(fromDbFormat);
+    },
+});
 
-async function createHoliday(req, res) {
-    const hid = uuid();
+const createHoliday = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const hid = uuid();
 
-    const holiday = _.merge({}, req.body, { hid }, _.pick(req.auth, ['uid']));
+        const holiday = _.merge({}, event.body, { hid }, _.pick(event.auth, ['uid']));
 
-    requestValidator.requireBodyParams(req, ['tid', 'title', 'startDate', 'endDate']);
+        requestValidator.requireBodyParams(event, ['tid', 'title', 'startDate', 'endDate']);
 
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.HOLIDAYS,
-        Item: toDbFormat(holiday),
-    });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.HOLIDAYS,
+            Item: toDbFormat(holiday),
+        });
 
-    res.json(holiday);
-}
+        return holiday;
+    },
+});
 
-async function updateHoliday(req, res) {
-    const holiday = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
+const updateHoliday = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const holiday = _.merge({}, event.body, event.pathParameters, _.pick(event.auth, ['uid']));
 
-    requestValidator.requireBodyParams(req, ['tid', 'title', 'startDate', 'endDate']);
+        requestValidator.requireBodyParams(event, ['tid', 'title', 'startDate', 'endDate']);
 
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.HOLIDAYS,
-        Item: toDbFormat(holiday),
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
-        ConditionExpression: 'uid = :uid',
-    });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.HOLIDAYS,
+            Item: toDbFormat(holiday),
+            ExpressionAttributeValues: { ':uid': event.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        });
 
-    res.json(holiday);
-}
+        return holiday;
+    },
+});
 
-async function deleteHoliday(req, res) {
-    const requestedHid = req.params.hid;
+const deleteHoliday = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedHid = event.pathParameters.hid;
 
-    await dynamoUtils.delete({
-        TableName: dynamoUtils.TABLES.HOLIDAYS,
-        Key: { hid: requestedHid },
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
-        ConditionExpression: 'uid = :uid',
-    });
+        await dynamoUtils.delete({
+            TableName: dynamoUtils.TABLES.HOLIDAYS,
+            Key: { hid: requestedHid },
+            ExpressionAttributeValues: { ':uid': event.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        });
 
-    res.json({ success: true });
-}
+        return { success: true };
+    },
+});
 
 module.exports = {
     __test_only__: { fromDbFormat, toDbFormat },
