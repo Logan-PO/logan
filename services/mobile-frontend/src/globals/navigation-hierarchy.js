@@ -50,35 +50,42 @@ const routes = [
     },
 ];
 
+const InternalTabBar = () => {
+    const theme = getCurrentTheme();
+
+    return (
+        <BottomTabs.Navigator
+            initialRouteName="Overview"
+            activeColor={theme.colors.primary}
+            barStyle={{ backgroundColor: 'white' }}
+            screenOptions={({ route }) => ({
+                // eslint-disable-next-line react/prop-types,react/display-name
+                tabBarIcon: ({ color }) => {
+                    const iconName = _.find(routes, navigationRoute => navigationRoute.name === route.name).icon;
+                    return <Icon name={iconName} size={22} color={color} />;
+                },
+            })}
+        >
+            {routes.map(({ name, component }) => (
+                <BottomTabs.Screen key={name} name={name} component={component} />
+            ))}
+        </BottomTabs.Navigator>
+    );
+};
+
+const mapStateToTabs = state => ({
+    user: state.login.user,
+});
+
+const TabBar = connect(mapStateToTabs, null)(InternalTabBar);
+
 class NavigationHierarchy extends React.Component {
-    tabs() {
-        const theme = getCurrentTheme();
-
-        return (
-            <BottomTabs.Navigator
-                initialRouteName="Overview"
-                activeColor={theme.colors.primary}
-                barStyle={{ backgroundColor: 'white' }}
-                screenOptions={({ route }) => ({
-                    tabBarIcon: ({ color }) => {
-                        const iconName = _.find(routes, navigationRoute => navigationRoute.name === route.name).icon;
-                        return <Icon name={iconName} size={22} color={color} />;
-                    },
-                })}
-            >
-                {routes.map(({ name, component }) => (
-                    <BottomTabs.Screen key={name} name={name} component={component} />
-                ))}
-            </BottomTabs.Navigator>
-        );
-    }
-
     render() {
         return (
             <RootStack.Navigator mode="modal" headerMode="screen" screenOptions={{ headerShown: false }}>
                 {this.props.loginStage === LOGIN_STAGE.DONE ? (
                     <React.Fragment>
-                        <RootStack.Screen name="Root" component={this.tabs} />
+                        <RootStack.Screen name="Root" component={TabBar} />
                         <RootStack.Screen name="New Task" component={NewTaskModalStack} />
                         <RootStack.Screen name="New Assignment" component={NewAssignmentModalStack} />
                         <RootStack.Screen name="New Term" component={NewTermModal} />
