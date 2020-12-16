@@ -7,6 +7,42 @@ const { v4: uuid } = require('uuid');
 const requestValidator = require('../../utils/request-validator');
 const { NotFoundError } = require('../../utils/errors');
 
+/**
+ * @typedef {object} DbSection
+ * @property {string} uid User ID
+ * @property {string} sid Section ID
+ * @property {string} cid Course ID
+ * @property {string} title Title
+ * @property {string} sd Start date
+ * @property {string} ed End date
+ * @property {string} st Start time
+ * @property {string} et End time
+ * @property {number[]} dow Days of week
+ * @property {number} wr Weekly repeat
+ * @property {string} [loc] Location
+ * @property {string} [inst] Instructor
+ */
+
+/**
+ * @typedef {object} Section
+ * @property {string} uid User ID
+ * @property {string} sid Section ID
+ * @property {string} cid Course ID
+ * @property {string} title Title
+ * @property {string} startDate Start date
+ * @property {string} endDate End date
+ * @property {string} startTime Start time
+ * @property {string} endTime End time
+ * @property {number[]} daysOfWeek Days of week
+ * @property {number} weeklyRepeat Weekly repeat
+ * @property {string} [location] Location
+ * @property {string} [instructor] Instructor
+ */
+
+/**
+ * @param {DbSection} db
+ * @return {Section}
+ */
 function fromDbFormat(db) {
     return {
         ..._.pick(db, ['uid', 'cid', 'sid', 'title']),
@@ -21,6 +57,10 @@ function fromDbFormat(db) {
     };
 }
 
+/**
+ * @param {Section} section
+ * @return {DbSection}
+ */
 function toDbFormat(section) {
     return {
         ..._.pick(section, ['uid', 'cid', 'sid', 'title']),
