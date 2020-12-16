@@ -236,3 +236,63 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+  GetRemindersFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetReminders
+      Handler: services/backend/src/controllers/reminders-controller.getReminders
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /reminders
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  CreateReminderFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateReminder
+      Handler: services/backend/src/controllers/reminders-controller.createReminder
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /reminders
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+  UpdateReminderFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateReminder
+      Handler: services/backend/src/controllers/reminders-controller.updateReminder
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /reminders/{rid}
+            Method: put
+            RestApiId:
+              Ref: ApiGateway
+  DeleteReminderFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: services/backend/src/controllers/reminders-controller.deleteReminder
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      FunctionName: DeleteReminder
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /reminders/{rid}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
