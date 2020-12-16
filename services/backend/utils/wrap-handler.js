@@ -21,6 +21,10 @@ const { LoganError } = require('./errors');
  * @return {function(*=): Promise<LambdaResponse>}
  */
 function makeHandler({ config, handler }) {
+    const headers = {
+        'Access-Control-Allow-Origin': '*',
+    };
+
     return async event => {
         try {
             await handleAuth(event, config.authRequired, config.unauthedAction);
@@ -30,11 +34,13 @@ function makeHandler({ config, handler }) {
                 return {
                     statusCode: 200,
                     body: JSON.stringify(response),
+                    headers,
                 };
             } else {
                 return {
                     statusCode: 200,
                     body: `${response}`,
+                    headers,
                 };
             }
         } catch (e) {
@@ -47,6 +53,7 @@ function makeHandler({ config, handler }) {
                         type: e.constructor.name,
                         error: e.message,
                     }),
+                    headers,
                 };
             } else {
                 return {
@@ -55,6 +62,7 @@ function makeHandler({ config, handler }) {
                         error: e.message,
                         stack: e.stack,
                     }),
+                    headers,
                 };
             }
         }
