@@ -325,3 +325,78 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+  GetTermFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetHoliday
+      Handler: services/backend/src/controllers/terms-controller.getTerm
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /terms/{tid}
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  GetTermsFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetHolidays
+      Handler: services/backend/src/controllers/terms-controller.getTerms
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /terms
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  CreateTermFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateTerm
+      Handler: services/backend/src/controllers/terms-controller.createTerm
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /terms
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+  UpdateTermFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateTerm
+      Handler: services/backend/src/controllers/terms-controller.updateTerm
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /terms/{tid}
+            Method: put
+            RestApiId:
+              Ref: ApiGateway
+  DeleteTermFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: services/backend/src/controllers/terms-controller.deleteTerm
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      FunctionName: DeleteHoliday
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /terms/{tid}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
