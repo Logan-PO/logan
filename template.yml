@@ -236,3 +236,78 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+  GetHolidayFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetHoliday
+      Handler: services/backend/src/controllers/holidays-controller.getHoliday
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /holidays/{hid}
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  GetHolidaysFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetHolidays
+      Handler: services/backend/src/controllers/holidays-controller.getHolidays
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /holidays
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  CreateHolidayFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateHoliday
+      Handler: services/backend/src/controllers/holidays-controller.createHoliday
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /holidays
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+  UpdateHolidayFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateHoliday
+      Handler: services/backend/src/controllers/holidays-controller.updateHoliday
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /holidays/{hid}
+            Method: put
+            RestApiId:
+              Ref: ApiGateway
+  DeleteHolidayFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: services/backend/src/controllers/holidays-controller.deleteHoliday
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      FunctionName: DeleteHoliday
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /holidays/{hid}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
