@@ -1,12 +1,11 @@
 const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const { OAuth2Client } = require('google-auth-library');
+const { makeHandler } = require('../../utils/wrap-handler');
 const auth = require('../../utils/auth');
 const requestValidator = require('../../utils/request-validator');
 
-async function verifyIdToken(req, res) {
-    // Verify the ID token from the request body
-    const { idToken, clientType = 'web' } = requestValidator.requireBodyParams(req, ['idToken', 'clientType']);
+async function verifyIdToken(idToken, clientType = 'web') {
     const { clientId } = await auth.getClientCreds(clientType);
 
     const client = new OAuth2Client(clientId);
@@ -26,22 +25,31 @@ async function verifyIdToken(req, res) {
 
     if (_.isEmpty(response.Items)) {
         // User does not exist
-        res.json({
+        return {
             exists: false,
             meta: { name, email },
             token: await auth.generateBearerToken({ action: auth.UNAUTHORIZED_ACTIONS.CREATE_USER }),
-        });
+        };
     } else {
         // User exists
         const user = _.first(response.Items);
-        res.json({
+        return {
             exists: true,
             user,
             token: await auth.generateBearerToken({ uid: user.uid }),
-        });
+        };
     }
 }
 
+const verifyIdTokenHandler = makeHandler({
+    config: { authRequired: false },
+    handler: async event => {
+        const { idToken, clientType } = requestValidator.requireBodyParams(event, ['idToken', 'clientType']);
+        return verifyIdToken(idToken, clientType);
+    },
+});
+
 module.exports = {
     verifyIdToken,
+    verifyIdTokenHandler,
 };

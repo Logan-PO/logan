@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const { secretUtils, dynamoUtils } = require('@logan/aws');
 const jwt = require('jsonwebtoken');
-const usersController = require('../src/controllers/users-controller');
 const { AuthorizationError, PermissionDeniedError } = require('./errors');
 
 const UNAUTHORIZED_ACTIONS = {
@@ -63,7 +62,7 @@ async function handleAuth(event, authRequired = false, unauthedAction) {
         if (response.Item) {
             event.auth = {
                 authorized: true,
-                ...usersController.__test_only__.fromDbFormat(response.Item),
+                ..._.pick(response.Item, ['uid']),
             };
 
             return;

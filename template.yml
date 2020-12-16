@@ -25,6 +25,36 @@ Resources:
         AllowOrigin: "'*'"
       EndpointConfiguration:
         Type: EDGE
+  PingFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Ping
+      Handler: services/backend/src/controllers/ping.ping
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /ping
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  VerifyTokenFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: VerifyIdToken
+      Handler: services/backend/src/controllers/verify-id-token.verifyIdTokenHandler
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+        Runtime: nodejs12.x
+        Events:
+          ApiEvent:
+            Type: Api
+            Properties:
+              Path: /auth/verify
+              Method: post
+              RestApiId:
+                Ref: ApiGateway
   GetAssignmentFn:
     Type: AWS::Serverless::Function
     Properties:
@@ -250,6 +280,66 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+  GetUserFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetUser
+      Handler: services/backend/src/controllers/users-controller.getUser
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /users/{uid}
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  CreateUserFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateUser
+      Handler: services/backend/src/controllers/users-controller.createUser
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /users
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+  UpdateUserFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateUser
+      Handler: services/backend/src/controllers/users-controller.updateUser
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /users/{uid}
+            Method: put
+            RestApiId:
+              Ref: ApiGateway
+  DeleteUserFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: services/backend/src/controllers/users-controller.deleteUser
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      FunctionName: DeleteUser
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /users/{uid}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
   GetHolidayFn:
     Type: AWS::Serverless::Function
     Properties:
@@ -322,6 +412,142 @@ Resources:
           Type: Api
           Properties:
             Path: /holidays/{hid}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
+  GetTermFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetHoliday
+      Handler: services/backend/src/controllers/terms-controller.getTerm
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /terms/{tid}
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  GetTermsFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetHolidays
+      Handler: services/backend/src/controllers/terms-controller.getTerms
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /terms
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  CreateTermFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateTerm
+      Handler: services/backend/src/controllers/terms-controller.createTerm
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /terms
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+  UpdateTermFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateTerm
+      Handler: services/backend/src/controllers/terms-controller.updateTerm
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /terms/{tid}
+            Method: put
+            RestApiId:
+              Ref: ApiGateway
+  DeleteTermFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: services/backend/src/controllers/terms-controller.deleteTerm
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      FunctionName: DeleteHoliday
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /terms/{tid}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
+
+  GetRemindersFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetReminders
+      Handler: services/backend/src/controllers/reminders-controller.getReminders
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /reminders
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  CreateReminderFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateReminder
+      Handler: services/backend/src/controllers/reminders-controller.createReminder
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /reminders
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+  UpdateReminderFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateReminder
+      Handler: services/backend/src/controllers/reminders-controller.updateReminder
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /reminders/{rid}
+            Method: put
+            RestApiId:
+              Ref: ApiGateway
+  DeleteReminderFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: services/backend/src/controllers/reminders-controller.deleteReminder
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      FunctionName: DeleteReminder
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /reminders/{rid}
             Method: delete
             RestApiId:
               Ref: ApiGateway
