@@ -24,7 +24,8 @@ async function getUser(req, res) {
 
     // If you request yourself, just return without querying
     if (requestedUid === 'me' || requestedUid === req.auth.uid) {
-        res.json(_.pick(req.auth, ['uid', 'name', 'email', 'username']));
+        // Convert back and forth to remove non-user properties!
+        res.json(toDbFormat(fromDbFormat(req.auth)));
         return;
     }
 
