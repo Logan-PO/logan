@@ -474,7 +474,7 @@ describe('Terms', () => {
 
     // Delete one of the terms, and ensure only the other term's entities remain
     it('Successful delete', async () => {
-        await controllers.terms.deleteTerm({ params: basicTerm1, auth: { uid: 'usr123' } }, { json: jsonMock });
+        await controllers.terms.deleteTerm({ pathParameters: { tid: basicTerm1.tid }, auth: { uid: 'usr123' } });
 
         const { Items: termsLeft, Count: termCount } = await dynamoUtils.scan({ TableName: 'terms' });
         expect(termCount).toEqual(1);
