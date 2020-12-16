@@ -25,6 +25,36 @@ Resources:
         AllowOrigin: "'*'"
       EndpointConfiguration:
         Type: EDGE
+  PingFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: Ping
+      Handler: services/backend/src/controllers/ping.ping
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /ping
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  VerifyTokenFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: VerifyIdToken
+      Handler: services/backend/src/controllers/verify-id-token.verifyIdTokenHandler
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+        Runtime: nodejs12.x
+        Events:
+          ApiEvent:
+            Type: Api
+            Properties:
+              Path: /auth/verify
+              Method: post
+              RestApiId:
+                Ref: ApiGateway
   GetAssignmentFn:
     Type: AWS::Serverless::Function
     Properties:
