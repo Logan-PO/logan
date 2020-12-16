@@ -2,6 +2,20 @@ AWSTemplateFormatVersion : '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 
 Resources:
+  SendRemindersFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: SendReminders
+      Handler: services/backend/src/reminders-agent.sendReminders
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ScheduleTrigger:
+          Type: Schedule
+          Properties:
+            Description: Send reminders every 15 minutes
+            Name: SendRemindersTrigger
+            Schedule: cron(0/15 * * * ? *)
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
