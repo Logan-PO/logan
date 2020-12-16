@@ -240,7 +240,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetUser
-      Handler: services/backend/src/controllers/userss-controller.getUser
+      Handler: services/backend/src/controllers/users-controller.getUser
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       Runtime: nodejs12.x
       Events:
