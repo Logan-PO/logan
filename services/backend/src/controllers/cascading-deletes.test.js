@@ -4,8 +4,6 @@ const {
     dateUtils: { dayjs },
 } = require('@logan/core');
 
-const jsonMock = jest.fn();
-
 jest.doMock('../../utils/auth', () => {
     const mocked = jest.requireActual('../../utils/auth');
     mocked.handleAuth = () => {};
