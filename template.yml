@@ -46,15 +46,15 @@ Resources:
       FunctionName: VerifyIdToken
       Handler: services/backend/src/controllers/verify-id-token.verifyIdTokenHandler
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-        Runtime: nodejs12.x
-        Events:
-          ApiEvent:
-            Type: Api
-            Properties:
-              Path: /auth/verify
-              Method: post
-              RestApiId:
-                Ref: ApiGateway
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /auth/verify
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
   GetAssignmentFn:
     Type: AWS::Serverless::Function
     Properties:
@@ -418,7 +418,7 @@ Resources:
   GetTermFn:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: GetHoliday
+      FunctionName: GetTerm
       Handler: services/backend/src/controllers/terms-controller.getTerm
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       Runtime: nodejs12.x
@@ -433,7 +433,7 @@ Resources:
   GetTermsFn:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: GetHolidays
+      FunctionName: GetTerms
       Handler: services/backend/src/controllers/terms-controller.getTerms
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       Runtime: nodejs12.x
@@ -480,7 +480,7 @@ Resources:
     Properties:
       Handler: services/backend/src/controllers/terms-controller.deleteTerm
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      FunctionName: DeleteHoliday
+      FunctionName: DeleteTerm
       Runtime: nodejs12.x
       Events:
         ApiEvent:
