@@ -537,7 +537,7 @@ describe('Users', () => {
 
     // Delete one user
     it('Successful delete', async () => {
-        await controllers.users.deleteUser({ params: basicUser1, auth: { uid: 'usr123' } }, { json: jsonMock });
+        await controllers.users.deleteUser({ pathParameters: basicUser1, auth: { uid: 'usr123' } });
 
         // Check that all the entities for that course are gone
         const { Items, Count } = await dynamoUtils.scan({ TableName: 'users' });

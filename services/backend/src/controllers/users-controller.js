@@ -1,7 +1,8 @@
 const _ = require('lodash');
 const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
-const { generateBearerToken } = require('../../utils/auth');
+const { UNAUTHORIZED_ACTIONS, generateBearerToken } = require('../../utils/auth');
+const { makeHandler } = require('../../utils/wrap-handler');
 const requestValidator = require('../../utils/request-validator');
 const { NotFoundError, ValidationError, PermissionDeniedError } = require('../../utils/errors');
 
@@ -19,116 +20,126 @@ function toDbFormat(user) {
     };
 }
 
-async function getUser(req, res) {
-    const requestedUid = req.params.uid;
+const getUser = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        let requestedUid = event.pathParameters.uid;
 
-    // If you request yourself, just return without querying
-    if (requestedUid === 'me' || requestedUid === req.auth.uid) {
-        // Convert back and forth to remove non-user properties!
-        res.json(toDbFormat(fromDbFormat(req.auth)));
-        return;
-    }
+        if (requestedUid === 'me') requestedUid = event.auth.uid;
 
-    const dbResponse = await dynamoUtils.get({
-        TableName: dynamoUtils.TABLES.USERS,
-        Key: { uid: requestedUid },
-    });
+        const dbResponse = await dynamoUtils.get({
+            TableName: dynamoUtils.TABLES.USERS,
+            Key: { uid: requestedUid },
+        });
 
-    if (dbResponse.Item) {
-        res.json(fromDbFormat(dbResponse.Item));
-    } else {
-        throw new NotFoundError('User does not exist');
-    }
-}
+        if (dbResponse.Item) {
+            return fromDbFormat(dbResponse.Item);
+        } else {
+            throw new NotFoundError('User does not exist');
+        }
+    },
+});
 
-async function createUser(req, res) {
-    const uid = uuid();
+const createUser = makeHandler({
+    config: { authRequired: false, unauthedAction: UNAUTHORIZED_ACTIONS.CREATE_USER },
+    handler: async event => {
+        const uid = uuid();
 
-    const user = requestValidator.requireBodyParams(req, ['name', 'email', 'username']);
-    user.uid = uid;
+        const user = requestValidator.requireBodyParams(event, ['name', 'email', 'username']);
+        user.uid = uid;
 
-    // Make sure uid, email, and username are all unique
-    const uniquenessResponse = await dynamoUtils.scan({
-        TableName: dynamoUtils.TABLES.USERS,
-        FilterExpression: 'uid = :uid OR email = :email OR uname = :uname',
-        ExpressionAttributeValues: {
-            ':uid': uid,
-            ':email': user.email,
-            ':uname': user.username,
-        },
-    });
+        // Make sure uid, email, and username are all unique
+        const uniquenessResponse = await dynamoUtils.scan({
+            TableName: dynamoUtils.TABLES.USERS,
+            FilterExpression: 'uid = :uid OR email = :email OR uname = :uname',
+            ExpressionAttributeValues: {
+                ':uid': uid,
+                ':email': user.email,
+                ':uname': user.username,
+            },
+        });
 
-    if (uniquenessResponse.Count > 0) throw new ValidationError('uid, email, and username must all be unique');
+        if (uniquenessResponse.Count > 0) throw new ValidationError('uid, email, and username must all be unique');
 
-    // Create the new user
-    const bearer = await generateBearerToken({ uid });
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.USERS,
-        Item: toDbFormat(user),
-    });
+        // Create the new user
+        const bearer = await generateBearerToken({ uid });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.USERS,
+            Item: toDbFormat(user),
+        });
 
-    // Return the new user data and a new bearer token for authorizing future requests
-    res.json({ user, bearer });
-}
+        // Return the new user data and a new bearer token for authorizing future requests
+        return { user, bearer };
+    },
+});
 
-async function validateUniqueness(req, res) {
-    const { Item: user } = await dynamoUtils.get({
-        TableName: dynamoUtils.TABLES.USERS,
-        Key: _.pick(req.auth, 'uid'),
-    });
+const validateUniqueness = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const { Item: user } = await dynamoUtils.get({
+            TableName: dynamoUtils.TABLES.USERS,
+            Key: _.pick(event.auth, 'uid'),
+        });
 
-    const potentialUpdate = _.merge({}, user, req.body);
+        const potentialUpdate = _.merge({}, user, event.body);
 
-    const uniquenessResponse = await dynamoUtils.scan({
-        TableName: dynamoUtils.TABLES.USERS,
-        FilterExpression: 'uname = :uname and not uid = :uid',
-        ExpressionAttributeValues: {
-            ':uid': user.uid,
-            ':uname': potentialUpdate.username,
-        },
-    });
+        const uniquenessResponse = await dynamoUtils.scan({
+            TableName: dynamoUtils.TABLES.USERS,
+            FilterExpression: 'uname = :uname and not uid = :uid',
+            ExpressionAttributeValues: {
+                ':uid': user.uid,
+                ':uname': potentialUpdate.username,
+            },
+        });
 
-    res.json({
-        unique: uniquenessResponse.Count === 0,
-    });
-}
+        return {
+            unique: uniquenessResponse.Count === 0,
+        };
+    },
+});
 
-async function updateUser(req, res) {
-    if (req.auth.uid !== req.params.uid) throw new PermissionDeniedError('Cannot modify another user');
+const updateUser = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        if (event.auth.uid !== event.pathParameters.uid) throw new PermissionDeniedError('Cannot modify another user');
 
-    requestValidator.requireBodyParams(req, ['name', 'email', 'username']);
-    const user = _.merge({}, req.auth, req.body, req.params);
+        requestValidator.requireBodyParams(event, ['name', 'email', 'username']);
+        const user = _.merge({}, event.auth, event.body, event.pathParameters);
 
-    // Check if the updated user still has a unique username and email
-    const uniquenessResponse = await dynamoUtils.scan({
-        TableName: dynamoUtils.TABLES.USERS,
-        FilterExpression: '(email = :email or uname = :uname) and not uid = :uid',
-        ExpressionAttributeValues: {
-            ':uid': user.uid,
-            ':email': user.email,
-            ':uname': user.username,
-        },
-    });
+        // Check if the updated user still has a unique username and email
+        const uniquenessResponse = await dynamoUtils.scan({
+            TableName: dynamoUtils.TABLES.USERS,
+            FilterExpression: '(email = :email or uname = :uname) and not uid = :uid',
+            ExpressionAttributeValues: {
+                ':uid': user.uid,
+                ':email': user.email,
+                ':uname': user.username,
+            },
+        });
 
-    if (uniquenessResponse.Count > 0) throw new ValidationError('email and username must be unique');
+        if (uniquenessResponse.Count > 0) throw new ValidationError('email and username must be unique');
 
-    // Update the user
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.USERS,
-        Item: toDbFormat(user),
-    });
+        // Update the user
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.USERS,
+            Item: toDbFormat(user),
+        });
 
-    res.json(user);
-}
+        return user;
+    },
+});
 
-async function deleteUser(req, res) {
-    if (req.auth.uid !== req.params.uid) throw new PermissionDeniedError('Cannot delete another user');
-    await dynamoUtils.delete({ TableName: dynamoUtils.TABLES.USERS, Key: { uid: req.auth.uid } });
+const deleteUser = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        if (event.auth.uid !== event.pathParameters.uid) throw new PermissionDeniedError('Cannot delete another user');
+        await dynamoUtils.delete({ TableName: dynamoUtils.TABLES.USERS, Key: { uid: event.auth.uid } });
 
-    await handleCascadingDeletes(req.auth.uid);
+        await handleCascadingDeletes(event.auth.uid);
 
-    res.json({ success: true });
-}
+        return { success: true };
+    },
+});
 
 async function handleCascadingDeletes(uid) {
     const tablesToClean = _.values(_.omit(dynamoUtils.TABLES, ['USERS']));
