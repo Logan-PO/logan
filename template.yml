@@ -325,3 +325,78 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+  GetSectionFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetSection
+      Handler: services/backend/src/controllers/sections-controller.getSection
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /sections/{sid}
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  GetSectionsFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetSections
+      Handler: services/backend/src/controllers/sections-controller.getSections
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /sections
+            Method: get
+            RestApiId:
+              Ref: ApiGateway
+  CreateSectionFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: CreateSection
+      Handler: services/backend/src/controllers/sections-controller.createSection
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /sections
+            Method: post
+            RestApiId:
+              Ref: ApiGateway
+  UpdateSectionFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: UpdateSection
+      Handler: services/backend/src/controllers/sections-controller.updateSection
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /sections/{sid}
+            Method: put
+            RestApiId:
+              Ref: ApiGateway
+  DeleteSectionFn:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: services/backend/src/controllers/sections-controller.deleteSection
+      Role: arn:aws:iam::417995070141:role/LoganLambdaRole
+      FunctionName: DeleteSection
+      Runtime: nodejs12.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /sections/{sid}
+            Method: delete
+            RestApiId:
+              Ref: ApiGateway
