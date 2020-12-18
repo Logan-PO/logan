@@ -23,6 +23,8 @@ const { LoganError } = require('./errors');
 function makeHandler({ config, handler }) {
     const headers = {
         'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': '*',
     };
 
     return async event => {
