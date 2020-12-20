@@ -23,6 +23,8 @@ Resources:
       StageName: Prod
       Cors:
         AllowOrigin: "'*'"
+        AllowHeaders: "'*'"
+        AllowMethods: "'GET, POST, PUT, DELETE'"
       EndpointConfiguration:
         Type: EDGE
   PingFn:
@@ -490,7 +492,6 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
-
   GetRemindersFn:
     Type: AWS::Serverless::Function
     Properties:
