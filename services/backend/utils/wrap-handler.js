@@ -35,6 +35,8 @@ function makeHandler({ config, handler }) {
             };
         }
 
+        if (typeof event.body === 'string') event.body = JSON.parse(event.body);
+
         try {
             await handleAuth(event, config.authRequired, config.unauthedAction);
             const response = await handler(event);
