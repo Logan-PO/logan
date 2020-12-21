@@ -4,7 +4,11 @@ const {
     dateUtils: { dayjs },
 } = require('@logan/core');
 
-const jsonMock = jest.fn();
+jest.doMock('../../utils/auth', () => {
+    const mocked = jest.requireActual('../../utils/auth');
+    mocked.handleAuth = () => {};
+    return mocked;
+});
 
 jest.doMock('@logan/aws', () => {
     const mocked = jest.requireActual('@logan/aws');
@@ -70,12 +74,8 @@ describe('Tasks', () => {
         await testUtils.clearTables(['tasks', 'reminders']);
     });
 
-    // Delete assignment
     it('Successful delete', async () => {
-        await controllers.tasks.deleteTask(
-            { params: { tid: basicTask1.tid }, auth: { uid: basicTask1.uid } },
-            { json: jsonMock }
-        );
+        await controllers.tasks.deleteTask({ pathParameters: { tid: basicTask1.tid }, auth: { uid: basicTask1.uid } });
 
         // Check that only the other task's reminder remains
         const { Items: remainingReminders } = await dynamoUtils.scan({ TableName: dynamoUtils.TABLES.REMINDERS });
@@ -151,10 +151,11 @@ describe('Assignments', () => {
 
     // Delete assignment
     it('Successful delete', async () => {
-        await controllers.assignments.deleteAssignment(
-            { params: { aid: basicAssignment1.aid }, auth: { uid: basicAssignment1.uid } },
-            { json: jsonMock }
-        );
+        await controllers.assignments.deleteAssignment({
+            pathParameters: { aid: basicAssignment1.aid },
+            auth: { uid: basicAssignment1.uid },
+        });
+
         // Check that only the other assignment's task remains
         const { Items: remainingAssignments } = await dynamoUtils.scan({ TableName: dynamoUtils.TABLES.ASSIGNMENTS });
         expect(remainingAssignments).toHaveLength(1);
@@ -322,7 +323,7 @@ describe('Courses', () => {
 
     // Delete one of the courses
     it('Successful delete', async () => {
-        await controllers.courses.deleteCourse({ params: basicCourse1, auth: { uid: 'usr123' } }, { json: jsonMock });
+        await controllers.courses.deleteCourse({ pathParameters: { cid: basicCourse1.cid }, auth: { uid: 'usr123' } });
 
         // Check that all the entities for that course are gone
         const { Items: remainingCourses, Count: courseCount } = await dynamoUtils.scan({ TableName: 'courses' });
@@ -471,7 +472,7 @@ describe('Terms', () => {
 
     // Delete one of the terms, and ensure only the other term's entities remain
     it('Successful delete', async () => {
-        await controllers.terms.deleteTerm({ params: basicTerm1, auth: { uid: 'usr123' } }, { json: jsonMock });
+        await controllers.terms.deleteTerm({ pathParameters: { tid: basicTerm1.tid }, auth: { uid: 'usr123' } });
 
         const { Items: termsLeft, Count: termCount } = await dynamoUtils.scan({ TableName: 'terms' });
         expect(termCount).toEqual(1);
@@ -534,7 +535,7 @@ describe('Users', () => {
 
     // Delete one user
     it('Successful delete', async () => {
-        await controllers.users.deleteUser({ params: basicUser1, auth: { uid: 'usr123' } }, { json: jsonMock });
+        await controllers.users.deleteUser({ pathParameters: basicUser1, auth: { uid: 'usr123' } });
 
         // Check that all the entities for that course are gone
         const { Items, Count } = await dynamoUtils.scan({ TableName: 'users' });

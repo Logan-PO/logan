@@ -7,11 +7,15 @@ const {
     },
 } = require('@logan/core');
 
-const jsonMock = jest.fn();
-
 jest.doMock('@logan/aws', () => {
     const mocked = jest.requireActual('@logan/aws');
     mocked.secretUtils.getSecret = async () => ({ web: 'mock-secret' });
+    return mocked;
+});
+
+jest.doMock('../../utils/auth', () => {
+    const mocked = jest.requireActual('../../utils/auth');
+    mocked.handleAuth = () => {};
     return mocked;
 });
 
@@ -94,13 +98,10 @@ describe('Operations work', () => {
     it('createReminder', async () => {
         const reminder = fromDbFormat(starter);
 
-        await controller.createReminder(
-            {
-                body: reminder,
-                auth: user,
-            },
-            { json: jsonMock }
-        );
+        await controller.createReminder({
+            body: reminder,
+            auth: user,
+        });
 
         const { Items: foundReminders } = await dynamoUtils.scan({ TableName: dynamoUtils.TABLES.REMINDERS });
         expect(foundReminders).toHaveLength(1);
@@ -116,14 +117,11 @@ describe('Operations work', () => {
 
         const updated = _.merge({}, starter2, { msg: 'Hi' });
 
-        await controller.updateReminder(
-            {
-                params: _.pick(updated, 'rid'),
-                body: fromDbFormat(updated),
-                auth: user,
-            },
-            { json: jsonMock }
-        );
+        await controller.updateReminder({
+            pathParameters: _.pick(updated, 'rid'),
+            body: fromDbFormat(updated),
+            auth: user,
+        });
 
         const { Items: foundReminders } = await dynamoUtils.scan({ TableName: dynamoUtils.TABLES.REMINDERS });
         expect(foundReminders).toHaveLength(1);
@@ -137,14 +135,11 @@ describe('Operations work', () => {
             Item: starter2,
         });
 
-        await controller.deleteReminder(
-            {
-                params: _.pick(starter2, 'rid'),
-                body: fromDbFormat(starter2),
-                auth: user,
-            },
-            { json: jsonMock }
-        );
+        await controller.deleteReminder({
+            pathParameters: _.pick(starter2, 'rid'),
+            body: fromDbFormat(starter2),
+            auth: user,
+        });
 
         const { Items: foundReminders } = await dynamoUtils.scan({ TableName: dynamoUtils.TABLES.REMINDERS });
         expect(foundReminders).toHaveLength(0);
