@@ -14,6 +14,7 @@ class TermsList extends React.Component {
 
         this.didSelectTerm = this.didSelectTerm.bind(this);
         this.didDeleteTerm = this.didDeleteTerm.bind(this);
+        this.closeModal = this.closeModal.bind(this);
 
         this.state = {
             createModalOpen: false,
@@ -36,6 +37,10 @@ class TermsList extends React.Component {
         this.props.deleteTerm(term);
         // TODO: Select next term
         this.props.onTermSelected(undefined);
+    }
+
+    closeModal() {
+        this.setState({ createModalOpen: false });
     }
 
     render() {
@@ -63,7 +68,7 @@ class TermsList extends React.Component {
                                 );
                             }),
                             <div key="add-new" className="list-cell">
-                                <ListItem button onClick={() => this.props.createTerm(this.randomTerm())}>
+                                <ListItem button onClick={() => this.setState({ createModalOpen: true })}>
                                     <ListItemText
                                         primary={
                                             <a style={{ display: 'flex', alignItems: 'center' }}>
@@ -76,6 +81,7 @@ class TermsList extends React.Component {
                                 </ListItem>
                             </div>,
                         ]}
+                        <TermCreateModal open={this.state.createModalOpen} onClose={this.closeModal} />
                     </List>
                 </div>
             </div>
