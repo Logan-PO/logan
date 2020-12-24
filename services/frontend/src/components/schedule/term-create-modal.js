@@ -109,7 +109,7 @@ TermCreateModal.propTypes = {
     createTerm: PropTypes.func,
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = { createTerm };
 
