@@ -14,6 +14,7 @@ import {
 import '../shared/list.scss';
 import EmptySticker from '../shared/displays/empty-sticker';
 import CourseCreateModal from './course-create-modal';
+import HolidayCreateModal from './holiday-create-modal';
 
 class TermChildrenList extends React.Component {
     constructor(props) {
@@ -134,7 +135,7 @@ class TermChildrenList extends React.Component {
                 );
             }),
             <div key="add-new" className="list-cell">
-                <ListItem button onClick={() => this.props.createHoliday(this.randomChild('holiday'))}>
+                <ListItem button onClick={() => this.setState({ holidayCreateModal: true })}>
                     <ListItemText
                         primary={
                             <a style={{ display: 'flex', alignItems: 'center' }}>
@@ -145,6 +146,7 @@ class TermChildrenList extends React.Component {
                         primaryTypographyProps={{ color: 'primary' }}
                     />
                 </ListItem>
+                <HolidayCreateModal open={this.state.holidayCreateModal} onClose={this.onClose} tid={this.props.tid} />
             </div>,
         ];
     }

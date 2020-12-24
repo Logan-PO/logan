@@ -84,10 +84,8 @@ class SchedulePage extends React.Component {
     }
 
     onHolidaySelected(hid) {
-        const holiday = this.props.getHoliday(hid);
-
         this.setState({
-            selectedTid: holiday.tid,
+            ...(hid && { selectedTid: this.props.getHoliday(hid).tid }),
             selectedCid: undefined,
             selectedHid: hid,
             selectedSid: undefined,

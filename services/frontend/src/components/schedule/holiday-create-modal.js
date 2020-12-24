@@ -1,20 +1,25 @@
 import React from 'react';
-import { createCourse } from '@logan/fe-shared/store/schedule';
+import { createHoliday } from '@logan/fe-shared/store/schedule';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Grid, TextField, Button } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { DatePicker } from '@material-ui/pickers';
+import { dateUtils } from '@logan/core';
 import _ from 'lodash';
-import ColorPicker from '../shared/controls/color-picker';
 
-class CourseCreateModal extends React.Component {
+const {
+    dayjs,
+    constants: { DB_DATE_FORMAT },
+} = dateUtils;
+
+class HolidayCreateModal extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            title: 'New course',
+            title: 'New holiday',
             startDate: '2020-01-01',
             endDate: '2020-05-20',
-            color: '#000000',
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -25,33 +30,38 @@ class CourseCreateModal extends React.Component {
         if (_.isEqual(this.props, prevProps)) return;
 
         this.setState({
-            title: 'New course',
+            title: 'New holiday',
             startDate: '2020-01-01',
             endDate: '2020-05-20',
-            color: '',
-            nickname: '',
         });
     }
 
     handleChange(prop, e) {
-        this.setState({ [prop]: e.target.value });
+        if (prop === 'startDate' || prop === 'endDate') {
+            this.setState({ [prop]: e.format(DB_DATE_FORMAT) });
+        } else {
+            this.setState({ [prop]: e.target.value });
+        }
     }
 
     async handleSubmit(e) {
         e.preventDefault();
-        this.props.createCourse({
+        this.props.createHoliday({
             tid: this.props.tid,
             title: this.state.title,
-            color: this.state.color,
-            nickname: this.state.nickname,
+            startDate: this.state.startDate,
+            endDate: this.state.endDate,
         });
         this.props.onClose();
     }
 
     render() {
+        const startDate = this.state.startDate ? dayjs(this.state.startDate, DB_DATE_FORMAT) : null;
+        const endDate = this.state.endDate ? dayjs(this.state.endDate, DB_DATE_FORMAT) : null;
+
         return (
             <Dialog open={this.props.open} onClose={this.props.onClose} fullWidth={true} maxWidth="xs">
-                <DialogTitle>Create Course</DialogTitle>
+                <DialogTitle>Create Holiday</DialogTitle>
                 <DialogContent>
                     <Grid container direction="column" spacing={1}>
                         <Grid item xs={12}>
@@ -62,19 +72,24 @@ class CourseCreateModal extends React.Component {
                                 fullWidth
                             />
                         </Grid>
-                        <Grid item xs={6}>
-                            <TextField
-                                label="Nickname"
+                        <Grid item xs={12}>
+                            <DatePicker
                                 fullWidth
-                                value={this.state.nickname}
-                                onChange={this.handleChange.bind(this, 'nickname')}
+                                label="Start Date"
+                                variant="inline"
+                                color="secondary"
+                                value={startDate}
+                                onChange={this.handleChange.bind(this, 'startDate')}
                             />
                         </Grid>
-                        <Grid item xs={6}>
-                            <ColorPicker
+                        <Grid item xs={12}>
+                            <DatePicker
                                 fullWidth
-                                value={this.state.color}
-                                onChange={this.handleChange.bind(this, 'color')}
+                                label="End Date"
+                                variant="inline"
+                                color="secondary"
+                                value={endDate}
+                                onChange={this.handleChange.bind(this, 'endDate')}
                             />
                         </Grid>
                     </Grid>
@@ -89,15 +104,15 @@ class CourseCreateModal extends React.Component {
     }
 }
 
-CourseCreateModal.propTypes = {
+HolidayCreateModal.propTypes = {
     onClose: PropTypes.func,
     open: PropTypes.bool,
-    createCourse: PropTypes.func,
+    createHoliday: PropTypes.func,
     tid: PropTypes.string,
 };
 
 const mapStateToProps = () => ({});
 
-const mapDispatchToProps = { createCourse };
+const mapDispatchToProps = { createHoliday };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CourseCreateModal);
+export default connect(mapStateToProps, mapDispatchToProps)(HolidayCreateModal);
