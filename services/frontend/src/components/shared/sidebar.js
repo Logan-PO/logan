@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
-import { Drawer, Toolbar, List, ListItem, ListItemText, colors } from '@material-ui/core';
+import { Drawer, Toolbar, List, ListItem, ListItemText } from '@material-ui/core';
+import { getCurrentTheme } from '../../globals/theme';
 import styles from './sidebar.module.scss';
 
 const pages = {
@@ -18,13 +20,15 @@ class Sidebar extends React.Component {
     }
 
     render() {
+        const theme = getCurrentTheme();
+
         return (
             <Drawer
                 variant="permanent"
                 className={styles.sidebar}
                 PaperProps={{
                     style: {
-                        background: colors.teal[700],
+                        background: theme.palette.primary.dark,
                         color: '#fff',
                     },
                 }}
@@ -53,4 +57,8 @@ Sidebar.propTypes = {
     currentPage: PropTypes.string,
 };
 
-export default Sidebar;
+const mapStateToProps = state => ({
+    user: state.login.user,
+});
+
+export default connect(mapStateToProps, undefined)(Sidebar);

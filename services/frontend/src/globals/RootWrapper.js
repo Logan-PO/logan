@@ -1,22 +1,21 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import { Provider as StoreProvider } from 'react-redux';
 import { CssBaseline } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/core/styles';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DayJsUtils from '@date-io/dayjs';
 import store from '@logan/fe-shared/store';
-import theme from './theme';
+import DynamicThemeProvider from './dynamic-theme-provider';
 
 function wrapper({ element }) {
     return (
-        <MuiPickersUtilsProvider utils={DayJsUtils}>
-            <ThemeProvider theme={theme}>
-                <Provider store={store}>
+        <StoreProvider store={store}>
+            <MuiPickersUtilsProvider utils={DayJsUtils}>
+                <DynamicThemeProvider>
                     <CssBaseline />
                     {element}
-                </Provider>
-            </ThemeProvider>
-        </MuiPickersUtilsProvider>
+                </DynamicThemeProvider>
+            </MuiPickersUtilsProvider>
+        </StoreProvider>
     );
 }
 
