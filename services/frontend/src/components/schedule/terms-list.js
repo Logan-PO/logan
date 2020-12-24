@@ -6,6 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getScheduleSelectors, createTerm, deleteTerm } from '@logan/fe-shared/store/schedule';
 import '../shared/list.scss';
+import TermCreateModal from './term-create-modal';
 
 class TermsList extends React.Component {
     constructor(props) {
@@ -13,6 +14,10 @@ class TermsList extends React.Component {
 
         this.didSelectTerm = this.didSelectTerm.bind(this);
         this.didDeleteTerm = this.didDeleteTerm.bind(this);
+
+        this.state = {
+            createModalOpen: false,
+        };
     }
 
     randomTerm() {
