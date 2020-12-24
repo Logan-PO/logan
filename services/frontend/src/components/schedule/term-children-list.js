@@ -13,6 +13,7 @@ import {
 } from '@logan/fe-shared/store/schedule';
 import '../shared/list.scss';
 import EmptySticker from '../shared/displays/empty-sticker';
+import CourseCreateModal from './course-create-modal';
 
 class TermChildrenList extends React.Component {
     constructor(props) {
@@ -20,6 +21,12 @@ class TermChildrenList extends React.Component {
 
         this.didSelectChild = this.didSelectChild.bind(this);
         this.didDeleteChild = this.didDeleteChild.bind(this);
+        this.onClose = this.onClose.bind(this);
+
+        this.state = {
+            courseCreateModal: false,
+            holidayCreateModal: false,
+        };
     }
 
     randomChild(type) {
@@ -57,6 +64,10 @@ class TermChildrenList extends React.Component {
         this.didSelectChild(type, undefined);
     }
 
+    onClose() {
+        this.setState({ courseCreateModal: false, holidayCreateModal: false });
+    }
+
     getCoursesList() {
         const courses = this.props.getCoursesForTerm({ tid: this.props.tid });
 
@@ -82,7 +93,7 @@ class TermChildrenList extends React.Component {
                 );
             }),
             <div key="add-new" className="list-cell">
-                <ListItem button onClick={() => this.props.createCourse(this.randomChild('course'))}>
+                <ListItem button onClick={() => this.setState({ courseCreateModal: true })}>
                     <ListItemText
                         primary={
                             <a style={{ display: 'flex', alignItems: 'center' }}>
@@ -93,6 +104,7 @@ class TermChildrenList extends React.Component {
                         primaryTypographyProps={{ color: 'primary' }}
                     />
                 </ListItem>
+                <CourseCreateModal open={this.state.courseCreateModal} onClose={this.onClose} tid={this.props.tid} />
             </div>,
         ];
     }

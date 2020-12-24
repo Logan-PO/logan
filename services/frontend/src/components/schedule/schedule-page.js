@@ -75,10 +75,8 @@ class SchedulePage extends React.Component {
     }
 
     onCourseSelected(cid) {
-        const course = this.props.getCourse(cid);
-
         this.setState({
-            selectedTid: course.tid,
+            ...(cid && { selectedTid: this.props.getCourse(cid).tid }),
             selectedCid: cid,
             selectedHid: undefined,
             selectedSid: undefined,
