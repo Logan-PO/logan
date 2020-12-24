@@ -10,6 +10,7 @@ const { v4: uuid } = require('uuid');
 const Promise = require('bluebird');
 const requestValidator = require('../../utils/request-validator');
 const { NotFoundError } = require('../../utils/errors');
+const { makeHandler } = require('../../utils/wrap-handler');
 const coursesController = require('./courses-controller');
 
 function fromDbFormat(db) {
@@ -28,77 +29,92 @@ function toDbFormat(term) {
     };
 }
 
-async function getTerm(req, res) {
-    const requestedTid = req.params.tid;
+const getTerm = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedTid = event.params.tid;
 
-    const dbResponse = await dynamoUtils.get({
-        TableName: dynamoUtils.TABLES.TERMS,
-        Key: { tid: requestedTid },
-    });
+        const dbResponse = await dynamoUtils.get({
+            TableName: dynamoUtils.TABLES.TERMS,
+            Key: { tid: requestedTid },
+        });
 
-    if (dbResponse.Item) {
-        res.json(fromDbFormat(dbResponse.Item));
-    } else {
-        throw new NotFoundError('Term does not exist');
-    }
-}
+        if (dbResponse.Item) {
+            return fromDbFormat(dbResponse.Item);
+        } else {
+            throw new NotFoundError('Term does not exist');
+        }
+    },
+});
 
-async function getTerms(req, res) {
-    const requestedBy = req.auth.uid;
+const getTerms = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedBy = event.auth.uid;
 
-    const dbResponse = await dynamoUtils.scan({
-        TableName: dynamoUtils.TABLES.TERMS,
-        FilterExpression: 'uid = :uid',
-        ExpressionAttributeValues: { ':uid': requestedBy },
-    });
+        const dbResponse = await dynamoUtils.scan({
+            TableName: dynamoUtils.TABLES.TERMS,
+            FilterExpression: 'uid = :uid',
+            ExpressionAttributeValues: { ':uid': requestedBy },
+        });
 
-    res.json(dbResponse.Items.map(fromDbFormat));
-}
+        return dbResponse.Items.map(fromDbFormat);
+    },
+});
 
-async function createTerm(req, res) {
-    const tid = uuid();
+const createTerm = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const tid = uuid();
 
-    const term = _.merge({}, req.body, { tid }, _.pick(req.auth, ['uid']));
+        const term = _.merge({}, event.body, { tid }, _.pick(event.auth, ['uid']));
 
-    requestValidator.requireBodyParams(req, ['title', 'startDate', 'endDate']);
+        requestValidator.requireBodyParams(event, ['title', 'startDate', 'endDate']);
 
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.TERMS,
-        Item: toDbFormat(term),
-    });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.TERMS,
+            Item: toDbFormat(term),
+        });
 
-    res.json(term);
-}
+        return term;
+    },
+});
 
-async function updateTerm(req, res) {
-    const term = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
+const updateTerm = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const term = _.merge({}, event.body, event.pathParameters, _.pick(event.auth, ['uid']));
 
-    requestValidator.requireBodyParams(req, ['title', 'startDate', 'endDate']);
+        requestValidator.requireBodyParams(event, ['title', 'startDate', 'endDate']);
 
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.TERMS,
-        Item: toDbFormat(term),
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
-        ConditionExpression: 'uid = :uid',
-    });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.TERMS,
+            Item: toDbFormat(term),
+            ExpressionAttributeValues: { ':uid': event.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        });
 
-    res.json(term);
-}
+        return term;
+    },
+});
 
-async function deleteTerm(req, res) {
-    const requestedTid = req.params.tid;
+const deleteTerm = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedTid = event.pathParameters.tid;
 
-    await dynamoUtils.delete({
-        TableName: dynamoUtils.TABLES.TERMS,
-        Key: { tid: requestedTid },
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
-        ConditionExpression: 'uid = :uid',
-    });
+        await dynamoUtils.delete({
+            TableName: dynamoUtils.TABLES.TERMS,
+            Key: { tid: requestedTid },
+            ExpressionAttributeValues: { ':uid': event.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        });
 
-    await handleCascadingDeletes(requestedTid);
+        await handleCascadingDeletes(requestedTid);
 
-    res.json({ success: true });
-}
+        return { success: true };
+    },
+});
 
 async function handleCascadingDeletes(tid) {
     // Delete courses

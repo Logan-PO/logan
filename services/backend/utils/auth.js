@@ -1,7 +1,6 @@
 const _ = require('lodash');
 const { secretUtils, dynamoUtils } = require('@logan/aws');
 const jwt = require('jsonwebtoken');
-const usersController = require('../src/controllers/users-controller');
 const { AuthorizationError, PermissionDeniedError } = require('./errors');
 
 const UNAUTHORIZED_ACTIONS = {
@@ -33,17 +32,17 @@ async function generateBearerToken(payload) {
 
 /**
  * Check the request's authorization header
- * @param req
+ * @param event
  * @param {boolean} authRequired
- * @param {string | undefined} unauthedAction
+ * @param {string} [unauthedAction]
  * @returns {Promise<void>}
  */
-async function handleAuth(req, authRequired = false, unauthedAction) {
-    const authHeader = _.get(req, ['headers', 'authorization']);
+async function handleAuth(event, authRequired = false, unauthedAction) {
+    const authHeader = _.get(event, ['headers', 'Authorization']);
     if (!authHeader || !_.startsWith(authHeader, 'Bearer ')) {
         if (authRequired || unauthedAction) throw new AuthorizationError('Missing bearer token');
         else {
-            req.auth = { authorized: false };
+            event.auth = { authorized: false };
             return;
         }
     }
@@ -61,16 +60,16 @@ async function handleAuth(req, authRequired = false, unauthedAction) {
         });
 
         if (response.Item) {
-            req.auth = {
+            event.auth = {
                 authorized: true,
-                ...usersController.__test_only__.fromDbFormat(response.Item),
+                ..._.pick(response.Item, ['uid']),
             };
 
             return;
         }
     }
 
-    req.auth = {
+    event.auth = {
         authorized: false,
         ...payload,
     };

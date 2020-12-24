@@ -4,9 +4,46 @@ const {
     dateUtils: { dayjs, constants: dateConstants },
 } = require('@logan/core');
 const { v4: uuid } = require('uuid');
+const { makeHandler } = require('../../utils/wrap-handler');
 const requestValidator = require('../../utils/request-validator');
 const { NotFoundError } = require('../../utils/errors');
 
+/**
+ * @typedef {object} DbSection
+ * @property {string} uid User ID
+ * @property {string} sid Section ID
+ * @property {string} cid Course ID
+ * @property {string} title Title
+ * @property {string} sd Start date
+ * @property {string} ed End date
+ * @property {string} st Start time
+ * @property {string} et End time
+ * @property {number[]} dow Days of week
+ * @property {number} wr Weekly repeat
+ * @property {string} [loc] Location
+ * @property {string} [inst] Instructor
+ */
+
+/**
+ * @typedef {object} Section
+ * @property {string} uid User ID
+ * @property {string} sid Section ID
+ * @property {string} cid Course ID
+ * @property {string} title Title
+ * @property {string} startDate Start date
+ * @property {string} endDate End date
+ * @property {string} startTime Start time
+ * @property {string} endTime End time
+ * @property {number[]} daysOfWeek Days of week
+ * @property {number} weeklyRepeat Weekly repeat
+ * @property {string} [location] Location
+ * @property {string} [instructor] Instructor
+ */
+
+/**
+ * @param {DbSection} db
+ * @return {Section}
+ */
 function fromDbFormat(db) {
     return {
         ..._.pick(db, ['uid', 'cid', 'sid', 'title']),
@@ -21,6 +58,10 @@ function fromDbFormat(db) {
     };
 }
 
+/**
+ * @param {Section} section
+ * @return {DbSection}
+ */
 function toDbFormat(section) {
     return {
         ..._.pick(section, ['uid', 'cid', 'sid', 'title']),
@@ -35,93 +76,108 @@ function toDbFormat(section) {
     };
 }
 
-async function getSection(req, res) {
-    const requestedSid = req.params.sid;
+const getSection = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedSid = event.pathParameters.sid;
 
-    const dbResponse = await dynamoUtils.get({
-        TableName: dynamoUtils.TABLES.SECTIONS,
-        Key: { Sid: requestedSid },
-    });
+        const dbResponse = await dynamoUtils.get({
+            TableName: dynamoUtils.TABLES.SECTIONS,
+            Key: { Sid: requestedSid },
+        });
 
-    if (dbResponse.Item) {
-        res.json(fromDbFormat(dbResponse.Item));
-    } else {
-        throw new NotFoundError('Section does not exist');
-    }
-}
+        if (dbResponse.Item) {
+            return fromDbFormat(dbResponse.Item);
+        } else {
+            throw new NotFoundError('Section does not exist');
+        }
+    },
+});
 
-async function getSections(req, res) {
-    const requestedBy = req.auth.uid;
+const getSections = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedBy = event.auth.uid;
 
-    const dbResponse = await dynamoUtils.scan({
-        TableName: dynamoUtils.TABLES.SECTIONS,
-        FilterExpression: 'uid = :uid',
-        ExpressionAttributeValues: { ':uid': requestedBy },
-    });
+        const dbResponse = await dynamoUtils.scan({
+            TableName: dynamoUtils.TABLES.SECTIONS,
+            FilterExpression: 'uid = :uid',
+            ExpressionAttributeValues: { ':uid': requestedBy },
+        });
 
-    res.json(dbResponse.Items.map(fromDbFormat));
-}
+        return dbResponse.Items.map(fromDbFormat);
+    },
+});
 
-async function createSection(req, res) {
-    const sid = uuid();
+const createSection = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const sid = uuid();
 
-    const section = _.merge({}, req.body, { sid }, _.pick(req.auth, ['uid']));
+        const section = _.merge({}, event.body, { sid }, _.pick(event.auth, ['uid']));
 
-    requestValidator.requireBodyParams(req, [
-        'cid',
-        'title',
-        'startDate',
-        'endDate',
-        'startTime',
-        'endTime',
-        'daysOfWeek',
-        'weeklyRepeat',
-    ]);
+        requestValidator.requireBodyParams(event, [
+            'cid',
+            'title',
+            'startDate',
+            'endDate',
+            'startTime',
+            'endTime',
+            'daysOfWeek',
+            'weeklyRepeat',
+        ]);
 
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.SECTIONS,
-        Item: toDbFormat(section),
-    });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.SECTIONS,
+            Item: toDbFormat(section),
+        });
 
-    res.json(section);
-}
+        return section;
+    },
+});
 
-async function updateSection(req, res) {
-    const section = _.merge({}, req.body, req.params, _.pick(req.auth, ['uid']));
+const updateSection = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const section = _.merge({}, event.body, event.pathParameters, _.pick(event.auth, ['uid']));
 
-    requestValidator.requireBodyParams(req, [
-        'cid',
-        'title',
-        'startDate',
-        'endDate',
-        'startTime',
-        'endTime',
-        'daysOfWeek',
-        'weeklyRepeat',
-    ]);
+        requestValidator.requireBodyParams(event, [
+            'cid',
+            'title',
+            'startDate',
+            'endDate',
+            'startTime',
+            'endTime',
+            'daysOfWeek',
+            'weeklyRepeat',
+        ]);
 
-    await dynamoUtils.put({
-        TableName: dynamoUtils.TABLES.SECTIONS,
-        Item: toDbFormat(section),
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
-        ConditionExpression: 'uid = :uid',
-    });
+        await dynamoUtils.put({
+            TableName: dynamoUtils.TABLES.SECTIONS,
+            Item: toDbFormat(section),
+            ExpressionAttributeValues: { ':uid': event.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        });
 
-    res.json(section);
-}
+        return section;
+    },
+});
 
-async function deleteSection(req, res) {
-    const requestedSid = req.params.sid;
+const deleteSection = makeHandler({
+    config: { authRequired: true },
+    handler: async event => {
+        const requestedSid = event.pathParameters.sid;
 
-    await dynamoUtils.delete({
-        TableName: dynamoUtils.TABLES.SECTIONS,
-        Key: { sid: requestedSid },
-        ExpressionAttributeValues: { ':uid': req.auth.uid },
-        ConditionExpression: 'uid = :uid',
-    });
+        await dynamoUtils.delete({
+            TableName: dynamoUtils.TABLES.SECTIONS,
+            Key: { sid: requestedSid },
+            ExpressionAttributeValues: { ':uid': event.auth.uid },
+            ConditionExpression: 'uid = :uid',
+        });
 
-    res.json({ success: true });
-}
+        return { success: true };
+    },
+});
 
 module.exports = {
     __test_only__: { fromDbFormat, toDbFormat },
