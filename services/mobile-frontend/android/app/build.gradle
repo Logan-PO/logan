@@ -82,7 +82,7 @@ project.ext.react = [
 ]
 
 apply from: '../../node_modules/react-native-unimodules/gradle.groovy'
-//apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native/react.gradle"
 apply from: "../../node_modules/expo-updates/scripts/create-manifest-android.gradle"
 
 /**
@@ -136,6 +136,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [appAuthRedirectScheme: 'com.example.app']
+
     }
     splits {
         abi {
