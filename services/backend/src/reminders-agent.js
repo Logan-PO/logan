@@ -98,8 +98,10 @@ async function sendReminders() {
         }
     }
 
-    console.log('Reminders with invalid tokens:');
-    console.log(JSON.stringify(invalidTokens, null, 4));
+    if (invalidTokens.length) {
+        console.log('Reminders with invalid tokens:');
+        console.log(JSON.stringify(invalidTokens, null, 4));
+    }
 
     if (!messages.length) {
         console.log('No valid messages to send');
@@ -122,4 +124,5 @@ async function sendReminders() {
 
 module.exports = {
     scheduleFirstRun,
+    sendReminders,
 };

@@ -3,8 +3,8 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { sectionToUTC, sectionFromUTC, reminderToUTC, reminderFromUTC } from './utc-translation';
 
-const BASE_URL = 'http://logan-backend-dev.us-west-2.elasticbeanstalk.com';
-const LOCAL_URL = 'http://192.168.86.227:3000';
+const BASE_URL = 'https://qecimgrskc.execute-api.us-west-2.amazonaws.com/Prod';
+const LOCAL_URL = 'http://192.168.1.149:3000';
 
 const STASH_KEY = 'stashedBearer';
 
