@@ -68,6 +68,7 @@ class CourseEditor extends Editor {
                                 <Grid item xs={6}>
                                     <ColorPicker
                                         fullWidth
+                                        label="Color"
                                         disabled={this.isEmpty()}
                                         value={_.get(this.state.course, 'color', '')}
                                         onChange={this.handleChange.bind(this, 'color')}
