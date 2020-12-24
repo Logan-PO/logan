@@ -4,13 +4,17 @@ import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
+import { getCurrentTheme } from '../../globals/theme';
 import Header from './header';
 
 class ViewController extends React.Component {
     render() {
+        const statusBarStyle =
+            this.props.statusBarStyle || (getCurrentTheme().colors.contrastText === 'white' ? 'light' : 'dark');
+
         return (
             <View style={{ flex: 1 }}>
-                <StatusBar style={this.props.statusBarStyle} />
+                <StatusBar style={statusBarStyle} />
                 {!this.props.disableHeader && (
                     <Header
                         {..._.pick(this.props, [
@@ -25,12 +29,11 @@ class ViewController extends React.Component {
                         ])}
                     />
                 )}
-                <View style={{ backgroundColor: 'white', flex: 1 }}>
+                <View style={{ flex: 1 }}>
                     <SafeAreaInsetsContext.Consumer>
                         {insets => (
                             <View
                                 style={{
-                                    backgroundColor: 'white',
                                     flex: 1,
                                     marginLeft: this.props.useSafeMargins ? insets.left : 0,
                                     marginRight: this.props.useSafeMargins ? insets.right : 0,
@@ -59,10 +62,6 @@ ViewController.propTypes = {
     leftActions: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     rightActions: PropTypes.object,
     rightActionIsSetting: PropTypes.bool,
-};
-
-ViewController.defaultProps = {
-    statusBarStyle: 'light',
 };
 
 export default ViewController;

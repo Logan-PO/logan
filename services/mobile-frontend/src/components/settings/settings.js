@@ -2,15 +2,17 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fetchSelf, setLoginStage, LOGIN_STAGE } from '@logan/fe-shared/store/login';
-import { Appbar, Button, Dialog, Paragraph, Portal, TextInput, Card, Colors } from 'react-native-paper';
+import { setLoginStage, LOGIN_STAGE, updateUser, deleteUser } from '@logan/fe-shared/store/login';
+import { Appbar, Button, Dialog, Paragraph, List, Portal, TextInput, Colors } from 'react-native-paper';
 import { ScrollView, View, ActivityIndicator } from 'react-native';
-import { deleteUser, updateUser } from '@logan/fe-shared/store/settings';
 import SyncComponent from '@logan/fe-shared/components/sync-component';
 import api from '@logan/fe-shared/utils/api';
 import ViewController from '../shared/view-controller';
 import MobileLoginButton from '../home/mobile-login-button';
 import Typography, { typographyStyles } from '../shared/typography';
+import ListItem from '../shared/list-item';
+import ColorPicker, { nameForColor } from '../shared/pickers/color-picker';
+import { getCurrentTheme } from '../../globals/theme';
 
 export class Settings extends SyncComponent {
     constructor(props) {
@@ -27,6 +29,8 @@ export class Settings extends SyncComponent {
         this.openDeleteConfirmation = this.openDeleteConfirmation.bind(this);
         this.hideDeleteConfirmation = this.hideDeleteConfirmation.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
+        this.updatePrimary = this.updatePrimary.bind(this);
+        this.updateAccent = this.updateAccent.bind(this);
 
         this.state = {
             user: props.user,
@@ -46,8 +50,6 @@ export class Settings extends SyncComponent {
         this.setState({ user });
 
         await this.props.updateUser(user);
-
-        await this.props.fetchSelf();
 
         this.setState({ isUpdatingUser: false });
     }
@@ -124,6 +126,20 @@ export class Settings extends SyncComponent {
         this.logout();
     }
 
+    async updatePrimary(hex) {
+        const user = { ...this.state.user };
+        user.primaryColor = nameForColor(hex);
+        this.setState({ user });
+        await this.props.updateUser(user);
+    }
+
+    async updateAccent(hex) {
+        const user = { ...this.state.user };
+        user.accentColor = nameForColor(hex);
+        this.setState({ user });
+        await this.props.updateUser(user);
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -135,46 +151,62 @@ export class Settings extends SyncComponent {
                     route={this.props.route}
                     leftActions={<Appbar.Action icon="close" onPress={this.props.navigation.goBack} />}
                 >
-                    <ScrollView style={{ padding: 16 }}>
-                        <Card>
-                            <Card.Content>
-                                <Typography variant="overline">ACCOUNT</Typography>
-                                <Typography variant="h5" style={{ marginTop: 4 }}>
-                                    {_.get(this.props, 'user.name')}
-                                </Typography>
-                                <Typography color="detail" style={{ marginTop: 4 }}>
-                                    {_.get(this.props, 'user.username')}
-                                </Typography>
-                                <Typography color="detail" style={{ marginTop: 4 }}>
-                                    {_.get(this.props, 'user.email')}
-                                </Typography>
-                            </Card.Content>
-                            <Card.Actions>
-                                <Button labelStyle={typographyStyles.button} onPress={this.openUsernameChange}>
-                                    Edit
-                                </Button>
-                                <Button labelStyle={typographyStyles.button} onPress={this.openLogoutConfirmation}>
-                                    Logout
-                                </Button>
-                                <View style={{ flex: 1 }} />
-                                <Button
-                                    color={Colors.red500}
-                                    labelStyle={typographyStyles.button}
-                                    onPress={this.openDeleteConfirmation}
-                                >
-                                    Delete
-                                </Button>
-                            </Card.Actions>
-                        </Card>
-                        <View style={{ flexDirection: 'row', marginTop: 16 }}>
-                            <Button
-                                mode="contained"
-                                labelStyle={typographyStyles.button}
-                                onPress={() => this.props.navigation.navigate('Tutorial Root')}
-                            >
-                                Show tutorial
-                            </Button>
-                        </View>
+                    <ScrollView>
+                        <List.Subheader>Account</List.Subheader>
+                        <ListItem
+                            leftContent={
+                                <View style={{ flex: 1 }}>
+                                    <View style={{ flex: 1 }}>
+                                        <Typography variant="h5" style={{ marginTop: 4 }}>
+                                            {_.get(this.props, 'user.name')}
+                                        </Typography>
+                                        <Typography color="detail" style={{ marginTop: 4 }}>
+                                            {_.get(this.props, 'user.username')}
+                                        </Typography>
+                                        <Typography color="detail" style={{ marginTop: 4 }}>
+                                            {_.get(this.props, 'user.email')}
+                                        </Typography>
+                                    </View>
+                                    <View style={{ flexDirection: 'row', marginTop: 12 }}>
+                                        <Button labelStyle={typographyStyles.button} onPress={this.openUsernameChange}>
+                                            Edit
+                                        </Button>
+                                        <Button
+                                            labelStyle={typographyStyles.button}
+                                            onPress={this.openLogoutConfirmation}
+                                        >
+                                            Logout
+                                        </Button>
+                                        <View style={{ flex: 1 }} />
+                                        <Button
+                                            color={Colors.red500}
+                                            labelStyle={typographyStyles.button}
+                                            onPress={this.openDeleteConfirmation}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </View>
+                                </View>
+                            }
+                        />
+                        <List.Subheader>Theme</List.Subheader>
+                        <ColorPicker
+                            primaryOnly
+                            label="Primary color"
+                            value={getCurrentTheme().colors.primary}
+                            onChange={this.updatePrimary}
+                        />
+                        <ColorPicker
+                            label="Accent color"
+                            value={getCurrentTheme().colors.accent}
+                            onChange={this.updateAccent}
+                        />
+                        <List.Subheader>Other</List.Subheader>
+                        <ListItem
+                            onPress={() => this.props.navigation.navigate('Tutorial Root')}
+                            showRightArrow
+                            leftContent={<Typography>Show tutorial</Typography>}
+                        />
                     </ScrollView>
                 </ViewController>
                 <Portal>
@@ -263,7 +295,8 @@ Settings.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
     updateUser: PropTypes.func,
-    fetchSelf: PropTypes.func,
+    selectPrimaryColor: PropTypes.func,
+    selectAccentColor: PropTypes.func,
 };
 
 const mapStateToProps = state => ({
@@ -272,10 +305,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-    deleteUser,
     setLoginStage,
     updateUser,
-    fetchSelf,
+    deleteUser,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

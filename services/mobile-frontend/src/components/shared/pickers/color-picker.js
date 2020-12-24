@@ -22,8 +22,30 @@ for (const name of names) {
 }
 
 delete namedColors.white;
+delete namedColors.black;
+
+const validPrimaryColors = _.pick(namedColors, [
+    'teal',
+    'green',
+    'lightGreen',
+    'orange',
+    'deepOrange',
+    'red',
+    'pink',
+    'purple',
+    'deepPurple',
+    'indigo',
+    'blue',
+    'lightBlue',
+    'blueGrey',
+]);
 
 export { namedColors as colors };
+
+export function nameForColor(hex) {
+    const result = _.find(_.entries(namedColors), entry => hex === entry[1].color);
+    return result[0];
+}
 
 class ColorPicker extends SyncComponent {
     constructor(props) {
@@ -77,6 +99,8 @@ class ColorPicker extends SyncComponent {
     }
 
     render() {
+        const colorsToUse = this.props.primaryOnly ? validPrimaryColors : namedColors;
+
         const namedColor = _.find(_.values(namedColors), ({ color }) => this.props.value === color);
 
         return (
@@ -101,7 +125,7 @@ class ColorPicker extends SyncComponent {
                     }}
                     onLayout={this.onViewLayout}
                 >
-                    {_.orderBy(_.values(namedColors), ['color'], ['desc']).map(({ color }, i) => {
+                    {_.orderBy(_.values(colorsToUse), ['color'], ['desc']).map(({ color }, i) => {
                         const selected = color === this.state.color;
 
                         const padding = 6;
@@ -129,6 +153,7 @@ class ColorPicker extends SyncComponent {
 }
 
 ColorPicker.propTypes = {
+    primaryOnly: PropTypes.bool,
     label: PropTypes.string,
     value: PropTypes.string,
     onChange: PropTypes.func,
