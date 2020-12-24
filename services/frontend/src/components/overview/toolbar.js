@@ -60,16 +60,16 @@ class Toolbar extends React.Component {
                 <Grid item xs={2}>
                     <ButtonGroup size="small" variant="contained" disableElevation color="primary">
                         <Button
-                            onClick={this.updateViewType.bind(this, 'week')}
-                            style={{ opacity: this.props.view === 'week' ? 0.5 : 1 }}
-                        >
-                            Week
-                        </Button>
-                        <Button
                             onClick={this.updateViewType.bind(this, 'month')}
                             style={{ opacity: this.props.view === 'month' ? 0.5 : 1 }}
                         >
                             Month
+                        </Button>
+                        <Button
+                            onClick={this.updateViewType.bind(this, 'week')}
+                            style={{ opacity: this.props.view === 'week' ? 0.5 : 1 }}
+                        >
+                            Week
                         </Button>
                     </ButtonGroup>
                 </Grid>
