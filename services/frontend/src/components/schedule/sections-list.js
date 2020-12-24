@@ -7,6 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { getScheduleSelectors, createSection, deleteSection } from '@logan/fe-shared/store/schedule';
 import '../shared/list.scss';
 import EmptySticker from '../shared/displays/empty-sticker';
+import SectionCreateModal from './section-create-modal';
 
 class SectionsList extends React.Component {
     constructor(props) {
@@ -14,6 +15,11 @@ class SectionsList extends React.Component {
 
         this.didSelectSection = this.didSelectSection.bind(this);
         this.didDeleteSection = this.didDeleteSection.bind(this);
+        this.onClose = this.onClose.bind(this);
+
+        this.state = {
+            createModalOpen: false,
+        };
     }
 
     randomSection() {
@@ -43,6 +49,10 @@ class SectionsList extends React.Component {
         this.didSelectSection(undefined);
     }
 
+    onClose() {
+        this.setState({ createModalOpen: false });
+    }
+
     listItems() {
         const sections = this.props.getSectionsForCourse({ cid: this.props.cid });
 
@@ -63,7 +73,7 @@ class SectionsList extends React.Component {
                     </div>
                 );
             }),
-            <ListItem button key="new" onClick={() => this.props.createSection(this.randomSection())}>
+            <ListItem button key="new" onClick={() => this.setState({ createModalOpen: true })}>
                 <ListItemText
                     primary={
                         <a style={{ display: 'flex', alignItems: 'center' }}>
@@ -92,6 +102,13 @@ class SectionsList extends React.Component {
                     <List>
                         <ListSubheader className="list-header">Sections</ListSubheader>
                         {this.listItems()}
+                        <SectionCreateModal
+                            onClose={this.onClose}
+                            open={this.state.createModalOpen}
+                            cid={this.props.cid}
+                            getCourse={this.props.getCourse}
+                            getTerm={this.props.getTerm}
+                        />
                     </List>
                 </div>
             </div>

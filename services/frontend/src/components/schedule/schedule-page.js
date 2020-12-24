@@ -93,15 +93,20 @@ class SchedulePage extends React.Component {
     }
 
     onSectionSelected(sid) {
-        const section = this.props.getSection(sid);
-        const course = this.props.getCourse(section.cid);
-
-        this.setState({
-            selectedTid: course.tid,
-            selectedCid: section.cid,
-            selectedHid: undefined,
-            selectedSid: sid,
-        });
+        if (!sid) {
+            this.setState({
+                selectedSid: null,
+            });
+        } else {
+            const section = this.props.getSection(sid);
+            const course = this.props.getCourse(section.cid);
+            this.setState({
+                selectedTid: course.tid,
+                selectedCid: section.cid,
+                selectedHid: undefined,
+                selectedSid: sid,
+            });
+        }
     }
 
     editorToDisplay() {
