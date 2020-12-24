@@ -81,7 +81,7 @@ describe('createUser', () => {
     beforeAll(async () => testUtils.clearTables());
 
     it('Creating a normal user succeeds', async () => {
-        const requestBody = _.omit(basicUser1, ['uid']);
+        const requestBody = _.pick(basicUser1, ['name', 'email', 'username']);
 
         const response = await usersController.createUser({ body: requestBody });
 
@@ -99,7 +99,9 @@ describe('createUser', () => {
         expect(users).toHaveLength(1);
         expect(users).toEqual(
             expect.arrayContaining([
-                expect.objectContaining(usersController.__test_only__.toDbFormat(_.omit(basicUser1, ['uid']))),
+                expect.objectContaining(
+                    _.pick(usersController.__test_only__.toDbFormat(basicUser1), ['name', 'username', 'email'])
+                ),
             ])
         );
     });
