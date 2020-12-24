@@ -19,6 +19,8 @@ const basicUser1 = {
     username: 'basicuser1',
     name: 'Basic User1',
     email: 'basicuser1@gmail.com',
+    primaryColor: 'teal',
+    accentColor: 'deepOrange',
 };
 
 const basicUser2 = {
@@ -26,6 +28,8 @@ const basicUser2 = {
     username: 'basicuser2',
     name: 'Basic User2',
     email: 'basicuser2@gmail.com',
+    primaryColor: 'red',
+    accentColor: 'blue',
 };
 
 // eslint-disable-next-line import/order
@@ -77,7 +81,7 @@ describe('createUser', () => {
     beforeAll(async () => testUtils.clearTables());
 
     it('Creating a normal user succeeds', async () => {
-        const requestBody = _.omit(basicUser1, ['uid']);
+        const requestBody = _.pick(basicUser1, ['name', 'email', 'username']);
 
         const response = await usersController.createUser({ body: requestBody });
 
@@ -95,7 +99,9 @@ describe('createUser', () => {
         expect(users).toHaveLength(1);
         expect(users).toEqual(
             expect.arrayContaining([
-                expect.objectContaining(usersController.__test_only__.toDbFormat(_.omit(basicUser1, ['uid']))),
+                expect.objectContaining(
+                    _.pick(usersController.__test_only__.toDbFormat(basicUser1), ['name', 'username', 'email'])
+                ),
             ])
         );
     });

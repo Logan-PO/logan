@@ -10,6 +10,8 @@ function fromDbFormat(db) {
     return {
         ..._.pick(db, ['uid', 'name', 'email', 'tokens']),
         username: db.uname,
+        primaryColor: db.pc,
+        accentColor: db.ac,
     };
 }
 
@@ -17,6 +19,8 @@ function toDbFormat(user) {
     return {
         ..._.pick(user, ['uid', 'name', 'email', 'tokens']),
         uname: user.username,
+        pc: user.primaryColor,
+        ac: user.accentColor,
     };
 }
 
