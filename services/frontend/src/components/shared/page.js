@@ -36,8 +36,8 @@ class Page extends React.Component {
                 </Helmet>
                 <Sidebar currentPage={this.props.title} />
                 <div className={styles.rootContainer}>
-                    <Navbar title={this.props.title} buttons={this.props.buttons} />
                     <div className={styles.contentContainer}>
+                        <Navbar title={this.props.title} buttons={this.props.buttons} />
                         <div className={styles.content}>{this.props.children}</div>
                     </div>
                 </div>
