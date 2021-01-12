@@ -32,7 +32,7 @@ class Page extends React.Component {
         return (
             <div className={styles.page} style={{ background: theme.palette.primary.main }}>
                 <Helmet>
-                    <title>Logan/{this.props.title}</title>
+                    <title>Logan / {this.props.title}</title>
                 </Helmet>
                 <Sidebar currentPage={this.props.title} />
                 <div className={styles.rootContainer}>
