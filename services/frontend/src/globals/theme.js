@@ -39,8 +39,8 @@ export function makeTheme(params = {}) {
             h4: { fontFamily: headingsFontFamily.join(',') },
             h5: { fontFamily: headingsFontFamily.join(',') },
             h6: { fontFamily: headingsFontFamily.join(',') },
-            body1: { fontSize: 14 },
-            body2: { fontSize: 12 },
+            body1: { fontSize: '0.9rem' },
+            body2: { fontSize: '0.75rem' },
             button: { fontWeight: 'normal', textTransform: 'none' },
         },
     });
