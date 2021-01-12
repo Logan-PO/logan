@@ -8,7 +8,9 @@ $sidebar-z-index: 20;
 }
 
 .sidebar-paper {
+    background: none !important;
     width: $sidebar-width;
+    border-right: none !important;
 }
 
 .sidebar-container {

@@ -74,7 +74,7 @@ class Navbar extends React.Component {
         const theme = getCurrentTheme();
 
         return (
-            <AppBar className={styles.navbar} theme={theme}>
+            <AppBar className={styles.navbar} theme={theme} position="static" elevation={0}>
                 <Toolbar>
                     <Typography variant="h6" noWrap>
                         Logan &gt; <b>{this.props.title}</b>

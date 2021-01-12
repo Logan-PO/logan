@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
 import { Helmet } from 'react-helmet';
-import { Toolbar } from '@material-ui/core';
 import api from '@logan/fe-shared/utils/api';
 import { setLoginStage, LOGIN_STAGE, fetchSelf } from '@logan/fe-shared/store/login';
+import { getCurrentTheme } from '../../globals/theme';
 import styles from './page.module.scss';
 import { Navbar, Sidebar } from '.';
 
@@ -27,16 +27,17 @@ class Page extends React.Component {
     }
 
     render() {
+        const theme = getCurrentTheme();
+
         return (
-            <div className={styles.page}>
+            <div className={styles.page} style={{ background: theme.palette.primary.main }}>
                 <Helmet>
-                    <title>Logan | {this.props.title}</title>
+                    <title>Logan/{this.props.title}</title>
                 </Helmet>
-                <Navbar title={this.props.title} buttons={this.props.buttons} />
+                <Sidebar currentPage={this.props.title} />
                 <div className={styles.rootContainer}>
-                    <Toolbar />
+                    <Navbar title={this.props.title} buttons={this.props.buttons} />
                     <div className={styles.contentContainer}>
-                        <Sidebar currentPage={this.props.title} />
                         <div className={styles.content}>{this.props.children}</div>
                     </div>
                 </div>
