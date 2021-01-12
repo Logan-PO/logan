@@ -33,8 +33,8 @@ export function makeTheme(params = {}) {
         },
         typography: {
             fontFamily: defaultFontFamily.join(', '),
-            h1: { fontFamily: headingsFontFamily.join(',') },
-            h2: { fontFamily: headingsFontFamily.join(',') },
+            h1: { fontFamily: headingsFontFamily.join(','), fontWeight: 500, fontSize: 36 },
+            h2: { fontFamily: headingsFontFamily.join(','), fontWeight: 500, fontSize: 24 },
             h3: { fontFamily: headingsFontFamily.join(',') },
             h4: { fontFamily: headingsFontFamily.join(',') },
             h5: { fontFamily: headingsFontFamily.join(',') },
