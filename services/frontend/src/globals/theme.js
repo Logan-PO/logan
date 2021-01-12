@@ -1,7 +1,7 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import { colors } from '@material-ui/core';
 
-const defaultFontFamily = ['Roboto', '-apple-system', 'BlinkMacSystemFont', 'Arial', 'sans-serif'];
+const defaultFontFamily = ['Rubik', '-apple-system', 'BlinkMacSystemFont', 'Arial', 'sans-serif'];
 const headingsFontFamily = ['Poppins', ...defaultFontFamily];
 
 let currentTheme = createMuiTheme();
