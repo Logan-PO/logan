@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import AddIcon from '@material-ui/icons/Add';
-import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
+import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch } from '@material-ui/core';
 import _ from 'lodash';
 import { dateUtils } from '@logan/core';
 import {
@@ -12,6 +11,7 @@ import {
     setShouldGoToAssignment,
 } from '@logan/fe-shared/store/assignments';
 import { getSections } from '@logan/fe-shared/sorting/assignments';
+import Fab from '../shared/controls/fab';
 import AssignmentModal from './assignment-modal';
 import AssignmentCell from './assignment-cell';
 import '../shared/list.scss';
@@ -145,9 +145,7 @@ class AssignmentsList extends React.Component {
                         </FormControl>
                     </Toolbar>
                 </AppBar>
-                <Fab className="add-button" color="secondary" onClick={this.openNewAssignmentModal}>
-                    <AddIcon />
-                </Fab>
+                <Fab className="add-button" onClick={this.openNewAssignmentModal} />
                 <AssignmentModal open={this.state.newAssignmentModalOpen} onClose={this.closeNewAssignmentModal} />
             </div>
         );
