@@ -4,12 +4,10 @@ import { Typography as MuiTypography } from '@material-ui/core';
 
 const variants = {
     'navbar-1': {
-        fontFamily: 'Poppins',
         fontSize: '24px',
         fontWeight: 500,
     },
     'navbar-2': {
-        fontFamily: 'Poppins',
         fontSize: '16px',
         fontWeight: 500,
     },
