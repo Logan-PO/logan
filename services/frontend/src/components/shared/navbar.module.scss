@@ -26,6 +26,7 @@
 }
 
 .navbar-text {
+    user-select: none;
     line-height: $navbar-height !important;
 }
 
