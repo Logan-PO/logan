@@ -10,31 +10,20 @@ $sidebar-z-index: 20;
 }
 
 .sidebar-button {
-    padding: 20px 0px !important;
-    background: none;
-    border: none;
-    color: white !important;
-    appearance: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 64px;
-    min-height: 64px;
+    height: 64px;
 }
 
-.button-label {
-    line-height: normal;
-    display: flex;
-    flex-direction: column;
+.sidebar-button-icon {
+    color: white;
 }
 
 .sidebar-button-selected {
     @extend .sidebar-button;
-    padding: 10px 0 !important;
-    background: rgba(0, 0, 0, 0.15);
-}
-
-.button-title {
-    text-transform: none;
-    font-weight: 500 !important;
-    padding-top: 4px;
+    background: rgba(0, 0, 0, 0.1) !important;
 }
 
 .sidebar-paper {

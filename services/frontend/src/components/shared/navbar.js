@@ -76,6 +76,11 @@ class Navbar extends React.Component {
 
         return (
             <AppBar className={styles.navbar} theme={theme} position="static" elevation={0}>
+                <div className={styles.titleContainer}>
+                    <Typography variant="navbar-1" noWrap className={styles.navbarText}>
+                        {this.props.title}
+                    </Typography>
+                </div>
                 <div className={styles.navbarContent}>
                     <Typography variant="navbar-2" noWrap className={styles.navbarText}>
                         {`${dateUtils.dayjs().format('h:mma')} / ${dateUtils.dayjs().format('dddd, MMM Do')}`}
@@ -83,17 +88,14 @@ class Navbar extends React.Component {
                     <div className={styles.flexibleSpace} />
                     {this.props.buttons}
                     <Tooltip title="Refresh">
-                        <IconButton disabled={this.props.isFetching} onClick={this.fetchAll} color="inherit">
-                            <SyncIcon />
-                        </IconButton>
+                        <span>
+                            <IconButton disabled={this.props.isFetching} onClick={this.fetchAll} color="inherit">
+                                <SyncIcon />
+                            </IconButton>
+                        </span>
                     </Tooltip>
                     <Typography onClick={this.openAccountModal} variant="navbar-2" noWrap className={styles.navbarText}>
                         {_.get(this.props, 'user.name', '').split(' ')[0]}
-                    </Typography>
-                </div>
-                <div className={styles.titleContainer}>
-                    <Typography variant="navbar-1" noWrap className={styles.navbarText}>
-                        {this.props.title}
                     </Typography>
                 </div>
                 <AccountDialog open={this.state.accountModalOpen} onClose={this.accountModalClosed} />

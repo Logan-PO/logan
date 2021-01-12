@@ -2,10 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
-import { Button } from '@material-ui/core';
+import { Tooltip, IconButton } from '@material-ui/core';
 import { Home, CheckCircleOutline, Assignment, CollectionsBookmark, Settings } from '@material-ui/icons';
 import styles from './sidebar.module.scss';
-import Typography from './typography';
 
 const pages = {
     Overview: {
@@ -44,18 +43,20 @@ class Sidebar extends React.Component {
                     const buttonClass = selected ? styles.sidebarButtonSelected : styles.sidebarButton;
 
                     return (
-                        <Button
-                            key={name}
-                            onClick={() => navigate(url)}
-                            classes={{ root: buttonClass, label: styles.buttonLabel }}
-                        >
-                            <IconComponent />
-                            {selected && (
-                                <Typography variant="caption" className={styles.buttonTitle}>
-                                    {name}
-                                </Typography>
-                            )}
-                        </Button>
+                        <div key={name} className={buttonClass}>
+                            <Tooltip
+                                title={name}
+                                disableHoverListener={selected}
+                                disableFocusListener={selected}
+                                disableTouchListener={selected}
+                            >
+                                <span>
+                                    <IconButton disabled={selected} onClick={() => navigate(url)}>
+                                        <IconComponent className={styles.sidebarButtonIcon} />
+                                    </IconButton>
+                                </span>
+                            </Tooltip>
+                        </div>
                     );
                 })}
             </div>
