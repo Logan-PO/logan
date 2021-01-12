@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch } from '@material-ui/core';
+import { List, ListSubheader, Toolbar, FormControl, FormControlLabel, Switch } from '@material-ui/core';
 import { getTasksSelectors, deleteTask, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
 import { setShouldGoToAssignment } from '@logan/fe-shared/store/assignments';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
@@ -105,7 +105,7 @@ class TasksList extends React.Component {
                         })}
                     </List>
                 </div>
-                <AppBar position="relative" color="primary" className={styles.actionsBar}>
+                <div className={styles.actionsBar}>
                     <Toolbar variant="dense">
                         <FormControl>
                             <FormControlLabel
@@ -120,7 +120,7 @@ class TasksList extends React.Component {
                             />
                         </FormControl>
                     </Toolbar>
-                </AppBar>
+                </div>
                 <Fab className="add-button" onClick={this.openCreateModal} />
                 <TaskModal open={this.state.newTaskModalOpen} onClose={this.closeCreateModal} />
             </div>

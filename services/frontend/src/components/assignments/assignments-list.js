@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch } from '@material-ui/core';
+import { List, ListSubheader, Toolbar, FormControl, FormControlLabel, Switch } from '@material-ui/core';
 import _ from 'lodash';
 import { dateUtils } from '@logan/core';
 import {
@@ -125,7 +125,7 @@ class AssignmentsList extends React.Component {
                         })}
                     </List>
                 </div>
-                <AppBar position="relative" color="primary" className={classes.actionsBar}>
+                <div className={classes.actionsBar}>
                     <Toolbar variant="dense">
                         <FormControl>
                             <FormControlLabel
@@ -144,7 +144,7 @@ class AssignmentsList extends React.Component {
                             />
                         </FormControl>
                     </Toolbar>
-                </AppBar>
+                </div>
                 <Fab className="add-button" onClick={this.openNewAssignmentModal} />
                 <AssignmentModal open={this.state.newAssignmentModalOpen} onClose={this.closeNewAssignmentModal} />
             </div>
