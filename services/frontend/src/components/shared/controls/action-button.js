@@ -44,7 +44,7 @@ class ActionButton extends React.Component {
     }
 
     render() {
-        let { children, color = 'primary', size = 'large', ...rest } = this.props;
+        let { children, color = 'primary', textColor, size = 'large', ...rest } = this.props;
 
         if (!(size === 'large' || size === 'small')) {
             size = 'large';
@@ -77,6 +77,8 @@ class ActionButton extends React.Component {
             colorStyle.color = theme.palette.primary.main;
         }
 
+        if (textColor) colorStyle.color = textColor;
+
         const typographyVariant = size === 'small' ? 'detail' : 'body1';
 
         return (
@@ -89,6 +91,7 @@ class ActionButton extends React.Component {
 
 ActionButton.propTypes = {
     color: PropTypes.string,
+    textColor: PropTypes.string,
     children: PropTypes.node,
     size: PropTypes.string,
 };
