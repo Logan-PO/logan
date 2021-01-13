@@ -9,7 +9,7 @@ const InputGroup = ({ color, accessory, icon, emptyAccessory = false, label, con
 
     if (icon) {
         const IconComponent = icon;
-        accessoryContent = <IconComponent color={color || '#646464'} style={{ fontSize: 22 }} />;
+        accessoryContent = <IconComponent style={{ fontSize: 22, color: color || '#646464' }} />;
     }
 
     return (

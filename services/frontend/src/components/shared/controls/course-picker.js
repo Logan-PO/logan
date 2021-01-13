@@ -46,10 +46,14 @@ class CoursePicker extends React.Component {
     }
 
     render() {
+        const course = this.props.getCourse(this.props.value) || {};
+        const courseColor = course.color;
+
         return (
             <InputGroup
                 label="Course"
                 icon={CourseIcon}
+                color={courseColor}
                 content={
                     <Select
                         fullWidth={this.props.fullWidth}
@@ -69,6 +73,7 @@ CoursePicker.propTypes = {
     disabled: PropTypes.bool,
     tids: PropTypes.array,
     getTerm: PropTypes.func,
+    getCourse: PropTypes.func,
     getCoursesForTerm: PropTypes.func,
     allCids: PropTypes.array,
     value: PropTypes.string,
@@ -87,6 +92,7 @@ const mapStateToProps = state => {
         tids: selectors.baseSelectors.terms.selectIds(),
         getTerm: selectors.baseSelectors.terms.selectById,
         getCoursesForTerm: selectors.getCoursesForTerm,
+        getCourse: selectors.baseSelectors.courses.selectById,
         allCids: selectors.baseSelectors.courses.selectIds(),
     };
 };
