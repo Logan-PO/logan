@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Grid, TextField } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from '@logan/fe-shared/store/tasks';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
@@ -11,6 +11,8 @@ import '../shared/editor.scss';
 import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox, TagEditor } from '../shared/controls';
 import RemindersList from '../reminders/reminders-list';
 import './task-editor.scss';
+import TextInput from '../shared/controls/text-input';
+import InputGroup from '../shared/controls/input-group';
 import AssignmentPreview from './assignment-preview';
 
 const {
@@ -66,88 +68,82 @@ class TaskEditor extends Editor {
         return (
             <div className="editor">
                 <div className="scroll-view">
-                    <Grid container spacing={2} direction="column" alignItems="stretch">
+                    <Grid container spacing={0} direction="column" alignItems="stretch">
                         <Grid item xs={12}>
-                            <Grid container spacing={1} direction="row" justify="flex-start" alignItems="flex-end">
-                                <Grid item>
+                            <InputGroup
+                                accessory={
                                     <Checkbox
                                         disabled={this.isEmpty()}
                                         cid={cid}
                                         checked={_.get(this.state.task, 'complete', false)}
                                         onChange={this.handleChange.bind(this, 'complete')}
                                     />
-                                </Grid>
-                                <Grid item style={{ flexGrow: 1 }}>
-                                    <TextField
-                                        label="Title"
+                                }
+                                content={
+                                    <TextInput
                                         fullWidth
                                         onChange={this.handleChange.bind(this, 'title')}
                                         value={_.get(this.state.task, 'title', '')}
-                                        placeholder="Untitled task"
+                                        placeholder="Title"
                                         disabled={this.isEmpty()}
+                                        variant="big-input"
                                     />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="Description"
-                                fullWidth
-                                multiline
-                                onChange={this.handleChange.bind(this, 'description')}
-                                value={_.get(this.state.task, 'description', '')}
-                                placeholder="Task description"
-                                disabled={this.isEmpty()}
+                                }
                             />
                         </Grid>
                         <Grid item xs={12}>
-                            <Grid container direction="row" spacing={2}>
-                                <Grid item xs={6}>
-                                    <Grid container direction="column" spacing={2}>
-                                        <Grid item xs={12}>
-                                            {relatedAssignment ? (
-                                                <AssignmentPreview aid={relatedAssignment.aid} />
-                                            ) : (
-                                                <CoursePicker
-                                                    fullWidth
-                                                    disabled={this.isEmpty() || !!relatedAssignment}
-                                                    value={cid || 'none'}
-                                                    onChange={this.handleChange.bind(this, 'cid')}
-                                                />
-                                            )}
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <DueDatePicker
-                                                entityId={_.get(this.state.task, 'tid')}
-                                                disabled={this.isEmpty()}
-                                                value={_.get(this.state.task, 'dueDate')}
-                                                onChange={this.handleChange.bind(this, 'dueDate')}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <RemindersList eid={_.get(this.state.task, 'tid')} entityType="task" />
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Grid container direction="column" spacing={2}>
-                                        <Grid item xs={12}>
-                                            <TagEditor
-                                                disabled={this.isEmpty()}
-                                                tags={_.get(this.state.task, 'tags')}
-                                                onChange={this.handleChange.bind(this, 'tags')}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <PriorityPicker
-                                                disabled={this.isEmpty()}
-                                                value={_.get(this.state.task, 'priority')}
-                                                onChange={this.handleChange.bind(this, 'priority')}
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
+                            <InputGroup
+                                emptyAccessory
+                                content={
+                                    <TextInput
+                                        fullWidth
+                                        multiline
+                                        onChange={this.handleChange.bind(this, 'description')}
+                                        value={_.get(this.state.task, 'description', '')}
+                                        placeholder="Description"
+                                        disabled={this.isEmpty()}
+                                        style={{ color: '#646464', marginBottom: 24 }}
+                                    />
+                                }
+                            />
+                        </Grid>
+                        {relatedAssignment && (
+                            <Grid item xs={12}>
+                                <AssignmentPreview aid={relatedAssignment.aid} />
                             </Grid>
+                        )}
+                        <Grid item xs={12}>
+                            <CoursePicker
+                                fullWidth
+                                disabled={this.isEmpty() || !!relatedAssignment}
+                                value={cid || 'none'}
+                                onChange={this.handleChange.bind(this, 'cid')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <DueDatePicker
+                                entityId={_.get(this.state.task, 'tid')}
+                                disabled={this.isEmpty()}
+                                value={_.get(this.state.task, 'dueDate')}
+                                onChange={this.handleChange.bind(this, 'dueDate')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TagEditor
+                                disabled={this.isEmpty()}
+                                tags={_.get(this.state.task, 'tags')}
+                                onChange={this.handleChange.bind(this, 'tags')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <PriorityPicker
+                                disabled={this.isEmpty()}
+                                value={_.get(this.state.task, 'priority')}
+                                onChange={this.handleChange.bind(this, 'priority')}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <RemindersList eid={_.get(this.state.task, 'tid')} entityType="task" />
                         </Grid>
                     </Grid>
                 </div>

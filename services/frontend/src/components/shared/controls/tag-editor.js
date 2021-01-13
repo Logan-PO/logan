@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Chip, FormControl, FormLabel } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
+import TagIcon from '@material-ui/icons/LocalOffer';
 import classes from './tag-editor.module.scss';
+import InputGroup from './input-group';
 
 class TagEditor extends React.Component {
     constructor(props) {
@@ -106,37 +108,40 @@ class TagEditor extends React.Component {
         );
 
         return (
-            <FormControl fullWidth>
-                <FormLabel style={{ fontSize: '0.75rem', marginBottom: '0.5rem' }}>Tags</FormLabel>
-                <div className={classes.tagEditor}>
-                    {this.props.tags.map((tag, index) => (
+            <InputGroup
+                label="Tags"
+                icon={TagIcon}
+                content={
+                    <div className={classes.tagEditor}>
+                        {this.props.tags.map((tag, index) => (
+                            <Chip
+                                disabled={this.props.disabled}
+                                color="primary"
+                                size="small"
+                                key={index}
+                                label={tag}
+                                onDelete={this.labelDeleted.bind(this, index)}
+                                style={{ margin: '0 4px 6px 0' }}
+                            />
+                        ))}
                         <Chip
                             disabled={this.props.disabled}
-                            color="primary"
+                            color={this.props.disabled ? 'default' : 'primary'}
                             size="small"
-                            key={index}
-                            label={tag}
-                            onDelete={this.labelDeleted.bind(this, index)}
-                            style={{ margin: '0 4px 6px 0' }}
+                            key="new"
+                            variant={this.state.focused ? 'outlined' : 'default'}
+                            label={currentLabel}
+                            onClick={this.openLabel}
+                            {...(this.state.focused ? { onDelete: this.cancelLabel } : {})}
+                            onMouseOver={this.hoverNew}
+                            style={{
+                                opacity: this.state.hovered || this.state.focused ? 1 : 0.75,
+                            }}
+                            onMouseOut={this.unhoverNew}
                         />
-                    ))}
-                    <Chip
-                        disabled={this.props.disabled}
-                        color={this.props.disabled ? 'default' : 'primary'}
-                        size="small"
-                        key="new"
-                        variant={this.state.focused ? 'outlined' : 'default'}
-                        label={currentLabel}
-                        onClick={this.openLabel}
-                        {...(this.state.focused ? { onDelete: this.cancelLabel } : {})}
-                        onMouseOver={this.hoverNew}
-                        style={{
-                            opacity: this.state.hovered || this.state.focused ? 1 : 0.75,
-                        }}
-                        onMouseOut={this.unhoverNew}
-                    />
-                </div>
-            </FormControl>
+                    </div>
+                }
+            />
         );
     }
 }

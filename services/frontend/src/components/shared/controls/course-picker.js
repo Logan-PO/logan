@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { FormControl, InputLabel, Select, ListSubheader, MenuItem } from '@material-ui/core';
+import { Select, ListSubheader, MenuItem } from '@material-ui/core';
+import CourseIcon from '@material-ui/icons/Book';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
+import InputGroup from './input-group';
 
 class CoursePicker extends React.Component {
     getDerivedValue() {
@@ -45,12 +47,19 @@ class CoursePicker extends React.Component {
 
     render() {
         return (
-            <FormControl fullWidth={this.props.fullWidth} disabled={this.props.disabled}>
-                <InputLabel>Course</InputLabel>
-                <Select fullWidth={this.props.fullWidth} value={this.getDerivedValue()} onChange={this.props.onChange}>
-                    {this.generateItems()}
-                </Select>
-            </FormControl>
+            <InputGroup
+                label="Course"
+                icon={CourseIcon}
+                content={
+                    <Select
+                        fullWidth={this.props.fullWidth}
+                        value={this.getDerivedValue()}
+                        onChange={this.props.onChange}
+                    >
+                        {this.generateItems()}
+                    </Select>
+                }
+            />
         );
     }
 }
