@@ -1,7 +1,12 @@
+.priority-group {
+  margin-bottom: 20px;
+}
+
 .priority-slider {
   width: 400px;
   margin-left: 1px;
   margin-right: 1px;
+  margin-bottom: 0 !important;
 
   .root {
     color: #e5e5e5;

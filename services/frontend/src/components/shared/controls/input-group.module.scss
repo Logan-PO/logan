@@ -6,12 +6,14 @@
   th, td {
     padding: 0;
     border-collapse: collapse;
-    vertical-align: center;
+    vertical-align: middle;
     overflow: visible;
   }
 
   tr > td:first-child:not(:only-child) {
     width: 40px;
+    min-width: 40px;
+    max-width: 40px;
     padding-right: 18px;
   }
 

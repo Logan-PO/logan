@@ -36,11 +36,11 @@ class PriorityPicker extends React.Component {
 
         return (
             <InputGroup
+                className="priority-group"
                 label="Priority"
                 icon={PriorityIcon}
                 content={
                     <Slider
-                        ref={this.sliderRef}
                         className="priority-slider"
                         style={{ width: '400px' }}
                         track={false}

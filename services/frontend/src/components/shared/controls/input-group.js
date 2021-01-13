@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from '../typography';
 import styles from './input-group.module.scss';
 
-const InputGroup = ({ color, accessory, icon, emptyAccessory = false, label, content }) => {
+const InputGroup = ({ color, accessory, icon, emptyAccessory = false, label, content, ...rest }) => {
     const hasAccessory = emptyAccessory || accessory || icon;
     let accessoryContent = accessory;
 
@@ -12,8 +12,14 @@ const InputGroup = ({ color, accessory, icon, emptyAccessory = false, label, con
         accessoryContent = <IconComponent style={{ fontSize: 22, color: color || '#646464' }} />;
     }
 
+    const classNames = [styles.inputGroup];
+
+    if (rest.className) {
+        classNames.push(rest.className);
+    }
+
     return (
-        <table className={styles.inputGroup}>
+        <table className={classNames.join(' ')}>
             <tbody>
                 {label && (
                     <tr>
