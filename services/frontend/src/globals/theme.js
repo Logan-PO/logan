@@ -1,7 +1,7 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import { colors } from '@material-ui/core';
 
-const defaultFontFamily = ['Roboto', '-apple-system', 'BlinkMacSystemFont', 'Arial', 'sans-serif'];
+const defaultFontFamily = ['Rubik', '-apple-system', 'BlinkMacSystemFont', 'Arial', 'sans-serif'];
 const headingsFontFamily = ['Poppins', ...defaultFontFamily];
 
 let currentTheme = createMuiTheme();
@@ -33,12 +33,15 @@ export function makeTheme(params = {}) {
         },
         typography: {
             fontFamily: defaultFontFamily.join(', '),
-            h1: { fontFamily: headingsFontFamily.join(',') },
-            h2: { fontFamily: headingsFontFamily.join(',') },
+            h1: { fontFamily: headingsFontFamily.join(','), fontWeight: 500, fontSize: '2.25rem' },
+            h2: { fontFamily: headingsFontFamily.join(','), fontWeight: 500, fontSize: '1.5rem' },
             h3: { fontFamily: headingsFontFamily.join(',') },
             h4: { fontFamily: headingsFontFamily.join(',') },
             h5: { fontFamily: headingsFontFamily.join(',') },
             h6: { fontFamily: headingsFontFamily.join(',') },
+            body1: { fontSize: '0.9rem' },
+            body2: { fontSize: '0.75rem' },
+            button: { fontWeight: 'normal', textTransform: 'none' },
         },
     });
 

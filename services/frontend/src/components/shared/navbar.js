@@ -1,9 +1,9 @@
+import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { AppBar, Toolbar, Typography, IconButton, Tooltip } from '@material-ui/core';
+import { AppBar, IconButton, Tooltip } from '@material-ui/core';
 import SyncIcon from '@material-ui/icons/Sync';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { dateUtils } from '@logan/core';
 import { fetchSelf } from '@logan/fe-shared/store/login';
 import { beginFetching, finishFetching } from '@logan/fe-shared/store/fetch-status';
@@ -14,6 +14,7 @@ import { fetchReminders } from '@logan/fe-shared/store/reminders';
 import { getCurrentTheme } from '../../globals/theme';
 import styles from './navbar.module.scss';
 import AccountDialog from './account-dialog';
+import Typography from './typography';
 
 class Navbar extends React.Component {
     constructor(props) {
@@ -74,22 +75,29 @@ class Navbar extends React.Component {
         const theme = getCurrentTheme();
 
         return (
-            <AppBar className={styles.navbar} theme={theme}>
-                <Toolbar>
-                    <Typography variant="h6" noWrap>
-                        Logan &gt; <b>{this.props.title}</b>
+            <AppBar className={styles.navbar} theme={theme} position="static" elevation={0}>
+                <div className={styles.titleContainer}>
+                    <Typography variant="navbar-1" noWrap className={styles.navbarText}>
+                        {this.props.title}
+                    </Typography>
+                </div>
+                <div className={styles.navbarContent}>
+                    <Typography variant="navbar-2" noWrap className={styles.navbarText}>
+                        {`${dateUtils.dayjs().format('h:mma')} / ${dateUtils.dayjs().format('dddd, MMM Do')}`}
                     </Typography>
                     <div className={styles.flexibleSpace} />
                     {this.props.buttons}
                     <Tooltip title="Refresh">
-                        <IconButton disabled={this.props.isFetching} onClick={this.fetchAll} color="inherit">
-                            <SyncIcon />
-                        </IconButton>
+                        <span>
+                            <IconButton disabled={this.props.isFetching} onClick={this.fetchAll} color="inherit">
+                                <SyncIcon />
+                            </IconButton>
+                        </span>
                     </Tooltip>
-                    <IconButton onClick={this.openAccountModal} color="inherit">
-                        <AccountCircleIcon />
-                    </IconButton>
-                </Toolbar>
+                    <Typography onClick={this.openAccountModal} variant="navbar-2" noWrap className={styles.navbarText}>
+                        {_.get(this.props, 'user.name', '').split(' ')[0]}
+                    </Typography>
+                </div>
                 <AccountDialog open={this.state.accountModalOpen} onClose={this.accountModalClosed} />
             </AppBar>
         );

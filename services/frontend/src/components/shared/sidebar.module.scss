@@ -1,14 +1,35 @@
-$sidebar-width: 240px;
+@import '../../globals/global';
+
 $sidebar-z-index: 20;
 
 .sidebar {
+    padding-top: calc(#{$navbar-height} + 24px);
     width: $sidebar-width;
     flex-shrink: 0;
     z-index: $sidebar-z-index;
 }
 
+.sidebar-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+}
+
+.sidebar-button-icon {
+    color: white;
+}
+
+.sidebar-button-selected {
+    @extend .sidebar-button;
+    background: rgba(0, 0, 0, 0.1) !important;
+}
+
 .sidebar-paper {
+    background: none !important;
     width: $sidebar-width;
+    border-right: none !important;
 }
 
 .sidebar-container {

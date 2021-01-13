@@ -2,11 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { List, ListSubheader, Toolbar, FormControl, FormControlLabel, Switch } from '@material-ui/core';
 import { getTasksSelectors, deleteTask, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
 import { setShouldGoToAssignment } from '@logan/fe-shared/store/assignments';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
+import Fab from '../shared/controls/fab';
 import TaskCell from './task-cell';
 import '../shared/list.scss';
 import styles from './tasks-list.module.scss';
@@ -105,7 +105,7 @@ class TasksList extends React.Component {
                         })}
                     </List>
                 </div>
-                <AppBar position="relative" color="primary" className={styles.actionsBar}>
+                <div className={styles.actionsBar}>
                     <Toolbar variant="dense">
                         <FormControl>
                             <FormControlLabel
@@ -120,10 +120,8 @@ class TasksList extends React.Component {
                             />
                         </FormControl>
                     </Toolbar>
-                </AppBar>
-                <Fab className="add-button" color="secondary" onClick={this.openCreateModal}>
-                    <AddIcon />
-                </Fab>
+                </div>
+                <Fab className="add-button" onClick={this.openCreateModal} />
                 <TaskModal open={this.state.newTaskModalOpen} onClose={this.closeCreateModal} />
             </div>
         );

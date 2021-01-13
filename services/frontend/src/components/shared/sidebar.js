@@ -2,16 +2,31 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
-import { Drawer, Toolbar, List, ListItem, ListItemText } from '@material-ui/core';
-import { getCurrentTheme } from '../../globals/theme';
+import { Tooltip, IconButton } from '@material-ui/core';
+import { Home, CheckCircleOutline, Assignment, CollectionsBookmark, Settings } from '@material-ui/icons';
 import styles from './sidebar.module.scss';
 
 const pages = {
-    Overview: '/overview',
-    Tasks: '/tasks',
-    Assignments: '/assignments',
-    Schedule: '/schedule',
-    Settings: '/settings',
+    Overview: {
+        url: '/overview',
+        icon: Home,
+    },
+    Tasks: {
+        url: '/tasks',
+        icon: CheckCircleOutline,
+    },
+    Assignments: {
+        url: '/assignments',
+        icon: Assignment,
+    },
+    Schedule: {
+        url: '/schedule',
+        icon: CollectionsBookmark,
+    },
+    Settings: {
+        url: '/settings',
+        icon: Settings,
+    },
 };
 
 class Sidebar extends React.Component {
@@ -20,35 +35,31 @@ class Sidebar extends React.Component {
     }
 
     render() {
-        const theme = getCurrentTheme();
-
         return (
-            <Drawer
-                variant="permanent"
-                className={styles.sidebar}
-                PaperProps={{
-                    style: {
-                        background: theme.palette.primary.dark,
-                        color: '#fff',
-                    },
-                }}
-                classes={{ paper: styles.sidebarPaper }}
-            >
-                <Toolbar />
-                <div className={styles.sidebarContainer}>
-                    <List>
-                        {Object.entries(pages).map(([name, url]) => {
-                            const selected = this.props.currentPage === name;
+            <div className={styles.sidebar}>
+                {Object.entries(pages).map(([name, { url, icon }]) => {
+                    const IconComponent = icon;
+                    const selected = this.props.currentPage === name;
+                    const buttonClass = selected ? styles.sidebarButtonSelected : styles.sidebarButton;
 
-                            return (
-                                <ListItem button key={name} selected={selected} onClick={() => navigate(url)}>
-                                    <ListItemText primary={selected ? <b>{name}</b> : name} />
-                                </ListItem>
-                            );
-                        })}
-                    </List>
-                </div>
-            </Drawer>
+                    return (
+                        <div key={name} className={buttonClass}>
+                            <Tooltip
+                                title={name}
+                                disableHoverListener={selected}
+                                disableFocusListener={selected}
+                                disableTouchListener={selected}
+                            >
+                                <span>
+                                    <IconButton disabled={selected} onClick={() => navigate(url)}>
+                                        <IconComponent className={styles.sidebarButtonIcon} />
+                                    </IconButton>
+                                </span>
+                            </Tooltip>
+                        </div>
+                    );
+                })}
+            </div>
         );
     }
 }
