@@ -11,6 +11,9 @@ const variants = {
         fontSize: '16px',
         fontWeight: 500,
     },
+    detail: {
+        fontSize: '11.5px',
+    },
 };
 
 const Typography = ({ children, style, variant, ...props }) => {
