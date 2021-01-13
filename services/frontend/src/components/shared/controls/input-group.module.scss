@@ -7,11 +7,11 @@
     padding: 0;
     border-collapse: collapse;
     vertical-align: center;
+    overflow: visible;
   }
 
   tr > td:first-child:not(:only-child) {
     width: 40px;
-    overflow: visible;
     padding-right: 18px;
   }
 

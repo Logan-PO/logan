@@ -8,4 +8,10 @@ const priorities = {
     'Very low': [-2, colors.blue[500]],
 };
 
+export function colorForValue(value) {
+    for (const [v, c] of Object.values(priorities)) {
+        if (value === v) return c;
+    }
+}
+
 export default priorities;

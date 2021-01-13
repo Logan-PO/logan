@@ -18,7 +18,7 @@ const InputGroup = ({ color, accessory, icon, emptyAccessory = false, label, con
                 {label && (
                     <tr>
                         {hasAccessory && <td />}
-                        <td>
+                        <td style={{ width: '100%' }}>
                             <Typography variant="detail-label">{label}</Typography>
                         </td>
                     </tr>
@@ -29,7 +29,7 @@ const InputGroup = ({ color, accessory, icon, emptyAccessory = false, label, con
                             <div className={styles.accessory}>{accessoryContent}</div>
                         </td>
                     )}
-                    <td>{content}</td>
+                    <td style={{ width: '100%' }}>{content}</td>
                 </tr>
             </tbody>
         </table>
@@ -38,7 +38,7 @@ const InputGroup = ({ color, accessory, icon, emptyAccessory = false, label, con
 
 InputGroup.propTypes = {
     accessory: PropTypes.node,
-    emptyAccessory: PropTypes.boolean,
+    emptyAccessory: PropTypes.bool,
     label: PropTypes.string,
     content: PropTypes.node,
     icon: PropTypes.elementType,
