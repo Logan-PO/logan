@@ -1,0 +1,23 @@
+.select-control {
+  padding-top: 3px !important;
+  padding-bottom: 3px !important;
+  padding-left: 6px !important;
+  margin-left: -6px !important;
+  border-radius: 4px !important;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+.select-icon {
+  color: inherit !important;
+}
+
+.menu-title {
+  font-weight: normal !important;
+}
+
+.menu-item {
+  font-weight: 500;
+}

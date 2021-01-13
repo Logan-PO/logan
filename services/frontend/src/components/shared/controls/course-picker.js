@@ -1,10 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Select, ListSubheader, MenuItem } from '@material-ui/core';
+import { InputBase, Select, ListSubheader, MenuItem } from '@material-ui/core';
 import CourseIcon from '@material-ui/icons/Book';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import InputGroup from './input-group';
+import styles from './course-picker.module.scss';
 
 class CoursePicker extends React.Component {
     getDerivedValue() {
@@ -27,16 +29,21 @@ class CoursePicker extends React.Component {
         );
 
         for (const term of terms.filter(term => term.courses.length)) {
-            items.push(<ListSubheader key={term.tid}>{term.title}</ListSubheader>);
+            items.push(
+                <ListSubheader key={term.tid} className={styles.menuTitle}>
+                    {term.title}
+                </ListSubheader>
+            );
             for (const course of term.courses) {
                 const itemStyle = {
-                    fontWeight: 'bold',
                     ...(!this.props.disabled && { color: course.color }), // Only set color if enabled
                 };
 
                 items.push(
                     <MenuItem key={course.cid} value={course.cid}>
-                        <span style={itemStyle}>{course.nickname || course.title}</span>
+                        <span className={styles.menuItem} style={itemStyle}>
+                            {course.nickname || course.title}
+                        </span>
                     </MenuItem>
                 );
             }
@@ -56,9 +63,15 @@ class CoursePicker extends React.Component {
                 color={courseColor}
                 content={
                     <Select
-                        fullWidth={this.props.fullWidth}
+                        style={{ color: courseColor }}
+                        IconComponent={KeyboardArrowDownIcon}
+                        classes={{
+                            select: styles.selectControl,
+                            icon: styles.selectIcon,
+                        }}
                         value={this.getDerivedValue()}
                         onChange={this.props.onChange}
+                        input={<InputBase />}
                     >
                         {this.generateItems()}
                     </Select>
