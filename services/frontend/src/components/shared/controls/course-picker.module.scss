@@ -5,13 +5,15 @@
   margin-left: -6px !important;
   border-radius: 4px !important;
 
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-  }
-}
+  &:not([aria-disabled="true"]) {
+    .select-icon {
+      color: inherit !important;
+    }
 
-.select-icon {
-  color: inherit !important;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+  }
 }
 
 .menu-title {

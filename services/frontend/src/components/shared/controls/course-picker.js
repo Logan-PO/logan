@@ -63,6 +63,7 @@ class CoursePicker extends React.Component {
                 color={courseColor}
                 content={
                     <Select
+                        disabled={this.props.disabled}
                         style={{ color: courseColor }}
                         IconComponent={KeyboardArrowDownIcon}
                         classes={{
