@@ -7,6 +7,9 @@ import { getCurrentTheme } from '../../../globals/theme';
 import Typography from '../typography';
 import styles from './action-button.module.scss';
 
+/**
+ * A simple rounded button. Can be sized "small" or "large"
+ */
 class ActionButton extends React.Component {
     constructor(props) {
         super(props);

@@ -6,6 +6,9 @@ import ButtonBase from '@material-ui/core/ButtonBase';
 import { getCurrentTheme } from '../../../globals/theme';
 import Typography from '../typography';
 
+/**
+ * A simple text button, with an optional leading icon. Can be sized "small" or "large".
+ */
 const TextButton = ({ style, IconComponent, children, color = 'primary', size = 'small', ...rest }) => {
     if (!(size === 'large' || size === 'small')) {
         console.warn(`Invalid size '${size}' for TextButton. Defaulting to 'small'`);

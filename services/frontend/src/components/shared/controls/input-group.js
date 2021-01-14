@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import Typography from '../typography';
 import styles from './input-group.module.scss';
 
+/**
+ * Displays a fancy input with an optional detail label above, and an optional accessory view to the left. Pass
+ * emptyAccessory to keep left padding with no accessory view or icon.
+ */
 const InputGroup = ({ style, color, accessory, icon, emptyAccessory = false, label, content, ...rest }) => {
     const hasAccessory = emptyAccessory || accessory || icon;
     let accessoryContent = accessory;
