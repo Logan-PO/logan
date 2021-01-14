@@ -105,18 +105,6 @@ class DueDatePicker extends React.Component {
                 content={
                     <div className={styles.selectables}>
                         <Selectable
-                            selected={this.state.dueDateType === 'asap'}
-                            onClick={this.updateType.bind(this, 'asap')}
-                        >
-                            ASAP
-                        </Selectable>
-                        <Selectable
-                            selected={this.state.dueDateType === 'eventually'}
-                            onClick={this.updateType.bind(this, 'eventually')}
-                        >
-                            Eventually
-                        </Selectable>
-                        <Selectable
                             selected={this.state.dueDateType === 'date'}
                             onClick={this.updateType.bind(this, 'date')}
                         >
@@ -128,6 +116,18 @@ class DueDatePicker extends React.Component {
                                 color="primary"
                                 labelFunc={val => (val ? dateUtils.readableDueDate(val) : 'Choose a date…')}
                             />
+                        </Selectable>
+                        <Selectable
+                            selected={this.state.dueDateType === 'asap'}
+                            onClick={this.updateType.bind(this, 'asap')}
+                        >
+                            ASAP
+                        </Selectable>
+                        <Selectable
+                            selected={this.state.dueDateType === 'eventually'}
+                            onClick={this.updateType.bind(this, 'eventually')}
+                        >
+                            Eventually
                         </Selectable>
                     </div>
                     // <RadioGroup
