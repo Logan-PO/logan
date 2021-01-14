@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Typography from '../typography';
 import styles from './input-group.module.scss';
 
-const InputGroup = ({ color, accessory, icon, emptyAccessory = false, label, content, ...rest }) => {
+const InputGroup = ({ style, color, accessory, icon, emptyAccessory = false, label, content, ...rest }) => {
     const hasAccessory = emptyAccessory || accessory || icon;
     let accessoryContent = accessory;
 
@@ -19,7 +19,7 @@ const InputGroup = ({ color, accessory, icon, emptyAccessory = false, label, con
     }
 
     return (
-        <table className={classNames.join(' ')}>
+        <table style={style} className={classNames.join(' ')}>
             <tbody>
                 {label && (
                     <tr>
@@ -43,6 +43,7 @@ const InputGroup = ({ color, accessory, icon, emptyAccessory = false, label, con
 };
 
 InputGroup.propTypes = {
+    style: PropTypes.object,
     accessory: PropTypes.node,
     emptyAccessory: PropTypes.bool,
     label: PropTypes.string,

@@ -2,8 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Chip } from '@material-ui/core';
 import TagIcon from '@material-ui/icons/LocalOffer';
+import AddIcon from '@material-ui/icons/AddCircleOutline';
+import Typography from '../typography';
+import { getCurrentTheme } from '../../../globals/theme';
 import classes from './tag-editor.module.scss';
 import InputGroup from './input-group';
+import TextButton from './text-button';
+
+// eslint-disable-next-line react/prop-types
+const CustomChip = ({ style, ...rest }) => (
+    <Chip
+        className={classes.chip}
+        variant="outlined"
+        size="small"
+        style={{ margin: '0 4px 6px 0', ...style }}
+        {...rest}
+    />
+);
 
 class TagEditor extends React.Component {
     constructor(props) {
@@ -32,11 +47,12 @@ class TagEditor extends React.Component {
     }
 
     openLabel() {
-        this.setState({
-            focused: true,
-        });
-
-        setTimeout(() => this.labelRef.current.focus(), 10);
+        this.setState(
+            {
+                focused: true,
+            },
+            () => this.labelRef.current.focus()
+        );
     }
 
     cancelLabel() {
@@ -87,9 +103,10 @@ class TagEditor extends React.Component {
     }
 
     render() {
+        const theme = getCurrentTheme();
+
         let currentLabel = (
             <React.Fragment>
-                {!this.state.focused && '\u0020+\u0020'}
                 <input
                     ref={this.labelRef}
                     type="text"
@@ -99,9 +116,10 @@ class TagEditor extends React.Component {
                     onChange={this.updateLabel}
                     onKeyUp={this.handleKeyUp.bind(this)}
                     style={{
-                        display: this.state.focused ? 'inline' : 'none',
+                        display: 'inline',
                         width: this.estimateWidth(),
                         minWidth: this.estimateWidth('New tag…'),
+                        ...theme.typography.body2,
                     }}
                 />
             </React.Fragment>
@@ -114,31 +132,26 @@ class TagEditor extends React.Component {
                 content={
                     <div className={classes.tagEditor}>
                         {this.props.tags.map((tag, index) => (
-                            <Chip
+                            <CustomChip
                                 disabled={this.props.disabled}
-                                color="primary"
-                                size="small"
                                 key={index}
-                                label={tag}
+                                label={<Typography variant="body2">{tag}</Typography>}
                                 onDelete={this.labelDeleted.bind(this, index)}
-                                style={{ margin: '0 4px 6px 0' }}
                             />
                         ))}
-                        <Chip
-                            disabled={this.props.disabled}
-                            color={this.props.disabled ? 'default' : 'primary'}
-                            size="small"
-                            key="new"
-                            variant={this.state.focused ? 'outlined' : 'default'}
-                            label={currentLabel}
-                            onClick={this.openLabel}
-                            {...(this.state.focused ? { onDelete: this.cancelLabel } : {})}
-                            onMouseOver={this.hoverNew}
-                            style={{
-                                opacity: this.state.hovered || this.state.focused ? 1 : 0.75,
-                            }}
-                            onMouseOut={this.unhoverNew}
-                        />
+                        {!this.state.focused ? (
+                            <TextButton className={classes.addButton} IconComponent={AddIcon} onClick={this.openLabel}>
+                                Add tag
+                            </TextButton>
+                        ) : (
+                            <CustomChip
+                                key="new"
+                                label={currentLabel}
+                                onDelete={this.cancelLabel}
+                                onMouseOver={this.hoverNew}
+                                onMouseOut={this.unhoverNew}
+                            />
+                        )}
                     </div>
                 }
             />

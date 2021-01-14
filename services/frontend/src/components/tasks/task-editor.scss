@@ -1,3 +1,14 @@
 .MuiGrid-root.MuiGrid-container {
     flex-wrap: nowrap;
 }
+
+.task-editor {
+    padding: 32px 24px 24px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    & > *:not(:last-child) {
+        margin-bottom: 8px;
+    }
+}
