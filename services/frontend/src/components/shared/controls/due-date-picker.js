@@ -130,40 +130,6 @@ class DueDatePicker extends React.Component {
                             Eventually
                         </Selectable>
                     </div>
-                    // <RadioGroup
-                    //     row
-                    //     name="dueDateType"
-                    //     value={_.get(this.state, 'dueDateType', '')}
-                    //     onChange={this.updateType}
-                    // >
-                    //     <FormControlLabel
-                    //         value="asap"
-                    //         label={<Button>ASAP</Button>}
-                    //         labelPlacement="end"
-                    //         control={<Radio color="primary" />}
-                    //     />
-                    //     <FormControlLabel
-                    //         value="eventually"
-                    //         label="Eventually"
-                    //         labelPlacement="end"
-                    //         control={<Radio color="primary" />}
-                    //     />
-                    //     <FormControlLabel
-                    //         value="date"
-                    //         label={
-                    //             <DatePicker
-                    //                 variant="inline"
-                    //                 disabled={_.get(this.state, 'dueDateType') !== 'date'}
-                    //                 value={dateValue}
-                    //                 onChange={this.updateDate}
-                    //                 color="primary"
-                    //                 labelFunc={val => (val ? dateUtils.readableDueDate(val) : 'Choose a date…')}
-                    //             />
-                    //         }
-                    //         labelPlacement="end"
-                    //         control={<Radio color="primary" />}
-                    //     />
-                    // </RadioGroup>
                 }
             />
         );
