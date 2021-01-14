@@ -71,6 +71,7 @@ class TaskEditor extends Editor {
                         style={{ marginBottom: 0 }}
                         accessory={
                             <Checkbox
+                                size="large"
                                 disabled={this.isEmpty()}
                                 cid={cid}
                                 checked={_.get(this.state.task, 'complete', false)}
