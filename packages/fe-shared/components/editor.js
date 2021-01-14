@@ -122,7 +122,7 @@ class Editor extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         if (this.isCreator) return;
 
         const currentId = this._ownEntityId();
@@ -141,9 +141,13 @@ class Editor extends React.Component {
             const current = this.selectEntity(currentId);
             this.updateCurrentEntityState(current);
         } else if (!this._manualSave) {
-            // Also if the task has been updated somewhere else, make sure the state reflects that
             const stored = this.selectEntity(currentId);
-            if (!_.isEqual(stored, this.state[this._entity])) {
+
+            const stateChanged = !_.isEqual(prevState[this._entity], this.state[this._entity]);
+            const stateMatchesStored = _.isEqual(stored, this.state[this._entity]);
+
+            // Also if the task has been updated somewhere else, make sure the state reflects that
+            if (!stateChanged && !stateMatchesStored) {
                 this.updateCurrentEntityState(stored);
             }
         }
