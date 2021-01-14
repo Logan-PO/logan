@@ -140,7 +140,12 @@ class TagEditor extends React.Component {
                             />
                         ))}
                         {!this.state.focused ? (
-                            <TextButton className={classes.addButton} IconComponent={AddIcon} onClick={this.openLabel}>
+                            <TextButton
+                                size="large"
+                                className={classes.addButton}
+                                IconComponent={AddIcon}
+                                onClick={this.openLabel}
+                            >
                                 Add tag
                             </TextButton>
                         ) : (
