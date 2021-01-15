@@ -1,5 +1,3 @@
-$picker-shadow: drop-shadow(0px 5px 2px rgba(0, 0, 0, 0.1)) drop-shadow(0px 8px 10px rgba(0, 0, 0, 0.14)) drop-shadow(0px 3px 14px rgba(0, 0, 0, 0.12));
-
 .root {
     position: relative;
     display: inline-block;;
@@ -17,30 +15,33 @@ $picker-shadow: drop-shadow(0px 5px 2px rgba(0, 0, 0, 0.1)) drop-shadow(0px 8px 
     }
 }
 
+.picker-paper {
+    overflow: visible !important;
+    background: none !important;
+}
+
 .picker-container {
-    position: absolute;
+    position: relative;
     top: -4px;
     left: -6px;
     display: inline-block;
-    filter: $picker-shadow;
-    animation: fadeIn 0.2s;
+    filter: drop-shadow(0px 5px 2px rgba(0, 0, 0, 0.1)) drop-shadow(0px 8px 10px rgba(0, 0, 0, 0.14)) drop-shadow(0px 3px 14px rgba(0, 0, 0, 0.12));
 
     .backdrop-container {
         display: flex;
         align-items: flex-end;
         flex-wrap: nowrap;
-    }
 
-    .group-backdrop {
-        display: inline-block;
-        background: currentColor;
-        border-radius: 4px 4px 0 0;
-        padding: 4px 6px 0;
-        cursor: pointer;
+        .group-backdrop {
+            display: inline-block;
+            background: currentColor;
+            border-radius: 4px 4px 0 0;
+            padding: 4px 6px 0;
+            cursor: pointer;
+        }
     }
 
     .picker-content {
-        position: absolute;
         display: flex;
         padding: 6px;
         border-radius: 0 4px 4px 4px;
@@ -98,15 +99,5 @@ $picker-shadow: drop-shadow(0px 5px 2px rgba(0, 0, 0, 0.1)) drop-shadow(0px 8px 
                 }
             }
         }
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
     }
 }

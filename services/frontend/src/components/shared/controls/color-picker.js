@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
+import Popover from '@material-ui/core/Popover';
 import * as muiColors from '@material-ui/core/colors';
 import Typography from '../typography';
 import styles from './color-picker.module.scss';
@@ -50,7 +51,6 @@ class ColorPicker extends React.Component {
         this.pickerRef = React.createRef();
         this.groupRef = React.createRef();
 
-        this._handleClick = this._handleClick.bind(this);
         this.generateItems = this.generateItems.bind(this);
         this.selectColor = this.selectColor.bind(this);
         this.openPicker = this.openPicker.bind(this);
@@ -66,26 +66,11 @@ class ColorPicker extends React.Component {
     }
 
     componentDidMount() {
-        // eslint-disable-next-line no-undef
-        document.addEventListener('mouseup', this._handleClick);
         this._updateBackdropSizeIfNecessary();
     }
 
     componentDidUpdate() {
         this._updateBackdropSizeIfNecessary();
-    }
-
-    componentWillUnmount() {
-        // eslint-disable-next-line no-undef
-        document.removeEventListener('mouseup', this._handleClick);
-    }
-
-    _handleClick(event) {
-        if (this.pickerRef && this.pickerRef.current && !this.pickerRef.current.contains(event.target)) {
-            if (this.state.pickerOpen) {
-                this.closePicker();
-            }
-        }
     }
 
     _updateBackdropSizeIfNecessary() {
@@ -169,46 +154,53 @@ class ColorPicker extends React.Component {
                         }
                     />
                 </div>
-                <div
-                    className={styles.pickerContainer}
-                    style={{ display: this.state.pickerOpen ? undefined : 'none', color: this.props.value }}
+                <Popover
+                    open={this.state.pickerOpen}
+                    anchorEl={this.groupRef.current}
+                    classes={{ paper: styles.pickerPaper }}
+                    elevation={0}
+                    onClose={this.closePicker}
                 >
-                    <div className={styles.backdropContainer}>
-                        <div
-                            className={styles.groupBackdrop}
-                            style={{
-                                width: this.state.backdropSize.width + 12,
-                                height: this.state.backdropSize.height + 4,
-                            }}
-                        >
-                            <InputGroup
-                                style={{ position: 'absolute' }}
-                                label={<span style={{ userSelect: 'none', color: 'white' }}>{this.props.label}</span>}
-                                color="white"
-                                content={
-                                    <Typography style={{ userSelect: 'none', color: 'white' }}>
-                                        {nameForColor(this.props.value)}
-                                    </Typography>
-                                }
-                            />
-                        </div>
-                        <svg width={4} height={4} style={{ fill: 'currentColor' }}>
-                            <path
-                                d="M 0 4
+                    <div className={styles.pickerContainer} style={{ color: this.props.value }}>
+                        <div className={styles.backdropContainer} onClick={this.closePicker}>
+                            <div
+                                className={styles.groupBackdrop}
+                                style={{
+                                    width: this.state.backdropSize.width + 12,
+                                    height: this.state.backdropSize.height + 4,
+                                }}
+                            >
+                                <InputGroup
+                                    style={{ position: 'absolute' }}
+                                    label={
+                                        <span style={{ userSelect: 'none', color: 'white' }}>{this.props.label}</span>
+                                    }
+                                    color="white"
+                                    content={
+                                        <Typography style={{ userSelect: 'none', color: 'white' }}>
+                                            {nameForColor(this.props.value)}
+                                        </Typography>
+                                    }
+                                />
+                            </div>
+                            <svg width={4} height={4} style={{ fill: 'currentColor' }}>
+                                <path
+                                    d="M 0 4
                                    L 0 0
                                    A 4 4 0 0 0 4 4
                                    L 0 4"
-                            />
-                        </svg>
+                                />
+                            </svg>
+                        </div>
+                        <div
+                            className={styles.pickerContent}
+                            style={{ top: this.state.backdropSize.height + 4 }}
+                            ref={this.pickerRef}
+                        >
+                            <div className={styles.colorsContainer}>{this.generateItems()}</div>
+                        </div>
                     </div>
-                    <div
-                        className={styles.pickerContent}
-                        style={{ top: this.state.backdropSize.height + 4 }}
-                        ref={this.pickerRef}
-                    >
-                        <div className={styles.colorsContainer}>{this.generateItems()}</div>
-                    </div>
-                </div>
+                </Popover>
             </div>
         );
     }
