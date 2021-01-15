@@ -2,13 +2,26 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { FormControl, FormLabel, FormControlLabel, RadioGroup, Radio } from '@material-ui/core';
+import { Button } from '@material-ui/core';
+import DueDateIcon from '@material-ui/icons/CalendarToday';
 import { DatePicker } from '@material-ui/pickers';
+import Typography from '../typography';
+import InputGroup from './input-group';
+import styles from './due-date-picker.module.scss';
 
 const {
     dayjs,
     constants: { DB_DATE_FORMAT },
 } = dateUtils;
+
+// eslint-disable-next-line react/prop-types
+const Selectable = ({ selected, children, ...rest }) => {
+    return (
+        <Button className={`${styles.selectable} ${selected ? styles.selected : ''}`} variant="outlined" {...rest}>
+            <Typography variant="body2">{children}</Typography>
+        </Button>
+    );
+};
 
 class DueDatePicker extends React.Component {
     constructor(props) {
@@ -59,14 +72,16 @@ class DueDatePicker extends React.Component {
         }
     }
 
-    updateType(e) {
-        const newType = e.target.value;
+    updateType(newType) {
+        const typeChanged = this.state.dueDateType !== newType;
+
+        if (!typeChanged) return;
 
         this.setState({ dueDateType: newType });
 
         if (newType === 'date') {
             let lastDueDate = this.state.lastDueDate;
-            if (!this.state.lastDueDate) {
+            if (!lastDueDate) {
                 lastDueDate = dayjs().format(DB_DATE_FORMAT);
                 this.setState({ lastDueDate });
             }
@@ -88,24 +103,15 @@ class DueDatePicker extends React.Component {
         const dateValue = lastDueDate ? dayjs(lastDueDate) : null;
 
         return (
-            <FormControl disabled={this.props.disabled}>
-                <FormLabel style={{ fontSize: '0.75rem' }}>Due Date</FormLabel>
-                <RadioGroup name="dueDateType" value={_.get(this.state, 'dueDateType', '')} onChange={this.updateType}>
-                    <FormControlLabel
-                        value="asap"
-                        label="ASAP"
-                        labelPlacement="end"
-                        control={<Radio color="primary" />}
-                    />
-                    <FormControlLabel
-                        value="eventually"
-                        label="Eventually"
-                        labelPlacement="end"
-                        control={<Radio color="primary" />}
-                    />
-                    <FormControlLabel
-                        value="date"
-                        label={
+            <InputGroup
+                label="Due Date"
+                icon={DueDateIcon}
+                content={
+                    <div className={styles.selectables}>
+                        <Selectable
+                            selected={this.state.dueDateType === 'date'}
+                            onClick={this.updateType.bind(this, 'date')}
+                        >
                             <DatePicker
                                 variant="inline"
                                 disabled={_.get(this.state, 'dueDateType') !== 'date'}
@@ -114,12 +120,22 @@ class DueDatePicker extends React.Component {
                                 color="primary"
                                 labelFunc={val => (val ? dateUtils.readableDueDate(val) : 'Choose a date…')}
                             />
-                        }
-                        labelPlacement="end"
-                        control={<Radio color="primary" />}
-                    />
-                </RadioGroup>
-            </FormControl>
+                        </Selectable>
+                        <Selectable
+                            selected={this.state.dueDateType === 'asap'}
+                            onClick={this.updateType.bind(this, 'asap')}
+                        >
+                            ASAP
+                        </Selectable>
+                        <Selectable
+                            selected={this.state.dueDateType === 'eventually'}
+                            onClick={this.updateType.bind(this, 'eventually')}
+                        >
+                            Eventually
+                        </Selectable>
+                    </div>
+                }
+            />
         );
     }
 }

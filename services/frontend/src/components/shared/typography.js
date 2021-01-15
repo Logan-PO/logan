@@ -11,6 +11,17 @@ const variants = {
         fontSize: '16px',
         fontWeight: 500,
     },
+    detail: {
+        fontSize: '11.5px',
+    },
+    'detail-label': {
+        fontSize: '11.5px',
+        textTransform: 'uppercase',
+        color: '#646464',
+    },
+    'big-input': {
+        fontSize: '24px',
+    },
 };
 
 const Typography = ({ children, style, variant, ...props }) => {
@@ -31,4 +42,5 @@ Typography.propTypes = {
     variant: PropTypes.string,
 };
 
+export { variants };
 export default Typography;

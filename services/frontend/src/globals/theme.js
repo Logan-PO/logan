@@ -29,6 +29,7 @@ export function makeTheme(params = {}) {
             },
             error: {
                 main: colors.red[500],
+                contrastText: '#fff',
             },
         },
         typography: {
