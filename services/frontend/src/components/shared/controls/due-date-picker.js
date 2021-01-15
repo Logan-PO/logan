@@ -73,11 +73,15 @@ class DueDatePicker extends React.Component {
     }
 
     updateType(newType) {
+        const typeChanged = this.state.dueDateType !== newType;
+
+        if (!typeChanged) return;
+
         this.setState({ dueDateType: newType });
 
         if (newType === 'date') {
             let lastDueDate = this.state.lastDueDate;
-            if (!this.state.lastDueDate) {
+            if (!lastDueDate) {
                 lastDueDate = dayjs().format(DB_DATE_FORMAT);
                 this.setState({ lastDueDate });
             }
