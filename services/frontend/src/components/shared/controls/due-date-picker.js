@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
 import { Button } from '@material-ui/core';
 import DueDateIcon from '@material-ui/icons/CalendarToday';
-import { DatePicker } from '@material-ui/pickers';
 import Typography from '../typography';
 import InputGroup from './input-group';
 import styles from './due-date-picker.module.scss';
+import DatePicker from './date-picker';
 
 const {
     dayjs,
@@ -113,7 +113,6 @@ class DueDatePicker extends React.Component {
                             onClick={this.updateType.bind(this, 'date')}
                         >
                             <DatePicker
-                                variant="inline"
                                 disabled={_.get(this.state, 'dueDateType') !== 'date'}
                                 value={dateValue}
                                 onChange={this.updateDate}
