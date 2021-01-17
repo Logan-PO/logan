@@ -2,8 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { Button } from '@material-ui/core';
+import { Button, ButtonBase } from '@material-ui/core';
 import DueDateIcon from '@material-ui/icons/CalendarToday';
+import ChevronDown from '@material-ui/icons/KeyboardArrowDown';
+import ChevronUp from '@material-ui/icons/KeyboardArrowUp';
+import { getCurrentTheme } from '../../../globals/theme';
 import Typography from '../typography';
 import InputGroup from './input-group';
 import styles from './due-date-picker.module.scss';
@@ -26,6 +29,8 @@ const Selectable = ({ selected, children, ...rest }) => {
 class DueDatePicker extends React.Component {
     constructor(props) {
         super(props);
+
+        this._pickerRef = React.createRef();
 
         this.updateType = this.updateType.bind(this);
         this.updateDate = this.updateDate.bind(this);
@@ -102,24 +107,51 @@ class DueDatePicker extends React.Component {
         const lastDueDate = _.get(this.state, 'lastDueDate');
         const dateValue = lastDueDate ? dayjs(lastDueDate) : null;
 
+        const theme = getCurrentTheme();
+        const body2Height = theme.typography.body2.fontSize;
+
         return (
             <InputGroup
                 label="Due Date"
                 icon={DueDateIcon}
                 content={
                     <div className={styles.selectables}>
-                        <Selectable
-                            selected={this.state.dueDateType === 'date'}
-                            onClick={this.updateType.bind(this, 'date')}
-                        >
-                            <DatePicker
-                                disabled={_.get(this.state, 'dueDateType') !== 'date'}
-                                value={dateValue}
-                                onChange={this.updateDate}
-                                color="primary"
-                                labelFunc={val => (val ? dateUtils.readableDueDate(val) : 'Choose a date…')}
-                            />
-                        </Selectable>
+                        <DatePicker
+                            ref={this._pickerRef}
+                            owner={
+                                <Selectable
+                                    selected={this.state.dueDateType === 'date'}
+                                    onClick={this.updateType.bind(this, 'date')}
+                                >
+                                    {dateValue ? dateUtils.readableDueDate(dateValue) : 'Choose a date…'}
+                                    <ButtonBase
+                                        className={styles.chevronButton}
+                                        style={{ '--size': body2Height }}
+                                        onClick={this._pickerRef.current && this._pickerRef.current.openPicker}
+                                    >
+                                        <ChevronDown />
+                                    </ButtonBase>
+                                </Selectable>
+                            }
+                            dummyOwnerForPicker={
+                                <Selectable selected>
+                                    {dateValue ? dateUtils.readableDueDate(dateValue) : 'Choose a date…'}
+                                    <ButtonBase
+                                        className={styles.chevronButton}
+                                        style={{ '--size': body2Height }}
+                                        onClick={this._pickerRef.current && this._pickerRef.current.closePicker}
+                                    >
+                                        <ChevronUp />
+                                    </ButtonBase>
+                                </Selectable>
+                            }
+                            offset={{ x: -4, y: -4 }}
+                            disabled={_.get(this.state, 'dueDateType') !== 'date'}
+                            value={dateValue}
+                            onChange={this.updateDate}
+                            color="primary"
+                            labelFunc={val => (val ? dateUtils.readableDueDate(val) : 'Choose a date…')}
+                        />
                         <Selectable
                             selected={this.state.dueDateType === 'asap'}
                             onClick={this.updateType.bind(this, 'asap')}
