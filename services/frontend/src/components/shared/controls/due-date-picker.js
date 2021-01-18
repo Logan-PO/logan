@@ -9,8 +9,8 @@ import ChevronUp from '@material-ui/icons/KeyboardArrowUp';
 import { getCurrentTheme } from '../../../globals/theme';
 import Typography from '../typography';
 import InputGroup from './input-group';
-import styles from './due-date-picker.module.scss';
 import DatePicker from './date-picker';
+import styles from './due-date-picker.module.scss';
 
 const {
     dayjs,
