@@ -10,8 +10,19 @@ class PriorityDisplay extends React.Component {
             _.find(_.values(priorities), ([num]) => num === this.props.priority),
             ['white', 'white']
         );
-        const style = { background: p[1] };
-        return <div className={styles.priorityDisplay} style={style} />;
+
+        const dotCount = this.props.priority + 3;
+        const dots = [];
+
+        for (let i = 0; i < dotCount; i++) {
+            dots.push(<div className={styles.dot} key={i} />);
+        }
+
+        return (
+            <div className={styles.priorityDisplay} style={{ color: p[1] }}>
+                {dots}
+            </div>
+        );
     }
 }
 
