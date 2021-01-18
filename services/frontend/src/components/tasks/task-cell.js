@@ -134,7 +134,6 @@ class TaskCell extends React.Component {
 
         return (
             <div className={`list-cell ${styles.taskCell}`}>
-                <PriorityDisplay priority={_.get(this.state.task, 'priority')} />
                 <ListItem button={!this.props.subtaskCell} selected={this.props.selected} onClick={this.select}>
                     <Checkbox
                         cid={_.get(this.state.task, 'cid')}
@@ -172,6 +171,8 @@ class TaskCell extends React.Component {
                                 : _.get(this.state.task, 'description')
                         }
                     />
+                    {/* TODO: Reposition PriorityDisplay when task cells are redesigned */}
+                    <PriorityDisplay priority={_.get(this.state.task, 'priority')} />
                     <ListItemSecondaryAction className="actions">
                         {this.props.subtaskCell && (
                             <Tooltip title="Edit">
