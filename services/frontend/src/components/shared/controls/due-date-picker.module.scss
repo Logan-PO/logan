@@ -1,55 +1,55 @@
 .selectable {
-  border-color: black !important;
-  padding: 3px 8px !important;
-  min-width: 0 !important;
-  flex-shrink: 0;
+    border-color: black !important;
+    padding: 3px 8px !important;
+    min-width: 0 !important;
+    flex-shrink: 0;
 
-  p {
-    white-space: nowrap;
-  }
+    p {
+        white-space: nowrap;
+    }
 
-  &.selected {
-    color: white;
-    background-color: black !important;
-  }
+    &.selected {
+        color: white;
+        background-color: black !important;
+    }
 }
 
 .selectables {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
 
-  & > *:not(:last-child) {
-    margin: 0 4px 4px 0 !important;
-  }
+    & > *:not(:last-child) {
+        margin: 0 4px 4px 0 !important;
+    }
 }
 
 .chevron-button {
-  --size: 1em;
+    --size: 1em;
 
-  margin: -2px -2px -2px 4px !important;
-  display: flex;
-  align-items: center !important;
-  justify-content: center !important;
-  width: calc(var(--size) + 4px);
-  height: calc(var(--size) + 4px);
-  padding: 0 !important;;
-  border-radius: 50% !important;
-  background: white !important;
-  color: black !important;
+    margin: -2px -2px -2px 4px !important;
+    display: flex;
+    align-items: center !important;
+    justify-content: center !important;
+    width: calc(var(--size) + 4px);
+    height: calc(var(--size) + 4px);
+    padding: 0 !important;;
+    border-radius: 50% !important;
+    background: white !important;
+    color: black !important;
 
-  * {
-    font-size: calc(var(--size) + 6px) !important;
-  }
+    * {
+        font-size: calc(var(--size) + 6px) !important;
+    }
 }
 
 .date-picker-owner-container {}
 
 .date-picker-picker-container {
-  top: -4px;
-  left: -4px;
+    top: -4px;
+    left: -4px;
 }
 
 .date-picker-backdrop {
-  padding: 4px;
+    padding: 4px;
 }
