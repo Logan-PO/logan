@@ -145,7 +145,10 @@ class DueDatePicker extends React.Component {
                                     </ButtonBase>
                                 </Selectable>
                             }
-                            offset={{ x: -4, y: -4 }}
+                            classes={{
+                                pickerContainer: styles.datePickerPickerContainer,
+                                backdrop: styles.datePickerBackdrop,
+                            }}
                             disabled={_.get(this.state, 'dueDateType') !== 'date'}
                             value={dateValue}
                             onChange={this.updateDate}

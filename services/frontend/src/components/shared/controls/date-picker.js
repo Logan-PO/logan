@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import { dateUtils } from '@logan/core';
 import { ButtonBase, Popover } from '@material-ui/core';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
@@ -16,6 +17,8 @@ class DatePicker extends React.Component {
 
         this.openPicker = this.openPicker.bind(this);
         this.closePicker = this.closePicker.bind(this);
+
+        this._handleBackdropClick = this._handleBackdropClick.bind(this);
 
         this._selectDay = this._selectDay.bind(this);
         this._changeMonth = this._changeMonth.bind(this);
@@ -69,6 +72,16 @@ class DatePicker extends React.Component {
         }
     }
 
+    _handleBackdropClick(event) {
+        if (
+            event.target.className &&
+            event.target.className.includes &&
+            event.target.className.includes(styles.backdropContainer)
+        ) {
+            this.closePicker();
+        }
+    }
+
     openPicker() {
         this.setState({ pickerOpen: true });
     }
@@ -116,14 +129,15 @@ class DatePicker extends React.Component {
     }
 
     _generateDay(date, isToday, isCurrentMonth, isSelected) {
-        const classes = [styles.dayCircle];
-
-        if (isToday) classes.push(styles.today);
-        if (!isCurrentMonth) classes.push(styles.outsideMonth);
-        if (isSelected) classes.push(styles.selectedDay);
+        const className = clsx({
+            [styles.dayCircle]: true,
+            [styles.today]: isToday,
+            [styles.outsideMonth]: !isCurrentMonth,
+            [styles.selectedDay]: isSelected,
+        });
 
         return (
-            <ButtonBase className={classes.join(' ')} onClick={() => this._selectDay(date)}>
+            <ButtonBase className={className} onClick={() => this._selectDay(date)}>
                 <Typography variant="body2">{date.date()}</Typography>
             </ButtonBase>
         );
@@ -147,6 +161,8 @@ class DatePicker extends React.Component {
     }
 
     render() {
+        const { classes = {} } = this.props;
+
         const theme = getCurrentTheme();
         const headerText = dateUtils.toDate(this.state.shownMonthStart).format('MMM YYYY');
 
@@ -159,7 +175,7 @@ class DatePicker extends React.Component {
 
         return (
             <React.Fragment>
-                <div className={styles.ownerContainer} ref={this.ownerContainerRef}>
+                <div className={clsx(styles.ownerContainer, classes.ownerContainer)} ref={this.ownerContainerRef}>
                     {this.props.owner}
                 </div>
                 <Popover
@@ -170,24 +186,20 @@ class DatePicker extends React.Component {
                     onClose={this.closePicker}
                 >
                     <div
-                        className={styles.pickerContainer}
+                        className={clsx(styles.pickerContainer, classes.pickerContainer)}
                         style={{
                             '--primary-color': theme.palette.primary.main,
                             '--primary-contrast': theme.palette.primary.contrastText,
                             '--secondary-color': theme.palette.secondary.main,
                             '--secondary-contrast': theme.palette.secondary.contrastText,
-                            top: this.props.offset.y,
-                            left: this.props.offset.x,
                         }}
                     >
-                        <div className={styles.backdropContainer}>
+                        <div className={styles.backdropContainer} onClick={this._handleBackdropClick}>
                             <div
-                                className={styles.backdrop}
+                                className={clsx(styles.backdrop, classes.backdrop)}
                                 style={{
-                                    paddingTop: -this.props.offset.y,
-                                    paddingLeft: -this.props.offset.x,
-                                    width: this.state.backdropSize.width - this.props.offset.x,
-                                    height: this.state.backdropSize.height - this.props.offset.y,
+                                    width: this.state.backdropSize.width,
+                                    height: this.state.backdropSize.height,
                                 }}
                             >
                                 {this.props.dummyOwnerForPicker}
@@ -246,7 +258,7 @@ class DatePicker extends React.Component {
 }
 
 DatePicker.propTypes = {
-    offset: PropTypes.object,
+    classes: PropTypes.object, // Options are: ownerContainer, pickerContainer, backdrop
     value: PropTypes.object,
     onChange: PropTypes.func,
     owner: PropTypes.node.isRequired,

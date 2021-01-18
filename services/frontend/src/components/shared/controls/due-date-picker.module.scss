@@ -3,7 +3,6 @@
   padding: 3px 8px !important;
   min-width: 0 !important;
   flex-shrink: 0;
-  margin: 0 4px 4px 0 !important;
 
   p {
     white-space: nowrap;
@@ -20,9 +19,8 @@
   flex-wrap: wrap;
   align-items: flex-start;
 
-  & > .selectable:last-child {
-    margin-right: 0 !important;
-    margin-bottom: 0 !important;
+  & > *:not(:last-child) {
+    margin: 0 4px 4px 0 !important;
   }
 }
 
@@ -43,4 +41,15 @@
   * {
     font-size: calc(var(--size) + 6px) !important;
   }
+}
+
+.date-picker-owner-container {}
+
+.date-picker-picker-container {
+  top: -4px;
+  left: -4px;
+}
+
+.date-picker-backdrop {
+  padding: 4px;
 }
