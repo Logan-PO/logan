@@ -7,16 +7,18 @@ const BreadcrumbsLike = ({ variant = 'body1', colors = [], sections = [], ...res
     const children = [];
 
     for (let i = 0; i < sections.length; i++) {
+        const color = colors[i] || (i ? 'textSecondary' : 'textPrimary');
+
         if (i > 0) {
             children.push(
-                <Typography variant={variant} color={colors[i]}>
+                <Typography variant={variant} color="textSecondary">
                     &nbsp;/&nbsp;
                 </Typography>
             );
         }
 
         children.push(
-            <Typography variant={variant} color={colors[i]}>
+            <Typography variant={variant} color={color}>
                 {sections[i]}
             </Typography>
         );

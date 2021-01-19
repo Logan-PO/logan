@@ -8,7 +8,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { dateUtils } from '@logan/core';
 import { getRemindersSelectors, deleteReminder } from '@logan/fe-shared/store/reminders';
-import Typography from '../shared/typography';
+import BreadcrumbsLike from '../shared/breadcrumbs-like';
 import styles from './reminder-cell.module.scss';
 
 class ReminderCell extends React.Component {
@@ -45,13 +45,14 @@ class ReminderCell extends React.Component {
     render() {
         const ts = _.get(this.state.reminder, 'timestamp');
         const dateObject = dateUtils.toDateTime(ts);
-        const timeString = `/ ${dateUtils.humanReadableDate(dateObject)} @ ${dateObject.format('h:mma')}`;
+        const timeString = `${dateUtils.humanReadableDate(dateObject)} @ ${dateObject.format('h:mma')}`;
 
         return (
             <div className={clsx('list-cell', styles.reminderCell)}>
-                <Typography>{_.get(this.state.reminder, 'message', '')}</Typography>
-                &nbsp;
-                <Typography color="textSecondary">{timeString}</Typography>
+                <BreadcrumbsLike
+                    colors={['textPrimary', 'textSecondary']}
+                    sections={[_.get(this.state.reminder, 'message', ''), timeString]}
+                />
                 <div className={styles.actions}>
                     <IconButton
                         className={styles.action}
