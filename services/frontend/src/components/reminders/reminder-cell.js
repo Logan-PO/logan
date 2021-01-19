@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import React from 'react';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { IconButton } from '@material-ui/core';
@@ -9,6 +8,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { dateUtils } from '@logan/core';
 import { getRemindersSelectors, deleteReminder } from '@logan/fe-shared/store/reminders';
 import BreadcrumbsLike from '../shared/breadcrumbs-like';
+import '../shared/list.scss';
 import styles from './reminder-cell.module.scss';
 
 class ReminderCell extends React.Component {
@@ -48,20 +48,16 @@ class ReminderCell extends React.Component {
         const timeString = `${dateUtils.humanReadableDate(dateObject)} @ ${dateObject.format('h:mma')}`;
 
         return (
-            <div className={clsx('list-cell', styles.reminderCell)}>
+            <div className={`list-item ${styles.reminderCell}`}>
                 <BreadcrumbsLike
                     colors={['textPrimary', 'textSecondary']}
                     sections={[_.get(this.state.reminder, 'message', ''), timeString]}
                 />
-                <div className={styles.actions}>
-                    <IconButton
-                        className={styles.action}
-                        size="small"
-                        onClick={() => this.props.onEdit(this.props.rid)}
-                    >
+                <div className="actions">
+                    <IconButton className="action" size="small" onClick={() => this.props.onEdit(this.props.rid)}>
                         <EditIcon fontSize="inherit" />
                     </IconButton>
-                    <IconButton className={styles.action} size="small" onClick={this.deleteSelf}>
+                    <IconButton className="action" size="small" onClick={this.deleteSelf}>
                         <DeleteIcon fontSize="inherit" color="error" />
                     </IconButton>
                 </div>

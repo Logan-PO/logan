@@ -5,18 +5,4 @@
   &:not(:last-child) {
     margin-bottom: 2px;
   }
-
-  .actions {
-    display: none;
-
-    .action {
-      margin: -2px 0px -2px 4px;
-    }
-  }
-
-  &:hover {
-    .actions {
-      display: flex;
-    }
-  }
 }

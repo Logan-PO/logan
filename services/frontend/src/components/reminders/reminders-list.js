@@ -7,6 +7,7 @@ import RemindersIcon from '@material-ui/icons/Notifications';
 import { getRemindersSelectors, setShouldGoToReminder } from '@logan/fe-shared/store/reminders';
 import InputGroup from '../shared/controls/input-group';
 import TextButton from '../shared/controls/text-button';
+import '../shared/list.scss';
 import ReminderCell from './reminder-cell';
 import classes from './reminders-list.module.scss';
 import ReminderModal from './reminder-modal';
@@ -47,7 +48,7 @@ class RemindersList extends React.Component {
                     content={
                         <div>
                             {this.props.eid && this.props.rids.length > 0 && (
-                                <div>
+                                <div className="small-list">
                                     {this.props.rids.map(rid => (
                                         <ReminderCell key={rid} rid={rid} onEdit={this.shouldEditReminder} />
                                     ))}

@@ -14,6 +14,7 @@ import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { PriorityDisplay } from '../shared/displays';
 import { Checkbox } from '../shared/controls';
 import BreadcrumbsLike from '../shared/breadcrumbs-like';
+import '../shared/list.scss';
 import styles from './subtask-cell.module.scss';
 
 const {
@@ -99,7 +100,7 @@ class SubtaskCell extends React.Component {
         return (
             <div
                 className={clsx({
-                    'list-cell': true,
+                    'list-item': true,
                     [styles.subtaskCell]: true,
                     [styles.complete]: task.complete,
                 })}
@@ -113,11 +114,11 @@ class SubtaskCell extends React.Component {
                     colors={['textPrimary', taskIsOverdue && !task.complete ? 'error' : 'textSecondary']}
                     sections={sections}
                 />
-                <div className={styles.actions}>
-                    <IconButton className={styles.action} size="small" onClick={this.openTask}>
+                <div className="actions">
+                    <IconButton className="action" size="small" onClick={this.openTask}>
                         <ChevronRight fontSize="inherit" />
                     </IconButton>
-                    <IconButton className={styles.action} size="small" onClick={this.deleteSelf}>
+                    <IconButton className="action" size="small" onClick={this.deleteSelf}>
                         <DeleteIcon fontSize="inherit" color="error" />
                     </IconButton>
                 </div>

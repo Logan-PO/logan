@@ -10,22 +10,4 @@
   .checkbox {
     margin-right: 6px !important;
   }
-
-  .actions {
-    display: flex;
-    opacity: 0;
-    transition: 0.2s;
-
-    margin-left: 6px;
-
-    .action {
-      margin: -2px 0px -2px 4px;
-    }
-  }
-
-  &:hover {
-    .actions {
-      opacity: 1;
-    }
-  }
 }

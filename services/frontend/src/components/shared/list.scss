@@ -1,5 +1,24 @@
 @import '../../globals/global';
 
+.small-list {
+    .list-item {
+        .actions {
+            opacity: 0;
+            transition: 0.2s;
+            display: flex;
+            margin-left: 6px;
+
+            .action {
+                margin: -2px 0px -2px 4px;
+            }
+        }
+
+        &:hover .actions {
+            opacity: 1;
+        }
+    }
+}
+
 %list-shared {
     .list-header {
         background: white;

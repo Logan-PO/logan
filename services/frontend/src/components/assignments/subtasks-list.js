@@ -9,8 +9,9 @@ import TasksIcon from 'mdi-material-ui/CheckboxMarkedCircleOutline';
 import TaskModal from '../tasks/task-modal';
 import InputGroup from '../shared/controls/input-group';
 import TextButton from '../shared/controls/text-button';
+import '../shared/list.scss';
 import SubtaskCell from './subtask-cell';
-import classes from './subtasks-list.module.scss';
+import styles from './subtasks-list.module.scss';
 
 const {
     dayjs,
@@ -49,7 +50,7 @@ class SubtasksList extends React.Component {
     listContent() {
         if (this.props.aid && this.props.tasks.length) {
             return (
-                <div className={classes.subtasksList}>
+                <div className={`${styles.subtasksList} small-list`}>
                     {this.props.tasks.map(task => (
                         <SubtaskCell key={task.tid} tid={task.tid} subtaskCell />
                     ))}
@@ -64,11 +65,11 @@ class SubtasksList extends React.Component {
         return (
             <React.Fragment>
                 <InputGroup
-                    classes={{ accessoryCell: this.props.tasks.length && classes.accessoryCellAlignTop }}
+                    classes={{ accessoryCell: this.props.tasks.length && styles.accessoryCellAlignTop }}
                     label="Subtasks"
                     icon={TasksIcon}
                     content={
-                        <div className={classes.subtasksListRoot}>
+                        <div className={styles.subtasksListRoot}>
                             {this.listContent()}
                             <TextButton size="large" IconComponent={AddIcon} onClick={this.openNewTaskModal}>
                                 Add subtask
