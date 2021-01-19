@@ -2,13 +2,15 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, Toolbar, FormControl, FormControlLabel, Switch } from '@material-ui/core';
+import { List, Toolbar, FormControl, FormControlLabel, Switch } from '@material-ui/core';
+import { dateUtils } from '@logan/core';
 import { getTasksSelectors, deleteTask, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
 import { setShouldGoToAssignment } from '@logan/fe-shared/store/assignments';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
 import Fab from '../shared/controls/fab';
-import TaskCell from './task-cell';
+import ListHeader from '../shared/list-header';
 import '../shared/list.scss';
+import TaskCell from './task-cell';
 import styles from './tasks-list.module.scss';
 import TaskModal from './task-modal';
 
@@ -73,6 +75,36 @@ class TasksList extends React.Component {
         this.setState({ showingCompletedTasks: e.target.checked });
     }
 
+    _headerForSection(section) {
+        const [dueDate] = section;
+
+        let sectionTitle = dueDate;
+        let sectionDetail;
+
+        const isDate = dateUtils.dueDateIsDate(dueDate);
+        const isToday = dateUtils.formatAsDate() === dueDate;
+        const isOverdue = dueDate === 'Overdue';
+
+        if (isDate) {
+            const dateObject = dateUtils.toDate(dueDate);
+            sectionTitle = dateUtils.readableDueDate(dateObject, false);
+
+            if (!isToday) {
+                sectionDetail = `${dateObject.diff(dateUtils.dayjs(), 'day')}D`;
+            }
+        }
+
+        return (
+            <ListHeader
+                color={isOverdue ? 'error' : undefined}
+                className="list-header"
+                title={sectionTitle}
+                detail={sectionDetail}
+                isBig={isToday}
+            />
+        );
+    }
+
     render() {
         const tasks = _.filter(
             this.props.tids.map(tid => this.props.getTask(tid)),
@@ -86,10 +118,11 @@ class TasksList extends React.Component {
                 <div className={`scroll-view ${styles.tasksList}`}>
                     <List>
                         {sections.map(section => {
-                            const [dueDate, tids] = section;
+                            const tids = section[1];
+
                             return (
                                 <React.Fragment key={section[0]}>
-                                    <ListSubheader className="list-header">{dueDate}</ListSubheader>
+                                    {this._headerForSection(section)}
                                     {tids.map(tid => (
                                         <TaskCell
                                             key={tid}

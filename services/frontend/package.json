@@ -21,6 +21,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/pickers": "^3.2.10",
     "@material-ui/system": "^4.9.14",
+    "clsx": "^1.1.1",
     "gatsby": "^2.24.60",
     "gatsby-plugin-react-helmet": "^3.3.14",
     "gatsby-plugin-sass": "^2.3.14",
