@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Typography from './typography';
 import styles from './breadcrumbs-like.module.scss';
 
+// Displays several pieces of content, separated by slashes
+// Ex (reminder): Don't forget to submit! / Tonight @ 6:00pm
 const BreadcrumbsLike = ({ variant = 'body1', colors = [], sections = [], ...rest }) => {
     const children = [];
 
