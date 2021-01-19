@@ -26,6 +26,7 @@
     "gatsby-plugin-react-helmet": "^3.3.14",
     "gatsby-plugin-sass": "^2.3.14",
     "lodash": "^4.17.20",
+    "mdi-material-ui": "^6.21.0",
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "prop-types": "^15.7.2",
