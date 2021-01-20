@@ -1,12 +1,13 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
+import ListSubheader from '@material-ui/core/ListSubheader';
 import Typography from './typography';
 import styles from './list-header.module.scss';
 
-const ListHeader = ({ title, detail, isBig = false, color, className, ...rest }) => {
+const ListHeader = ({ title, detail, isBig = false, color = 'textPrimary', className, ...rest }) => {
     return (
-        <div className={clsx(styles.listHeader, className)} {...rest}>
+        <ListSubheader color={color} classes={{ root: clsx(styles.listHeader, className) }} disableGutters {...rest}>
             <Typography color={color} className={styles.title} variant={isBig ? 'h1' : 'h2'}>
                 {title}
             </Typography>
@@ -16,7 +17,7 @@ const ListHeader = ({ title, detail, isBig = false, color, className, ...rest })
                     {detail}
                 </Typography>
             )}
-        </div>
+        </ListSubheader>
     );
 };
 

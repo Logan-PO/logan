@@ -25,6 +25,10 @@
 
 .scrollable-list {
     @extend %list-shared;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
     height: 100%;
     flex-grow: 1;
     background: white;
@@ -32,10 +36,9 @@
     border-right: solid 1px $border;
 
     .add-button {
-        position: relative;
-        left: calc(100% - 1.5em);
+        position: absolute;
+        right: 1.5em;
         bottom: 1.5em;
-        transform: translate(-100%, -100%);
         z-index: 10;
     }
 

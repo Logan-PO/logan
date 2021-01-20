@@ -99,7 +99,10 @@ class TaskCell extends React.Component {
         }
 
         return (
-            <div className={clsx('list-cell', styles.taskCell, selected && styles.selected)} onClick={this.select}>
+            <div
+                className={clsx('list-cell', styles.taskCell, this.props.className, selected && styles.selected)}
+                onClick={this.select}
+            >
                 <Checkbox
                     className={styles.checkbox}
                     cid={_.get(this.state.task, 'cid')}
@@ -146,6 +149,7 @@ class TaskCell extends React.Component {
 }
 
 TaskCell.propTypes = {
+    className: PropTypes.string,
     tid: PropTypes.string,
     showOverdueLabel: PropTypes.bool,
     updateTask: PropTypes.func,
