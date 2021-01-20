@@ -1,32 +1,20 @@
 import _ from 'lodash';
 import React from 'react';
+import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
-import {
-    ListItem,
-    ListItemText,
-    Typography,
-    ListItemSecondaryAction,
-    IconButton,
-    Fab,
-    Tooltip,
-} from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
+import { Chip, Tooltip, IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TodayIcon from '@material-ui/icons/Today';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
-import { CourseLabel, PriorityDisplay, TagsDisplay } from '../shared/displays';
-import { Checkbox } from '../shared/controls';
+import PriorityDisplay from '../shared/displays/priority-display';
+import Checkbox from '../shared/controls/checkbox';
+import Typography from '../shared/typography';
 import styles from './task-cell.module.scss';
-
-const {
-    dayjs,
-    constants: { DB_DATE_FORMAT, DB_DATETIME_FORMAT },
-} = dateUtils;
 
 class TaskCell extends React.Component {
     constructor(props) {
@@ -38,9 +26,6 @@ class TaskCell extends React.Component {
         this.moveToToday = this.moveToToday.bind(this);
         this.toggleCompletion = this.toggleCompletion.bind(this);
         this.openRelatedAssignment = this.openRelatedAssignment.bind(this);
-
-        this.shouldShowOverdueLabel = this.shouldShowOverdueLabel.bind(this);
-        this.overdueLabelContent = this.overdueLabelContent.bind(this);
 
         this.state = {
             task: this.props.selectTaskFromStore(this.props.tid),
@@ -86,7 +71,7 @@ class TaskCell extends React.Component {
         changes[prop] = newVal;
 
         if (changes.complete) {
-            changes.completionDate = dayjs().format(DB_DATETIME_FORMAT);
+            changes.completionDate = dateUtils.formatAsDateTime();
         }
 
         this.props.updateTaskLocal({
@@ -103,107 +88,64 @@ class TaskCell extends React.Component {
         this.props.updateTask(afterUpdates);
     }
 
-    shouldShowOverdueLabel() {
-        if (_.get(this.state, 'task.complete')) return false;
-        if (!this.props.showOverdueLabel && !this.props.subtaskCell) return false;
-        if (!dateUtils.dueDateIsDate(this.state.task.dueDate)) return false;
-
-        const dateValue = dayjs(this.state.task.dueDate, DB_DATE_FORMAT);
-        return dateValue.isBefore(dayjs(), 'day');
-    }
-
-    overdueLabelContent() {
-        const dateValue = dayjs(this.state.task.dueDate, DB_DATE_FORMAT);
-        const days = dayjs().diff(dateValue, 'days');
-
-        if (days === 1) {
-            return 'Due yesterday';
-        } else {
-            return `Due ${days} days ago`;
-        }
-    }
-
     render() {
-        const assignment = this.props.getAssignment(_.get(this.state.task, 'aid'));
-        const course = assignment
-            ? this.props.getCourse(assignment.cid)
-            : this.props.getCourse(_.get(this.state.task, 'cid'));
+        const { selected } = this.props;
+        const { task = {} } = this.state;
 
-        const needsUpperLabel = !this.props.subtaskCell && (course || assignment);
-        const hasBoth = course && assignment;
+        let shouldShowMoveToToday = false;
+
+        if (this.props.onSelect && !task.complete && task.dueDate && dateUtils.dueDateIsDate(task.dueDate)) {
+            shouldShowMoveToToday = dateUtils.toDate(task.dueDate).isBefore(dateUtils.dayjs(), 'day');
+        }
 
         return (
-            <div className={`list-cell ${styles.taskCell}`}>
-                <PriorityDisplay priority={_.get(this.state.task, 'priority')} />
-                <ListItem button={!this.props.subtaskCell} selected={this.props.selected} onClick={this.select}>
-                    <Checkbox
-                        cid={_.get(this.state.task, 'cid')}
-                        checked={_.get(this.state, 'task.complete', false)}
-                        onChange={this.toggleCompletion}
-                        marginRight="1rem"
-                    />
-                    <ListItemText
-                        primary={
-                            <React.Fragment>
-                                {needsUpperLabel && (
-                                    <div className="cell-upper-label">
-                                        {course && <CourseLabel cid={course.cid} />}
-                                        {assignment && (
-                                            <Typography className="assignment-label">
-                                                {`${hasBoth ? ' / ' : ''}${assignment.title}`}
-                                            </Typography>
-                                        )}
-                                    </div>
-                                )}
-                                <div>{_.get(this.state, 'task.title')}</div>
-                                {_.get(this.state.task, 'tags', []).length > 0 && (
-                                    <TagsDisplay tags={this.state.task.tags} />
-                                )}
-                                {this.shouldShowOverdueLabel() && (
-                                    <Typography variant="body2" color="error">
-                                        {this.overdueLabelContent()}
-                                    </Typography>
-                                )}
-                            </React.Fragment>
-                        }
-                        secondary={
-                            this.props.subtaskCell && !this.state.task.complete && !this.shouldShowOverdueLabel()
-                                ? `Due ${dateUtils.readableDueDate(this.state.task.dueDate, true)}`
-                                : _.get(this.state.task, 'description')
-                        }
-                    />
-                    <ListItemSecondaryAction className="actions">
-                        {this.props.subtaskCell && (
-                            <Tooltip title="Edit">
-                                <IconButton edge="end" onClick={this.openRelatedAssignment}>
-                                    <EditIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                        )}
-                        {this.props.onSelect && this.shouldShowOverdueLabel() && (
-                            <Tooltip title="Move to today">
-                                <IconButton onClick={this.moveToToday}>
+            <div className={clsx('list-cell', styles.taskCell, selected && styles.selected)} onClick={this.select}>
+                <Checkbox
+                    className={styles.checkbox}
+                    cid={_.get(this.state.task, 'cid')}
+                    checked={_.get(this.state, 'task.complete', false)}
+                    onChange={this.toggleCompletion}
+                />
+                <div className={styles.taskContent}>
+                    <Typography>{task.title}</Typography>
+                    {task.description && (
+                        <Typography variant="body2" color="textSecondary">
+                            {task.description}
+                        </Typography>
+                    )}
+                </div>
+                <div className={styles.rightContent}>
+                    {(task.tags || []).length > 0 && (
+                        <div className={styles.tagsDisplay}>
+                            {task.tags.map((tag, index) => (
+                                <Chip className={styles.tag} size="small" key={index} label={tag} />
+                            ))}
+                        </div>
+                    )}
+                    <PriorityDisplay priority={task.priority} className={styles.priorityDisplay} />
+                    <div className="actions">
+                        {shouldShowMoveToToday && (
+                            <Tooltip title="Move to today" className={styles.action} onClick={this.moveToToday}>
+                                <IconButton size="small">
                                     <TodayIcon fontSize="small" />
                                 </IconButton>
                             </Tooltip>
                         )}
                         {this.props.onDelete && (
                             <Tooltip title="Delete">
-                                <IconButton edge="end" onClick={this.deleted}>
-                                    <DeleteIcon color="error" />
+                                <IconButton size="small" edge="end" className={styles.action} onClick={this.deleted}>
+                                    <DeleteIcon fontSize="small" color="error" />
                                 </IconButton>
                             </Tooltip>
                         )}
-                        {this.props.specialActionsPadding && <Fab size="small" />}
-                    </ListItemSecondaryAction>
-                </ListItem>
+                    </div>
+                </div>
             </div>
         );
     }
 }
 
 TaskCell.propTypes = {
-    subtaskCell: PropTypes.bool,
     tid: PropTypes.string,
     showOverdueLabel: PropTypes.bool,
     updateTask: PropTypes.func,
@@ -215,7 +157,6 @@ TaskCell.propTypes = {
     onSelect: PropTypes.func,
     onDelete: PropTypes.func,
     setShouldGoToTask: PropTypes.func,
-    specialActionsPadding: PropTypes.bool,
 };
 
 const mapStateToProps = state => {

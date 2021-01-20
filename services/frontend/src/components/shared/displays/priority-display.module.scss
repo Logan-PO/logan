@@ -5,6 +5,7 @@ $dot-size: 5px;
     justify-content: flex-end;
     flex-wrap: nowrap;
     flex-grow: 0 !important;
+    flex-shrink: 0 !important;
 
     .dot {
         background: currentColor;

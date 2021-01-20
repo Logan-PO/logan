@@ -31,7 +31,7 @@ const variants = {
 
 const Typography = ({ children, style, variant, ...props }) => {
     const variantStyle = (variant && variants[variant]) || {};
-    const customStyle = { ...variantStyle, ...style };
+    const customStyle = { userSelect: 'none', ...variantStyle, ...style };
     const muiVariant = variant && variants[variant] ? undefined : variant;
 
     return (

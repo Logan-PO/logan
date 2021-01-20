@@ -25,10 +25,10 @@ class TasksPage extends React.Component {
         return (
             <Page title="Tasks">
                 <Grid container spacing={0} className={styles.tasksPage}>
-                    <Grid item sm={6} md={4} lg={5} className={styles.tasksListContainer}>
+                    <Grid item xs={6} className={styles.tasksListContainer}>
                         <TasksList onTaskSelected={this.didSelectTask} />
                     </Grid>
-                    <Grid item sm={6} md={8} lg={7} className={styles.taskEditorContainer}>
+                    <Grid item xs={6} className={styles.taskEditorContainer}>
                         {this.state.selectedTid ? (
                             <TaskEditor tid={this.state.selectedTid} />
                         ) : (
