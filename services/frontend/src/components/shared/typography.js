@@ -13,6 +13,9 @@ const variants = {
         fontSize: '36px',
         lineHeight: '1.2em',
     },
+    'big-body': {
+        fontSize: '18px',
+    },
     'navbar-1': {
         fontSize: '24px',
         fontWeight: 500,

@@ -111,7 +111,12 @@ class HomePage extends React.Component {
                         <React.Fragment>
                             <Typography>Ready to get started?</Typography>
                             <div style={{ display: 'flex' }}>
-                                <TextButton color="white" size="large" classes={{ text: styles.textButton }}>
+                                <TextButton
+                                    color="white"
+                                    size="large"
+                                    classes={{ text: styles.textButton }}
+                                    onClick={() => navigate('/login')}
+                                >
                                     Log in
                                 </TextButton>
                                 <Typography style={{ fontFamily: headingsFontFamily }}>&nbsp;/&nbsp;</Typography>
