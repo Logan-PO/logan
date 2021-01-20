@@ -12,6 +12,11 @@ const variants = {
         fontSize: '16px',
         fontWeight: 500,
     },
+    'list-heading': {
+        fontFamily: headingsFontFamily,
+        fontSize: '14px',
+        fontWeight: 600,
+    },
     'list-header-detail': {
         fontFamily: headingsFontFamily,
         fontSize: '16px',

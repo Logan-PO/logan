@@ -5,11 +5,13 @@ import { connect } from 'react-redux';
 import { List, FormControl, FormControlLabel, Switch } from '@material-ui/core';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, deleteTask, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
-import { setShouldGoToAssignment } from '@logan/fe-shared/store/assignments';
+import { setShouldGoToAssignment, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
 import Fab from '../shared/controls/fab';
 import ListHeader from '../shared/list-header';
 import '../shared/list.scss';
+import ListSubheader from '../shared/list-subheader';
 import TaskCell from './task-cell';
 import styles from './tasks-list.module.scss';
 import TaskModal from './task-modal';
@@ -75,9 +77,7 @@ class TasksList extends React.Component {
         this.setState({ showingCompletedTasks: e.target.checked });
     }
 
-    _headerForSection(section) {
-        const [dueDate] = section;
-
+    _headerForSection(dueDate) {
         let sectionTitle = dueDate;
         let sectionDetail;
 
@@ -105,6 +105,63 @@ class TasksList extends React.Component {
         );
     }
 
+    _contentsForSection(tids) {
+        const tasks = tids.map(this.props.getTask);
+
+        const groupings = _.groupBy(tasks, task => {
+            const assignment = task.aid ? this.props.getAssignment(task.aid) : undefined;
+            return `${(assignment ? assignment.cid : task.cid) || ''} ${task.aid || ''}`;
+        });
+
+        const sortedEntries = _.sortBy(_.entries(groupings), '0');
+
+        const contents = [];
+
+        for (const [sortKey, tasks] of sortedEntries) {
+            const [cid, aid] = sortKey.split(' ');
+
+            if (cid || aid) {
+                const items = [];
+                const colors = [];
+
+                if (cid) {
+                    const course = this.props.getCourse(cid);
+
+                    if (course) {
+                        items.push(course.title);
+                        colors.push(course.color);
+                    }
+                }
+
+                if (aid) {
+                    const assignment = this.props.getAssignment(aid);
+
+                    if (assignment) {
+                        items.push(assignment.title);
+                        colors.push('textPrimary');
+                    }
+                }
+
+                contents.push(<ListSubheader className={styles.subheader} items={items} colors={colors} />);
+            }
+
+            contents.push(
+                ...tasks.map(({ tid }) => (
+                    <TaskCell
+                        key={tid}
+                        tid={tid}
+                        showOverdueLabel={!this.state.showingCompletedTasks}
+                        onSelect={this.didSelectTask}
+                        onDelete={this.didDeleteTask}
+                        selected={this.state.selectedTid === tid}
+                    />
+                ))
+            );
+        }
+
+        return contents;
+    }
+
     render() {
         const tasks = _.filter(
             this.props.tids.map(tid => this.props.getTask(tid)),
@@ -117,25 +174,12 @@ class TasksList extends React.Component {
             <div className="scrollable-list">
                 <div className={`scroll-view ${styles.tasksList}`}>
                     <List className={styles.listContent}>
-                        {sections.map(section => {
-                            const tids = section[1];
-
-                            return (
-                                <div className={styles.section} key={section[0]}>
-                                    {this._headerForSection(section)}
-                                    {tids.map(tid => (
-                                        <TaskCell
-                                            key={tid}
-                                            tid={tid}
-                                            showOverdueLabel={!this.state.showingCompletedTasks}
-                                            onSelect={this.didSelectTask}
-                                            onDelete={this.didDeleteTask}
-                                            selected={this.state.selectedTid === tid}
-                                        />
-                                    ))}
-                                </div>
-                            );
-                        })}
+                        {sections.map(([dueDate, tids]) => (
+                            <div className={styles.section} key={dueDate}>
+                                {this._headerForSection(dueDate)}
+                                {this._contentsForSection(tids)}
+                            </div>
+                        ))}
                     </List>
                 </div>
                 <div className={styles.actionsBar}>
@@ -165,6 +209,8 @@ class TasksList extends React.Component {
 TasksList.propTypes = {
     tids: PropTypes.array,
     getTask: PropTypes.func,
+    getAssignment: PropTypes.func,
+    getCourse: PropTypes.func,
     deleteTask: PropTypes.func,
     onTaskSelected: PropTypes.func,
     shouldGoToTask: PropTypes.string,
@@ -173,12 +219,14 @@ TasksList.propTypes = {
 };
 
 const mapStateToProps = state => {
-    const selectors = getTasksSelectors(state.tasks);
+    const tasksSelectors = getTasksSelectors(state.tasks);
 
     return {
         shouldGoToTask: state.tasks.shouldGoToTask,
-        tids: getTasksSelectors(state.tasks).selectIds(),
-        getTask: selectors.selectById,
+        tids: tasksSelectors.selectIds(),
+        getTask: tasksSelectors.selectById,
+        getAssignment: getAssignmentsSelectors(state.assignments).selectById,
+        getCourse: getCourseSelectors(state.schedule).selectById,
     };
 };
 

@@ -11,6 +11,7 @@ import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import { colorForValue } from '../shared/displays/priority-constants';
 import PriorityDisplay from '../shared/displays/priority-display';
 import Checkbox from '../shared/controls/checkbox';
 import Typography from '../shared/typography';
@@ -92,6 +93,8 @@ class TaskCell extends React.Component {
         const { selected } = this.props;
         const { task = {} } = this.state;
 
+        const selectedColor = colorForValue(task.priority);
+
         let shouldShowMoveToToday = false;
 
         if (this.props.onSelect && !task.complete && task.dueDate && dateUtils.dueDateIsDate(task.dueDate)) {
@@ -101,6 +104,7 @@ class TaskCell extends React.Component {
         return (
             <div
                 className={clsx('list-cell', styles.taskCell, this.props.className, selected && styles.selected)}
+                style={{ background: selected ? `${selectedColor}4b` : undefined }}
                 onClick={this.select}
             >
                 <Checkbox
@@ -125,22 +129,24 @@ class TaskCell extends React.Component {
                             ))}
                         </div>
                     )}
-                    <PriorityDisplay priority={task.priority} className={styles.priorityDisplay} />
-                    <div className="actions">
-                        {shouldShowMoveToToday && (
-                            <Tooltip title="Move to today" className={styles.action} onClick={this.moveToToday}>
-                                <IconButton size="small">
-                                    <TodayIcon fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                        )}
-                        {this.props.onDelete && (
-                            <Tooltip title="Delete">
-                                <IconButton size="small" edge="end" className={styles.action} onClick={this.deleted}>
-                                    <DeleteIcon fontSize="small" color="error" />
-                                </IconButton>
-                            </Tooltip>
-                        )}
+                    <div className={styles.actionsPriorityWrapper}>
+                        <PriorityDisplay priority={task.priority} className={styles.priorityDisplay} />
+                        <div className="actions">
+                            {shouldShowMoveToToday && (
+                                <Tooltip title="Move to today" className={styles.action} onClick={this.moveToToday}>
+                                    <IconButton size="small">
+                                        <TodayIcon fontSize="small" />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                            {this.props.onDelete && (
+                                <Tooltip title="Delete">
+                                    <IconButton size="small" className={styles.action} onClick={this.deleted}>
+                                        <DeleteIcon fontSize="small" color="error" />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

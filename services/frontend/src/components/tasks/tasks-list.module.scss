@@ -3,7 +3,7 @@
     margin: 24px 0 0;
 
     .list-content {
-        padding: 0 12px 12px;
+        padding: 0 0 12px 12px;
 
         .section {
             display: flex;
@@ -15,7 +15,12 @@
             }
 
             .header {
-                padding: 0 12px 6px;
+                padding: 0 24px 6px 12px;
+            }
+
+            .subheader {
+                padding: 0 24px 0 12px;
+                margin: 3px 0;
             }
         }
     }

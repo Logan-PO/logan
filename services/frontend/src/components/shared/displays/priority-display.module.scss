@@ -1,8 +1,10 @@
 $dot-size: 5px;
+$dot-spacing: 2px;
 
 .priority-display {
+    width: calc(5 * #{$dot-size} + 4 * #{$dot-spacing});
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     flex-wrap: nowrap;
     flex-grow: 0 !important;
     flex-shrink: 0 !important;
@@ -15,7 +17,7 @@ $dot-size: 5px;
         border-radius: 50%;
 
         &:not(:last-child) {
-            margin-right: 2px;
+            margin-right: $dot-spacing;
         }
     }
 }
