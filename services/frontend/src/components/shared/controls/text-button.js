@@ -9,7 +9,7 @@ import Typography from '../typography';
 /**
  * A simple text button, with an optional leading icon. Can be sized "small" or "large".
  */
-const TextButton = ({ style, IconComponent, children, color = 'primary', size = 'small', ...rest }) => {
+const TextButton = ({ classes = {}, style, IconComponent, children, color = 'primary', size = 'small', ...rest }) => {
     if (!(size === 'large' || size === 'small')) {
         console.warn(`Invalid size '${size}' for TextButton. Defaulting to 'small'`);
         size = 'small';
@@ -30,6 +30,7 @@ const TextButton = ({ style, IconComponent, children, color = 'primary', size = 
 
     return (
         <ButtonBase
+            className={classes.root}
             style={{
                 ...colorStyle,
                 display: 'flex',
@@ -41,6 +42,7 @@ const TextButton = ({ style, IconComponent, children, color = 'primary', size = 
         >
             {IconComponent && (
                 <IconComponent
+                    className={classes.icon}
                     style={{
                         display: 'inline !important',
                         marginBottom: 2,
@@ -49,7 +51,7 @@ const TextButton = ({ style, IconComponent, children, color = 'primary', size = 
                     }}
                 />
             )}
-            <Typography variant={typographyVariant} style={{ display: 'inline !important' }}>
+            <Typography className={classes.text} variant={typographyVariant} style={{ display: 'inline !important' }}>
                 {children}
             </Typography>
         </ButtonBase>
@@ -57,6 +59,11 @@ const TextButton = ({ style, IconComponent, children, color = 'primary', size = 
 };
 
 TextButton.propTypes = {
+    classes: PropTypes.exact({
+        root: PropTypes.string,
+        icon: PropTypes.string,
+        text: PropTypes.string,
+    }),
     style: PropTypes.object,
     IconComponent: PropTypes.elementType,
     color: PropTypes.string,
