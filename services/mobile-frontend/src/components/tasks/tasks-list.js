@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { SectionList } from 'react-native';
 import { FAB, Portal, Dialog, Paragraph, Button } from 'react-native-paper';
 import SegmentedControl from '@react-native-community/segmented-control';
+import { dateUtils } from '@logan/core';
 import { getTasksSelectors, deleteTask, deleteTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -99,11 +100,17 @@ class TasksList extends React.Component {
                             onDeletePressed={this.openDeleteConfirmation}
                         />
                     )}
-                    renderSectionHeader={({ section: { title } }) => (
-                        <ListHeader style={{ backgroundColor: 'white' }} key={title}>
-                            {title}
-                        </ListHeader>
-                    )}
+                    renderSectionHeader={({ section: { title } }) => {
+                        const formattedTitle = dateUtils.dueDateIsDate(title)
+                            ? dateUtils.readableDueDate(title)
+                            : title;
+
+                        return (
+                            <ListHeader style={{ backgroundColor: 'white' }} key={title}>
+                                {formattedTitle}
+                            </ListHeader>
+                        );
+                    }}
                 />
                 <FAB
                     icon="plus"
