@@ -73,7 +73,7 @@ class SignUpForm extends React.Component {
                     <Typography>Sign in with your Google account to get started.</Typography>
                 </div>
                 <div className={styles.actions}>
-                    <ActionButton className={styles.cancelButton} textColor="white">
+                    <ActionButton className={styles.cancelButton} textColor="white" onClick={this.props.onClose}>
                         Cancel
                     </ActionButton>
                     <div className={styles.flexibleSpace} />
@@ -126,7 +126,7 @@ class SignUpForm extends React.Component {
                     </div>
                 </div>
                 <div className={styles.actions}>
-                    <ActionButton className={styles.cancelButton} textColor="white">
+                    <ActionButton className={styles.cancelButton} textColor="white" onClick={this.props.onClose}>
                         Cancel
                     </ActionButton>
                     <div className={styles.flexibleSpace} />
