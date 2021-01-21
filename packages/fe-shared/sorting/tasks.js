@@ -35,7 +35,7 @@ function makeSectionsIncomplete(tasks) {
             if (dueDate.isBefore(now, 'day')) {
                 addToSection(task, 'Overdue');
             } else {
-                addToSection(task, dateUtils.humanReadableDate(dueDate));
+                addToSection(task, task.dueDate);
             }
         }
     }

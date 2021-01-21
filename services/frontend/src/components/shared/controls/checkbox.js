@@ -1,4 +1,5 @@
 import React from 'react';
+import clsx from 'clsx';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ButtonBase from '@material-ui/core/ButtonBase';
@@ -38,7 +39,7 @@ class Checkbox extends React.Component {
 
         return (
             <ButtonBase
-                className={checkboxClass}
+                className={clsx(checkboxClass, this.props.className)}
                 disabled={this.props.disabled}
                 style={checkboxStyle}
                 onClick={this._onChange.bind(this)}
@@ -46,20 +47,11 @@ class Checkbox extends React.Component {
                 <CheckIcon className={styles.checkIcon} />
             </ButtonBase>
         );
-
-        // return (
-        //     <MuiCheckbox
-        //         className={styles.checkbox}
-        //         disabled={this.props.disabled}
-        //         checked={this.props.checked}
-        //         onChange={this.props.onChange}
-        //         style={checkboxStyle}
-        //     />
-        // );
     }
 }
 
 Checkbox.propTypes = {
+    className: PropTypes.string,
     size: PropTypes.string,
     cid: PropTypes.string,
     selectCourse: PropTypes.func,

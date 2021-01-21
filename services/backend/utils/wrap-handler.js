@@ -2,7 +2,11 @@ const _ = require('lodash');
 const { handleAuth } = require('./auth');
 const { LoganError } = require('./errors');
 
-const VALID_ORIGINS = ['http://localhost:8000', 'http://logan-frontend.s3-website-us-west-2.amazonaws.com'];
+const VALID_ORIGINS = [
+    'http://localhost:8000',
+    'http://logan-frontend.s3-website-us-west-2.amazonaws.com',
+    'https://loganplanner.com',
+];
 
 /**
  * @typedef HandlerConfig

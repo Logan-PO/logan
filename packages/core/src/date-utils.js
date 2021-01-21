@@ -60,7 +60,7 @@ function dueDateType(dueDate) {
 }
 
 function dueDateIsDate(dueDate) {
-    return dueDate !== 'asap' && dueDate !== 'eventually';
+    return toDate(dueDate).isValid();
 }
 
 function readableDueDate(dueDate, forSentence = false) {

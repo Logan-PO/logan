@@ -9,7 +9,22 @@ import styles from './input-group.module.scss';
  */
 // eslint-disable-next-line react/display-name
 const InputGroup = React.forwardRef(
-    ({ style, color, accessory, icon, emptyAccessory = false, label, content, className, ...rest }, ref) => {
+    (
+        {
+            style,
+            color,
+            error = false,
+            helperText,
+            accessory,
+            icon,
+            className,
+            emptyAccessory = false,
+            label,
+            content,
+            ...rest
+        },
+        ref
+    ) => {
         const hasAccessory = emptyAccessory || accessory || icon;
         let accessoryContent = accessory;
 
@@ -29,7 +44,7 @@ const InputGroup = React.forwardRef(
                         <tr>
                             {hasAccessory && <td />}
                             <td style={{ width: '100%' }}>
-                                <Typography style={{ userSelect: 'none' }} variant="detail-label">
+                                <Typography variant="detail-label" color={error ? 'error' : 'textSecondary'}>
                                     {label}
                                 </Typography>
                             </td>
@@ -43,6 +58,16 @@ const InputGroup = React.forwardRef(
                         )}
                         <td style={{ width: '100%' }}>{content}</td>
                     </tr>
+                    {helperText && (
+                        <tr>
+                            {hasAccessory && <td />}
+                            <td style={{ width: '100%' }}>
+                                <Typography variant="detail" color={error ? 'error' : 'textSecondary'}>
+                                    {helperText}
+                                </Typography>
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
         );
@@ -58,6 +83,8 @@ InputGroup.propTypes = {
     icon: PropTypes.elementType,
     color: PropTypes.string,
     className: PropTypes.string,
+    error: PropTypes.bool,
+    helperText: PropTypes.string,
 };
 
 export default InputGroup;
