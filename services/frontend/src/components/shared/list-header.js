@@ -24,7 +24,7 @@ const ListHeader = ({ title, detail, isBig = false, color = 'textPrimary', class
 ListHeader.propTypes = {
     title: PropTypes.string.isRequired,
     detail: PropTypes.string,
-    isBig: PropTypes.boolean,
+    isBig: PropTypes.bool,
     color: PropTypes.string,
     className: PropTypes.string,
 };

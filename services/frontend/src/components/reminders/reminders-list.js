@@ -55,7 +55,7 @@ class RemindersList extends React.Component {
                                 </div>
                             )}
                             <TextButton
-                                className={classes.addButton}
+                                classes={{ root: classes.addButton }}
                                 IconComponent={AddIcon}
                                 size="large"
                                 onClick={this.setReminderModalState.bind(this, 'create', true)}

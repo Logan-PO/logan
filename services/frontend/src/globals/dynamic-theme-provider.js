@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -9,7 +10,7 @@ const DynamicThemeProvider = ({ primary, accent, children, ...rest }) => {
     const theme = makeTheme({ primary, accent });
 
     return (
-        <ThemeProvider theme={theme} {...rest}>
+        <ThemeProvider theme={theme} {..._.omit(rest, 'dispatch')}>
             {children}
         </ThemeProvider>
     );

@@ -24,9 +24,9 @@ const ListSubheader = ({ items = [], colors = [], isBig = false, className, disa
 ListSubheader.propTypes = {
     items: PropTypes.arrayOf(PropTypes.string).isRequired,
     colors: PropTypes.arrayOf(PropTypes.string).isRequired,
-    isBig: PropTypes.boolean,
+    isBig: PropTypes.bool,
     className: PropTypes.string,
-    disableSeparator: PropTypes.boolean,
+    disableSeparator: PropTypes.bool,
 };
 
 export default ListSubheader;
