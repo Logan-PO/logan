@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Typography as MuiTypography } from '@material-ui/core';
+import { headingsFontFamily } from '../../globals/theme';
 
 const variants = {
     'navbar-1': {
@@ -10,6 +11,15 @@ const variants = {
     'navbar-2': {
         fontSize: '16px',
         fontWeight: 500,
+    },
+    'list-heading': {
+        fontFamily: headingsFontFamily,
+        fontSize: '14px',
+        fontWeight: 600,
+    },
+    'list-header-detail': {
+        fontFamily: headingsFontFamily,
+        fontSize: '16px',
     },
     detail: {
         fontSize: '11.5px',
@@ -26,7 +36,7 @@ const variants = {
 
 const Typography = ({ children, style, variant, ...props }) => {
     const variantStyle = (variant && variants[variant]) || {};
-    const customStyle = { ...variantStyle, ...style };
+    const customStyle = { userSelect: 'none', ...variantStyle, ...style };
     const muiVariant = variant && variants[variant] ? undefined : variant;
 
     return (

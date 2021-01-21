@@ -4,7 +4,9 @@
   height: 18px;
   border-radius: 9px !important;
   border: solid 1px black !important;
-  background: none !important;
+  background: white !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
 
   .check-icon {
     display: none;

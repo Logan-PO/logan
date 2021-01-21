@@ -1,10 +1,23 @@
+$dot-size: 5px;
+$dot-spacing: 2px;
+
 .priority-display {
-    display: inline-block;
-    width: 5px;
-    max-width: 5px;
-    margin: 0;
-    padding: 0;
-    align-self: stretch;
+    width: calc(5 * #{$dot-size} + 4 * #{$dot-spacing});
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
     flex-grow: 0 !important;
-    -webkit-transition: 0.1s;
+    flex-shrink: 0 !important;
+
+    .dot {
+        background: currentColor;
+        display: inline-block;
+        width: $dot-size;
+        height: $dot-size;
+        border-radius: 50%;
+
+        &:not(:last-child) {
+            margin-right: $dot-spacing;
+        }
+    }
 }
