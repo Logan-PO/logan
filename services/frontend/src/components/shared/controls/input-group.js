@@ -76,7 +76,9 @@ const InputGroup = React.forwardRef(
 );
 
 InputGroup.propTypes = {
-    classes: PropTypes.object, // accessoryCell
+    classes: PropTypes.exact({
+        accessoryCell: PropTypes.string,
+    }),
     style: PropTypes.object,
     accessory: PropTypes.node,
     emptyAccessory: PropTypes.bool,
