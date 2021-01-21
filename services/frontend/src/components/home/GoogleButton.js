@@ -48,6 +48,7 @@ class GoogleBtn extends React.Component {
                     buttonText="Logout"
                     onLogoutSuccess={this.onLogout}
                     onFailure={handleLogoutFailure}
+                    {...this.props.logoutProps}
                 />
             );
         } else if (this.state.loggingIn) {
@@ -56,10 +57,10 @@ class GoogleBtn extends React.Component {
             return (
                 <GoogleLogin
                     clientId={clientID}
-                    buttonText="Login"
                     onSuccess={this.onLogin}
                     onFailure={handleLoginFailure}
                     cookiePolicy={'single_host_origin'}
+                    {...this.props.loginProps}
                 />
             );
         }
@@ -67,6 +68,8 @@ class GoogleBtn extends React.Component {
 }
 
 GoogleBtn.propTypes = {
+    loginProps: PropTypes.object,
+    logoutProps: PropTypes.object,
     isLoggedIn: PropTypes.bool,
     setLoginStage: PropTypes.func,
     verifyIdToken: PropTypes.func,

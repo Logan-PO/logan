@@ -7,7 +7,18 @@ import styles from './input-group.module.scss';
  * Displays a fancy input with an optional detail label above, and an optional accessory view to the left. Pass
  * emptyAccessory to keep left padding with no accessory view or icon.
  */
-const InputGroup = ({ style, color, accessory, icon, emptyAccessory = false, label, content, ...rest }) => {
+const InputGroup = ({
+    style,
+    color,
+    error = false,
+    helperText,
+    accessory,
+    icon,
+    emptyAccessory = false,
+    label,
+    content,
+    ...rest
+}) => {
     const hasAccessory = emptyAccessory || accessory || icon;
     let accessoryContent = accessory;
 
@@ -29,7 +40,9 @@ const InputGroup = ({ style, color, accessory, icon, emptyAccessory = false, lab
                     <tr>
                         {hasAccessory && <td />}
                         <td style={{ width: '100%' }}>
-                            <Typography variant="detail-label">{label}</Typography>
+                            <Typography variant="detail-label" color={error ? 'error' : 'textSecondary'}>
+                                {label}
+                            </Typography>
                         </td>
                     </tr>
                 )}
@@ -41,6 +54,16 @@ const InputGroup = ({ style, color, accessory, icon, emptyAccessory = false, lab
                     )}
                     <td style={{ width: '100%' }}>{content}</td>
                 </tr>
+                {helperText && (
+                    <tr>
+                        {hasAccessory && <td />}
+                        <td style={{ width: '100%' }}>
+                            <Typography variant="detail" color={error ? 'error' : 'textSecondary'}>
+                                {helperText}
+                            </Typography>
+                        </td>
+                    </tr>
+                )}
             </tbody>
         </table>
     );
@@ -54,6 +77,8 @@ InputGroup.propTypes = {
     content: PropTypes.node,
     icon: PropTypes.elementType,
     color: PropTypes.string,
+    error: PropTypes.bool,
+    helperText: PropTypes.string,
 };
 
 export default InputGroup;
