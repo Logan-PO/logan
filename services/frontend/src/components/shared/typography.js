@@ -24,6 +24,15 @@ const variants = {
         fontSize: '16px',
         fontWeight: 500,
     },
+    'list-heading': {
+        fontFamily: headingsFontFamily,
+        fontSize: '14px',
+        fontWeight: 600,
+    },
+    'list-header-detail': {
+        fontFamily: headingsFontFamily,
+        fontSize: '16px',
+    },
     detail: {
         fontSize: '11.5px',
     },
@@ -39,7 +48,7 @@ const variants = {
 
 const Typography = ({ useHeaderFont = false, children, style, variant, ...props }) => {
     const variantStyle = (variant && variants[variant]) || {};
-    const customStyle = { display: 'flex', alignItems: 'center', ...variantStyle, ...style };
+    const customStyle = { display: 'flex', alignItems: 'center', userSelect: 'none', ...variantStyle, ...style };
     const muiVariant = variant && variants[variant] ? undefined : variant;
 
     if (useHeaderFont) customStyle.fontFamily = headingsFontFamily;
