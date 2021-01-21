@@ -8,7 +8,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import api from '@logan/fe-shared/utils/api';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
-import Typography from '../shared/typography';
+import Typography, { variants } from '../shared/typography';
 import ActionButton from '../shared/controls/action-button';
 import { headingsFontFamily } from '../../globals/theme';
 import TextButton from '../shared/controls/text-button';
@@ -59,23 +59,139 @@ class HomePage extends React.Component {
     render() {
         const alreadyLoggedIn = this.props.loginStage === LOGIN_STAGE.DONE && this.props.user;
 
+        const sections = [
+            {
+                color: colors.teal[500],
+                id: 'welcome',
+                contents: (
+                    <React.Fragment>
+                        <Typography variant="title">Meet Logan</Typography>
+                        <Typography variant="subtitle">
+                            An intuitive personal organizer.
+                            <br />
+                            Designed for students, by students.
+                        </Typography>
+                        <ActionButton
+                            size="large"
+                            color="white"
+                            textColor={colors.teal[500]}
+                            onClick={makeScrollToFunction(1)}
+                        >
+                            Learn more
+                            <ArrowDownwardIcon style={{ margin: '0 -4px 0 4px' }} />
+                        </ActionButton>
+                    </React.Fragment>
+                ),
+            },
+            {
+                color: '#a1208d',
+                id: 'intro',
+                contents: (
+                    <React.Fragment>
+                        <Typography variant="title">Overview</Typography>
+                        <Typography variant="subtitle">
+                            We created Logan to help us stay on top of the things we need to get done each day.
+                        </Typography>
+                        <Typography variant="subtitle">
+                            At it’s core, it’s a powerful todo list, but there’s more to it than that.
+                        </Typography>
+                        <ActionButton size="large" color="white" textColor="#a1208d" onClick={makeScrollToFunction(2)}>
+                            Next:&nbsp;<i>Assignments</i>
+                        </ActionButton>
+                    </React.Fragment>
+                ),
+            },
+            {
+                color: '#f74b28',
+                id: 'assignments',
+                contents: (
+                    <React.Fragment>
+                        <Typography variant="title">Assignments</Typography>
+                        <Typography variant="subtitle">
+                            In addition to keeping track of your tasks, Logan can track your assignments and due-dates
+                            as well. Tasks can then be associated with your assignments, so you can easily plan out your
+                            work and track your progress.
+                        </Typography>
+                        <Typography variant="subtitle">
+                            It can also schedule reminders, so you never have to stress about forgetting that 11:59pm
+                            deadline again.
+                        </Typography>
+                        <ActionButton size="large" color="white" textColor="#f74b28" onClick={makeScrollToFunction(3)}>
+                            Next:&nbsp;<i>Scheduling</i>
+                        </ActionButton>
+                    </React.Fragment>
+                ),
+            },
+            {
+                color: '#3f51b5',
+                id: 'schedule',
+                contents: (
+                    <React.Fragment>
+                        <Typography variant="title">Scheduling</Typography>
+                        <Typography variant="subtitle">
+                            Logan also keeps track of your course schedule for you, making it easy to see what you have
+                            going on each day.
+                        </Typography>
+                        <Typography variant="subtitle">
+                            You can see an overview of your schedule and deadlines in a convenient calendar format, to
+                            help you plan out your work most effectively.
+                        </Typography>
+                        <ActionButton size="large" color="white" textColor="#3f51b5" onClick={makeScrollToFunction(4)}>
+                            What’s next?
+                        </ActionButton>
+                    </React.Fragment>
+                ),
+            },
+            {
+                color: '#607d8b',
+                id: 'future',
+                contents: (
+                    <React.Fragment>
+                        <Typography variant="title">Future Features (WIP)</Typography>
+                        <ul>
+                            <li style={variants.subtitle}>
+                                <b>Group project support</b>
+                                <br />
+                                Share assignments with other users, and assign group members tasks to help keep track of
+                                who’s doing what.
+                            </li>
+                            <br />
+                            <li style={variants.subtitle}>
+                                <b>Smart suggestions</b>
+                                <br />
+                                Integrations with Canvas, Google Classroom, and other similar services to automatically
+                                suggest assignments when professors create them.
+                            </li>
+                        </ul>
+                    </React.Fragment>
+                ),
+            },
+        ];
+
+        function makeScrollToFunction(index) {
+            return () => {
+                console.log(index);
+                const id = sections[index].id;
+                // eslint-disable-next-line no-undef
+                const element = document.getElementById(id);
+                window.scrollTo({
+                    top: element.offsetTop,
+                    left: 0,
+                    behavior: 'smooth',
+                });
+            };
+        }
+
         return (
             <div
                 className={styles.homePage}
                 style={{ background: colors.teal[500], '--headings-family': headingsFontFamily }}
             >
-                <div className={styles.contentContainer}>
-                    <Typography variant="title">Meet Logan</Typography>
-                    <Typography variant="subtitle">
-                        An intuitive personal organizer.
-                        <br />
-                        Designed for students, by students.
-                    </Typography>
-                    <ActionButton size="large" color="white" textColor={colors.teal[500]}>
-                        Learn more
-                        <ArrowDownwardIcon style={{ margin: '0 -4px 0 4px' }} />
-                    </ActionButton>
-                </div>
+                {sections.map(({ color, id, contents }) => (
+                    <div key={id} id={id} className={styles.contentContainer} style={{ background: color }}>
+                        {contents}
+                    </div>
+                ))}
                 <div className={styles.getStartedContainer}>
                     {alreadyLoggedIn ? (
                         <React.Fragment>
