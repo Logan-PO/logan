@@ -1,0 +1,125 @@
+$day-size: 28px;
+
+.root {
+  position: relative;
+  display: inline-block;
+}
+
+.owner-container {
+  display: inline-block;
+}
+
+.picker-paper {
+  overflow: visible !important;
+  background: none !important;
+}
+
+.picker-container {
+  --primary-color: black;
+  --primary-contrast: white;
+  --secondary-color: white;
+  --secondary-contrast: black;
+
+  position: relative;
+  display: inline-block !important;
+  color: var(--primary-color);
+  filter: drop-shadow(0px 5px 2px rgba(0, 0, 0, 0.1)) drop-shadow(0px 8px 10px rgba(0, 0, 0, 0.14)) drop-shadow(0px 3px 14px rgba(0, 0, 0, 0.12));
+
+  .backdrop-container {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: nowrap;
+
+    .backdrop {
+      display: inline-block;
+      box-sizing: content-box;
+      background: currentColor;
+      border-radius: 4px 4px 0 0;
+    }
+  }
+
+  .picker-content {
+    display: flex;
+    flex-direction: column;
+    background: var(--primary-color);
+    padding: 6px;
+    border-radius: 0 4px 4px 4px;
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--primary-contrast);
+      padding-bottom: 6px;
+
+      .icon-button {
+        width: 18px;
+        height: 18px;
+        background: var(--primary-contrast);
+        color: black;
+        border-radius: 50%;
+
+        .icon {
+          font-size: 1.5em;
+        }
+      }
+    }
+
+    .calendar {
+      display: inline-block;
+      padding: 6px;
+      background: white;
+      border-radius: 2px;
+      color: black;
+
+      .dow-container {
+        display: flex;
+        justify-content: stretch;
+        color: #646464;
+        margin-bottom: 3px;
+
+        .dow-label {
+          text-align: center;
+          width: $day-size;
+        }
+      }
+
+      .calendar-week {
+        display: flex;
+      }
+
+      .day-circle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: $day-size;
+        height: $day-size;
+        border-radius: 50%;
+
+        &.today {
+          background: #e5e5e5;
+        }
+
+        &.selected-day {
+          background: var(--secondary-color);
+          color: var(--secondary-contrast);
+        }
+
+        &.outside-month {
+          opacity: 0.25;
+        }
+      }
+    }
+
+    .picker-buttons {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: scroll;
+      margin-top: 6px;
+
+      & > *:not(:last-child) {
+        margin-right: 6px;
+      }
+    }
+  }
+}
