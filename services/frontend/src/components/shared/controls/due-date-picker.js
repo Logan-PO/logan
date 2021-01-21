@@ -121,7 +121,11 @@ class DueDatePicker extends React.Component {
                             owner={
                                 <Selectable
                                     selected={this.state.dueDateType === 'date'}
-                                    onClick={this.updateType.bind(this, 'date')}
+                                    onClick={
+                                        this.state.dueDateType === 'date'
+                                            ? this._pickerRef.current && this._pickerRef.current.openPicker
+                                            : this.updateType.bind(this, 'date')
+                                    }
                                 >
                                     {dateValue ? dateUtils.readableDueDate(dateValue) : 'Choose a date…'}
                                     <ButtonBase
