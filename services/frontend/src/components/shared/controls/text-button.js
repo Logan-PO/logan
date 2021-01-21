@@ -1,10 +1,12 @@
 import _ from 'lodash';
+import clsx from 'clsx';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { getCurrentTheme } from '../../../globals/theme';
 import Typography from '../typography';
+import styles from './text-button.module.scss';
 
 /**
  * A simple text button, with an optional leading icon. Can be sized "small" or "large".
@@ -30,7 +32,7 @@ const TextButton = ({ classes = {}, style, IconComponent, children, color = 'pri
 
     return (
         <ButtonBase
-            className={classes.root}
+            classes={{ root: clsx(styles.textButton, classes.root) }}
             style={{
                 ...colorStyle,
                 display: 'flex',

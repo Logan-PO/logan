@@ -11,6 +11,7 @@ import styles from './input-group.module.scss';
 const InputGroup = React.forwardRef(
     (
         {
+            classes = {},
             style,
             color,
             error = false,
@@ -52,7 +53,7 @@ const InputGroup = React.forwardRef(
                     )}
                     <tr>
                         {hasAccessory && (
-                            <td>
+                            <td className={classes.accessoryCell}>
                                 <div className={styles.accessory}>{accessoryContent}</div>
                             </td>
                         )}
@@ -75,6 +76,9 @@ const InputGroup = React.forwardRef(
 );
 
 InputGroup.propTypes = {
+    classes: PropTypes.exact({
+        accessoryCell: PropTypes.string,
+    }),
     style: PropTypes.object,
     accessory: PropTypes.node,
     emptyAccessory: PropTypes.bool,

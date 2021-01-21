@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
 import { Tooltip, IconButton } from '@material-ui/core';
-import { Home, CheckCircleOutline, Assignment, CollectionsBookmark, Settings } from '@material-ui/icons';
+import { Home, Assignment, CollectionsBookmark, Settings } from '@material-ui/icons';
+import { CheckboxMarkedCircleOutline } from 'mdi-material-ui';
 import styles from './sidebar.module.scss';
 
 const pages = {
@@ -13,7 +14,7 @@ const pages = {
     },
     Tasks: {
         url: '/tasks',
-        icon: CheckCircleOutline,
+        icon: CheckboxMarkedCircleOutline,
     },
     Assignments: {
         url: '/assignments',

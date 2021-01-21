@@ -68,7 +68,7 @@ class BasicDatePicker extends React.Component {
 }
 
 BasicDatePicker.propTypes = {
-    hideIcon: PropTypes.boolean,
+    hideIcon: PropTypes.bool,
     inputGroupProps: PropTypes.object,
     value: PropTypes.object,
     onChange: PropTypes.func,

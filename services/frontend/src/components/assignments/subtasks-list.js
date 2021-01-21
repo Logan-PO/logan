@@ -4,12 +4,14 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
 import { getTasksSelectors, createTask, deleteTask } from '@logan/fe-shared/store/tasks';
-import { Paper, List, Divider, FormLabel, Fab, ListItem, ListItemText, Tooltip } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import TaskCell from '../tasks/task-cell';
-import '../shared/list.scss';
+import AddIcon from '@material-ui/icons/AddCircleOutline';
+import TasksIcon from 'mdi-material-ui/CheckboxMarkedCircleOutline';
 import TaskModal from '../tasks/task-modal';
-import classes from './subtasks-list.module.scss';
+import InputGroup from '../shared/controls/input-group';
+import TextButton from '../shared/controls/text-button';
+import '../shared/list.scss';
+import SubtaskCell from './subtask-cell';
+import styles from './subtasks-list.module.scss';
 
 const {
     dayjs,
@@ -47,47 +49,34 @@ class SubtasksList extends React.Component {
 
     listContent() {
         if (this.props.aid && this.props.tasks.length) {
-            return this.props.tasks.map((task, index) => (
-                <React.Fragment key={task.tid}>
-                    <TaskCell key={task.tid} tid={task.tid} subtaskCell />
-                    {index < this.props.tasks.length - 1 && <Divider component="li" style={{ marginTop: -1 }} />}
-                </React.Fragment>
-            ));
-        } else {
             return (
-                <ListItem>
-                    <ListItemText secondary="No subtasks" />
-                </ListItem>
+                <div className={`${styles.subtasksList} small-list`}>
+                    {this.props.tasks.map(task => (
+                        <SubtaskCell key={task.tid} tid={task.tid} subtaskCell />
+                    ))}
+                </div>
             );
+        } else {
+            return undefined;
         }
     }
 
     render() {
         return (
             <React.Fragment>
-                <div>
-                    <FormLabel
-                        style={{
-                            fontSize: '0.75rem',
-                            marginBottom: '0.5rem',
-                            display: 'inline-block',
-                        }}
-                    >
-                        Subtasks
-                    </FormLabel>
-                    <Paper variant="outlined" className={classes.subtasksList}>
-                        <div className="basic-list">
-                            <List style={{ padding: 0 }}>{this.listContent()}</List>
+                <InputGroup
+                    classes={{ accessoryCell: this.props.tasks.length && styles.accessoryCellAlignTop }}
+                    label="Subtasks"
+                    icon={TasksIcon}
+                    content={
+                        <div className={styles.subtasksListRoot}>
+                            {this.listContent()}
+                            <TextButton size="large" IconComponent={AddIcon} onClick={this.openNewTaskModal}>
+                                Add subtask
+                            </TextButton>
                         </div>
-                    </Paper>
-                    <div className={classes.fabContainer}>
-                        <Tooltip title="New subtask">
-                            <Fab color="secondary" size="small" className={classes.fab} onClick={this.openNewTaskModal}>
-                                <AddIcon fontSize="small" />
-                            </Fab>
-                        </Tooltip>
-                    </div>
-                </div>
+                    }
+                />
                 <TaskModal open={this.state.newTaskModalOpen} onClose={this.closeNewTaskModal} aid={this.props.aid} />
             </React.Fragment>
         );
