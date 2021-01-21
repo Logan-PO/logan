@@ -1,5 +1,4 @@
 import React from 'react';
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import Typography from '../typography';
 import styles from './input-group.module.scss';
@@ -54,8 +53,8 @@ const InputGroup = React.forwardRef(
                     )}
                     <tr>
                         {hasAccessory && (
-                            <td>
-                                <div className={clsx(styles.accessory, classes.accessoryCell)}>{accessoryContent}</div>
+                            <td className={classes.accessoryCell}>
+                                <div className={styles.accessory}>{accessoryContent}</div>
                             </td>
                         )}
                         <td style={{ width: '100%' }}>{content}</td>
