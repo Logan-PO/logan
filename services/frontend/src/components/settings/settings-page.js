@@ -9,6 +9,7 @@ import ColorPicker from '../shared/controls/color-picker';
 import ListHeader from '../shared/list-header';
 import ActionButton from '../shared/controls/action-button.js';
 import InputGroup from '../shared/controls/input-group.js';
+import Typography from '../shared/typography.js';
 import UsernameModal from './username-modal';
 import DeleteModal from './delete-modal';
 import LogOutModal from './logout-modal';
@@ -102,19 +103,19 @@ export class SettingsPage extends React.Component {
                         <ListHeader title="Account" isBig />
                         <div>
                             <InputGroup
-                                label="NAME"
-                                content={_.get(this.props, 'user.name')}
-                                style={{ fontSize: 16, paddingBottom: 10, paddingTop: 10 }}
+                                label="name"
+                                content=<Typography variant="big-body">{_.get(this.props, 'user.name')}</Typography>
+                                style={{ paddingBottom: 10, paddingTop: 10 }}
                             />
                             <InputGroup
-                                label="USERNAME"
-                                content={_.get(this.props, 'user.username')}
-                                style={{ fontSize: 16, paddingBottom: 10 }}
+                                label="username"
+                                content=<Typography>{_.get(this.props, 'user.username')}</Typography>
+                                style={{ paddingBottom: 10 }}
                             />
                             <InputGroup
-                                label="EMAIL"
-                                content={_.get(this.props, 'user.email')}
-                                style={{ fontSize: 16, paddingBottom: 10 }}
+                                label="email"
+                                content=<Typography>{_.get(this.props, 'user.email')}</Typography>
+                                style={{ paddingBottom: 10 }}
                             />
                         </div>
                         <Grid container spacing={1} style={{ paddingTop: '1em' }}>
