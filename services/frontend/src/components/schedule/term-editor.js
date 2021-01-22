@@ -5,13 +5,23 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import { getScheduleSelectors, updateTerm, updateTermLocal } from '@logan/fe-shared/store/schedule';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Editor from '@logan/fe-shared/components/editor';
+import {
+    getScheduleSelectors,
+    updateTerm,
+    updateTermLocal,
+    deleteCourse,
+    deleteHoliday,
+} from '@logan/fe-shared/store/schedule';
 import TextInput from '../shared/controls/text-input';
 import BasicDatePicker from '../shared/controls/basic-date-picker';
 import Typography from '../shared/typography';
 import InputGroup from '../shared/controls/input-group';
+import '../shared/list.scss';
 import '../shared/editor.scss';
 import editorStyles from './page-editor.module.scss';
 import listStyles from './page-list.module.scss';
@@ -23,10 +33,17 @@ const {
 } = dateUtils;
 
 const CourseCell = ({ course, ...rest }) => (
-    <div className={clsx(listStyles.cell, styles.courseCell)} {...rest}>
+    <div className={clsx('list-item', listStyles.cell, styles.courseCell)} {...rest}>
         <div className={styles.swatch} style={{ background: course.color }} />
         <Typography>{course.title}</Typography>
         <ChevronRightIcon fontSize="small" />
+        <div className="actions">
+            <Tooltip title="Delete">
+                <IconButton size="small" className="action" onClick={() => this.props.deleteCourse(course)}>
+                    <DeleteIcon fontSize="small" color="error" />
+                </IconButton>
+            </Tooltip>
+        </div>
     </div>
 );
 
@@ -35,9 +52,16 @@ CourseCell.propTypes = {
 };
 
 const HolidayCell = ({ holiday, ...rest }) => (
-    <div className={clsx(listStyles.cell, styles.courseCell)} {...rest}>
+    <div className={clsx('list-item', listStyles.cell, styles.courseCell)} {...rest}>
         <Typography>{holiday.title}</Typography>
         <ChevronRightIcon fontSize="small" />
+        <div className="actions">
+            <Tooltip title="Delete">
+                <IconButton size="small" className="action" onClick={() => this.props.deleteHoliday(holiday)}>
+                    <DeleteIcon fontSize="small" color="error" />
+                </IconButton>
+            </Tooltip>
+        </div>
     </div>
 );
 
@@ -76,15 +100,95 @@ class TermEditor extends Editor {
         }
     }
 
+    _selectCourse(event, cid) {
+        if (event.target.tagName !== 'P') return; // Ignore clicks on actions within the cells
+
+        this.props.onSelectCourse(cid);
+    }
+
+    _selectHoliday(event, hid) {
+        if (event.target.tagName !== 'P') return; // Ignore clicks on actions within the cells
+
+        this.props.onSelectHoliday(hid);
+    }
+
+    renderCoursesList() {
+        const courses = this.isEmpty() ? [] : this.props.getCoursesForTerm({ tid: this.props.tid });
+
+        return (
+            <InputGroup
+                label="Courses"
+                content={
+                    <div className={`small-list ${styles.coursesList}`}>
+                        {courses.map(course => (
+                            <div
+                                key={course.cid}
+                                className={clsx('list-item', listStyles.cell, styles.courseCell)}
+                                onClick={event => this._selectCourse(event, course.cid)}
+                            >
+                                <div className={styles.swatch} style={{ background: course.color }} />
+                                <Typography>{course.title}</Typography>
+                                <ChevronRightIcon fontSize="small" />
+                                <div className="actions">
+                                    <Tooltip title="Delete">
+                                        <IconButton
+                                            size="small"
+                                            className="action"
+                                            onClick={() => this.props.deleteCourse(course)}
+                                        >
+                                            <DeleteIcon fontSize="small" color="error" />
+                                        </IconButton>
+                                    </Tooltip>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                }
+            />
+        );
+    }
+
+    renderHolidaysList() {
+        const holidays = this.isEmpty() ? [] : this.props.getHolidaysForTerm({ tid: this.props.tid });
+
+        return (
+            <InputGroup
+                label="Holidays"
+                content={
+                    <div className={`small-list ${styles.coursesList}`}>
+                        {holidays.map(holiday => (
+                            <div
+                                key={holiday.hid}
+                                className={clsx('list-item', listStyles.cell, styles.courseCell)}
+                                onClick={event => this._selectHoliday(event, holiday.hid)}
+                            >
+                                <Typography>{holiday.title}</Typography>
+                                <ChevronRightIcon fontSize="small" />
+                                <div className="actions">
+                                    <Tooltip title="Delete">
+                                        <IconButton
+                                            size="small"
+                                            className="action"
+                                            onClick={() => this.props.deleteHoliday(holiday)}
+                                        >
+                                            <DeleteIcon fontSize="small" color="error" />
+                                        </IconButton>
+                                    </Tooltip>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                }
+            />
+        );
+    }
+
     render() {
         const sd = _.get(this.state.term, 'startDate');
         const ed = _.get(this.state.term, 'endDate');
 
         const startDate = sd ? dayjs(sd, DB_DATE_FORMAT) : dayjs();
         const endDate = ed ? dayjs(ed, DB_DATE_FORMAT) : dayjs();
-
-        const courses = this.isEmpty() ? [] : this.props.getCoursesForTerm({ tid: this.props.tid });
-        const holidays = this.isEmpty() ? [] : this.props.getHolidaysForTerm({ tid: this.props.tid });
 
         return (
             <div className="editor">
@@ -123,36 +227,10 @@ class TermEditor extends Editor {
                         <Grid item xs={12}>
                             <Grid container direction="row" spacing={2}>
                                 <Grid item xs={6}>
-                                    <InputGroup
-                                        label="Courses"
-                                        content={
-                                            <div className={styles.coursesList}>
-                                                {courses.map(course => (
-                                                    <CourseCell
-                                                        key={course.cid}
-                                                        course={course}
-                                                        onClick={() => this.props.onSelectCourse(course.cid)}
-                                                    />
-                                                ))}
-                                            </div>
-                                        }
-                                    />
+                                    {this.renderCoursesList()}
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <InputGroup
-                                        label="Holidays"
-                                        content={
-                                            <div className={styles.coursesList}>
-                                                {holidays.map(holiday => (
-                                                    <HolidayCell
-                                                        key={holiday.hid}
-                                                        holiday={holiday}
-                                                        onClick={() => this.props.onSelectHoliday(holiday.hid)}
-                                                    />
-                                                ))}
-                                            </div>
-                                        }
-                                    />
+                                    {this.renderHolidaysList()}
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -168,6 +246,8 @@ TermEditor.propTypes = {
     selectTerm: PropTypes.func,
     updateTermLocal: PropTypes.func,
     updateTerm: PropTypes.func,
+    deleteCourse: PropTypes.func,
+    deleteHoliday: PropTypes.func,
     getCoursesForTerm: PropTypes.func,
     getHolidaysForTerm: PropTypes.func,
     onSelectCourse: PropTypes.func,
@@ -184,6 +264,6 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = { updateTerm, updateTermLocal };
+const mapDispatchToProps = { updateTerm, updateTermLocal, deleteCourse, deleteHoliday };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TermEditor);

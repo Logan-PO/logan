@@ -1,7 +1,7 @@
 .courses-list {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .course-cell {
@@ -13,6 +13,10 @@
   border-radius: 10px;
 
   &:hover {
+    background: #f2f2f2;
+  }
+
+  &:active {
     background: #e5e5e5;
   }
 
