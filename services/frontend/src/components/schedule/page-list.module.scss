@@ -1,0 +1,45 @@
+.list-container {
+  flex-grow: 1;
+  margin: 24px 0 0;
+
+  .list-content {
+    padding: 0 0 12px 12px;
+
+    .header {
+      padding: 0 24px 6px 12px;
+    }
+
+    .subheader {
+      padding: 0 24px 0 12px;
+      margin: 3px 0;
+    }
+
+    .cell {
+      display: flex;
+      padding: 6px 24px 6px 12px;
+      border-radius: 10px 0 0 10px;
+
+      &.selected {
+        background: #e5e5e5;
+      }
+
+      &:hover {
+        .actions {
+          display: flex;
+        }
+      }
+
+      .actions {
+        display: none;
+        justify-content: flex-end;
+        align-items: center;
+        margin-left: 4px;
+        flex-grow: 2;
+
+        .action {
+          margin: -6px 0 -6px 4px;
+        }
+      }
+    }
+  }
+}
