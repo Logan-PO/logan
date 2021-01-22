@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import AddIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Editor from '@logan/fe-shared/components/editor';
 import {
@@ -23,6 +24,7 @@ import Typography from '../shared/typography';
 import InputGroup from '../shared/controls/input-group';
 import '../shared/list.scss';
 import '../shared/editor.scss';
+import TextButton from '../shared/controls/text-button';
 import editorStyles from './page-editor.module.scss';
 import listStyles from './page-list.module.scss';
 import styles from './term-editor.module.scss';
@@ -142,6 +144,9 @@ class TermEditor extends Editor {
                                 </div>
                             </div>
                         ))}
+                        <TextButton size="large" IconComponent={AddIcon}>
+                            Add course
+                        </TextButton>
                     </div>
                 }
             />
@@ -177,6 +182,9 @@ class TermEditor extends Editor {
                                 </div>
                             </div>
                         ))}
+                        <TextButton size="large" IconComponent={AddIcon}>
+                            Add holiday
+                        </TextButton>
                     </div>
                 }
             />
