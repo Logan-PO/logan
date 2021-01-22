@@ -1,0 +1,39 @@
+$margin: 24px;
+
+.dialog {
+  padding: $margin !important;
+  border-radius: 10px !important;
+
+  .title {
+    display: inline-block !important;
+    padding: 0 !important;
+    text-align: center !important;
+    margin-bottom: $margin
+  }
+
+  .content {
+    padding: 0 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    & > *:not(:last-child) {
+      margin-bottom: 12px;
+    }
+  }
+
+  .actions {
+    margin-top: $margin ;
+    display: flex;
+    align-items: flex-end;
+
+    .cancel-button {
+      background: grey !important;
+    }
+
+    .flexible-space {
+      display: inline-block;
+      flex-grow: 1;
+    }
+  }
+}
