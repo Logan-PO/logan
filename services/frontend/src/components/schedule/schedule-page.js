@@ -139,7 +139,13 @@ class SchedulePage extends React.Component {
         } else if (this.state.selectedHid) {
             return <HolidayEditor hid={this.state.selectedHid} />;
         } else {
-            return <TermEditor tid={this.state.selectedTid} />;
+            return (
+                <TermEditor
+                    tid={this.state.selectedTid}
+                    onSelectCourse={this.onCourseSelected}
+                    onSelectHoliday={this.onHolidaySelected}
+                />
+            );
         }
     }
 
