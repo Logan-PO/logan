@@ -6,7 +6,18 @@ import Typography from './typography';
 import styles from './dialog.module.scss';
 import ActionButton from './controls/action-button';
 
-const Dialog = ({ open, onClose, classes = {}, maxWidth = 'sm', title, content, cancelTitle, actions, ...rest }) => (
+const Dialog = ({
+    open,
+    onClose,
+    classes = {},
+    maxWidth = 'sm',
+    title,
+    beforeContent,
+    content,
+    cancelTitle,
+    actions,
+    ...rest
+}) => (
     <MuiDialog
         open={open}
         onClose={onClose}
@@ -18,6 +29,7 @@ const Dialog = ({ open, onClose, classes = {}, maxWidth = 'sm', title, content, 
         <Typography className={clsx(styles.title, classes.title)} variant="navbar-1" useHeaderFont>
             {title}
         </Typography>
+        {beforeContent}
         <div className={clsx(styles.content, classes.content)}>{content}</div>
         <div className={clsx(styles.actions, classes.actions)}>
             {cancelTitle && (
@@ -42,6 +54,7 @@ Dialog.propTypes = {
         actions: PropTypes.string,
     }),
     title: PropTypes.oneOfType([PropTypes.node, PropTypes.string]).isRequired,
+    beforeContent: PropTypes.node,
     content: PropTypes.node.isRequired,
     actions: PropTypes.node.isRequired,
     cancelTitle: PropTypes.string,

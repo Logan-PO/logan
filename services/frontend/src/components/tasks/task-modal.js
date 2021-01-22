@@ -4,12 +4,17 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
 import { createTask } from '@logan/fe-shared/store/tasks';
+import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import CourseIcon from '@material-ui/icons/Book';
 import { Checkbox, CoursePicker, DueDatePicker, PriorityPicker, TagEditor } from '../shared/controls';
 import TextInput from '../shared/controls/text-input';
 import InputGroup from '../shared/controls/input-group';
 import ActionButton from '../shared/controls/action-button';
 import Dialog from '../shared/dialog';
+import Typography from '../shared/typography';
 import styles from './task-modal.module.scss';
 
 const {
@@ -105,7 +110,10 @@ class TaskModal extends React.Component {
 
     render() {
         const isSubtask = !!this.props.aid;
-        const { cid } = this.state.task;
+        const relatedAssignment = isSubtask ? this.props.getAssignment(this.props.aid) : undefined;
+
+        const cid = relatedAssignment ? relatedAssignment.cid : this.state.task.cid;
+        const course = this.props.getCourse(cid);
 
         return (
             <Dialog
@@ -115,6 +123,27 @@ class TaskModal extends React.Component {
                 disableBackdropClick={this.state.isCreating}
                 disableEscapeKeyDown
                 title={isSubtask ? 'New subtask' : 'New task'}
+                beforeContent={
+                    relatedAssignment && (
+                        <div className={styles.assignmentPreview}>
+                            <InputGroup
+                                label="Related Assignment"
+                                icon={AssignmentIcon}
+                                content={<Typography>{relatedAssignment.title}</Typography>}
+                            />
+                            <InputGroup
+                                label="Course"
+                                icon={CourseIcon}
+                                color={course ? course.color : undefined}
+                                content={
+                                    <Typography style={{ color: course ? course.color : undefined }}>
+                                        {course ? course.title : 'None'}
+                                    </Typography>
+                                }
+                            />
+                        </div>
+                    )
+                }
                 content={
                     <React.Fragment>
                         <InputGroup
@@ -151,7 +180,13 @@ class TaskModal extends React.Component {
                                 />
                             }
                         />
-                        <CoursePicker fullWidth value={cid || 'none'} onChange={this.handleChange.bind(this, 'cid')} />
+                        {!isSubtask && (
+                            <CoursePicker
+                                fullWidth
+                                value={cid || 'none'}
+                                onChange={this.handleChange.bind(this, 'cid')}
+                            />
+                        )}
                         <DueDatePicker
                             entityId={_.get(this.state.task, 'tid')}
                             value={_.get(this.state.task, 'dueDate')}
@@ -187,6 +222,13 @@ TaskModal.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
     createTask: PropTypes.func,
+    getAssignment: PropTypes.func,
+    getCourse: PropTypes.func,
 };
 
-export default connect(null, { createTask })(TaskModal);
+const mapStateToProps = state => ({
+    getAssignment: getAssignmentsSelectors(state.assignments).selectById,
+    getCourse: getCourseSelectors(state.schedule).selectById,
+});
+
+export default connect(mapStateToProps, { createTask })(TaskModal);

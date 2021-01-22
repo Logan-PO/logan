@@ -1,3 +1,19 @@
+.assignment-preview {
+    display: flex;
+    width: calc(100% + 48px);
+    justify-content: stretch;
+    margin: 0 -24px 24px -24px;
+    padding: 12px 24px;
+    background: #e5e5e5;
+    border: solid 1px #c4c4c4;
+    border-left: none;
+    border-right: none;
+
+    & > * {
+        width: 50%;
+    }
+}
+
 .modal-content {
     margin-bottom: 24px;
 }
