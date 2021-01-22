@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
-import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import { connect } from 'react-redux';
 import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
 import PropTypes from 'prop-types';
@@ -27,12 +27,27 @@ class MobileLoginButton extends React.Component {
 
     async signIn() {
         this.setState({ isLoggingIn: true });
-        try {
+        //try {
             await GoogleSignin.hasPlayServices();
             const { type, idToken } = await GoogleSignin.signIn();
-        } catch (error) {
-            alert('Login Failed');
-        }
+            alert(type);
+        /*} catch (error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // user cancelled the login flow
+                alert('Cancel');
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                alert('Signin in progress');
+                // operation (f.e. sign in) is in progress already
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                alert('PLAY_SERVICES_NOT_AVAILABLE');
+                // play services not available or outdated
+            } else if(error.code === statusCodes.SIGN_IN_REQUIRED){
+                alert('Some other Error');
+            }
+            else{
+                alert('boop')
+            }
+        }*/
         if (type === 'success') {
             await this.props.verifyIdToken({ idToken: idToken, clientType: DEVICE });
         }
