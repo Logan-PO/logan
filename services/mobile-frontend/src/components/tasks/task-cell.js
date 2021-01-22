@@ -12,6 +12,7 @@ import PriorityDisplay from '../shared/displays/priority-display';
 import CourseLabel from '../shared/displays/course-label';
 import Typography from '../shared/typography';
 import ListItem from '../shared/list-item';
+import TagsDisplay from '../shared/tags/tags-display';
 
 class TaskCell extends React.Component {
     constructor(props) {
@@ -37,8 +38,10 @@ class TaskCell extends React.Component {
         this.handleChange('complete', !this.state.task.complete);
     }
 
-    moveToToday() {
-        this.handleChange('dueDate', dateUtils.formatAsDate(dateUtils.dayjs()));
+    async moveToToday() {
+        await this.listItem.current.close();
+        await this.handleChange('dueDate', dateUtils.formatAsDate(dateUtils.dayjs()));
+        this.listItem.current.resetHeight();
     }
 
     async handleChange(prop, newValue) {
@@ -151,6 +154,9 @@ class TaskCell extends React.Component {
                                         {this.overdueLabelContent()}
                                     </Typography>
                                 </View>
+                            )}
+                            {!_.isEmpty(this.state.task.tags) && (
+                                <TagsDisplay style={{ marginTop: 4 }} tags={this.state.task.tags} />
                             )}
                             {!_.isEmpty(this.state.task.description) && (
                                 <View style={{ marginTop: 2, marginRight: marginSize }}>

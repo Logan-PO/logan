@@ -2,16 +2,18 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { SectionList, View } from 'react-native';
-import { List, FAB, Portal, Dialog, Paragraph, Button } from 'react-native-paper';
+import { SectionList } from 'react-native';
+import { FAB, Portal, Dialog, Paragraph, Button } from 'react-native-paper';
 import { getAssignmentsSelectors, deleteAssignment, deleteAssignmentLocal } from '@logan/fe-shared/store/assignments';
 import { getSections } from '@logan/fe-shared/sorting/assignments';
 import { dateUtils } from '@logan/core';
 import SegmentedControl from '@react-native-community/segmented-control';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import AssignmentCell from '../../components/assignments/assignment-cell';
 import ViewController from '../shared/view-controller';
 import { typographyStyles } from '../shared/typography';
-import theme from '../../globals/theme';
+import ListHeader from '../shared/list-header';
+import { getCurrentTheme } from '../../globals/theme';
 
 class AssignmentsList extends React.Component {
     constructor(props) {
@@ -64,6 +66,8 @@ class AssignmentsList extends React.Component {
     }
 
     render() {
+        const theme = getCurrentTheme();
+
         const assignments = _.filter(this.props.assignments, assignment => this._shouldShowAssignment(assignment));
         const sections = getSections(assignments, this.state.showingPastAssignments); //TODO: Move _should to fe-shared
         const listData = sections.map(([name, aids]) => ({ title: name, data: aids }));
@@ -77,7 +81,8 @@ class AssignmentsList extends React.Component {
                 leftActionIsFetch={true}
                 rightActionIsSetting={true}
             >
-                <View
+                <SafeAreaView
+                    edges={['left', 'right']}
                     style={{
                         padding: 12,
                         paddingTop: 0,
@@ -92,7 +97,7 @@ class AssignmentsList extends React.Component {
                         }
                         tintColor="white"
                     />
-                </View>
+                </SafeAreaView>
                 <SectionList
                     style={{ height: '100%', backgroundColor: 'white' }}
                     sections={listData}
@@ -106,9 +111,9 @@ class AssignmentsList extends React.Component {
                         />
                     )}
                     renderSectionHeader={({ section: { title } }) => (
-                        <List.Subheader style={{ backgroundColor: 'white' }} key={title}>
+                        <ListHeader style={{ backgroundColor: 'white' }} key={title}>
                             {title}
-                        </List.Subheader>
+                        </ListHeader>
                     )}
                 />
                 <FAB

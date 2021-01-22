@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import { getTasksSelectors, createTask, deleteTask } from '@logan/fe-shared/store/tasks';
-import { Text } from 'react-native-paper';
 import TaskCell from '../tasks/task-cell';
 import ListItem from '../shared/list-item';
-import { typographyStyles } from '../shared/typography';
+import Typography from '../shared/typography';
 
 class SubtasksList extends React.Component {
     constructor(props) {
@@ -15,8 +14,9 @@ class SubtasksList extends React.Component {
 
         this.openTask = this.openTask.bind(this);
     }
+
     openTask(tid) {
-        this.props.navigation.navigate('Task', { tid });
+        this.props.navigation.push('Task', { tid });
     }
 
     listContent() {
@@ -29,15 +29,13 @@ class SubtasksList extends React.Component {
             ));
         } else {
             return (
-                <ListItem>
-                    <Text
-                        style={{
-                            ...typographyStyles.body,
-                        }}
-                    >
-                        No Subtasks
-                    </Text>
-                </ListItem>
+                <ListItem
+                    leftContent={
+                        <Typography color="secondary" style={{ fontStyle: 'italic' }}>
+                            None
+                        </Typography>
+                    }
+                />
             );
         }
     }

@@ -4,7 +4,7 @@ import { dateUtils } from '@logan/core';
 import { View, LayoutAnimation } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import SegmentedControl from '@react-native-community/segmented-control';
-import { Colors } from 'react-native-paper';
+import { getCurrentTheme } from '../../../globals/theme';
 
 class DueDatePicker extends React.Component {
     constructor(props) {
@@ -69,6 +69,8 @@ class DueDatePicker extends React.Component {
     }
 
     render() {
+        const theme = getCurrentTheme();
+
         return (
             <View style={{ backgroundColor: 'white' }}>
                 {!this.props.datesOnly && (
@@ -92,9 +94,9 @@ class DueDatePicker extends React.Component {
                                 },
                             }}
                             theme={{
-                                arrowColor: Colors.teal500,
-                                todayTextColor: Colors.deepOrange500,
-                                selectedDayBackgroundColor: Colors.teal500,
+                                arrowColor: theme.colors.primary,
+                                todayTextColor: theme.colors.accent,
+                                selectedDayBackgroundColor: theme.colors.primary,
                                 selectedDayTextColor: 'white',
                                 textDayFontWeight: 'normal',
                                 textMonthFontWeight: 'normal',

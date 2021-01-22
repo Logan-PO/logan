@@ -1,13 +1,35 @@
-.subtasks-list {
-    overflow: hidden;
+.subtasks-list-root {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    & > *:only-child {
+        margin-top: 1px !important;
+    }
+
+    & > *:last-child {
+        margin-top: 6px;
+    }
+
+    .subtasks-list {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        & > *:not(:first-child) {
+            margin-top: 4px;
+        }
+    }
 }
 
-.fab-container {
-    display: flex;
-    justify-content: flex-end;
-    height: 20px;
+.add-button {
+    margin-top: 1px !important;
 
-    .fab {
-        transform: translate(-1rem, -50%);
+    &:not(:first-child) {
+        margin-top: 6px !important;
     }
+}
+
+.accessory-cell-align-top {
+    vertical-align: top !important;
 }

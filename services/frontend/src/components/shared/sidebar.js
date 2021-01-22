@@ -1,15 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
-import { Drawer, Toolbar, List, ListItem, ListItemText, colors } from '@material-ui/core';
+import { Tooltip, IconButton } from '@material-ui/core';
+import { Home, Assignment, CollectionsBookmark, Settings } from '@material-ui/icons';
+import { CheckboxMarkedCircleOutline } from 'mdi-material-ui';
 import styles from './sidebar.module.scss';
 
 const pages = {
-    Overview: '/overview',
-    Tasks: '/tasks',
-    Assignments: '/assignments',
-    Schedule: '/schedule',
-    Settings: '/settings',
+    Overview: {
+        url: '/overview',
+        icon: Home,
+    },
+    Tasks: {
+        url: '/tasks',
+        icon: CheckboxMarkedCircleOutline,
+    },
+    Assignments: {
+        url: '/assignments',
+        icon: Assignment,
+    },
+    Schedule: {
+        url: '/schedule',
+        icon: CollectionsBookmark,
+    },
+    Settings: {
+        url: '/settings',
+        icon: Settings,
+    },
 };
 
 class Sidebar extends React.Component {
@@ -19,32 +37,30 @@ class Sidebar extends React.Component {
 
     render() {
         return (
-            <Drawer
-                variant="permanent"
-                className={styles.sidebar}
-                PaperProps={{
-                    style: {
-                        background: colors.teal[700],
-                        color: '#fff',
-                    },
-                }}
-                classes={{ paper: styles.sidebarPaper }}
-            >
-                <Toolbar />
-                <div className={styles.sidebarContainer}>
-                    <List>
-                        {Object.entries(pages).map(([name, url]) => {
-                            const selected = this.props.currentPage === name;
+            <div className={styles.sidebar}>
+                {Object.entries(pages).map(([name, { url, icon }]) => {
+                    const IconComponent = icon;
+                    const selected = this.props.currentPage === name;
+                    const buttonClass = selected ? styles.sidebarButtonSelected : styles.sidebarButton;
 
-                            return (
-                                <ListItem button key={name} selected={selected} onClick={() => navigate(url)}>
-                                    <ListItemText primary={selected ? <b>{name}</b> : name} />
-                                </ListItem>
-                            );
-                        })}
-                    </List>
-                </div>
-            </Drawer>
+                    return (
+                        <div key={name} className={buttonClass}>
+                            <Tooltip
+                                title={name}
+                                disableHoverListener={selected}
+                                disableFocusListener={selected}
+                                disableTouchListener={selected}
+                            >
+                                <span>
+                                    <IconButton disabled={selected} onClick={() => navigate(url)}>
+                                        <IconComponent className={styles.sidebarButtonIcon} />
+                                    </IconButton>
+                                </span>
+                            </Tooltip>
+                        </div>
+                    );
+                })}
+            </div>
         );
     }
 }
@@ -53,4 +69,8 @@ Sidebar.propTypes = {
     currentPage: PropTypes.string,
 };
 
-export default Sidebar;
+const mapStateToProps = state => ({
+    user: state.login.user,
+});
+
+export default connect(mapStateToProps, undefined)(Sidebar);

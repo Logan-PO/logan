@@ -1,0 +1,23 @@
+$horizontal-spacing: 4px;
+
+.list-header {
+  display: flex;
+  align-items: baseline;
+
+  .title {
+    margin-right: $horizontal-spacing;
+  }
+
+  .horizontal-line {
+    display: inline-block;
+    height: 1px;
+    flex-grow: 1;
+    background: #e5e5e5;
+    border-radius: 0.5px;
+  }
+
+  .detail {
+    color: #646464;
+    margin-left: $horizontal-spacing;
+  }
+}

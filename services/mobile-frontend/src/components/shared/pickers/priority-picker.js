@@ -2,10 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, ScrollView } from 'react-native';
-import { List } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import priorities from '../priority-constants';
 import ViewController from '../view-controller';
+import ListItem from '../list-item';
+import Typography from '../typography';
 
 class PriorityPicker extends React.Component {
     constructor(props) {
@@ -30,7 +31,7 @@ class PriorityPicker extends React.Component {
 
     iconToDisplay(value, color) {
         const c = this.state.value === value ? color : 'rgba(0, 0, 0, 0)';
-        return <Icon name="check" style={{ alignSelf: 'center' }} size={18} color={c} />;
+        return <Icon name="check" style={{ alignSelf: 'center', marginRight: 12 }} size={18} color={c} />;
     }
 
     render() {
@@ -39,11 +40,16 @@ class PriorityPicker extends React.Component {
                 <ScrollView>
                     <View style={{ backgroundColor: 'white' }}>
                         {_.entries(priorities).map(([name, [value, color]]) => (
-                            <List.Item
+                            <ListItem
                                 key={value}
-                                left={() => this.iconToDisplay(value, color)}
-                                title={name}
-                                titleStyle={{ color }}
+                                leftContent={
+                                    <View style={{ flexDirection: 'row' }}>
+                                        {this.iconToDisplay(value, color)}
+                                        <Typography style={{ fontWeight: 'bold' }} color={color}>
+                                            {name}
+                                        </Typography>
+                                    </View>
+                                }
                                 onPress={this.selectPriority.bind(this, value)}
                             />
                         ))}

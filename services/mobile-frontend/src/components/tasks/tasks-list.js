@@ -2,15 +2,18 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { View, SectionList } from 'react-native';
-import { List, FAB, Portal, Dialog, Paragraph, Button } from 'react-native-paper';
+import { SectionList } from 'react-native';
+import { FAB, Portal, Dialog, Paragraph, Button } from 'react-native-paper';
 import SegmentedControl from '@react-native-community/segmented-control';
+import { dateUtils } from '@logan/core';
 import { getTasksSelectors, deleteTask, deleteTaskLocal } from '@logan/fe-shared/store/tasks';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
-import theme from '../../globals/theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { getCurrentTheme } from '../../globals/theme';
 import TaskCell from '../../components/tasks/task-cell';
 import ViewController from '../shared/view-controller';
 import { typographyStyles } from '../shared/typography';
+import ListHeader from '../shared/list-header';
 
 class TasksList extends React.Component {
     constructor(props) {
@@ -52,6 +55,8 @@ class TasksList extends React.Component {
     }
 
     render() {
+        const theme = getCurrentTheme();
+
         const tasks = _.filter(this.props.tasks, task => task.complete === this.state.showingCompletedTasks);
         const sections = getSections(tasks, this.state.showingCompletedTasks);
         const listData = sections.map(([name, tids]) => ({ title: name, data: tids }));
@@ -65,7 +70,8 @@ class TasksList extends React.Component {
                 leftActionIsFetch={true}
                 rightActionIsSetting={true}
             >
-                <View
+                <SafeAreaView
+                    edges={['left', 'right']}
                     style={{
                         padding: 12,
                         paddingTop: 0,
@@ -80,7 +86,7 @@ class TasksList extends React.Component {
                         }
                         tintColor="white"
                     />
-                </View>
+                </SafeAreaView>
                 <SectionList
                     style={{ height: '100%', backgroundColor: 'white' }}
                     sections={listData}
@@ -94,11 +100,17 @@ class TasksList extends React.Component {
                             onDeletePressed={this.openDeleteConfirmation}
                         />
                     )}
-                    renderSectionHeader={({ section: { title } }) => (
-                        <List.Subheader style={{ backgroundColor: 'white' }} key={title}>
-                            {title}
-                        </List.Subheader>
-                    )}
+                    renderSectionHeader={({ section: { title } }) => {
+                        const formattedTitle = dateUtils.dueDateIsDate(title)
+                            ? dateUtils.readableDueDate(title)
+                            : title;
+
+                        return (
+                            <ListHeader style={{ backgroundColor: 'white' }} key={title}>
+                                {formattedTitle}
+                            </ListHeader>
+                        );
+                    }}
                 />
                 <FAB
                     icon="plus"

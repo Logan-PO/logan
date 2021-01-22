@@ -2,12 +2,14 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ListItem, ListItemText, ListItemIcon, ListItemSecondaryAction, IconButton } from '@material-ui/core';
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import { IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { dateUtils } from '@logan/core';
 import { getRemindersSelectors, deleteReminder } from '@logan/fe-shared/store/reminders';
+import BreadcrumbsLike from '../shared/breadcrumbs-like';
+import '../shared/list.scss';
+import styles from './reminder-cell.module.scss';
 
 class ReminderCell extends React.Component {
     constructor(props) {
@@ -43,24 +45,22 @@ class ReminderCell extends React.Component {
     render() {
         const ts = _.get(this.state.reminder, 'timestamp');
         const dateObject = dateUtils.toDateTime(ts);
-        const timeString = `${dateUtils.humanReadableDate(dateObject)} at ${dateObject.format('h:mm A')}`;
+        const timeString = `${dateUtils.humanReadableDate(dateObject)} @ ${dateObject.format('h:mma')}`;
 
         return (
-            <div className="list-cell">
-                <ListItem dense>
-                    <ListItemIcon>
-                        <NotificationsIcon />
-                    </ListItemIcon>
-                    <ListItemText primary={_.get(this.state.reminder, 'message', '')} secondary={timeString} />
-                    <ListItemSecondaryAction className="actions">
-                        <IconButton onClick={() => this.props.onEdit(this.props.rid)}>
-                            <EditIcon />
-                        </IconButton>
-                        <IconButton onClick={this.deleteSelf}>
-                            <DeleteIcon color="error" />
-                        </IconButton>
-                    </ListItemSecondaryAction>
-                </ListItem>
+            <div className={`list-item ${styles.reminderCell}`}>
+                <BreadcrumbsLike
+                    colors={['textPrimary', 'textSecondary']}
+                    sections={[_.get(this.state.reminder, 'message', ''), timeString]}
+                />
+                <div className="actions">
+                    <IconButton className="action" size="small" onClick={() => this.props.onEdit(this.props.rid)}>
+                        <EditIcon fontSize="inherit" />
+                    </IconButton>
+                    <IconButton className="action" size="small" onClick={this.deleteSelf}>
+                        <DeleteIcon fontSize="inherit" color="error" />
+                    </IconButton>
+                </div>
             </div>
         );
     }

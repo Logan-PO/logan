@@ -1,6 +1,20 @@
 .tag-editor {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+
+    .add-button {
+        margin-bottom: 4px;
+
+        &:not(:first-child) {
+            margin-left: 2px;
+        }
+    }
+
+    .chip {
+        border-color: black !important;
+        user-select: none;
+    }
 
     .tag-input {
         appearance: none;
@@ -11,5 +25,4 @@
         background: none;
         min-width: 1rem;
     }
-
 }

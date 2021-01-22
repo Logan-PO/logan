@@ -1,17 +1,103 @@
-.item {
-    display: flex;
-    flex-direction: row;
+.root {
+    position: relative;
+    display: inline-block;;
+}
 
-    .swatch {
-        margin-right: 1em;
+.input-group-container {
+    display: inline-block;
+    padding: 4px 6px;
+    margin: -4px -6px;
+    border-radius: 4px;
+    transition: 0.1s;
+
+    &:hover {
+        background: #f7f7f7;
     }
 }
 
-.swatch {
+.picker-paper {
+    overflow: visible !important;
+    background: none !important;
+}
+
+.picker-container {
+    position: relative;
+    top: -4px;
+    left: -6px;
     display: inline-block;
-    width: 0.5em;
-    height: 0.5em;
-    border-radius: 50%;
-    align-self: center;
-    margin-right: 0.5em;
+    filter: drop-shadow(0px 5px 2px rgba(0, 0, 0, 0.1)) drop-shadow(0px 8px 10px rgba(0, 0, 0, 0.14)) drop-shadow(0px 3px 14px rgba(0, 0, 0, 0.12));
+
+    .backdrop-container {
+        display: flex;
+        align-items: flex-end;
+        flex-wrap: nowrap;
+
+        .group-backdrop {
+            display: inline-block;
+            background: currentColor;
+            border-radius: 4px 4px 0 0;
+            padding: 4px 6px 0;
+            cursor: pointer;
+        }
+    }
+
+    .picker-content {
+        display: flex;
+        padding: 6px;
+        border-radius: 0 4px 4px 4px;
+        background: currentColor;
+
+        .colors-container {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            border-radius: 4px;
+            padding: 6px;
+            background: white;
+
+            .swatch-row {
+                display: flex;
+                flex-direction: row;
+
+                &:not(:last-child) {
+                    margin-bottom: 4px;
+                }
+
+                .swatch {
+                    display: inline-block;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    align-self: center;
+                    transition: 0.2s;
+
+                    &.selected {
+                        margin: 4px;
+                        width: 12px;
+                        height: 12px;
+                    }
+
+                    &:not(.selected) {
+                        cursor: pointer;
+                    }
+
+                    &:hover:not(.selected) {
+                        box-shadow: 0 1px 2px 1px rgba(0, 0, 0, 0.2);
+                    }
+
+                    &:active:not(.selected) {
+                        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+                    }
+
+                    &:not(:last-child) {
+                        margin-right: 4px;
+
+                        &.selected {
+                            margin-right: 8px;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

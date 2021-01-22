@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import api from '@logan/fe-shared/utils/api';
 import { verifyIdToken, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
+import { LinearProgress } from '@material-ui/core';
 
 const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
 
@@ -14,6 +15,12 @@ class GoogleBtn extends React.Component {
 
         this.onLogin = this.onLogin.bind(this);
         this.onLogout = this.onLogout.bind(this);
+
+        this.state = { loggingIn: false };
+    }
+
+    componentDidMount() {
+        this.setState({ loggingIn: false });
     }
 
     /*
@@ -21,6 +28,7 @@ class GoogleBtn extends React.Component {
      If all conditions are met, then create a login action and update the state
      */
     async onLogin(response) {
+        this.setState({ loggingIn: true });
         await this.props.verifyIdToken({ idToken: response.tokenId, clientType: 'web' });
     }
 
@@ -40,16 +48,19 @@ class GoogleBtn extends React.Component {
                     buttonText="Logout"
                     onLogoutSuccess={this.onLogout}
                     onFailure={handleLogoutFailure}
+                    {...this.props.logoutProps}
                 />
             );
+        } else if (this.state.loggingIn) {
+            return <LinearProgress />;
         } else {
             return (
                 <GoogleLogin
                     clientId={clientID}
-                    buttonText="Login"
                     onSuccess={this.onLogin}
                     onFailure={handleLoginFailure}
                     cookiePolicy={'single_host_origin'}
+                    {...this.props.loginProps}
                 />
             );
         }
@@ -57,6 +68,8 @@ class GoogleBtn extends React.Component {
 }
 
 GoogleBtn.propTypes = {
+    loginProps: PropTypes.object,
+    logoutProps: PropTypes.object,
     isLoggedIn: PropTypes.bool,
     setLoginStage: PropTypes.func,
     verifyIdToken: PropTypes.func,

@@ -1,0 +1,20 @@
+%action-button {
+  &[disabled] {
+    opacity: 0.5;
+  }
+}
+
+.action-button-large {
+  @extend %action-button;
+  padding: 8px 18px !important;
+}
+
+.action-button-medium {
+  @extend %action-button;
+  padding: 4px 12px !important;
+}
+
+.action-button-small {
+  @extend %action-button;
+  padding: 3px 10px !important;
+}

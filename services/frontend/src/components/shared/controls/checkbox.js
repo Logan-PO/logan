@@ -1,19 +1,36 @@
 import React from 'react';
+import clsx from 'clsx';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Checkbox as MuiCheckbox } from '@material-ui/core';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import CheckIcon from '@material-ui/icons/CheckRounded';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
+import styles from './checkbox.module.scss';
 
 class Checkbox extends React.Component {
+    _onChange() {
+        if (this.props.onChange) {
+            this.props.onChange({
+                target: {
+                    value: !this.props.checked,
+                },
+            });
+        }
+    }
+
     render() {
-        const checkboxStyle = { padding: 0 };
+        let checkboxClass = styles.checkbox;
+        const checkboxStyle = {};
+
         const course = this.props.selectCourse(this.props.cid);
 
-        if (this.props.color) {
-            checkboxStyle.color = this.props.color;
+        if (this.props.size === 'large') {
+            checkboxClass += ` ${styles.large}`;
         }
-        if (course && this.props.checked) {
-            checkboxStyle.color = course.color;
+
+        if (this.props.checked) {
+            checkboxClass += ` ${styles.checked}`;
+            if (course) checkboxStyle.color = `${course.color}`;
         }
 
         if (this.props.marginRight !== undefined) {
@@ -21,18 +38,21 @@ class Checkbox extends React.Component {
         }
 
         return (
-            <MuiCheckbox
+            <ButtonBase
+                className={clsx(checkboxClass, this.props.className)}
                 disabled={this.props.disabled}
-                checked={this.props.checked}
-                onChange={this.props.onChange}
                 style={checkboxStyle}
-            />
+                onClick={this._onChange.bind(this)}
+            >
+                <CheckIcon className={styles.checkIcon} />
+            </ButtonBase>
         );
     }
 }
 
 Checkbox.propTypes = {
-    color: PropTypes.string,
+    className: PropTypes.string,
+    size: PropTypes.string,
     cid: PropTypes.string,
     selectCourse: PropTypes.func,
     checked: PropTypes.bool,

@@ -2,13 +2,17 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, AppBar, Toolbar, FormControl, FormControlLabel, Switch, Fab } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { List, FormControl, FormControlLabel, Switch } from '@material-ui/core';
+import { dateUtils } from '@logan/core';
 import { getTasksSelectors, deleteTask, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
-import { setShouldGoToAssignment } from '@logan/fe-shared/store/assignments';
+import { setShouldGoToAssignment, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import { getSections } from '@logan/fe-shared/sorting/tasks';
-import TaskCell from './task-cell';
+import Fab from '../shared/controls/fab';
+import ListHeader from '../shared/list-header';
 import '../shared/list.scss';
+import ListSubheader from '../shared/list-subheader';
+import TaskCell from './task-cell';
 import styles from './tasks-list.module.scss';
 import TaskModal from './task-modal';
 
@@ -73,6 +77,91 @@ class TasksList extends React.Component {
         this.setState({ showingCompletedTasks: e.target.checked });
     }
 
+    _headerForSection(dueDate) {
+        let sectionTitle = dueDate;
+        let sectionDetail;
+
+        const isDate = dateUtils.dueDateIsDate(dueDate);
+        const isToday = dateUtils.formatAsDate() === dueDate;
+        const isOverdue = dueDate === 'Overdue';
+
+        if (isDate) {
+            const dateObject = dateUtils.toDate(dueDate);
+            sectionTitle = dateUtils.readableDueDate(dateObject, false);
+
+            if (!isToday) {
+                sectionDetail = `${dateObject.diff(dateUtils.dayjs().startOf('day'), 'day')}D`;
+            }
+        }
+
+        return (
+            <ListHeader
+                color={isOverdue ? 'error' : undefined}
+                className={`list-header ${styles.header}`}
+                title={sectionTitle}
+                detail={sectionDetail}
+                isBig={isToday}
+            />
+        );
+    }
+
+    _contentsForSection(tids) {
+        const tasks = tids.map(this.props.getTask);
+
+        const groupings = _.groupBy(tasks, task => {
+            const assignment = task.aid ? this.props.getAssignment(task.aid) : undefined;
+            return `${(assignment ? assignment.cid : task.cid) || ''} ${task.aid || ''}`;
+        });
+
+        const sortedEntries = _.sortBy(_.entries(groupings), '0');
+
+        const contents = [];
+
+        for (const [sortKey, tasks] of sortedEntries) {
+            const [cid, aid] = sortKey.split(' ');
+
+            if (cid || aid) {
+                const items = [];
+                const colors = [];
+
+                if (cid) {
+                    const course = this.props.getCourse(cid);
+
+                    if (course) {
+                        items.push(course.title);
+                        colors.push(course.color);
+                    }
+                }
+
+                if (aid) {
+                    const assignment = this.props.getAssignment(aid);
+
+                    if (assignment) {
+                        items.push(assignment.title);
+                        colors.push('textPrimary');
+                    }
+                }
+
+                contents.push(<ListSubheader className={styles.subheader} items={items} colors={colors} />);
+            }
+
+            contents.push(
+                ...tasks.map(({ tid }) => (
+                    <TaskCell
+                        key={tid}
+                        tid={tid}
+                        showOverdueLabel={!this.state.showingCompletedTasks}
+                        onSelect={this.didSelectTask}
+                        onDelete={this.didDeleteTask}
+                        selected={this.state.selectedTid === tid}
+                    />
+                ))
+            );
+        }
+
+        return contents;
+    }
+
     render() {
         const tasks = _.filter(
             this.props.tids.map(tid => this.props.getTask(tid)),
@@ -84,46 +173,33 @@ class TasksList extends React.Component {
         return (
             <div className="scrollable-list">
                 <div className={`scroll-view ${styles.tasksList}`}>
-                    <List>
-                        {sections.map(section => {
-                            const [dueDate, tids] = section;
-                            return (
-                                <React.Fragment key={section[0]}>
-                                    <ListSubheader className="list-header">{dueDate}</ListSubheader>
-                                    {tids.map(tid => (
-                                        <TaskCell
-                                            key={tid}
-                                            tid={tid}
-                                            showOverdueLabel={!this.state.showingCompletedTasks}
-                                            onSelect={this.didSelectTask}
-                                            onDelete={this.didDeleteTask}
-                                            selected={this.state.selectedTid === tid}
-                                        />
-                                    ))}
-                                </React.Fragment>
-                            );
-                        })}
+                    <List className={styles.listContent}>
+                        {sections.map(([dueDate, tids]) => (
+                            <div className={styles.section} key={dueDate}>
+                                {this._headerForSection(dueDate)}
+                                {this._contentsForSection(tids)}
+                            </div>
+                        ))}
                     </List>
                 </div>
-                <AppBar position="relative" color="primary" className={styles.actionsBar}>
-                    <Toolbar variant="dense">
-                        <FormControl>
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        color="default"
-                                        checked={this.state.showingCompletedTasks}
-                                        onChange={this.toggleCompletedTasks}
-                                    />
-                                }
-                                label={this.state.showingCompletedTasks ? 'Completed tasks' : 'Remaining tasks'}
-                            />
-                        </FormControl>
-                    </Toolbar>
-                </AppBar>
-                <Fab className="add-button" color="secondary" onClick={this.openCreateModal}>
-                    <AddIcon />
-                </Fab>
+                <div className={styles.actionsBar}>
+                    <FormControl>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    classes={{ root: styles.switch }}
+                                    color="default"
+                                    checked={this.state.showingCompletedTasks}
+                                    onChange={this.toggleCompletedTasks}
+                                />
+                            }
+                            label={
+                                this.state.showingCompletedTasks ? 'Showing completed tasks' : 'Showing remaining tasks'
+                            }
+                        />
+                    </FormControl>
+                </div>
+                <Fab className="add-button" onClick={this.openCreateModal} />
                 <TaskModal open={this.state.newTaskModalOpen} onClose={this.closeCreateModal} />
             </div>
         );
@@ -133,6 +209,8 @@ class TasksList extends React.Component {
 TasksList.propTypes = {
     tids: PropTypes.array,
     getTask: PropTypes.func,
+    getAssignment: PropTypes.func,
+    getCourse: PropTypes.func,
     deleteTask: PropTypes.func,
     onTaskSelected: PropTypes.func,
     shouldGoToTask: PropTypes.string,
@@ -141,12 +219,14 @@ TasksList.propTypes = {
 };
 
 const mapStateToProps = state => {
-    const selectors = getTasksSelectors(state.tasks);
+    const tasksSelectors = getTasksSelectors(state.tasks);
 
     return {
         shouldGoToTask: state.tasks.shouldGoToTask,
-        tids: getTasksSelectors(state.tasks).selectIds(),
-        getTask: selectors.selectById,
+        tids: tasksSelectors.selectIds(),
+        getTask: tasksSelectors.selectById,
+        getAssignment: getAssignmentsSelectors(state.assignments).selectById,
+        getCourse: getCourseSelectors(state.schedule).selectById,
     };
 };
 

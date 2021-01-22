@@ -5,6 +5,7 @@ import { StyleSheet, View, LayoutAnimation } from 'react-native';
 import { Text, TouchableRipple } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const styles = StyleSheet.create({
     animationContainer: {
@@ -78,6 +79,10 @@ class ListItem extends React.Component {
         this._swipeable.close();
     }
 
+    resetHeight() {
+        this.setState({ cellHeightValue: 'auto' });
+    }
+
     async collapse() {
         const duration = 200;
 
@@ -123,23 +128,25 @@ class ListItem extends React.Component {
             >
                 <Swipeable ref={this.updateSwipeableRef} renderRightActions={this.renderRightActions}>
                     <TouchableRipple onPress={this.props.onPress} style={styles.cell}>
-                        <View style={styles.root}>
-                            {this.props.beforeContent}
-                            <View style={styles.container}>
-                                <View style={styles.contentContainer}>
-                                    {this.props.leftContent && (
-                                        <View style={leftContentStyle}>{this.props.leftContent}</View>
-                                    )}
-                                    {this.props.rightContent && (
-                                        <View style={rightContentStyle}>{this.props.rightContent}</View>
+                        <SafeAreaView edges={['left', 'right']}>
+                            <View style={styles.root}>
+                                {this.props.beforeContent}
+                                <View style={styles.container}>
+                                    <View style={styles.contentContainer}>
+                                        {this.props.leftContent && (
+                                            <View style={leftContentStyle}>{this.props.leftContent}</View>
+                                        )}
+                                        {this.props.rightContent && (
+                                            <View style={rightContentStyle}>{this.props.rightContent}</View>
+                                        )}
+                                    </View>
+                                    {this.props.showRightArrow && (
+                                        <Icon name="chevron-right" size={24} style={styles.chevron} />
                                     )}
                                 </View>
-                                {this.props.showRightArrow && (
-                                    <Icon name="chevron-right" size={24} style={styles.chevron} />
-                                )}
+                                {this.props.afterContent}
                             </View>
-                            {this.props.afterContent}
-                        </View>
+                        </SafeAreaView>
                     </TouchableRipple>
                 </Swipeable>
             </View>

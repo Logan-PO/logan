@@ -69,11 +69,27 @@ const { slice, asyncActions } = createAsyncSlice({
                 state.user = action.payload;
             },
         },
+        updateUser: {
+            fn: api.updateUser,
+            success(state, action) {
+                state.user = action.payload;
+            },
+        },
+        deleteUser: {
+            fn: api.deleteUser,
+            success(state) {
+                state.currentStage = LOGIN_STAGE.LOGIN;
+                state.isLoggedIn = false;
+                state.isUserConnected = false;
+                state.user = undefined;
+                state.userMeta = undefined;
+            },
+        },
     },
 });
 
 export { LOGIN_STAGE };
 export const { setLoginStage } = slice.actions;
-export const { verifyIdToken, createNewUser, fetchSelf } = asyncActions;
+export const { verifyIdToken, createNewUser, fetchSelf, updateUser, deleteUser } = asyncActions;
 export { asyncActions };
 export default slice.reducer;

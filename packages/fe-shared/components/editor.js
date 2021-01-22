@@ -8,6 +8,8 @@ import UpdateTimer from '../utils/update-timer';
  * @property {number} [interval]
  * @property {string} id
  * @property {string} entity
+ * @property {boolean} mobile
+ * @property {boolean} manualSave
  */
 
 class Editor extends React.Component {
@@ -16,6 +18,7 @@ class Editor extends React.Component {
         this._id = config.id;
         this._entity = config.entity;
         this._isMobile = config.mobile || false;
+        this._manualSave = config.manualSave;
 
         this._ownEntityId = this._ownEntityId.bind(this);
 
@@ -119,7 +122,7 @@ class Editor extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         if (this.isCreator) return;
 
         const currentId = this._ownEntityId();
@@ -137,10 +140,14 @@ class Editor extends React.Component {
 
             const current = this.selectEntity(currentId);
             this.updateCurrentEntityState(current);
-        } else {
-            // Also if the task has been updated somewhere else, make sure the state reflects that
+        } else if (!this._manualSave) {
             const stored = this.selectEntity(currentId);
-            if (!_.isEqual(stored, this.state[this._entity])) {
+
+            const stateChanged = !_.isEqual(prevState[this._entity], this.state[this._entity]);
+            const stateMatchesStored = _.isEqual(stored, this.state[this._entity]);
+
+            // Also if the task has been updated somewhere else, make sure the state reflects that
+            if (!stateChanged && !stateMatchesStored) {
                 this.updateCurrentEntityState(stored);
             }
         }

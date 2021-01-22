@@ -1,0 +1,40 @@
+%date-label {
+  user-select: none;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.real-label {
+  @extend %date-label;
+  padding: 1px 6px !important;
+  margin: 0 -6px !important;
+  border-radius: 4px;
+
+  .icon {
+    margin: -4px -4px -4px 0;
+  }
+
+  &:hover {
+    background: #eeeeee !important;
+  }
+}
+
+.dummy-label {
+  @extend %date-label;
+  padding: 2px 4px 0 0 !important;
+
+  .icon {
+    margin-bottom: -1px;
+  }
+}
+
+.picker-container {
+  top: -1px;
+  left: -6px;
+}
+
+.backdrop {
+  padding: 0 4px 0 6px;
+}
