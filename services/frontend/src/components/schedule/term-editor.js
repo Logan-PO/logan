@@ -27,49 +27,11 @@ import '../shared/editor.scss';
 import TextButton from '../shared/controls/text-button';
 import editorStyles from './page-editor.module.scss';
 import listStyles from './page-list.module.scss';
-import styles from './term-editor.module.scss';
 
 const {
     dayjs,
     constants: { DB_DATE_FORMAT },
 } = dateUtils;
-
-const CourseCell = ({ course, ...rest }) => (
-    <div className={clsx('list-item', listStyles.cell, styles.courseCell)} {...rest}>
-        <div className={styles.swatch} style={{ background: course.color }} />
-        <Typography>{course.title}</Typography>
-        <ChevronRightIcon fontSize="small" />
-        <div className="actions">
-            <Tooltip title="Delete">
-                <IconButton size="small" className="action" onClick={() => this.props.deleteCourse(course)}>
-                    <DeleteIcon fontSize="small" color="error" />
-                </IconButton>
-            </Tooltip>
-        </div>
-    </div>
-);
-
-CourseCell.propTypes = {
-    course: PropTypes.object,
-};
-
-const HolidayCell = ({ holiday, ...rest }) => (
-    <div className={clsx('list-item', listStyles.cell, styles.courseCell)} {...rest}>
-        <Typography>{holiday.title}</Typography>
-        <ChevronRightIcon fontSize="small" />
-        <div className="actions">
-            <Tooltip title="Delete">
-                <IconButton size="small" className="action" onClick={() => this.props.deleteHoliday(holiday)}>
-                    <DeleteIcon fontSize="small" color="error" />
-                </IconButton>
-            </Tooltip>
-        </div>
-    </div>
-);
-
-HolidayCell.propTypes = {
-    holiday: PropTypes.object,
-};
 
 class TermEditor extends Editor {
     constructor(props) {
@@ -121,11 +83,11 @@ class TermEditor extends Editor {
             <InputGroup
                 label="Courses"
                 content={
-                    <div className={`small-list ${styles.coursesList}`}>
+                    <div className={`small-list ${editorStyles.smallerList}`}>
                         {courses.map(course => (
                             <div
                                 key={course.cid}
-                                className={clsx('list-item', listStyles.cell, styles.courseCell)}
+                                className={clsx('list-item', listStyles.cell, editorStyles.smallerCell)}
                                 onClick={event => this._selectCourse(event, course.cid)}
                             >
                                 <div className={listStyles.swatch} style={{ background: course.color }} />
@@ -160,11 +122,11 @@ class TermEditor extends Editor {
             <InputGroup
                 label="Holidays"
                 content={
-                    <div className={`small-list ${styles.coursesList}`}>
+                    <div className={`small-list ${editorStyles.smallerList}`}>
                         {holidays.map(holiday => (
                             <div
                                 key={holiday.hid}
-                                className={clsx('list-item', listStyles.cell, styles.courseCell)}
+                                className={clsx('list-item', listStyles.cell, editorStyles.smallerCell)}
                                 onClick={event => this._selectHoliday(event, holiday.hid)}
                             >
                                 <Typography>{holiday.title}</Typography>
