@@ -144,7 +144,7 @@ class TermEditor extends Editor {
                                 </div>
                             </div>
                         ))}
-                        <TextButton size="large" IconComponent={AddIcon}>
+                        <TextButton classes={{ root: listStyles.addButton }} size="large" IconComponent={AddIcon}>
                             Add course
                         </TextButton>
                     </div>
@@ -182,7 +182,7 @@ class TermEditor extends Editor {
                                 </div>
                             </div>
                         ))}
-                        <TextButton size="large" IconComponent={AddIcon}>
+                        <TextButton classes={{ root: listStyles.addButton }} size="large" IconComponent={AddIcon}>
                             Add holiday
                         </TextButton>
                     </div>
