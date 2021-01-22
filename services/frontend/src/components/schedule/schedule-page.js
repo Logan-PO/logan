@@ -108,6 +108,29 @@ class SchedulePage extends React.Component {
         });
     }
 
+    listToDisplay() {
+        if (this.state.selectedSid) {
+            return (
+                <SectionsList
+                    cid={this.state.selectedCid}
+                    selectedSid={this.state.selectedSid}
+                    onSectionSelected={this.onSectionSelected}
+                />
+            );
+        } else if (this.state.selectedCid || this.state.selectedHid) {
+            return (
+                <TermChildrenList
+                    tid={this.state.selectedTid}
+                    selectedId={this.state.selectedCid || this.state.selectedHid}
+                    onCourseSelected={this.onCourseSelected}
+                    onHolidaySelected={this.onHolidaySelected}
+                />
+            );
+        } else {
+            return <TermsList selectedTid={this.state.selectedTid} onTermSelected={this.onTermSelected} />;
+        }
+    }
+
     editorToDisplay() {
         if (this.state.selectedSid) {
             return <SectionEditor sid={this.state.selectedSid} />;
@@ -124,24 +147,8 @@ class SchedulePage extends React.Component {
         return (
             <Page title="Schedule">
                 <div className={styles.schedulePage}>
-                    <div className={styles.list}>
-                        <TermsList selectedTid={this.state.selectedTid} onTermSelected={this.onTermSelected} />
-                    </div>
-                    <div className={styles.list}>
-                        <TermChildrenList
-                            tid={this.state.selectedTid}
-                            selectedId={this.state.selectedCid || this.state.selectedHid}
-                            onCourseSelected={this.onCourseSelected}
-                            onHolidaySelected={this.onHolidaySelected}
-                        />
-                    </div>
-                    <div className={styles.list}>
-                        <SectionsList
-                            cid={this.state.selectedCid}
-                            selectedSid={this.state.selectedSid}
-                            onSectionSelected={this.onSectionSelected}
-                        />
-                    </div>
+                    <div className={styles.listContainer}>{this.listToDisplay()}</div>
+                    <div className={styles.divider} />
                     {this.editorToDisplay()}
                 </div>
             </Page>
