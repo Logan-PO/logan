@@ -8,7 +8,13 @@ import IconButton from '@material-ui/core/IconButton';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { dateUtils } from '@logan/core';
-import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
+import {
+    getTasksSelectors,
+    updateTask,
+    deleteTask,
+    updateTaskLocal,
+    setShouldGoToTask,
+} from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { PriorityDisplay } from '../shared/displays';
@@ -26,19 +32,13 @@ class SubtaskCell extends React.Component {
     constructor(props) {
         super(props);
 
-        this.deleted = this.deleted.bind(this);
+        this.deleteSelf = this.deleteSelf.bind(this);
         this.toggleCompletion = this.toggleCompletion.bind(this);
         this.openTask = this.openTask.bind(this);
 
         this.state = {
             task: this.props.selectTaskFromStore(this.props.tid),
         };
-    }
-
-    deleted() {
-        if (this.props.onDelete) {
-            this.props.onDelete(this.state.task);
-        }
     }
 
     openTask() {
@@ -52,6 +52,10 @@ class SubtaskCell extends React.Component {
         if (!_.isEqual(storeTask, this.state.task)) {
             this.setState({ task: storeTask });
         }
+    }
+
+    deleteSelf() {
+        this.props.deleteTask(this.state.task);
     }
 
     toggleCompletion() {
@@ -131,8 +135,8 @@ SubtaskCell.propTypes = {
     tid: PropTypes.string,
     updateTask: PropTypes.func,
     updateTaskLocal: PropTypes.func,
+    deleteTask: PropTypes.func,
     selectTaskFromStore: PropTypes.func,
-    onDelete: PropTypes.func,
     setShouldGoToTask: PropTypes.func,
 };
 
@@ -144,6 +148,6 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = { updateTask, updateTaskLocal, setShouldGoToTask };
+const mapDispatchToProps = { updateTask, updateTaskLocal, deleteTask, setShouldGoToTask };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SubtaskCell);
