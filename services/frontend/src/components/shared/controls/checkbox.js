@@ -22,15 +22,12 @@ class Checkbox extends React.Component {
         let checkboxClass = styles.checkbox;
         const checkboxStyle = {};
 
-        const course = this.props.selectCourse(this.props.cid);
-
         if (this.props.size === 'large') {
             checkboxClass += ` ${styles.large}`;
         }
 
         if (this.props.checked) {
             checkboxClass += ` ${styles.checked}`;
-            if (course) checkboxStyle.color = `${course.color}`;
         }
 
         if (this.props.marginRight !== undefined) {
