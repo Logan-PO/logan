@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:850674143860:android:cbda9005c4b74d88a0b721",
         "android_client_info": {
-          "package_name": "com.Logan.loganandroid"
+          "package_name": "com.loganandroid"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "850674143860-08mgv746qubebp877d5r5jf7es25lth1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.Logan.loganandroid",
+            "package_name": "com.loganandroid",
             "certificate_hash": "6a4801493c9fbfad9fab90a9cdbc13ec46f05a79"
           }
         },

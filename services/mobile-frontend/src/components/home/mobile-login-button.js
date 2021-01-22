@@ -1,7 +1,7 @@
 import React from 'react';
 import { Platform, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
-import * as Google from 'expo-google-app-auth';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from 'react-native-google-signin';
 import { connect } from 'react-redux';
 import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
 import PropTypes from 'prop-types';
@@ -27,7 +27,12 @@ class MobileLoginButton extends React.Component {
 
     async signIn() {
         this.setState({ isLoggingIn: true });
-        const { type, idToken } = await Google.logInAsync(config);
+        try {
+            await GoogleSignin.hasPlayServices();
+            const { type, idToken } = await GoogleSignin.signIn();
+        } catch (error) {
+            alert('Login Failed');
+        }
         if (type === 'success') {
             await this.props.verifyIdToken({ idToken: idToken, clientType: DEVICE });
         }
@@ -56,15 +61,12 @@ class MobileLoginButton extends React.Component {
                 return <ActivityIndicator animating={true} color="white" size="large" />;
             } else {
                 return (
-                    <Button
-                        labelStyle={typographyStyles.button}
-                        style={this.props.style}
-                        color={this.props.color}
-                        mode={this.props.mode}
+                    <GoogleSigninButton
+                        style={{ width: 192, height: 48 }}
+                        size={GoogleSigninButton.Size.Wide}
+                        color={GoogleSigninButton.Color.Dark}
                         onPress={this.signIn}
-                    >
-                        Login with Google
-                    </Button>
+                    />
                 );
             }
         }
