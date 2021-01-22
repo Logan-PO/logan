@@ -13,7 +13,6 @@ import InputGroup from '../shared/controls/input-group';
 import TextInput from '../shared/controls/text-input';
 import BasicDatePicker from '../shared/controls/basic-date-picker';
 import TagEditor from '../shared/controls/tag-editor';
-import taskModalStyles from '../tasks/task-modal.module.scss';
 import styles from './assignment-modal.module.scss';
 
 const {
@@ -164,7 +163,7 @@ class AssignmentModal extends React.Component {
                     !this.state.showLoader ? (
                         <ActionButton onClick={this.createAssignment}>Create</ActionButton>
                     ) : (
-                        <CircularProgress size={24} className={taskModalStyles.buttonProgress} />
+                        <CircularProgress size={24} />
                     )
                 }
             />

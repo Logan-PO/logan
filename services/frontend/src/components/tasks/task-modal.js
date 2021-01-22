@@ -109,6 +109,7 @@ class TaskModal extends React.Component {
 
         return (
             <Dialog
+                classes={{ content: styles.modalContent }}
                 open={this.props.open}
                 onClose={this.props.onClose}
                 disableBackdropClick={this.state.isCreating}
@@ -173,7 +174,7 @@ class TaskModal extends React.Component {
                             Create
                         </ActionButton>
                     ) : (
-                        <CircularProgress size={24} className={styles.buttonProgress} />
+                        <CircularProgress size={24} />
                     )
                 }
             />
