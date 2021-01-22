@@ -66,6 +66,7 @@ class AssignmentEditor extends Editor {
                 <div className="scroll-view assignment-editor">
                     <InputGroup
                         icon={AssignmentIcon}
+                        style={{ marginBottom: 0 }}
                         content={
                             <TextInput
                                 fullWidth

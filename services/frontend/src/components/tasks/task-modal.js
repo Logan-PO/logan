@@ -3,18 +3,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    Grid,
-    TextField,
-    DialogActions,
-    Button,
-    CircularProgress,
-} from '@material-ui/core';
 import { createTask } from '@logan/fe-shared/store/tasks';
-import { CoursePicker, DueDatePicker, PriorityPicker, TagEditor } from '../shared/controls';
+import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import AssignmentIcon from '@material-ui/icons/Assignment';
+import CourseIcon from '@material-ui/icons/Book';
+import { Checkbox, CoursePicker, DueDatePicker, PriorityPicker, TagEditor } from '../shared/controls';
+import TextInput from '../shared/controls/text-input';
+import InputGroup from '../shared/controls/input-group';
+import ActionButton from '../shared/controls/action-button';
+import Dialog from '../shared/dialog';
+import Typography from '../shared/typography';
 import styles from './task-modal.module.scss';
 
 const {
@@ -110,94 +110,109 @@ class TaskModal extends React.Component {
 
     render() {
         const isSubtask = !!this.props.aid;
+        const relatedAssignment = isSubtask ? this.props.getAssignment(this.props.aid) : undefined;
+
+        const cid = relatedAssignment ? relatedAssignment.cid : this.state.task.cid;
+        const course = this.props.getCourse(cid);
 
         return (
             <Dialog
+                classes={{ content: styles.modalContent }}
                 open={this.props.open}
                 onClose={this.props.onClose}
-                fullWidth
-                maxWidth="sm"
                 disableBackdropClick={this.state.isCreating}
                 disableEscapeKeyDown
-            >
-                <DialogTitle>{isSubtask ? 'New Subtask' : 'New Task'}</DialogTitle>
-                <DialogContent>
-                    <Grid container direction="column" spacing={1}>
-                        <Grid item xs={12}>
-                            <TextField
-                                autoFocus
-                                label="Title"
-                                onChange={this.handleChange.bind(this, 'title')}
-                                value={_.get(this.state.task, 'title')}
-                                fullWidth
-                                inputRef={this._titleRef}
+                title={isSubtask ? 'New subtask' : 'New task'}
+                beforeContent={
+                    relatedAssignment && (
+                        <div className={styles.assignmentPreview}>
+                            <InputGroup
+                                label="Related Assignment"
+                                icon={AssignmentIcon}
+                                content={<Typography>{relatedAssignment.title}</Typography>}
                             />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="Description"
-                                multiline
-                                onChange={this.handleChange.bind(this, 'description')}
-                                value={_.get(this.state.task, 'description')}
-                                fullWidth
+                            <InputGroup
+                                label="Course"
+                                icon={CourseIcon}
+                                color={course ? course.color : undefined}
+                                content={
+                                    <Typography style={{ color: course ? course.color : undefined }}>
+                                        {course ? course.title : 'None'}
+                                    </Typography>
+                                }
                             />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
-                                {!isSubtask && (
-                                    <Grid item xs={6}>
-                                        <CoursePicker
-                                            value={_.get(this.state.task, 'cid', 'none')}
-                                            onChange={this.handleChange.bind(this, 'cid')}
-                                            fullWidth
-                                        />
-                                    </Grid>
-                                )}
-                                <Grid item>
-                                    <TagEditor
-                                        tags={_.get(this.state.task, 'tags')}
-                                        onChange={this.handleChange.bind(this, 'tags')}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Grid container direction="row" spacing={2} style={{ marginTop: 4 }}>
-                                <Grid item xs={6}>
-                                    <DueDatePicker
-                                        entityId={this.state.fakeId}
-                                        value={_.get(this.state.task, 'dueDate')}
-                                        onChange={this.handleChange.bind(this, 'dueDate')}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <PriorityPicker
-                                        value={_.get(this.state.task, 'priority')}
-                                        onChange={this.handleChange.bind(this, 'priority')}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.close} disableElevation>
-                        Cancel
-                    </Button>
-                    <div className={styles.wrapper}>
-                        <Button
-                            onClick={this.createTask}
-                            variant="contained"
-                            color="primary"
-                            disabled={this.state.showLoader}
-                            disableElevation
-                        >
+                        </div>
+                    )
+                }
+                content={
+                    <React.Fragment>
+                        <InputGroup
+                            style={{ marginBottom: 0 }}
+                            accessory={
+                                <Checkbox
+                                    size="large"
+                                    checked={_.get(this.state.task, 'complete', false)}
+                                    onChange={this.handleChange.bind(this, 'complete')}
+                                />
+                            }
+                            content={
+                                <TextInput
+                                    fullWidth
+                                    onChange={this.handleChange.bind(this, 'title')}
+                                    value={_.get(this.state.task, 'title')}
+                                    placeholder="Title"
+                                    variant="big-input"
+                                    inputRef={this._titleRef}
+                                />
+                            }
+                        />
+                        <InputGroup
+                            emptyAccessory
+                            style={{ marginBottom: 16 }}
+                            content={
+                                <TextInput
+                                    fullWidth
+                                    multiline
+                                    onChange={this.handleChange.bind(this, 'description')}
+                                    value={_.get(this.state.task, 'description')}
+                                    placeholder="Description"
+                                    style={{ color: '#646464' }}
+                                />
+                            }
+                        />
+                        {!isSubtask && (
+                            <CoursePicker
+                                fullWidth
+                                value={cid || 'none'}
+                                onChange={this.handleChange.bind(this, 'cid')}
+                            />
+                        )}
+                        <DueDatePicker
+                            entityId={_.get(this.state.task, 'tid')}
+                            value={_.get(this.state.task, 'dueDate')}
+                            onChange={this.handleChange.bind(this, 'dueDate')}
+                        />
+                        <TagEditor
+                            tags={_.get(this.state.task, 'tags')}
+                            onChange={this.handleChange.bind(this, 'tags')}
+                        />
+                        <PriorityPicker
+                            value={_.get(this.state.task, 'priority')}
+                            onChange={this.handleChange.bind(this, 'priority')}
+                        />
+                    </React.Fragment>
+                }
+                cancelTitle="Cancel"
+                actions={
+                    !this.state.showLoader ? (
+                        <ActionButton onClick={this.createTask} disabled={this.state.showLoader}>
                             Create
-                        </Button>
-                        {this.state.showLoader && <CircularProgress size={24} className={styles.buttonProgress} />}
-                    </div>
-                </DialogActions>
-            </Dialog>
+                        </ActionButton>
+                    ) : (
+                        <CircularProgress size={24} />
+                    )
+                }
+            />
         );
     }
 }
@@ -207,6 +222,13 @@ TaskModal.propTypes = {
     open: PropTypes.bool,
     onClose: PropTypes.func,
     createTask: PropTypes.func,
+    getAssignment: PropTypes.func,
+    getCourse: PropTypes.func,
 };
 
-export default connect(null, { createTask })(TaskModal);
+const mapStateToProps = state => ({
+    getAssignment: getAssignmentsSelectors(state.assignments).selectById,
+    getCourse: getCourseSelectors(state.schedule).selectById,
+});
+
+export default connect(mapStateToProps, { createTask })(TaskModal);
