@@ -125,6 +125,7 @@ class SchedulePage extends React.Component {
                     selectedId={this.state.selectedCid || this.state.selectedHid}
                     onCourseSelected={this.onCourseSelected}
                     onHolidaySelected={this.onHolidaySelected}
+                    onBackPressed={() => this.onTermSelected(this.state.selectedTid)}
                 />
             );
         } else {

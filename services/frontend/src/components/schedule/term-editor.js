@@ -128,7 +128,7 @@ class TermEditor extends Editor {
                                 className={clsx('list-item', listStyles.cell, styles.courseCell)}
                                 onClick={event => this._selectCourse(event, course.cid)}
                             >
-                                <div className={styles.swatch} style={{ background: course.color }} />
+                                <div className={listStyles.swatch} style={{ background: course.color }} />
                                 <Typography>{course.title}</Typography>
                                 <ChevronRightIcon fontSize="small" />
                                 <div className="actions">

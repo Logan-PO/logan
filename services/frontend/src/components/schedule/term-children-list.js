@@ -1,9 +1,10 @@
 import React from 'react';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import { List, IconButton, Tooltip } from '@material-ui/core';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DeleteIcon from '@material-ui/icons/Delete';
-import AddIcon from '@material-ui/icons/Add';
 import {
     getScheduleSelectors,
     createCourse,
@@ -12,7 +13,12 @@ import {
     deleteHoliday,
 } from '@logan/fe-shared/store/schedule';
 import '../shared/list.scss';
-import EmptySticker from '../shared/displays/empty-sticker';
+import ListHeader from '../shared/list-header';
+import TextButton from '../shared/controls/text-button';
+import ListSubheader from '../shared/list-subheader';
+import Typography from '../shared/typography';
+import Fab from '../shared/controls/fab';
+import styles from './page-list.module.scss';
 
 class TermChildrenList extends React.Component {
     constructor(props) {
@@ -60,102 +66,97 @@ class TermChildrenList extends React.Component {
     getCoursesList() {
         const courses = this.props.getCoursesForTerm({ tid: this.props.tid });
 
-        return [
-            ...courses.map(course => {
-                const isSelected = course.cid === this.props.selectedId;
+        return courses.map(course => {
+            const isSelected = course.cid === this.props.selectedId;
 
-                return (
-                    <div key={course.cid} className="list-cell">
-                        <ListItem
-                            button
-                            selected={isSelected}
-                            onClick={() => this.didSelectChild('course', course.cid)}
-                        >
-                            <ListItemText primary={course.title} />
-                            <ListItemSecondaryAction className="actions">
-                                <IconButton edge="end" onClick={() => this.didDeleteChild('course', course)}>
-                                    <DeleteIcon color="error" />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
+            return (
+                <div
+                    key={course.cid}
+                    className={clsx('list-cell', styles.cell, isSelected && styles.selected)}
+                    onClick={() => this.didSelectChild('course', course.cid)}
+                >
+                    <div className={styles.swatch} style={{ background: course.color }} />
+                    <Typography>{course.title}</Typography>
+                    <div className={`actions ${styles.actions}`}>
+                        <Tooltip title="Delete">
+                            <IconButton
+                                size="small"
+                                className={styles.action}
+                                onClick={() => this.didDeleteChild('course', course)}
+                            >
+                                <DeleteIcon fontSize="small" color="error" />
+                            </IconButton>
+                        </Tooltip>
                     </div>
-                );
-            }),
-            <div key="add-new" className="list-cell">
-                <ListItem button onClick={() => this.props.createCourse(this.randomChild('course'))}>
-                    <ListItemText
-                        primary={
-                            <a style={{ display: 'flex', alignItems: 'center' }}>
-                                <AddIcon style={{ marginRight: '0.5rem' }} fontSize="small" />
-                                New course
-                            </a>
-                        }
-                        primaryTypographyProps={{ color: 'primary' }}
-                    />
-                </ListItem>
-            </div>,
-        ];
+                </div>
+            );
+        });
     }
 
     getHolidaysList() {
         const holidays = this.props.getHolidaysForTerm({ tid: this.props.tid });
 
-        return [
-            ...holidays.map(holiday => {
-                const isSelected = holiday.hid === this.props.selectedId;
+        return holidays.map(holiday => {
+            const isSelected = holiday.hid === this.props.selectedId;
 
-                return (
-                    <div key={holiday.hid} className="list-cell">
-                        <ListItem
-                            button
-                            selected={isSelected}
-                            onClick={() => this.didSelectChild('holiday', holiday.hid)}
-                        >
-                            <ListItemText primary={holiday.title} />
-                            <ListItemSecondaryAction className="actions">
-                                <IconButton edge="end" onClick={() => this.didDeleteChild('holiday', holiday)}>
-                                    <DeleteIcon color="error" />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
+            return (
+                <div
+                    key={holiday.hid}
+                    className={clsx('list-cell', styles.cell, isSelected && styles.selected)}
+                    onClick={() => this.didSelectChild('holiday', holiday.hid)}
+                >
+                    <Typography>{holiday.title}</Typography>
+                    <div className={`actions ${styles.actions}`}>
+                        <Tooltip title="Delete">
+                            <IconButton
+                                size="small"
+                                className={styles.action}
+                                onClick={() => this.didDeleteChild('holiday', holiday)}
+                            >
+                                <DeleteIcon fontSize="small" color="error" />
+                            </IconButton>
+                        </Tooltip>
                     </div>
-                );
-            }),
-            <div key="add-new" className="list-cell">
-                <ListItem button onClick={() => this.props.createHoliday(this.randomChild('holiday'))}>
-                    <ListItemText
-                        primary={
-                            <a style={{ display: 'flex', alignItems: 'center' }}>
-                                <AddIcon style={{ marginRight: '0.5rem' }} fontSize="small" />
-                                New holiday
-                            </a>
-                        }
-                        primaryTypographyProps={{ color: 'primary' }}
-                    />
-                </ListItem>
-            </div>,
-        ];
+                </div>
+            );
+        });
     }
 
     render() {
-        if (!this.props.tid) {
-            return (
-                <div className="scrollable-list">
-                    <EmptySticker message="No term selected" />
-                </div>
-            );
-        }
+        const term = this.props.getTerm(this.props.tid);
 
         return (
             <div className="scrollable-list">
-                <div className="scroll-view">
-                    <List>
-                        <ListSubheader className="list-header">Courses</ListSubheader>
+                <div className={`scroll-view ${styles.listContainer}`}>
+                    <List className={styles.listContent}>
+                        <TextButton
+                            size="large"
+                            classes={{ root: styles.backButton }}
+                            IconComponent={ChevronLeftIcon}
+                            color="textSecondary"
+                            onClick={this.props.onBackPressed}
+                        >
+                            All terms
+                        </TextButton>
+                        <ListHeader title={term.title} className={styles.header} isBig disableDivider />
+                        <ListSubheader
+                            className={styles.subheader}
+                            items={['COURSES']}
+                            colors={['textPrimary']}
+                            showHorizontalDivider
+                        />
                         {this.getCoursesList()}
-                        <ListSubheader className="list-header">Holidays</ListSubheader>
+                        <ListSubheader
+                            className={styles.subheader}
+                            items={['HOLIDAYS']}
+                            colors={['textPrimary']}
+                            showHorizontalDivider
+                        />
                         {this.getHolidaysList()}
                     </List>
                 </div>
+                {/* TODO: Add create modals, and FabGroup! */}
+                <Fab className="add-button" />
             </div>
         );
     }
@@ -163,6 +164,7 @@ class TermChildrenList extends React.Component {
 
 TermChildrenList.propTypes = {
     tid: PropTypes.string,
+    onBackPressed: PropTypes.func,
     selectedId: PropTypes.string,
     getTerm: PropTypes.func,
     getCoursesForTerm: PropTypes.func,
