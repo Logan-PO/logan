@@ -18,7 +18,7 @@ $margin: 24px;
     align-items: flex-start;
     flex-grow: 1;
     flex-shrink: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     & > *:not(:last-child) {
       margin-bottom: 12px;
