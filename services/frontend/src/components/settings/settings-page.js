@@ -99,7 +99,7 @@ export class SettingsPage extends React.Component {
             <Page title="Settings">
                 <div style={{ background: 'white', minHeight: '100%' }}>
                     <Container style={{ paddingTop: '1em', paddingBottom: '1em' }}>
-                        <ListHeader title="Account" isBig="True" />
+                        <ListHeader title="Account" isBig />
                         <div>
                             <InputGroup
                                 label="NAME"
@@ -153,7 +153,7 @@ export class SettingsPage extends React.Component {
                         <UsernameModal open={this.state.newUsernameModal} onClose={this.closeNewUsernameModal} />
                         <LogOutModal open={this.state.newLogOutModal} onClose={this.closeNewLogOutModal} />
                         <DeleteModal open={this.state.newDeleteModal} onClose={this.closeNewDeleteModal} />
-                        <ListHeader title="Theme" isBig="true" style={{ paddingTop: 20 }} />
+                        <ListHeader title="Theme" isBig style={{ paddingTop: 20 }} />
                         <Grid container direction="column" spacing={1}>
                             <Grid item>
                                 <div style={{ display: 'inline-block', minWidth: '12rem', paddingTop: 10 }}>
