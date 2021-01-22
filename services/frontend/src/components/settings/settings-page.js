@@ -2,10 +2,13 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Container, Grid, Typography, ListSubheader, Button, colors } from '@material-ui/core';
+import { Container, Grid, colors } from '@material-ui/core';
 import { setLoginStage, updateUser } from '@logan/fe-shared/store/login';
 import { Page } from '../shared';
 import ColorPicker from '../shared/controls/color-picker';
+import ListHeader from '../shared/list-header';
+import ActionButton from '../shared/controls/action-button.js';
+import InputGroup from '../shared/controls/input-group.js';
 import UsernameModal from './username-modal';
 import DeleteModal from './delete-modal';
 import LogOutModal from './logout-modal';
@@ -96,57 +99,66 @@ export class SettingsPage extends React.Component {
             <Page title="Settings">
                 <div style={{ background: 'white', minHeight: '100%' }}>
                     <Container style={{ paddingTop: '1em', paddingBottom: '1em' }}>
-                        <ListSubheader style={{ paddingLeft: 0, paddingRight: 0 }}>Account</ListSubheader>
+                        <ListHeader title="Account" isBig="True" />
                         <div>
-                            <Typography variant="h5">{_.get(this.props, 'user.name')}</Typography>
-                            <Typography>@{_.get(this.props, 'user.username')}</Typography>
-                            <Typography>{_.get(this.props, 'user.email')}</Typography>
+                            <InputGroup
+                                label="NAME"
+                                content={_.get(this.props, 'user.name')}
+                                style={{ fontSize: 16, paddingBottom: 10, paddingTop: 10 }}
+                            />
+                            <InputGroup
+                                label="USERNAME"
+                                content={_.get(this.props, 'user.username')}
+                                style={{ fontSize: 16, paddingBottom: 10 }}
+                            />
+                            <InputGroup
+                                label="EMAIL"
+                                content={_.get(this.props, 'user.email')}
+                                style={{ fontSize: 16, paddingBottom: 10 }}
+                            />
                         </div>
                         <Grid container spacing={1} style={{ paddingTop: '1em' }}>
                             <Grid item>
-                                <Button
-                                    size="small"
+                                <ActionButton
                                     variant="contained"
                                     color="primary"
                                     disableElevation
                                     onClick={this.openNewUsernameModal}
                                 >
-                                    Edit
-                                </Button>
+                                    Edit account
+                                </ActionButton>
                             </Grid>
                             <Grid item>
-                                <Button
-                                    size="small"
+                                <ActionButton
                                     variant="contained"
                                     color="primary"
                                     disableElevation
                                     onClick={this.openNewLogOutModal}
                                 >
-                                    Logout
-                                </Button>
+                                    Log out
+                                </ActionButton>
                             </Grid>
                             <Grid item>
-                                <Button
-                                    size="small"
+                                <ActionButton
                                     variant="contained"
-                                    color="primary"
+                                    color="error"
                                     disableElevation
                                     onClick={this.openNewDeleteModal}
                                 >
-                                    Delete Account
-                                </Button>
+                                    Delete account
+                                </ActionButton>
                             </Grid>
                         </Grid>
                         {/* Modals */}
                         <UsernameModal open={this.state.newUsernameModal} onClose={this.closeNewUsernameModal} />
                         <LogOutModal open={this.state.newLogOutModal} onClose={this.closeNewLogOutModal} />
                         <DeleteModal open={this.state.newDeleteModal} onClose={this.closeNewDeleteModal} />
-                        <ListSubheader style={{ paddingLeft: 0, paddingRight: 0 }}>Theme</ListSubheader>
+                        <ListHeader title="Theme" isBig="true" style={{ paddingTop: 20 }} />
                         <Grid container direction="column" spacing={1}>
                             <Grid item>
-                                <div style={{ display: 'inline-block', minWidth: '12rem' }}>
+                                <div style={{ display: 'inline-block', minWidth: '12rem', paddingTop: 10 }}>
                                     <ColorPicker
-                                        label="Primary color"
+                                        label="PRIMARY COLOR"
                                         size="medium"
                                         fullWidth
                                         disableNone
@@ -159,7 +171,7 @@ export class SettingsPage extends React.Component {
                             <Grid item>
                                 <div style={{ display: 'inline-block', minWidth: '12rem' }}>
                                     <ColorPicker
-                                        label="Accent color"
+                                        label="ACCENT COLOR"
                                         size="medium"
                                         fullWidth
                                         disableNone
