@@ -113,7 +113,7 @@ class TaskModal extends React.Component {
                 onClose={this.props.onClose}
                 disableBackdropClick={this.state.isCreating}
                 disableEscapeKeyDown
-                title={isSubtask ? 'New Subtask' : 'New Task'}
+                title={isSubtask ? 'New subtask' : 'New task'}
                 content={
                     <React.Fragment>
                         <InputGroup
