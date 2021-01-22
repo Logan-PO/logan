@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setShouldGoTo, getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { Page } from '../shared';
+import EmptySticker from '../shared/displays/empty-sticker';
 import TermsList from './terms-list';
 import TermChildrenList from './term-children-list';
 import SectionsList from './sections-list';
@@ -138,7 +139,7 @@ class SchedulePage extends React.Component {
             return <CourseEditor cid={this.state.selectedCid} />;
         } else if (this.state.selectedHid) {
             return <HolidayEditor hid={this.state.selectedHid} />;
-        } else {
+        } else if (this.state.selectedTid) {
             return (
                 <TermEditor
                     tid={this.state.selectedTid}
@@ -146,6 +147,8 @@ class SchedulePage extends React.Component {
                     onSelectHoliday={this.onHolidaySelected}
                 />
             );
+        } else {
+            return <EmptySticker message="Nothing selected" />;
         }
     }
 
@@ -155,7 +158,7 @@ class SchedulePage extends React.Component {
                 <div className={styles.schedulePage}>
                     <div className={styles.listContainer}>{this.listToDisplay()}</div>
                     <div className={styles.divider} />
-                    {this.editorToDisplay()}
+                    <div className={styles.editorContainer}>{this.editorToDisplay()}</div>
                 </div>
             </Page>
         );
