@@ -1,15 +1,22 @@
 import _ from 'lodash';
+import clsx from 'clsx';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
-import { getScheduleSelectors, updateCourse, updateCourseLocal } from '@logan/fe-shared/store/schedule';
+import { Grid, Tooltip, IconButton } from '@material-ui/core';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import AddIcon from '@material-ui/icons/AddCircleOutline';
+import DeleteIcon from '@material-ui/icons/Delete';
+import { getScheduleSelectors, updateCourse, updateCourseLocal, deleteSection } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
-import '../shared/editor.scss';
 import ColorPicker from '../shared/controls/color-picker';
 import TextInput from '../shared/controls/text-input';
 import InputGroup from '../shared/controls/input-group';
+import Typography from '../shared/typography';
+import TextButton from '../shared/controls/text-button';
+import '../shared/editor.scss';
 import editorStyles from './page-editor.module.scss';
+import listStyles from './page-list.module.scss';
 
 class CourseEditor extends Editor {
     constructor(props) {
@@ -32,6 +39,50 @@ class CourseEditor extends Editor {
 
     updateEntityLocal({ id, changes }) {
         this.props.updateCourseLocal({ id, changes });
+    }
+
+    _selectSection(event, sid) {
+        if (event.target.tagName === 'BUTTON') return; // Ignore clicks on actions within the cells
+
+        this.props.onSelectSection(sid);
+    }
+
+    renderSectionsList() {
+        const sections = this.props.getSectionsForCourse({ cid: this.props.cid });
+
+        return (
+            <InputGroup
+                label="Sections"
+                content={
+                    <div className={`small-list ${editorStyles.smallerList}`}>
+                        {sections.map(section => (
+                            <div
+                                key={section.sid}
+                                className={clsx('list-item', listStyles.cell, editorStyles.smallerCell)}
+                                onClick={event => this._selectSection(event, section.sid)}
+                            >
+                                <Typography>{section.title}</Typography>
+                                <ChevronRightIcon fontSize="small" />
+                                <div className="actions">
+                                    <Tooltip title="Delete">
+                                        <IconButton
+                                            size="small"
+                                            className="action"
+                                            onClick={() => this.props.deleteSection(section)}
+                                        >
+                                            <DeleteIcon fontSize="small" color="error" />
+                                        </IconButton>
+                                    </Tooltip>
+                                </div>
+                            </div>
+                        ))}
+                        <TextButton classes={{ root: listStyles.addButton }} size="large" IconComponent={AddIcon}>
+                            Add section
+                        </TextButton>
+                    </div>
+                }
+            />
+        );
     }
 
     render() {
@@ -70,7 +121,7 @@ class CourseEditor extends Editor {
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <InputGroup label="Sections" />
+                                    {this.renderSectionsList()}
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -83,21 +134,25 @@ class CourseEditor extends Editor {
 
 CourseEditor.propTypes = {
     cid: PropTypes.string,
+    onSelectSection: PropTypes.func,
     selectTerm: PropTypes.func,
     selectCourse: PropTypes.func,
     updateCourseLocal: PropTypes.func,
     updateCourse: PropTypes.func,
+    getSectionsForCourse: PropTypes.func,
+    deleteSection: PropTypes.func,
 };
 
 const mapStateToProps = state => {
-    const { baseSelectors } = getScheduleSelectors(state.schedule);
+    const selectors = getScheduleSelectors(state.schedule);
 
     return {
-        selectTerm: baseSelectors.terms.selectById,
-        selectCourse: baseSelectors.courses.selectById,
+        selectTerm: selectors.baseSelectors.terms.selectById,
+        selectCourse: selectors.baseSelectors.courses.selectById,
+        getSectionsForCourse: selectors.getSectionsForCourse,
     };
 };
 
-const mapDispatchToProps = { updateCourse, updateCourseLocal };
+const mapDispatchToProps = { updateCourse, updateCourseLocal, deleteSection };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CourseEditor);

@@ -65,13 +65,13 @@ class TermEditor extends Editor {
     }
 
     _selectCourse(event, cid) {
-        if (event.target.tagName !== 'P') return; // Ignore clicks on actions within the cells
+        if (event.target.tagName === 'BUTTON') return; // Ignore clicks on actions within the cells
 
         this.props.onSelectCourse(cid);
     }
 
     _selectHoliday(event, hid) {
-        if (event.target.tagName !== 'P') return; // Ignore clicks on actions within the cells
+        if (event.target.tagName === 'BUTTON') return; // Ignore clicks on actions within the cells
 
         this.props.onSelectHoliday(hid);
     }

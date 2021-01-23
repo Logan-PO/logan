@@ -19,9 +19,10 @@
     flex-direction: row;
     align-items: center;
     padding: 3px 12px;
-    margin: 0 -12px;
+    margin: 0 0 0 -12px;
     border-radius: 10px;
     align-self: stretch;
+    cursor: pointer;
 
     &:hover {
       background: #f2f2f2;

@@ -137,7 +137,7 @@ class SchedulePage extends React.Component {
         if (this.state.selectedSid) {
             return <SectionEditor sid={this.state.selectedSid} />;
         } else if (this.state.selectedCid) {
-            return <CourseEditor cid={this.state.selectedCid} />;
+            return <CourseEditor cid={this.state.selectedCid} onSelectSection={this.onSectionSelected} />;
         } else if (this.state.selectedHid) {
             return <HolidayEditor hid={this.state.selectedHid} />;
         } else if (this.state.selectedTid) {
