@@ -1,12 +1,18 @@
 import React from 'react';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, ListItem, ListItemText, ListItemSecondaryAction, IconButton } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { List, Tooltip, IconButton } from '@material-ui/core';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getScheduleSelectors, createSection, deleteSection } from '@logan/fe-shared/store/schedule';
+import TextButton from '../shared/controls/text-button';
 import '../shared/list.scss';
-import EmptySticker from '../shared/displays/empty-sticker';
+import ListHeader from '../shared/list-header';
+import ListSubheader from '../shared/list-subheader';
+import Typography from '../shared/typography';
+import Fab from '../shared/controls/fab';
+import styles from './page-list.module.scss';
 
 class SectionsList extends React.Component {
     constructor(props) {
@@ -46,54 +52,61 @@ class SectionsList extends React.Component {
     listItems() {
         const sections = this.props.getSectionsForCourse({ cid: this.props.cid });
 
-        return [
-            ...sections.map(section => {
-                const isSelected = section.sid === this.props.selectedSid;
+        return sections.map(section => {
+            const isSelected = section.sid === this.props.selectedSid;
 
-                return (
-                    <div key={section.sid} className="list-cell">
-                        <ListItem button selected={isSelected} onClick={() => this.didSelectSection(section.sid)}>
-                            <ListItemText primary={section.title} />
-                            <ListItemSecondaryAction className="actions">
-                                <IconButton edge="end" onClick={() => this.didDeleteSection(section)}>
-                                    <DeleteIcon color="error" />
-                                </IconButton>
-                            </ListItemSecondaryAction>
-                        </ListItem>
+            return (
+                <div
+                    key={section.sid}
+                    className={clsx('list-cell', styles.cell, isSelected && styles.selected)}
+                    onClick={() => this.didSelectSection(section.sid)}
+                >
+                    <Typography>{section.title}</Typography>
+                    <div className={`actions ${styles.actions}`}>
+                        <Tooltip title="Delete">
+                            <IconButton
+                                size="small"
+                                className={styles.action}
+                                onClick={() => this.didDeleteSection(section)}
+                            >
+                                <DeleteIcon fontSize="small" color="error" />
+                            </IconButton>
+                        </Tooltip>
                     </div>
-                );
-            }),
-            <ListItem button key="new" onClick={() => this.props.createSection(this.randomSection())}>
-                <ListItemText
-                    primary={
-                        <a style={{ display: 'flex', alignItems: 'center' }}>
-                            <AddIcon style={{ marginRight: '0.5rem' }} fontSize="small" />
-                            New section
-                        </a>
-                    }
-                    primaryTypographyProps={{ color: 'primary' }}
-                />
-            </ListItem>,
-        ];
+                </div>
+            );
+        });
     }
 
     render() {
-        if (!this.props.cid) {
-            return (
-                <div className="scrollable-list">
-                    <EmptySticker message="No course selected" />
-                </div>
-            );
-        }
+        const course = this.props.getCourse(this.props.cid);
+        const term = this.props.getTerm((course || {}).tid);
 
         return (
             <div className="scrollable-list">
-                <div className="scroll-view">
-                    <List>
-                        <ListSubheader className="list-header">Sections</ListSubheader>
+                <div className={`scroll-view ${styles.listContainer}`}>
+                    <List className={styles.listContent}>
+                        <TextButton
+                            size="large"
+                            classes={{ root: styles.backButton }}
+                            IconComponent={ChevronLeftIcon}
+                            color="textSecondary"
+                            onClick={this.props.onBackPressed}
+                        >
+                            {term.title}
+                        </TextButton>
+                        <ListHeader title={course.title} className={styles.header} isBig disableDivider />
+                        <ListSubheader
+                            className={styles.subheader}
+                            items={['SECTIONS']}
+                            colors={['textPrimary']}
+                            showHorizontalDivider
+                        />
                         {this.listItems()}
                     </List>
                 </div>
+                {/* TODO: Add create modals */}
+                <Fab className="add-button" />
             </div>
         );
     }
@@ -108,6 +121,7 @@ SectionsList.propTypes = {
     createSection: PropTypes.func,
     deleteSection: PropTypes.func,
     onSectionSelected: PropTypes.func,
+    onBackPressed: PropTypes.func,
 };
 
 const mapStateToProps = state => {

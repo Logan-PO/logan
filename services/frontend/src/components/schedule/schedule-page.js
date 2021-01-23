@@ -116,6 +116,7 @@ class SchedulePage extends React.Component {
                     cid={this.state.selectedCid}
                     selectedSid={this.state.selectedSid}
                     onSectionSelected={this.onSectionSelected}
+                    onBackPressed={() => this.onCourseSelected(this.state.selectedCid)}
                 />
             );
         } else if (this.state.selectedCid || this.state.selectedHid) {
