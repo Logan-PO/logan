@@ -60,6 +60,7 @@ class HolidayEditor extends Editor {
                     <Grid container spacing={2} direction="column">
                         <Grid item xs={12}>
                             <TextInput
+                                style={{ marginBottom: 16 }}
                                 variant="big-input"
                                 placeholder="Title"
                                 value={_.get(this.state.holiday, 'title', '')}

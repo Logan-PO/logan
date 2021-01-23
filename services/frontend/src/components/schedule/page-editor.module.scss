@@ -9,6 +9,26 @@
   }
 }
 
+.two-col {
+  display: flex;
+  align-items: flex-start;
+  justify-content: stretch;
+
+  .column {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+
+    &:first-child {
+      margin-right: 12px;
+    }
+
+    & > *:not(:last-child) {
+      margin-bottom: 8px;
+    }
+  }
+}
+
 .smaller-list {
   display: flex;
   flex-direction: column;

@@ -92,6 +92,7 @@ class CourseEditor extends Editor {
                     <Grid container spacing={2} direction="column">
                         <Grid item xs={12}>
                             <TextInput
+                                style={{ marginBottom: 16 }}
                                 variant="big-input"
                                 fullWidth
                                 value={_.get(this.state.course, 'title', '')}
