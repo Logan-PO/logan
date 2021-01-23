@@ -187,6 +187,7 @@ class TermEditor extends Editor {
                                 </Grid>
                                 <Grid item xs={6}>
                                     <BasicDatePicker
+                                        labelFunc={date => date.format('MMM d, YYYY')}
                                         value={endDate}
                                         onChange={this.handleChange.bind(this, 'endDate')}
                                         hideIcon
