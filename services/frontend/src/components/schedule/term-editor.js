@@ -27,6 +27,7 @@ import '../shared/editor.scss';
 import TextButton from '../shared/controls/text-button';
 import editorStyles from './page-editor.module.scss';
 import listStyles from './page-list.module.scss';
+import CourseModal from './course-modal';
 
 const {
     dayjs,
@@ -40,6 +41,7 @@ class TermEditor extends Editor {
         this.handleChange = this.handleChange.bind(this);
 
         this.state = {
+            showCourseModal: false,
             term: {},
         };
     }
@@ -106,7 +108,12 @@ class TermEditor extends Editor {
                                 </div>
                             </div>
                         ))}
-                        <TextButton classes={{ root: listStyles.addButton }} size="large" IconComponent={AddIcon}>
+                        <TextButton
+                            classes={{ root: listStyles.addButton }}
+                            size="large"
+                            IconComponent={AddIcon}
+                            onClick={() => this.setState({ showCourseModal: true })}
+                        >
                             Add course
                         </TextButton>
                     </div>
@@ -209,6 +216,11 @@ class TermEditor extends Editor {
                         </Grid>
                     </Grid>
                 </div>
+                <CourseModal
+                    tid={this.state.term.tid}
+                    open={this.state.showCourseModal}
+                    onClose={() => this.setState({ showCourseModal: false })}
+                />
             </div>
         );
     }
