@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -12,6 +13,7 @@ import ListHeader from '../shared/list-header';
 import ListSubheader from '../shared/list-subheader';
 import Typography from '../shared/typography';
 import Fab from '../shared/controls/fab';
+import SectionModal from './section-modal';
 import styles from './page-list.module.scss';
 
 class SectionsList extends React.Component {
@@ -20,6 +22,10 @@ class SectionsList extends React.Component {
 
         this.didSelectSection = this.didSelectSection.bind(this);
         this.didDeleteSection = this.didDeleteSection.bind(this);
+
+        this.state = {
+            sectionModalOpen: false,
+        };
     }
 
     randomSection() {
@@ -105,8 +111,13 @@ class SectionsList extends React.Component {
                         {this.listItems()}
                     </List>
                 </div>
-                {/* TODO: Add create modals */}
-                <Fab className="add-button" />
+                <Fab className="add-button" onClick={() => this.setState({ sectionModalOpen: true })} />
+                <SectionModal
+                    tid={_.get(term, 'tid')}
+                    cid={this.props.cid}
+                    open={this.state.sectionModalOpen}
+                    onClose={() => this.setState({ sectionModalOpen: false })}
+                />
             </div>
         );
     }

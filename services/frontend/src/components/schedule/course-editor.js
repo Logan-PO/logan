@@ -17,6 +17,7 @@ import TextButton from '../shared/controls/text-button';
 import '../shared/editor.scss';
 import editorStyles from './page-editor.module.scss';
 import listStyles from './page-list.module.scss';
+import SectionModal from './section-modal';
 
 class CourseEditor extends Editor {
     constructor(props) {
@@ -76,7 +77,12 @@ class CourseEditor extends Editor {
                                 </div>
                             </div>
                         ))}
-                        <TextButton classes={{ root: listStyles.addButton }} size="large" IconComponent={AddIcon}>
+                        <TextButton
+                            classes={{ root: listStyles.addButton }}
+                            size="large"
+                            IconComponent={AddIcon}
+                            onClick={() => this.setState({ sectionModalOpen: true })}
+                        >
                             Add section
                         </TextButton>
                     </div>
@@ -86,6 +92,8 @@ class CourseEditor extends Editor {
     }
 
     render() {
+        const term = this.props.selectTerm(_.get(this.state.course, 'tid')) || {};
+
         return (
             <div className="editor">
                 <div className={`scroll-view ${editorStyles.editor}`}>
@@ -128,6 +136,12 @@ class CourseEditor extends Editor {
                         </Grid>
                     </Grid>
                 </div>
+                <SectionModal
+                    tid={term.tid}
+                    cid={this.state.course.cid}
+                    open={this.state.sectionModalOpen}
+                    onClose={() => this.setState({ sectionModalOpen: false })}
+                />
             </div>
         );
     }
