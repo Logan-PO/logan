@@ -76,6 +76,16 @@ class TermChildrenList extends React.Component {
     getCoursesList() {
         const courses = this.props.getCoursesForTerm({ tid: this.props.tid });
 
+        if (!courses.length) {
+            return (
+                <div className={clsx('list-cell', listStyles.cell)}>
+                    <Typography color="textSecondary" style={{ fontStyle: 'italic' }}>
+                        None
+                    </Typography>
+                </div>
+            );
+        }
+
         return courses.map(course => {
             const isSelected = course.cid === this.props.selectedId;
 
@@ -105,6 +115,16 @@ class TermChildrenList extends React.Component {
 
     getHolidaysList() {
         const holidays = this.props.getHolidaysForTerm({ tid: this.props.tid });
+
+        if (!holidays.length) {
+            return (
+                <div className={clsx('list-cell', listStyles.cell)}>
+                    <Typography color="textSecondary" style={{ fontStyle: 'italic' }}>
+                        None
+                    </Typography>
+                </div>
+            );
+        }
 
         return holidays.map(holiday => {
             const isSelected = holiday.hid === this.props.selectedId;
