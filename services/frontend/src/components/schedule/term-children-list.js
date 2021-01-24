@@ -3,6 +3,9 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, IconButton, Tooltip } from '@material-ui/core';
+import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab';
+import CourseIcon from '@material-ui/icons/Book';
+import HolidayIcon from '@material-ui/icons/BeachAccess';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DeleteIcon from '@material-ui/icons/Delete';
 import {
@@ -17,8 +20,9 @@ import ListHeader from '../shared/list-header';
 import TextButton from '../shared/controls/text-button';
 import ListSubheader from '../shared/list-subheader';
 import Typography from '../shared/typography';
-import Fab from '../shared/controls/fab';
-import styles from './page-list.module.scss';
+import listStyles from './page-list.module.scss';
+import styles from './term-children-list.module.scss';
+import CourseModal from './course-modal';
 
 class TermChildrenList extends React.Component {
     constructor(props) {
@@ -26,6 +30,12 @@ class TermChildrenList extends React.Component {
 
         this.didSelectChild = this.didSelectChild.bind(this);
         this.didDeleteChild = this.didDeleteChild.bind(this);
+
+        this.state = {
+            speedDialOpen: false,
+            createCourseOpen: false,
+            createHolidayOpen: false,
+        };
     }
 
     randomChild(type) {
@@ -72,16 +82,16 @@ class TermChildrenList extends React.Component {
             return (
                 <div
                     key={course.cid}
-                    className={clsx('list-cell', styles.cell, isSelected && styles.selected)}
+                    className={clsx('list-cell', listStyles.cell, isSelected && listStyles.selected)}
                     onClick={() => this.didSelectChild('course', course.cid)}
                 >
-                    <div className={styles.swatch} style={{ background: course.color }} />
+                    <div className={listStyles.swatch} style={{ background: course.color }} />
                     <Typography>{course.title}</Typography>
-                    <div className={`actions ${styles.actions}`}>
+                    <div className={`actions ${listStyles.actions}`}>
                         <Tooltip title="Delete">
                             <IconButton
                                 size="small"
-                                className={styles.action}
+                                className={listStyles.action}
                                 onClick={() => this.didDeleteChild('course', course)}
                             >
                                 <DeleteIcon fontSize="small" color="error" />
@@ -102,15 +112,15 @@ class TermChildrenList extends React.Component {
             return (
                 <div
                     key={holiday.hid}
-                    className={clsx('list-cell', styles.cell, isSelected && styles.selected)}
+                    className={clsx('list-cell', listStyles.cell, isSelected && listStyles.selected)}
                     onClick={() => this.didSelectChild('holiday', holiday.hid)}
                 >
                     <Typography>{holiday.title}</Typography>
-                    <div className={`actions ${styles.actions}`}>
+                    <div className={`actions ${listStyles.actions}`}>
                         <Tooltip title="Delete">
                             <IconButton
                                 size="small"
-                                className={styles.action}
+                                className={listStyles.action}
                                 onClick={() => this.didDeleteChild('holiday', holiday)}
                             >
                                 <DeleteIcon fontSize="small" color="error" />
@@ -127,27 +137,27 @@ class TermChildrenList extends React.Component {
 
         return (
             <div className="scrollable-list">
-                <div className={`scroll-view ${styles.listContainer}`}>
-                    <List className={styles.listContent}>
+                <div className={`scroll-view ${listStyles.listContainer}`}>
+                    <List className={listStyles.listContent}>
                         <TextButton
                             size="large"
-                            classes={{ root: styles.backButton }}
+                            classes={{ root: listStyles.backButton }}
                             IconComponent={ChevronLeftIcon}
                             color="textSecondary"
                             onClick={this.props.onBackPressed}
                         >
                             All terms
                         </TextButton>
-                        <ListHeader title={term.title} className={styles.header} isBig disableDivider />
+                        <ListHeader title={term.title} className={listStyles.header} isBig disableDivider />
                         <ListSubheader
-                            className={styles.subheader}
+                            className={listStyles.subheader}
                             items={['COURSES']}
                             colors={['textPrimary']}
                             showHorizontalDivider
                         />
                         {this.getCoursesList()}
                         <ListSubheader
-                            className={styles.subheader}
+                            className={listStyles.subheader}
                             items={['HOLIDAYS']}
                             colors={['textPrimary']}
                             showHorizontalDivider
@@ -155,8 +165,26 @@ class TermChildrenList extends React.Component {
                         {this.getHolidaysList()}
                     </List>
                 </div>
-                {/* TODO: Add create modals, and FabGroup! */}
-                <Fab className="add-button" />
+                <CourseModal
+                    tid={this.props.tid}
+                    open={this.state.createCourseOpen}
+                    onClose={() => this.setState({ createCourseOpen: false })}
+                />
+                <SpeedDial
+                    ariaLabel="create"
+                    icon={<SpeedDialIcon />}
+                    open={this.state.speedDialOpen}
+                    onOpen={() => this.setState({ speedDialOpen: true })}
+                    onClose={() => this.setState({ speedDialOpen: false })}
+                    classes={{ root: styles.root, fab: styles.fab }}
+                >
+                    <SpeedDialAction
+                        icon={<CourseIcon />}
+                        tooltipTitle="New course"
+                        onClick={() => this.setState({ createCourseOpen: true })}
+                    />
+                    <SpeedDialAction icon={<HolidayIcon />} tooltipTitle="New holiday" onClick={() => {}} />
+                </SpeedDial>
             </div>
         );
     }
