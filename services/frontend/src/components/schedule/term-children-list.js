@@ -23,6 +23,7 @@ import Typography from '../shared/typography';
 import listStyles from './page-list.module.scss';
 import styles from './term-children-list.module.scss';
 import CourseModal from './course-modal';
+import HolidayModal from './holiday-modal';
 
 class TermChildrenList extends React.Component {
     constructor(props) {
@@ -190,6 +191,11 @@ class TermChildrenList extends React.Component {
                     open={this.state.createCourseOpen}
                     onClose={() => this.setState({ createCourseOpen: false })}
                 />
+                <HolidayModal
+                    tid={this.props.tid}
+                    open={this.state.createHolidayOpen}
+                    onClose={() => this.setState({ createHolidayOpen: false })}
+                />
                 <SpeedDial
                     ariaLabel="create"
                     icon={<SpeedDialIcon />}
@@ -203,7 +209,11 @@ class TermChildrenList extends React.Component {
                         tooltipTitle="New course"
                         onClick={() => this.setState({ createCourseOpen: true })}
                     />
-                    <SpeedDialAction icon={<HolidayIcon />} tooltipTitle="New holiday" onClick={() => {}} />
+                    <SpeedDialAction
+                        icon={<HolidayIcon />}
+                        tooltipTitle="New holiday"
+                        onClick={() => this.setState({ createHolidayOpen: true })}
+                    />
                 </SpeedDial>
             </div>
         );
