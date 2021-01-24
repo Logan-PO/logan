@@ -12,6 +12,7 @@ import ListSubheader from '../shared/list-subheader';
 import Fab from '../shared/controls/fab';
 import '../shared/list.scss';
 import styles from './page-list.module.scss';
+import TermModal from './term-modal';
 
 class TermsList extends React.Component {
     constructor(props) {
@@ -20,13 +21,9 @@ class TermsList extends React.Component {
         this.renderListContent = this.renderListContent.bind(this);
         this.didSelectTerm = this.didSelectTerm.bind(this);
         this.didDeleteTerm = this.didDeleteTerm.bind(this);
-    }
 
-    randomTerm() {
-        return {
-            title: 'New term',
-            startDate: dateUtils.formatAsDate(),
-            endDate: dateUtils.formatAsDate(),
+        this.state = {
+            showCreateModal: false,
         };
     }
 
@@ -122,8 +119,11 @@ class TermsList extends React.Component {
                         {this.renderListContent()}
                     </List>
                 </div>
-                {/* TODO: Add create modal! */}
-                <Fab className="add-button" />
+                <Fab className="add-button" onClick={() => this.setState({ showCreateModal: true })} />
+                <TermModal
+                    open={this.state.showCreateModal}
+                    onClose={() => this.setState({ showCreateModal: false })}
+                />
             </div>
         );
     }
