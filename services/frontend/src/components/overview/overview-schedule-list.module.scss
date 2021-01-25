@@ -23,6 +23,10 @@
         padding: 0 12px !important;
         margin: 3px 0;
 
+        .subheader-divider {
+          opacity: 0.5;
+        }
+
         &:first-of-type {
           margin-top: 0 !important;
         }

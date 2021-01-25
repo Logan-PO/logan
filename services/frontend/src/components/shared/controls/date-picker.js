@@ -50,6 +50,7 @@ class DatePicker extends React.Component {
 
         if (changed) {
             this.setState({
+                shownMonthStart: dateUtils.formatAsDate(this.props.value.date(1)),
                 selectedDate: dateUtils.formatAsDate(this.props.value),
             });
         }

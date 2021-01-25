@@ -1,11 +1,12 @@
-.list-header {
+.root {
   display: flex;
   align-items: baseline;
   justify-content: stretch;
 
-  .breadcrumbs {
+  .list-header {
     display: flex;
     align-items: center;
+    flex-grow: 0;
 
     .chevron {
       display: inline-flex;
@@ -19,6 +20,5 @@
     background: #e5e5e5;
     border-radius: 0.5px;
     margin-left: 3px;
-    opacity: 0.5;
   }
 }

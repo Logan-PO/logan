@@ -3,11 +3,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { Grid, Typography, TextField, Breadcrumbs, Divider } from '@material-ui/core';
-import { DatePicker } from '@material-ui/pickers';
+import { Grid } from '@material-ui/core';
 import { getScheduleSelectors, updateHoliday, updateHolidayLocal } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
+import TextInput from '../shared/controls/text-input';
+import BasicDatePicker from '../shared/controls/basic-date-picker';
 import '../shared/editor.scss';
+import editorStyles from './page-editor.module.scss';
 
 const {
     dayjs,
@@ -46,54 +48,40 @@ class HolidayEditor extends Editor {
     }
 
     render() {
-        const term = this.props.selectTerm(_.get(this.state.holiday, 'tid'));
-
         const sd = _.get(this.state.holiday, 'startDate');
         const ed = _.get(this.state.holiday, 'endDate');
 
-        const startDate = sd ? dayjs(sd, DB_DATE_FORMAT) : null;
-        const endDate = ed ? dayjs(ed, DB_DATE_FORMAT) : null;
+        const startDate = sd ? dayjs(sd, DB_DATE_FORMAT) : dayjs();
+        const endDate = ed ? dayjs(ed, DB_DATE_FORMAT) : dayjs();
 
         return (
             <div className="editor">
-                <div className="scroll-view">
+                <div className={`scroll-view ${editorStyles.editor}`}>
                     <Grid container spacing={2} direction="column">
                         <Grid item xs={12}>
-                            <Breadcrumbs>
-                                <Typography color="inherit">{_.get(term, 'title')}</Typography>
-                                <Typography color="textPrimary">Edit Holiday 🎉</Typography>
-                            </Breadcrumbs>
-                        </Grid>
-                        <Divider flexItem style={{ margin: '0 -1em' }} />
-                        <Grid item xs={12}>
-                            <TextField
-                                disabled={this.isEmpty()}
-                                label="Title"
-                                fullWidth
+                            <TextInput
+                                style={{ marginBottom: 16 }}
+                                variant="big-input"
+                                placeholder="Title"
                                 value={_.get(this.state.holiday, 'title', '')}
                                 onChange={this.handleChange.bind(this, 'title')}
+                                fullWidth
                             />
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container direction="row" spacing={2}>
                                 <Grid item xs={6}>
-                                    <DatePicker
-                                        fullWidth
-                                        label="Start Date"
-                                        variant="inline"
-                                        disabled={this.isEmpty()}
-                                        color="secondary"
+                                    <BasicDatePicker
+                                        labelFunc={date => date.format('MMM D, YYYY')}
+                                        inputGroupProps={{ label: 'Start date' }}
                                         value={startDate}
                                         onChange={this.handleChange.bind(this, 'startDate')}
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <DatePicker
-                                        fullWidth
-                                        label="End Date"
-                                        variant="inline"
-                                        disabled={this.isEmpty()}
-                                        color="secondary"
+                                    <BasicDatePicker
+                                        labelFunc={date => date.format('MMM D, YYYY')}
+                                        inputGroupProps={{ label: 'End date' }}
                                         value={endDate}
                                         onChange={this.handleChange.bind(this, 'endDate')}
                                     />

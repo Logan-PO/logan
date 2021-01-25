@@ -13,7 +13,6 @@ class EmptySticker extends React.Component {
                 style={{
                     width: '100%',
                     height: '100%',
-                    background: colors.grey[200],
                     color: colors.grey[500],
                 }}
             >

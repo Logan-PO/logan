@@ -79,6 +79,7 @@ $day-size: 28px;
         margin-bottom: 3px;
 
         .dow-label {
+          display: inline-block !important;
           text-align: center;
           width: $day-size;
         }

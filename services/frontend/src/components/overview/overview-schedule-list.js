@@ -12,7 +12,7 @@ import TaskCell from '../tasks/task-cell';
 import ListHeader from '../shared/list-header';
 import ListSubheader from '../shared/list-subheader';
 import OverviewSectionCell from './overview-section-cell';
-import styles from './overview-list.module.scss';
+import styles from './overview-schedule-list.module.scss';
 
 const {
     dayjs,
@@ -98,12 +98,12 @@ export class OverviewScheduleList extends React.Component {
     secondaryHeader(title) {
         return (
             <ListSubheader
-                className={styles.subheader}
+                classes={{ root: styles.subheader, divider: styles.subheaderDivider }}
                 items={[title]}
                 colors={['textSecondary']}
                 key={title}
                 isBig
-                horizontalLine
+                showHorizontalDivider
             />
         );
     }
@@ -138,7 +138,11 @@ export class OverviewScheduleList extends React.Component {
                         const courseName = course.nickname && course.nickname !== '' ? course.nickname : course.title;
 
                         subheader = (
-                            <ListSubheader className={styles.subheader} items={[courseName]} colors={[course.color]} />
+                            <ListSubheader
+                                classes={{ root: styles.subheader }}
+                                items={[courseName]}
+                                colors={[course.color]}
+                            />
                         );
                     }
 
@@ -193,7 +197,7 @@ export class OverviewScheduleList extends React.Component {
                 }
 
                 contents.push(
-                    <ListSubheader key={sortKey} className={styles.subheader} items={items} colors={colors} />
+                    <ListSubheader key={sortKey} classes={{ root: styles.subheader }} items={items} colors={colors} />
                 );
             }
 

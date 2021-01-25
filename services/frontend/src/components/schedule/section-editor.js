@@ -3,12 +3,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { Grid, Typography, TextField, Breadcrumbs, Divider } from '@material-ui/core';
-import { DatePicker, TimePicker } from '@material-ui/pickers';
+import { TimePicker } from '@material-ui/pickers';
+import InstructorIcon from '@material-ui/icons/Face';
+import LocationIcon from '@material-ui/icons/LocationOn';
+import TimeIcon from '@material-ui/icons/Schedule';
+import WeeklyIcon from '@material-ui/icons/ViewWeek';
 import { getScheduleSelectors, updateSection, updateSectionLocal } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
 import '../shared/editor.scss';
 import DowPicker from '../shared/controls/dow-picker';
+import TextInput from '../shared/controls/text-input';
+import BasicDatePicker from '../shared/controls/basic-date-picker';
+import InputGroup from '../shared/controls/input-group';
+import editorStyles from './page-editor.module.scss';
 
 const {
     dayjs,
@@ -16,7 +23,7 @@ const {
 } = dateUtils;
 
 function dateOrNull(input, format) {
-    return input ? dayjs(input, format) : null;
+    return input ? dayjs(input, format) : dayjs();
 }
 
 class SectionEditor extends Editor {
@@ -55,138 +62,121 @@ class SectionEditor extends Editor {
     }
 
     render() {
-        const course = this.props.selectCourse(_.get(this.state.section, 'cid'));
-        const term = this.props.selectTerm(_.get(course, 'tid'));
-
         const startDate = dateOrNull(_.get(this.state.section, 'startDate'), DB_DATE_FORMAT);
         const endDate = dateOrNull(_.get(this.state.section, 'endDate'), DB_DATE_FORMAT);
         const startTime = dateOrNull(_.get(this.state.section, 'startTime'), DB_TIME_FORMAT);
         const endTime = dateOrNull(_.get(this.state.section, 'endTime'), DB_TIME_FORMAT);
 
-        const termBreadcrumb = _.get(term, 'title');
-        const courseBreadcrumb = !_.isEmpty(_.get(course, 'nickname')) ? course.nickname : _.get(course, 'title');
-
         return (
             <div className="editor">
-                <div className="scroll-view">
-                    <Grid container spacing={2} direction="column">
-                        <Grid item xs={12}>
-                            <Breadcrumbs>
-                                <Typography color="inherit">{termBreadcrumb}</Typography>
-                                <Typography color="inherit">{courseBreadcrumb}</Typography>
-                                <Typography color="textPrimary">Edit Section</Typography>
-                            </Breadcrumbs>
-                        </Grid>
-                        <Divider flexItem style={{ margin: '0 -1em' }} />
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                disabled={this.isEmpty()}
-                                label="Title"
-                                value={_.get(this.state.section, 'title', '')}
-                                onChange={this.handleChange.bind(this, 'title')}
+                <div className={`scroll-view ${editorStyles.editor}`}>
+                    <TextInput
+                        style={{ marginBottom: 16 }}
+                        variant="big-input"
+                        placeholder="Section title"
+                        value={_.get(this.state.section, 'title', '')}
+                        onChange={this.handleChange.bind(this, 'title')}
+                    />
+                    <div className={editorStyles.twoCol}>
+                        <div className={editorStyles.column}>
+                            <BasicDatePicker
+                                labelFunc={date => date.format('MMM D, YYYY')}
+                                inputGroupProps={{ label: 'Start date' }}
+                                value={startDate}
+                                onChange={this.handleChange.bind(this, 'startDate')}
                             />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Grid container direction="row" spacing={2}>
-                                <Grid item xs={6}>
-                                    <TextField
-                                        fullWidth
-                                        disabled={this.isEmpty()}
-                                        label="Instructor"
-                                        value={_.get(this.state.section, 'instructor', '')}
-                                        onChange={this.handleChange.bind(this, 'instructor')}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <TextField
-                                        fullWidth
-                                        disabled={this.isEmpty()}
-                                        label="Location"
-                                        value={_.get(this.state.section, 'location', '')}
-                                        onChange={this.handleChange.bind(this, 'location')}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Grid container direction="row" spacing={2}>
-                                <Grid item xs={6}>
-                                    <DatePicker
-                                        fullWidth
-                                        label="Start Date"
-                                        variant="inline"
-                                        disabled={this.isEmpty()}
-                                        color="secondary"
-                                        value={startDate}
-                                        onChange={this.handleChange.bind(this, 'startDate')}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
+                        </div>
+                        <div className={editorStyles.column}>
+                            <InputGroup
+                                label="Start time"
+                                icon={TimeIcon}
+                                content={
                                     <TimePicker
-                                        fullWidth
-                                        label="Start Time"
                                         variant="inline"
-                                        disabled={this.isEmpty()}
                                         color="secondary"
-                                        format="h:mm A"
+                                        format="h:mma"
                                         value={startTime}
                                         onChange={this.handleChange.bind(this, 'startTime')}
                                     />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Grid container direction="row" spacing={2}>
-                                <Grid item xs={6}>
-                                    <DatePicker
-                                        fullWidth
-                                        label="End Date"
-                                        variant="inline"
-                                        disabled={this.isEmpty()}
-                                        color="secondary"
-                                        value={endDate}
-                                        onChange={this.handleChange.bind(this, 'endDate')}
-                                    />
-                                </Grid>
-                                <Grid item xs={6}>
+                                }
+                            />
+                        </div>
+                    </div>
+                    <div className={editorStyles.twoCol}>
+                        <div className={editorStyles.column}>
+                            <BasicDatePicker
+                                labelFunc={date => date.format('MMM D, YYYY')}
+                                inputGroupProps={{ label: 'End date' }}
+                                value={endDate}
+                                onChange={this.handleChange.bind(this, 'endDate')}
+                            />
+                        </div>
+                        <div className={editorStyles.column}>
+                            <InputGroup
+                                label="End time"
+                                icon={TimeIcon}
+                                content={
                                     <TimePicker
-                                        fullWidth
-                                        label="End Time"
                                         variant="inline"
-                                        disabled={this.isEmpty()}
                                         color="secondary"
-                                        format="h:mm A"
+                                        format="h:mma"
                                         value={endTime}
                                         onChange={this.handleChange.bind(this, 'endTime')}
                                     />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Grid container direction="row" spacing={2}>
-                                <Grid item xs={6}>
-                                    <TextField
+                                }
+                            />
+                        </div>
+                    </div>
+                    <div className={editorStyles.twoCol}>
+                        <div className={editorStyles.column}>
+                            <InputGroup
+                                label="Location"
+                                icon={LocationIcon}
+                                content={
+                                    <TextInput
+                                        placeholder="None"
+                                        value={_.get(this.state.section, 'location')}
+                                        onChange={this.handleChange.bind(this, 'location')}
+                                    />
+                                }
+                            />
+                        </div>
+                        <div className={editorStyles.column}>
+                            <InputGroup
+                                label="Instructor"
+                                icon={InstructorIcon}
+                                content={
+                                    <TextInput
+                                        placeholder="None"
+                                        value={_.get(this.state.section, 'instructor')}
+                                        onChange={this.handleChange.bind(this, 'instructor')}
+                                    />
+                                }
+                            />
+                        </div>
+                    </div>
+                    <div className={editorStyles.twoCol}>
+                        <div className={editorStyles.column}>
+                            <InputGroup
+                                label="Weekly Interval"
+                                icon={WeeklyIcon}
+                                content={
+                                    <TextInput
                                         type="number"
-                                        inputProps={{ min: 1, max: 52 }}
-                                        disabled={this.isEmpty()}
-                                        label="Weekly Interval"
-                                        fullWidth
-                                        value={_.get(this.state.section, 'weeklyRepeat', '')}
+                                        value={_.get(this.state.section, 'weeklyRepeat')}
                                         onChange={this.handleChange.bind(this, 'weeklyRepeat')}
                                     />
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <DowPicker
-                                        fullWidth
-                                        disabled={this.isEmpty()}
-                                        value={_.get(this.state.section, 'daysOfWeek', [])}
-                                        onChange={this.handleChange.bind(this, 'daysOfWeek')}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </Grid>
+                                }
+                            />
+                        </div>
+                        <div className={editorStyles.column}>
+                            <DowPicker
+                                disabled={this.isEmpty()}
+                                value={_.get(this.state.section, 'daysOfWeek', [])}
+                                onChange={this.handleChange.bind(this, 'daysOfWeek')}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         );
