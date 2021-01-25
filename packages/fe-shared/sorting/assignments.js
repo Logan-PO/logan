@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { dateUtils } from '@logan/core';
 import { compareDueDates } from '../store/tasks';
 
 export function initialQuickSort(showPast, a, b) {
@@ -11,29 +10,11 @@ export function initialQuickSort(showPast, a, b) {
 }
 
 function makeSectionsUpcoming(assignments) {
-    const sections = {};
-
-    function addToSection(task, section) {
-        if (!sections[section]) sections[section] = [task];
-        else sections[section].push(task);
-    }
-
-    for (const assignment of assignments) {
-        if (assignment.dueDate === 'asap' || assignment.dueDate === 'eventually') {
-            addToSection(assignment, assignment.dueDate);
-        } else {
-            const dueDate = dateUtils.dayjs(assignment.dueDate, dateUtils.constants.DB_DATE_FORMAT);
-            addToSection(assignment, dateUtils.humanReadableDate(dueDate));
-        }
-    }
-
-    return sections;
+    return _.groupBy(assignments, 'dueDate');
 }
 
 function makeSectionsPast(assignments) {
-    return _.groupBy(assignments, assignment =>
-        dateUtils.humanReadableDate(dateUtils.dayjs(assignment.dueDate, dateUtils.constants.DB_DATE_FORMAT))
-    );
+    return _.groupBy(assignments, 'dueDate');
 }
 
 export function makeSections(assignments, showPast) {
