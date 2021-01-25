@@ -11,8 +11,8 @@ import Typography from '../shared/typography';
 import ListSubheader from '../shared/list-subheader';
 import Fab from '../shared/controls/fab';
 import '../shared/list.scss';
-import styles from './page-list.module.scss';
 import TermModal from './term-modal';
+import styles from './page-list.module.scss';
 
 class TermsList extends React.Component {
     constructor(props) {
@@ -70,7 +70,7 @@ class TermsList extends React.Component {
             contents.push(
                 <ListSubheader
                     key={type}
-                    className={styles.subheader}
+                    classes={{ root: styles.subheader }}
                     items={[type.toUpperCase()]}
                     colors={['textPrimary']}
                     showHorizontalDivider

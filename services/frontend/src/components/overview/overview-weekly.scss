@@ -1,10 +1,6 @@
 @import '~react-big-calendar/lib/sass/styles';
 @import '~react-big-calendar/lib/sass/variables';
 
-.full-overview-height {
-    height: calc(100vh - 64px);
-}
-
 .rbc-calendar, .rbc-calendar * {
     box-sizing: border-box !important;
 }

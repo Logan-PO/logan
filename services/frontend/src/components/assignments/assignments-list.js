@@ -138,7 +138,7 @@ class AssignmentsList extends React.Component {
                 const courseName = course.nickname && course.nickname !== '' ? course.nickname : course.title;
 
                 subheader = (
-                    <ListSubheader className={classes.subheader} items={[courseName]} colors={[course.color]} />
+                    <ListSubheader classes={{ root: classes.subheader }} items={[courseName]} colors={[course.color]} />
                 );
             }
 

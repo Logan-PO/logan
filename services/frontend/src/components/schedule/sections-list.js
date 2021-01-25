@@ -103,7 +103,7 @@ class SectionsList extends React.Component {
                         </TextButton>
                         <ListHeader title={course.title} className={styles.header} isBig disableDivider />
                         <ListSubheader
-                            className={styles.subheader}
+                            classes={{ root: styles.subheader }}
                             items={['SECTIONS']}
                             colors={['textPrimary']}
                             showHorizontalDivider

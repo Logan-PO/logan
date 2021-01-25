@@ -1,0 +1,22 @@
+.overview-page {
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  height: 100%;
+
+  .divider {
+    display: inline-block;
+    background: #e5e5e5;
+    width: 1px;
+    margin: 18px 0;
+  }
+
+  .list-container {
+    height: 100%;
+  }
+
+  .calendar-container {
+    padding: 0 24px;
+    height: 100%;
+  }
+}

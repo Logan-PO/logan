@@ -171,14 +171,14 @@ class TermChildrenList extends React.Component {
                         </TextButton>
                         <ListHeader title={term.title} className={listStyles.header} isBig disableDivider />
                         <ListSubheader
-                            className={listStyles.subheader}
+                            classes={{ root: listStyles.subheader }}
                             items={['COURSES']}
                             colors={['textPrimary']}
                             showHorizontalDivider
                         />
                         {this.getCoursesList()}
                         <ListSubheader
-                            className={listStyles.subheader}
+                            classes={{ root: listStyles.subheader }}
                             items={['HOLIDAYS']}
                             colors={['textPrimary']}
                             showHorizontalDivider
