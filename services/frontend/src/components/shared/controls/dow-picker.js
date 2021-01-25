@@ -5,6 +5,7 @@ import { FormControl, InputLabel, Select, MenuItem, InputBase } from '@material-
 import DowIcon from '@material-ui/icons/DateRange';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import CheckIcon from '@material-ui/icons/Check';
+import Typography from '../typography';
 import InputGroup from './input-group';
 import styles from './course-picker.module.scss';
 
@@ -13,7 +14,8 @@ const shortValues = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 class DowPicker extends React.Component {
     readableVersion(value) {
-        return _.values(_.pick(shortValues, value)).join('/');
+        if (!value || !value.length) return <Typography color="textSecondary">None</Typography>;
+        return <Typography>{_.values(_.pick(shortValues, value)).join('/')}</Typography>;
     }
 
     render() {
@@ -33,6 +35,7 @@ class DowPicker extends React.Component {
                         multiple
                         value={this.props.value}
                         onChange={this.props.onChange}
+                        displayEmpty
                         renderValue={this.readableVersion}
                         input={<InputBase />}
                     >

@@ -45,7 +45,7 @@ class BasicDatePicker extends React.Component {
                                 className={styles.realLabel}
                                 onClick={this.datePickerRef.current && this.datePickerRef.current.openPicker}
                             >
-                                <Typography style={{ fontWeight: 500 }}>{formattedDate}</Typography>
+                                <Typography>{formattedDate}</Typography>
                                 <ChevronDown className={styles.icon} />
                             </div>
                         }
@@ -54,7 +54,7 @@ class BasicDatePicker extends React.Component {
                                 className={styles.dummyLabel}
                                 onClick={this.datePickerRef.current && this.datePickerRef.current.closePicker}
                             >
-                                <Typography style={{ fontWeight: 500, color: 'white' }}>{formattedDate}</Typography>
+                                <Typography style={{ color: 'white' }}>{formattedDate}</Typography>
                                 <ChevronUp className={styles.icon} style={{ color: 'white' }} />
                             </div>
                         }
