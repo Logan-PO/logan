@@ -11,7 +11,6 @@ import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import ListHeader from '../shared/list-header';
 import ListSubheader from '../shared/list-subheader';
-import classes from '../assignments/assignments-list.module.scss';
 import OverviewSectionCell from './overview-section-cell';
 import styles from './overview-list.module.scss';
 
@@ -114,7 +113,7 @@ export class OverviewScheduleList extends React.Component {
             <React.Fragment>
                 {sections.length > 0 && this.secondaryHeader('Schedule')}
                 {sections.map(({ sid }) => (
-                    <OverviewSectionCell key={sid} sid={sid} />
+                    <OverviewSectionCell className={styles.cell} key={sid} sid={sid} />
                 ))}
             </React.Fragment>
         );
@@ -139,7 +138,7 @@ export class OverviewScheduleList extends React.Component {
                         const courseName = course.nickname && course.nickname !== '' ? course.nickname : course.title;
 
                         subheader = (
-                            <ListSubheader className={classes.subheader} items={[courseName]} colors={[course.color]} />
+                            <ListSubheader className={styles.subheader} items={[courseName]} colors={[course.color]} />
                         );
                     }
 

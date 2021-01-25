@@ -3,24 +3,24 @@
   margin: 24px 0 0;
 
   .list-content {
-    padding: 0 24px 24px;
+    padding: 0 12px 24px 12px;
 
     .section {
       display: flex;
       flex-direction: column;
       align-items: stretch;
 
-      &:not(:first-of-type) {
-        padding-top: 24px;
+      &:not(:last-of-type) {
+        margin-bottom: 24px;
       }
 
       .header {
-        padding: 0 0 3px 0;
+        padding: 0 12px 3px;
         background: white;
       }
 
       .subheader {
-        padding: 0 !important;
+        padding: 0 12px !important;
         margin: 3px 0;
 
         &:first-of-type {
@@ -29,7 +29,16 @@
       }
 
       .cell {
-        padding: 3px 0 !important;
+        padding: 3px 12px !important;
+        border-radius: 10px !important;
+
+        &:hover {
+          background: #f0f0f0;
+        }
+
+        &:active {
+          background: #e5e5e5;
+        }
       }
     }
   }

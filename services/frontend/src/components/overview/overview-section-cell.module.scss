@@ -1,0 +1,13 @@
+.cell {
+  display: flex;
+
+  .section-time {
+    min-width: 9rem;
+  }
+
+  .details {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+  }
+}

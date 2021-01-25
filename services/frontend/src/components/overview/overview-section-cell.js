@@ -1,11 +1,12 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
-import { Grid, ListItem, ListItemText } from '@material-ui/core';
+import clsx from 'clsx';
+import { connect } from 'react-redux';
 import { getSectionSelectors } from '@logan/fe-shared/store/schedule';
 import { printSectionTimes } from '@logan/fe-shared/utils/scheduling-utils';
 import { CourseLabel } from '../shared/displays';
+import Typography from '../shared/typography';
+import styles from './overview-section-cell.module.scss';
 
 class OverviewSectionCell extends React.Component {
     constructor(props) {
@@ -19,42 +20,38 @@ class OverviewSectionCell extends React.Component {
 
     makeDetailText(title, value) {
         return (
-            <ListItemText
-                secondary={
-                    <React.Fragment>
-                        <b>{title}: </b>
-                        {value}
-                    </React.Fragment>
-                }
-            />
+            <Typography variant="body2" color="textSecondary">
+                <b>{title}:&nbsp;</b>
+                {value}
+            </Typography>
         );
     }
 
     render() {
-        const section = _.get(this.state, 'section.title');
-        const location = _.get(this.state, 'section.location');
-        const instructor = _.get(this.state, 'section.instructor');
+        const { className } = this.props;
+        const { section = {}, condensed = false } = this.state;
+        const { title, location, instructor, cid } = section;
 
         return (
-            <div className="list-cell">
-                <ListItem dense button onClick={() => this.setState({ condensed: !this.state.condensed })}>
-                    <Grid container direction="row" alignItems="flex-start">
-                        <Grid item style={{ minWidth: '9rem' }}>
-                            <ListItemText primary={printSectionTimes(this.state.section)} />
-                        </Grid>
-                        <Grid item>
-                            <ListItemText primary={<CourseLabel cid={_.get(this.state, 'section.cid')} />} />
-                            {this.state.condensed && section && this.makeDetailText('Section', section)}
-                            {this.state.condensed && location && this.makeDetailText('Location', location)}
-                            {this.state.condensed && instructor && this.makeDetailText('Instructor', instructor)}
-                        </Grid>
-                    </Grid>
-                </ListItem>
+            <div
+                className={clsx('list-cell', styles.cell, className)}
+                onClick={() => this.setState({ condensed: !condensed })}
+            >
+                <div className={styles.sectionTime}>
+                    <Typography>{printSectionTimes(section)}</Typography>
+                </div>
+                <div className={styles.details}>
+                    <Typography>{<CourseLabel cid={cid} />}</Typography>
+                    {condensed && title && this.makeDetailText('Section', title)}
+                    {condensed && location && this.makeDetailText('Location', location)}
+                    {condensed && instructor && this.makeDetailText('Instructor', instructor)}
+                </div>
             </div>
         );
     }
 }
 OverviewSectionCell.propTypes = {
+    className: PropTypes.string,
     sid: PropTypes.string,
     cid: PropTypes.string,
     tid: PropTypes.string,
