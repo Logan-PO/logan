@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
@@ -41,6 +42,9 @@ class LoginPage extends React.Component {
                 className={styles.homePage}
                 style={{ background: colors.teal[500], '--headings-family': headingsFontFamily }}
             >
+                <Helmet>
+                    <title>Logan / Log In</title>
+                </Helmet>
                 <div className={loginStyles.topLeftContainer} style={{ alignItems: 'flex-start' }}>
                     <TextButton IconComponent={ArrowBackIcon} size="large" color="white" onClick={() => navigate('/')}>
                         Back home
