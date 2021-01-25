@@ -112,7 +112,7 @@ class AssignmentModal extends React.Component {
                 content={
                     <React.Fragment>
                         <InputGroup
-                            style={{ marginBottom: 0 }}
+                            style={{ marginBottom: 0, width: '100%' }}
                             icon={AssignmentIcon}
                             content={
                                 <TextInput
@@ -127,7 +127,7 @@ class AssignmentModal extends React.Component {
                         />
                         <InputGroup
                             emptyAccessory
-                            style={{ marginBottom: 16 }}
+                            style={{ marginBottom: 16, width: '100%' }}
                             content={
                                 <TextInput
                                     fullWidth

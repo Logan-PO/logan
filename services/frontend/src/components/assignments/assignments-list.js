@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, Toolbar, FormControl, FormControlLabel, Switch } from '@material-ui/core';
+import { List, FormControl, FormControlLabel, Switch } from '@material-ui/core';
 import _ from 'lodash';
 import { dateUtils } from '@logan/core';
 import {
@@ -10,8 +10,11 @@ import {
     deleteAssignment,
     setShouldGoToAssignment,
 } from '@logan/fe-shared/store/assignments';
+import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import { getSections } from '@logan/fe-shared/sorting/assignments';
 import Fab from '../shared/controls/fab';
+import ListHeader from '../shared/list-header';
+import ListSubheader from '../shared/list-subheader';
 import AssignmentModal from './assignment-modal';
 import AssignmentCell from './assignment-cell';
 import '../shared/list.scss';
@@ -96,6 +99,66 @@ class AssignmentsList extends React.Component {
         }
     }
 
+    _headerForSection(dueDate) {
+        let sectionTitle = dueDate;
+        let sectionDetail;
+
+        const isToday = dateUtils.formatAsDate() === dueDate;
+
+        const dateObject = dateUtils.toDate(dueDate);
+        sectionTitle = dateUtils.humanReadableDate(dateObject);
+
+        if (!this.state.showingPastAssignments && !isToday) {
+            sectionDetail = `${dateObject.diff(dateUtils.dayjs().startOf('day'), 'day')}D`;
+        }
+
+        return (
+            <ListHeader
+                className={`list-header ${classes.header}`}
+                title={sectionTitle}
+                detail={sectionDetail}
+                isBig={isToday}
+            />
+        );
+    }
+
+    _contentsForSection(aids) {
+        const assignments = aids.map(this.props.getAssignment);
+
+        const groupings = _.groupBy(assignments, 'cid');
+
+        const sortedEntries = _.sortBy(_.entries(groupings), '0');
+
+        return sortedEntries.map(([cid, assignments]) => {
+            const course = this.props.getCourse(cid);
+
+            let subheader;
+
+            if (course) {
+                const courseName = course.nickname && course.nickname !== '' ? course.nickname : course.title;
+
+                subheader = (
+                    <ListSubheader className={classes.subheader} items={[courseName]} colors={[course.color]} />
+                );
+            }
+
+            return (
+                <React.Fragment key={cid}>
+                    {subheader}
+                    {assignments.map(({ aid }) => (
+                        <AssignmentCell
+                            key={aid}
+                            aid={aid}
+                            onSelect={this.didSelectAssignment}
+                            onDelete={this.didDeleteAssignment}
+                            selected={this.state.selectedAid === aid}
+                        />
+                    ))}
+                </React.Fragment>
+            );
+        });
+    }
+
     render() {
         const sections = getSections(
             _.filter(this.props.assignments, this._shouldShowAssignment),
@@ -105,45 +168,36 @@ class AssignmentsList extends React.Component {
         return (
             <div className="scrollable-list">
                 <div className={`scroll-view ${classes.assignmentsList}`}>
-                    <List>
+                    <List className={classes.listContent}>
                         {sections.map(section => {
                             const [dueDate, aids] = section;
                             return (
-                                <React.Fragment key={section[0]}>
-                                    <ListSubheader className="list-header">{dueDate}</ListSubheader>
-                                    {aids.map(aid => (
-                                        <AssignmentCell
-                                            key={aid}
-                                            aid={aid}
-                                            onSelect={this.didSelectAssignment}
-                                            onDelete={this.didDeleteAssignment}
-                                            selected={this.state.selectedAid === aid}
-                                        />
-                                    ))}
-                                </React.Fragment>
+                                <div className={classes.section} key={section[0]}>
+                                    {this._headerForSection(dueDate)}
+                                    {this._contentsForSection(aids)}
+                                </div>
                             );
                         })}
                     </List>
                 </div>
                 <div className={classes.actionsBar}>
-                    <Toolbar variant="dense">
-                        <FormControl>
-                            <FormControlLabel
-                                control={
-                                    <Switch
-                                        color="default"
-                                        checked={this.state.showingPastAssignments}
-                                        onChange={this.togglePastAssignments}
-                                    />
-                                }
-                                label={
-                                    this.state.showingPastAssignments
-                                        ? 'Showing past assignments'
-                                        : 'Showing upcoming assignments'
-                                }
-                            />
-                        </FormControl>
-                    </Toolbar>
+                    <FormControl>
+                        <FormControlLabel
+                            control={
+                                <Switch
+                                    classes={{ root: classes.switch }}
+                                    color="default"
+                                    checked={this.state.showingPastAssignments}
+                                    onChange={this.togglePastAssignments}
+                                />
+                            }
+                            label={
+                                this.state.showingPastAssignments
+                                    ? 'Showing past assignments'
+                                    : 'Showing upcoming assignments'
+                            }
+                        />
+                    </FormControl>
                 </div>
                 <Fab className="add-button" onClick={this.openNewAssignmentModal} />
                 <AssignmentModal open={this.state.newAssignmentModalOpen} onClose={this.closeNewAssignmentModal} />
@@ -159,6 +213,7 @@ AssignmentsList.propTypes = {
     getAssignment: PropTypes.func,
     shouldGoToAssignment: PropTypes.string,
     setShouldGoToAssignment: PropTypes.func,
+    getCourse: PropTypes.func,
 };
 
 const mapStateToProps = state => {
@@ -168,6 +223,7 @@ const mapStateToProps = state => {
         getAssignment: selectors.selectById,
         shouldGoToAssignment: state.assignments.shouldGoToAssignment,
         assignments: selectors.selectAll(),
+        getCourse: getCourseSelectors(state.schedule).selectById,
     };
 };
 
