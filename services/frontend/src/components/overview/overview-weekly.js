@@ -2,17 +2,17 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Grid } from '@material-ui/core';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import * as dateUtils from '@logan/core/src/date-utils';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
-import './overview-weekly.scss';
 import Toolbar from './toolbar';
 import OverviewScheduleList from './overview-schedule-list';
 import CalendarEvent from './calendar-event';
+import './overview-weekly.scss';
+import styles from './overview-weekly.module.scss';
 
 const localizer = momentLocalizer(moment);
 
@@ -152,59 +152,57 @@ class OverviewWeekly extends React.Component {
 
     render() {
         return (
-            <Grid container style={{ background: 'white' }}>
+            <div className={styles.overviewPage}>
                 {this.state.viewType === 'week' && (
-                    <Grid item xs={3} className="full-overview-height">
-                        <div className="scrollable-list">
-                            <div className="scroll-view">
-                                <OverviewScheduleList />
-                            </div>
-                        </div>
-                    </Grid>
-                )}
-                <Grid item xs={this.state.viewType === 'week' ? 9 : 12} className="full-overview-height">
-                    <div className="scroll-view">
-                        <Calendar
-                            className="full-overview-height"
-                            localizer={localizer}
-                            defaultDate={new Date()}
-                            defaultView="week"
-                            views={['month', 'week']}
-                            onView={this.viewTypeChanged}
-                            events={this.getCalendarEvents()}
-                            popup={true}
-                            eventPropGetter={() => ({ className: `view-type-${this.state.viewType}` })}
-                            components={{
-                                toolbar: Toolbar,
-                                event: CalendarEvent,
-                            }}
-                            step={60} //how much is one slot worth ( in min)
-                            timeslots={1}
-                            formats={{
-                                dateFormat: date => {
-                                    const day = dateUtils.dayjs(date);
-                                    if (day.date() === 1) return day.format('MMM D');
-                                    else return day.format('D');
-                                },
-                                timeGutterFormat: 'h:mma',
-                                weekdayFormat: 'ddd',
-                                dayFormat: date =>
-                                    `${dayjs(date).format('ddd').toUpperCase()} / ${dayjs(date).format('Do')}`,
-                                dayRangeHeaderFormat: ({ start, end }) => {
-                                    const startDate = dayjs(start);
-                                    const endDate = dayjs(end);
-
-                                    if (startDate.isSame(endDate, 'month')) {
-                                        return `${startDate.format('MMMM Do')} - ${endDate.format('Do')}`;
-                                    } else {
-                                        return `${startDate.format('MMMM Do')} - ${endDate.format('MMMM Do')}`;
-                                    }
-                                },
-                            }}
-                        />
+                    <div className={styles.listContainer}>
+                        <OverviewScheduleList />
                     </div>
-                </Grid>
-            </Grid>
+                )}
+                {this.state.viewType === 'week' && <div className={styles.divider} />}
+                <div
+                    className={styles.calendarContainer}
+                    style={{ width: this.state.viewType === 'week' ? '75%' : '100%' }}
+                >
+                    <Calendar
+                        className="full-overview-height"
+                        localizer={localizer}
+                        defaultDate={new Date()}
+                        defaultView="week"
+                        views={['month', 'week']}
+                        onView={this.viewTypeChanged}
+                        events={this.getCalendarEvents()}
+                        popup={true}
+                        eventPropGetter={() => ({ className: `view-type-${this.state.viewType}` })}
+                        components={{
+                            toolbar: Toolbar,
+                            event: CalendarEvent,
+                        }}
+                        step={60} //how much is one slot worth ( in min)
+                        timeslots={1}
+                        formats={{
+                            dateFormat: date => {
+                                const day = dateUtils.dayjs(date);
+                                if (day.date() === 1) return day.format('MMM D');
+                                else return day.format('D');
+                            },
+                            timeGutterFormat: 'h:mma',
+                            weekdayFormat: 'ddd',
+                            dayFormat: date =>
+                                `${dayjs(date).format('ddd').toUpperCase()} / ${dayjs(date).format('Do')}`,
+                            dayRangeHeaderFormat: ({ start, end }) => {
+                                const startDate = dayjs(start);
+                                const endDate = dayjs(end);
+
+                                if (startDate.isSame(endDate, 'month')) {
+                                    return `${startDate.format('MMMM Do')} - ${endDate.format('Do')}`;
+                                } else {
+                                    return `${startDate.format('MMMM Do')} - ${endDate.format('MMMM Do')}`;
+                                }
+                            },
+                        }}
+                    />
+                </div>
+            </div>
         );
     }
 }

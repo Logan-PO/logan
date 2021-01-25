@@ -29,6 +29,11 @@ const variants = {
         fontSize: '14px',
         fontWeight: 600,
     },
+    'list-heading-big': {
+        fontFamily: headingsFontFamily,
+        fontSize: '18px',
+        fontWeight: 600,
+    },
     'list-header-detail': {
         fontFamily: headingsFontFamily,
         fontSize: '16px',

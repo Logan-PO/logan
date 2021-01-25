@@ -2,15 +2,18 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, ListSubheader, ListItem, Typography, colors } from '@material-ui/core';
+import { List } from '@material-ui/core';
 import { dateUtils } from '@logan/core';
 import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
-import OverviewWeekly from './overview-weekly';
+import ListHeader from '../shared/list-header';
+import ListSubheader from '../shared/list-subheader';
+import classes from '../assignments/assignments-list.module.scss';
 import OverviewSectionCell from './overview-section-cell';
+import styles from './overview-list.module.scss';
 
 const {
     dayjs,
@@ -95,43 +98,145 @@ export class OverviewScheduleList extends React.Component {
 
     secondaryHeader(title) {
         return (
-            <ListItem style={{ background: colors.grey[100] }} dense key={title}>
-                <Typography variant="button">
-                    <b>{title}</b>
-                </Typography>
-            </ListItem>
+            <ListSubheader
+                className={styles.subheader}
+                items={[title]}
+                colors={['textSecondary']}
+                key={title}
+                isBig
+                horizontalLine
+            />
+        );
+    }
+
+    _scheduleOverview(sections) {
+        return (
+            <React.Fragment>
+                {sections.length > 0 && this.secondaryHeader('Schedule')}
+                {sections.map(({ sid }) => (
+                    <OverviewSectionCell key={sid} sid={sid} />
+                ))}
+            </React.Fragment>
+        );
+    }
+
+    _assignmentsOverview(assignments) {
+        if (!assignments.length) return;
+
+        const groupings = _.groupBy(assignments, 'cid');
+
+        const sortedEntries = _.sortBy(_.entries(groupings), '0');
+
+        return (
+            <React.Fragment>
+                {this.secondaryHeader('Assignments')}
+                {sortedEntries.map(([cid, groupedAssignments]) => {
+                    const course = this.props.scheduleSelectors.baseSelectors.courses.selectById(cid);
+
+                    let subheader;
+
+                    if (course) {
+                        const courseName = course.nickname && course.nickname !== '' ? course.nickname : course.title;
+
+                        subheader = (
+                            <ListSubheader className={classes.subheader} items={[courseName]} colors={[course.color]} />
+                        );
+                    }
+
+                    return (
+                        <React.Fragment key={cid}>
+                            {subheader}
+                            {groupedAssignments.map(({ aid }) => (
+                                <AssignmentCell className={styles.cell} key={aid} aid={aid} />
+                            ))}
+                        </React.Fragment>
+                    );
+                })}
+            </React.Fragment>
+        );
+    }
+
+    _tasksOverview(tasks) {
+        if (!tasks.length) return;
+
+        const groupings = _.groupBy(tasks, task => {
+            const assignment = task.aid ? this.props.assignmentSelectors.selectById(task.aid) : undefined;
+            return `${(assignment ? assignment.cid : task.cid) || ''} ${task.aid || ''}`;
+        });
+
+        const sortedEntries = _.sortBy(_.entries(groupings), '0');
+
+        const contents = [];
+
+        for (const [sortKey, tasks] of sortedEntries) {
+            const [cid, aid] = sortKey.split(' ');
+
+            if (cid || aid) {
+                const items = [];
+                const colors = [];
+
+                if (cid) {
+                    const course = this.props.scheduleSelectors.baseSelectors.courses.selectById(cid);
+
+                    if (course) {
+                        items.push(course.title);
+                        colors.push(course.color);
+                    }
+                }
+
+                if (aid) {
+                    const assignment = this.props.assignmentSelectors.selectById(aid);
+
+                    if (assignment) {
+                        items.push(assignment.title);
+                        colors.push('textPrimary');
+                    }
+                }
+
+                contents.push(
+                    <ListSubheader key={sortKey} className={styles.subheader} items={items} colors={colors} />
+                );
+            }
+
+            contents.push(
+                ...tasks.map(({ tid }) => <TaskCell className={styles.cell} key={tid} tid={tid} disableActions />)
+            );
+        }
+
+        return (
+            <React.Fragment>
+                {this.secondaryHeader('Tasks')}
+                {contents}
+            </React.Fragment>
         );
     }
 
     render() {
         const groups = this.getRelevantData();
 
-        return _.get(this.state, 'listView', true) ? (
-            <List style={{ paddingTop: 0 }}>
-                {groups.map(([date, { sections, assignments, tasks }]) => {
-                    return (
-                        <React.Fragment key={date.format()}>
-                            <ListSubheader style={{ background: colors.grey[300] }}>
-                                {dateUtils.humanReadableDate(date)}
-                            </ListSubheader>
-                            {sections.length > 0 && this.secondaryHeader('SCHEDULE')}
-                            {sections.map(({ sid }) => (
-                                <OverviewSectionCell key={sid} sid={sid} />
-                            ))}
-                            {assignments.length > 0 && this.secondaryHeader('ASSIGNMENTS')}
-                            {assignments.map(({ aid }) => (
-                                <AssignmentCell key={aid} aid={aid} />
-                            ))}
-                            {tasks.length > 0 && this.secondaryHeader('TASKS')}
-                            {tasks.map(({ tid }) => (
-                                <TaskCell key={tid} tid={tid} />
-                            ))}
-                        </React.Fragment>
-                    );
-                })}
-            </List>
-        ) : (
-            <OverviewWeekly />
+        return (
+            <div className="scrollable-list">
+                <div className={`scroll-view ${styles.overviewList}`}>
+                    <List className={styles.listContent}>
+                        {groups.map(([date, { sections, assignments, tasks }]) => {
+                            const isToday = dateUtils.humanReadableDate(date) === 'Today';
+
+                            return (
+                                <div className={styles.section} key={date.format()}>
+                                    <ListHeader
+                                        title={dateUtils.humanReadableDate(date)}
+                                        className={styles.header}
+                                        isBig={isToday}
+                                    />
+                                    {this._scheduleOverview(sections)}
+                                    {this._assignmentsOverview(assignments)}
+                                    {this._tasksOverview(tasks)}
+                                </div>
+                            );
+                        })}
+                    </List>
+                </div>
+            </div>
         );
     }
 }
