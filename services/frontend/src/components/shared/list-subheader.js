@@ -7,18 +7,21 @@ import BreadcrumbsLike from './breadcrumbs-like';
 import Typography from './typography';
 
 // eslint-disable-next-line no-unused-vars
-const ListSubheader = ({ items = [], colors = [], isBig = false, className, disableSeparator = false, ...rest }) => (
-    <BreadcrumbsLike
-        classes={{ root: clsx(styles.listHeader, className) }}
-        variant={isBig ? undefined : 'list-heading'}
-        sections={items}
-        colors={colors}
-        separator={color => (
-            <Typography color={color} className={styles.chevron}>
-                <ChevronRightIcon style={{ color: 'inherit', fontSize: '1.2rem' }} />
-            </Typography>
-        )}
-    />
+const ListSubheader = ({ items = [], colors = [], isBig = false, className, showHorizontalDivider, ...rest }) => (
+    <div className={clsx(styles.root, className)}>
+        <BreadcrumbsLike
+            classes={{ root: styles.listHeader }}
+            variant={isBig ? undefined : 'list-heading'}
+            sections={items}
+            colors={colors}
+            separator={color => (
+                <Typography color={color} className={styles.chevron}>
+                    <ChevronRightIcon style={{ color: 'inherit', fontSize: '1.2rem' }} />
+                </Typography>
+            )}
+        />
+        {showHorizontalDivider && <div className={styles.horizontalLine} />}
+    </div>
 );
 
 ListSubheader.propTypes = {
@@ -26,7 +29,7 @@ ListSubheader.propTypes = {
     colors: PropTypes.arrayOf(PropTypes.string).isRequired,
     isBig: PropTypes.bool,
     className: PropTypes.string,
-    disableSeparator: PropTypes.bool,
+    showHorizontalDivider: PropTypes.bool,
 };
 
 export default ListSubheader;

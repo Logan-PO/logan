@@ -6,8 +6,23 @@
     align-items: stretch;
     justify-content: stretch;
 
-    .list {
-        flex-grow: 0;
-        width: 300px;
+    .divider {
+        display: inline-block;
+        background: #e5e5e5;
+        width: 1px;
+        margin: 18px 0;
+    }
+
+    .list-container {
+        display: inline-block;
+        width: 50%;
+        height: 100%;
+    }
+
+    .editor-container {
+        width: 50%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
 }
