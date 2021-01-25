@@ -116,6 +116,7 @@ class CourseEditor extends Editor {
                                         content={
                                             <TextInput
                                                 fullWidth
+                                                placeholder="None"
                                                 value={_.get(this.state.course, 'nickname', '')}
                                                 onChange={this.handleChange.bind(this, 'nickname')}
                                             />
