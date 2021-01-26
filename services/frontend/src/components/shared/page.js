@@ -29,7 +29,7 @@ class Page extends React.Component {
     render() {
         const theme = getCurrentTheme();
 
-        // Insert theme colors as CSS variables into the page wrapper's style, so they can be used by its children
+        // Insert theme colors as CSS variables into the body's style, so they can be used by its children
         const cssVariables = {
             '--color-primary': theme.palette.primary.main,
             '--color-primary-light': theme.palette.primary.light,
@@ -53,10 +53,19 @@ class Page extends React.Component {
             '--background-default': theme.palette.background.default,
         };
 
+        // Map cssVariables to an actual CSS string
+        const bodyProps = Object.entries(cssVariables)
+            .map(([prop, val]) => `  ${prop}: ${val};`)
+            .join('\n');
+
+        // Create a CSS definition for the body tag
+        const bodyStyle = `body {\n${bodyProps}\n}`;
+
         return (
-            <div className={styles.page} style={cssVariables}>
+            <div className={styles.page}>
                 <Helmet>
                     <title>Logan / {this.props.title}</title>
+                    <style data-meta="theme-colors">{bodyStyle}</style>
                 </Helmet>
                 <Sidebar currentPage={this.props.title} />
                 <div className={styles.rootContainer}>
