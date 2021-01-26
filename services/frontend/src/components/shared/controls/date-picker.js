@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { dateUtils } from '@logan/core';
 import { ButtonBase, Popover } from '@material-ui/core';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
-import { getCurrentTheme } from '../../../globals/theme';
 import Typography from '../typography';
 import ActionButton from './action-button';
 import styles from './date-picker.module.scss';
@@ -164,7 +163,6 @@ class DatePicker extends React.Component {
     render() {
         const { classes = {} } = this.props;
 
-        const theme = getCurrentTheme();
         const headerText = dateUtils.toDate(this.state.shownMonthStart).format('MMM YYYY');
 
         const selectedDate = dateUtils.toDate(this.state.selectedDate);
@@ -186,15 +184,7 @@ class DatePicker extends React.Component {
                     elevation={0}
                     onClose={this.closePicker}
                 >
-                    <div
-                        className={clsx(styles.pickerContainer, classes.pickerContainer)}
-                        style={{
-                            '--primary-color': theme.palette.primary.main,
-                            '--primary-contrast': theme.palette.primary.contrastText,
-                            '--secondary-color': theme.palette.secondary.main,
-                            '--secondary-contrast': theme.palette.secondary.contrastText,
-                        }}
-                    >
+                    <div className={clsx(styles.pickerContainer, classes.pickerContainer)}>
                         <div className={styles.backdropContainer} onClick={this._handleBackdropClick}>
                             <div
                                 className={clsx(styles.backdrop, classes.backdrop)}
