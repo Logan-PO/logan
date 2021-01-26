@@ -29,8 +29,32 @@ class Page extends React.Component {
     render() {
         const theme = getCurrentTheme();
 
+        // Insert theme colors as CSS variables into the page wrapper's style, so they can be used by its children
+        const cssVariables = {
+            '--color-primary': theme.palette.primary.main,
+            '--color-primary-light': theme.palette.primary.light,
+            '--color-primary-dark': theme.palette.primary.dark,
+            '--color-primary-contrast-text': theme.palette.primary.contrastText,
+            '--color-secondary': theme.palette.secondary.main,
+            '--color-secondary-light': theme.palette.secondary.light,
+            '--color-secondary-dark': theme.palette.secondary.dark,
+            '--color-secondary-contrast-text': theme.palette.secondary.contrastText,
+            '--color-error': theme.palette.error.main,
+            '--color-error-light': theme.palette.error.light,
+            '--color-error-dark': theme.palette.error.dark,
+            '--color-error-contrast-text': theme.palette.error.contrastText,
+            '--color-warning': theme.palette.warning.main,
+            '--color-warning-light': theme.palette.warning.light,
+            '--color-warning-dark': theme.palette.warning.dark,
+            '--color-warning-contrast-text': theme.palette.warning.contrastText,
+            '--text-primary': theme.palette.text.primary,
+            '--text-secondary': theme.palette.text.secondary,
+            '--background-paper': theme.palette.background.paper,
+            '--background-default': theme.palette.background.default,
+        };
+
         return (
-            <div className={styles.page} style={{ background: theme.palette.primary.main }}>
+            <div className={styles.page} style={cssVariables}>
                 <Helmet>
                     <title>Logan / {this.props.title}</title>
                 </Helmet>
