@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import api from '@logan/fe-shared/utils/api';
 import { verifyIdToken, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
-import { LinearProgress } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import styles from './GoogleButton.module.scss';
 
 const clientID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
 
@@ -51,17 +52,19 @@ class GoogleBtn extends React.Component {
                     {...this.props.logoutProps}
                 />
             );
-        } else if (this.state.loggingIn) {
-            return <LinearProgress />;
         } else {
             return (
-                <GoogleLogin
-                    clientId={clientID}
-                    onSuccess={this.onLogin}
-                    onFailure={handleLoginFailure}
-                    cookiePolicy={'single_host_origin'}
-                    {...this.props.loginProps}
-                />
+                <div className={styles.container}>
+                    <GoogleLogin
+                        disabled={this.state.loggingIn}
+                        clientId={clientID}
+                        onSuccess={this.onLogin}
+                        onFailure={handleLoginFailure}
+                        cookiePolicy={'single_host_origin'}
+                        {...this.props.loginProps}
+                    />
+                    {this.state.loggingIn && <CircularProgress color="white" size={32} />}
+                </div>
             );
         }
     }
