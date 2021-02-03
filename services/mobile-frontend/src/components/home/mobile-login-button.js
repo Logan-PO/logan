@@ -7,11 +7,10 @@ import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/stor
 import PropTypes from 'prop-types';
 import { typographyStyles } from '../shared/typography';
 
-const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
+// const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
 const IOS_CLIENT_ID = '850674143860-mqhkuritdvkmiq53h9963rjmn5gamsgb.apps.googleusercontent.com';
-const CLIENT_ID = Platform.OS === 'ios' ? IOS_CLIENT_ID : ANDROID_CLIENT_ID;
+// const CLIENT_ID = Platform.OS === 'ios' ? IOS_CLIENT_ID : ANDROID_CLIENT_ID;
 const DEVICE = Platform.OS === 'ios' ? 'ios' : 'android';
-const config = { clientId: CLIENT_ID };
 
 class MobileLoginButton extends React.Component {
     constructor(props) {
@@ -20,6 +19,10 @@ class MobileLoginButton extends React.Component {
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
 
+        GoogleSignin.configure({
+            iosClientId: IOS_CLIENT_ID,
+        });
+
         this.state = {
             isLoggingIn: false,
         };
@@ -27,31 +30,25 @@ class MobileLoginButton extends React.Component {
 
     async signIn() {
         this.setState({ isLoggingIn: true });
-        //try {
+
+        try {
             await GoogleSignin.hasPlayServices();
-            const { type, idToken } = await GoogleSignin.signIn();
-            alert(type);
-        /*} catch (error) {
-            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                // user cancelled the login flow
-                alert('Cancel');
-            } else if (error.code === statusCodes.IN_PROGRESS) {
-                alert('Signin in progress');
-                // operation (f.e. sign in) is in progress already
-            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-                alert('PLAY_SERVICES_NOT_AVAILABLE');
-                // play services not available or outdated
-            } else if(error.code === statusCodes.SIGN_IN_REQUIRED){
-                alert('Some other Error');
-            }
-            else{
-                alert('boop')
-            }
-        }*/
-        if (type === 'success') {
+            const { idToken } = await GoogleSignin.signIn();
             await this.props.verifyIdToken({ idToken: idToken, clientType: DEVICE });
+        } catch (error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                console.log('Google Sign-in cancelled by user');
+                this.setState({ isLoggingIn: false });
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                console.log('Google Sign-in already in progress');
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                console.log('Play services not available');
+                this.setState({ isLoggingIn: false });
+            } else {
+                this.setState({ isLoggingIn: false });
+                throw error;
+            }
         }
-        this.setState({ isLoggingIn: false });
     }
 
     async signOut() {
@@ -79,7 +76,7 @@ class MobileLoginButton extends React.Component {
                     <GoogleSigninButton
                         style={{ width: 192, height: 48 }}
                         size={GoogleSigninButton.Size.Wide}
-                        color={GoogleSigninButton.Color.Dark}
+                        color={GoogleSigninButton.Color.Light}
                         onPress={this.signIn}
                     />
                 );
