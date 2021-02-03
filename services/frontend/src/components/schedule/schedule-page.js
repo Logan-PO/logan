@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { setShouldGoTo, getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { Page } from '../shared';
+import EmptySticker from '../shared/displays/empty-sticker';
 import TermsList from './terms-list';
 import TermChildrenList from './term-children-list';
 import SectionsList from './sections-list';
@@ -108,15 +109,48 @@ class SchedulePage extends React.Component {
         });
     }
 
+    listToDisplay() {
+        if (this.state.selectedSid) {
+            return (
+                <SectionsList
+                    cid={this.state.selectedCid}
+                    selectedSid={this.state.selectedSid}
+                    onSectionSelected={this.onSectionSelected}
+                    onBackPressed={() => this.onCourseSelected(this.state.selectedCid)}
+                />
+            );
+        } else if (this.state.selectedCid || this.state.selectedHid) {
+            return (
+                <TermChildrenList
+                    tid={this.state.selectedTid}
+                    selectedId={this.state.selectedCid || this.state.selectedHid}
+                    onCourseSelected={this.onCourseSelected}
+                    onHolidaySelected={this.onHolidaySelected}
+                    onBackPressed={() => this.onTermSelected(this.state.selectedTid)}
+                />
+            );
+        } else {
+            return <TermsList selectedTid={this.state.selectedTid} onTermSelected={this.onTermSelected} />;
+        }
+    }
+
     editorToDisplay() {
         if (this.state.selectedSid) {
             return <SectionEditor sid={this.state.selectedSid} />;
         } else if (this.state.selectedCid) {
-            return <CourseEditor cid={this.state.selectedCid} />;
+            return <CourseEditor cid={this.state.selectedCid} onSelectSection={this.onSectionSelected} />;
         } else if (this.state.selectedHid) {
             return <HolidayEditor hid={this.state.selectedHid} />;
+        } else if (this.state.selectedTid) {
+            return (
+                <TermEditor
+                    tid={this.state.selectedTid}
+                    onSelectCourse={this.onCourseSelected}
+                    onSelectHoliday={this.onHolidaySelected}
+                />
+            );
         } else {
-            return <TermEditor tid={this.state.selectedTid} />;
+            return <EmptySticker message="Nothing selected" />;
         }
     }
 
@@ -124,25 +158,9 @@ class SchedulePage extends React.Component {
         return (
             <Page title="Schedule">
                 <div className={styles.schedulePage}>
-                    <div className={styles.list}>
-                        <TermsList selectedTid={this.state.selectedTid} onTermSelected={this.onTermSelected} />
-                    </div>
-                    <div className={styles.list}>
-                        <TermChildrenList
-                            tid={this.state.selectedTid}
-                            selectedId={this.state.selectedCid || this.state.selectedHid}
-                            onCourseSelected={this.onCourseSelected}
-                            onHolidaySelected={this.onHolidaySelected}
-                        />
-                    </div>
-                    <div className={styles.list}>
-                        <SectionsList
-                            cid={this.state.selectedCid}
-                            selectedSid={this.state.selectedSid}
-                            onSectionSelected={this.onSectionSelected}
-                        />
-                    </div>
-                    {this.editorToDisplay()}
+                    <div className={styles.listContainer}>{this.listToDisplay()}</div>
+                    <div className={styles.divider} />
+                    <div className={styles.editorContainer}>{this.editorToDisplay()}</div>
                 </div>
             </Page>
         );

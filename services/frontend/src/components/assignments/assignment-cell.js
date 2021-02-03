@@ -1,12 +1,13 @@
 import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { ListItem, ListItemText, ListItemSecondaryAction, IconButton, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '@logan/fe-shared/store/assignments';
-import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
-import { CourseLabel } from '../shared/displays';
+import Typography from '../shared/typography';
+import styles from './assignment-cell.module.scss';
 
 class AssignmentCell extends React.Component {
     constructor(props) {
@@ -35,43 +36,44 @@ class AssignmentCell extends React.Component {
     }
 
     render() {
-        const course = this.props.getCourse(_.get(this.state.assignment, 'cid'));
+        const { selected, className } = this.props;
+        const { assignment = {} } = this.state;
 
         return (
-            <div className="list-cell">
-                <ListItem button selected={this.props.selected} onClick={this.select}>
-                    <ListItemText
-                        primary={
-                            <React.Fragment>
-                                {course && (
-                                    <div className="cell-upper-label">
-                                        <CourseLabel cid={course.cid} />
-                                    </div>
-                                )}
-                                <div>{_.get(this.state, 'assignment.title')}</div>
-                            </React.Fragment>
-                        }
-                        secondary={_.get(this.state, 'assignment.description')}
-                    />
-                    <ListItemSecondaryAction className="actions">
-                        {this.props.onDelete && (
-                            <Tooltip title="Delete">
-                                <IconButton edge="end" onClick={this.deleted}>
-                                    <DeleteIcon color="error" />
-                                </IconButton>
-                            </Tooltip>
-                        )}
-                    </ListItemSecondaryAction>
-                </ListItem>
+            <div
+                className={clsx('list-cell', styles.cell, className, selected && styles.selected)}
+                onClick={this.select}
+            >
+                <div className={styles.content}>
+                    <Typography>{assignment.title}</Typography>
+                    {assignment.description && (
+                        <Typography variant="body2" color="textSecondary">
+                            {assignment.description}
+                        </Typography>
+                    )}
+                </div>
+                <div className={styles.rightContent}>
+                    <div className={styles.actionsPriorityWrapper}>
+                        <div className="actions">
+                            {this.props.onDelete && (
+                                <Tooltip title="Delete">
+                                    <IconButton size="small" className={styles.action} onClick={this.deleted}>
+                                        <DeleteIcon fontSize="small" color="error" />
+                                    </IconButton>
+                                </Tooltip>
+                            )}
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
 }
 AssignmentCell.propTypes = {
+    className: PropTypes.string,
     aid: PropTypes.string,
     updateAssignmentLocal: PropTypes.func,
     selectAssignmentFromStore: PropTypes.func,
-    getCourse: PropTypes.func,
     selected: PropTypes.bool,
     onSelect: PropTypes.func,
     onDelete: PropTypes.func,
@@ -80,7 +82,6 @@ AssignmentCell.propTypes = {
 const mapStateToProps = state => {
     return {
         selectAssignmentFromStore: getAssignmentsSelectors(state.assignments).selectById,
-        getCourse: getScheduleSelectors(state.schedule).baseSelectors.courses.selectById,
     };
 };
 

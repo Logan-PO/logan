@@ -90,7 +90,7 @@ class TaskCell extends React.Component {
     }
 
     render() {
-        const { selected } = this.props;
+        const { selected, disableActions } = this.props;
         const { task = {} } = this.state;
 
         const selectedColor = colorForValue(task.priority);
@@ -129,25 +129,27 @@ class TaskCell extends React.Component {
                             ))}
                         </div>
                     )}
-                    <div className={styles.actionsPriorityWrapper}>
-                        <PriorityDisplay priority={task.priority} className={styles.priorityDisplay} />
-                        <div className="actions">
-                            {shouldShowMoveToToday && (
-                                <Tooltip title="Move to today" className={styles.action} onClick={this.moveToToday}>
-                                    <IconButton size="small">
-                                        <TodayIcon fontSize="small" />
-                                    </IconButton>
-                                </Tooltip>
-                            )}
-                            {this.props.onDelete && (
-                                <Tooltip title="Delete">
-                                    <IconButton size="small" className={styles.action} onClick={this.deleted}>
-                                        <DeleteIcon fontSize="small" color="error" />
-                                    </IconButton>
-                                </Tooltip>
-                            )}
+                    {!disableActions && (
+                        <div className={styles.actionsPriorityWrapper}>
+                            <PriorityDisplay priority={task.priority} className={styles.priorityDisplay} />
+                            <div className="actions">
+                                {shouldShowMoveToToday && (
+                                    <Tooltip title="Move to today" className={styles.action} onClick={this.moveToToday}>
+                                        <IconButton size="small">
+                                            <TodayIcon fontSize="small" />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
+                                {this.props.onDelete && (
+                                    <Tooltip title="Delete">
+                                        <IconButton size="small" className={styles.action} onClick={this.deleted}>
+                                            <DeleteIcon fontSize="small" color="error" />
+                                        </IconButton>
+                                    </Tooltip>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         );
@@ -167,6 +169,7 @@ TaskCell.propTypes = {
     onSelect: PropTypes.func,
     onDelete: PropTypes.func,
     setShouldGoToTask: PropTypes.func,
+    disableActions: PropTypes.bool,
 };
 
 const mapStateToProps = state => {

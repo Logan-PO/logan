@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
 import { colors } from '@material-ui/core';
@@ -187,6 +188,9 @@ class HomePage extends React.Component {
                 className={styles.homePage}
                 style={{ background: colors.teal[500], '--headings-family': headingsFontFamily }}
             >
+                <Helmet>
+                    <title>Logan / Home</title>
+                </Helmet>
                 {sections.map(({ color, id, contents }) => (
                     <div key={id} id={id} className={styles.contentContainer} style={{ background: color }}>
                         {contents}

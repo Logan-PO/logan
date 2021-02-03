@@ -7,8 +7,8 @@ import Typography from '../typography';
 import styles from './color-picker.module.scss';
 import InputGroup from './input-group';
 
-const allValidColors = _.omit(muiColors, ['common']);
-const primaryColors = _.pick(allValidColors, [
+export const allValidColors = _.omit(muiColors, ['common']);
+export const primaryColors = _.pick(allValidColors, [
     'teal',
     'green',
     'lightGreen',

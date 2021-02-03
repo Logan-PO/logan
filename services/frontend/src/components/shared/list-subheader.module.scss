@@ -1,10 +1,16 @@
-
-.list-header {
+.root {
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  justify-content: stretch;
 
-  .chevron {
-    display: inline-flex;
+  .list-header {
+    display: flex;
+    align-items: center;
+    flex-grow: 0;
+
+    .chevron {
+      display: inline-flex;
+    }
   }
 
   .horizontal-line {
@@ -13,5 +19,6 @@
     flex-grow: 1;
     background: #e5e5e5;
     border-radius: 0.5px;
+    margin-left: 3px;
   }
 }
