@@ -128,7 +128,7 @@ class TasksList extends React.Component {
                     const course = this.props.getCourse(cid);
 
                     if (course) {
-                        items.push(course.title);
+                        items.push(!_.isEmpty(course.nickname) ? course.nickname : course.title);
                         colors.push(course.color);
                     }
                 }
