@@ -70,9 +70,9 @@ function readableDueDate(dueDate, forSentence = false) {
 }
 
 // Constants
-const DB_DATE_FORMAT = 'YYYY-MM-DD';
+const DB_DATE_FORMAT = 'YYYY-M-DD';
 const DB_TIME_FORMAT = 'HH:mm';
-const DB_DATETIME_FORMAT = 'YYYY-MM-DD HH:mm';
+const DB_DATETIME_FORMAT = 'YYYY-M-D HH:mm';
 
 function toDate(input) {
     return dayjs(input, DB_DATE_FORMAT);
