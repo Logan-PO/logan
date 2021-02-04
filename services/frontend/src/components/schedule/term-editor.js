@@ -35,6 +35,13 @@ const {
     constants: { DB_DATE_FORMAT },
 } = dateUtils;
 
+function noProp(fn) {
+    return (event, ...otherProps) => {
+        event.stopPropagation();
+        fn(event, ...otherProps);
+    };
+}
+
 class TermEditor extends Editor {
     constructor(props) {
         super(props, { id: 'tid', entity: 'term' });
@@ -68,18 +75,6 @@ class TermEditor extends Editor {
         }
     }
 
-    _selectCourse(event, cid) {
-        if (event.target.tagName === 'BUTTON') return; // Ignore clicks on actions within the cells
-
-        this.props.onSelectCourse(cid);
-    }
-
-    _selectHoliday(event, hid) {
-        if (event.target.tagName === 'BUTTON') return; // Ignore clicks on actions within the cells
-
-        this.props.onSelectHoliday(hid);
-    }
-
     renderCoursesList() {
         const courses = this.isEmpty() ? [] : this.props.getCoursesForTerm({ tid: this.props.tid });
 
@@ -92,7 +87,7 @@ class TermEditor extends Editor {
                             <div
                                 key={course.cid}
                                 className={clsx('list-item', listStyles.cell, editorStyles.smallerCell)}
-                                onClick={event => this._selectCourse(event, course.cid)}
+                                onClick={() => this.props.onSelectCourse(course.cid)}
                             >
                                 <div className={listStyles.swatch} style={{ background: course.color }} />
                                 <Typography>{course.title}</Typography>
@@ -102,7 +97,7 @@ class TermEditor extends Editor {
                                         <IconButton
                                             size="small"
                                             className="action"
-                                            onClick={() => this.props.deleteCourse(course)}
+                                            onClick={noProp(() => this.props.deleteCourse(course))}
                                         >
                                             <DeleteIcon fontSize="small" color="error" />
                                         </IconButton>
@@ -136,7 +131,7 @@ class TermEditor extends Editor {
                             <div
                                 key={holiday.hid}
                                 className={clsx('list-item', listStyles.cell, editorStyles.smallerCell)}
-                                onClick={event => this._selectHoliday(event, holiday.hid)}
+                                onClick={() => this.props.onSelectHoliday(holiday.hid)}
                             >
                                 <Typography>{holiday.title}</Typography>
                                 <ChevronRightIcon fontSize="small" />
@@ -145,7 +140,7 @@ class TermEditor extends Editor {
                                         <IconButton
                                             size="small"
                                             className="action"
-                                            onClick={() => this.props.deleteHoliday(holiday)}
+                                            onClick={noProp(() => this.props.deleteHoliday(holiday))}
                                         >
                                             <DeleteIcon fontSize="small" color="error" />
                                         </IconButton>
