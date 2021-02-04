@@ -70,7 +70,7 @@ function readableDueDate(dueDate, forSentence = false) {
 }
 
 // Constants
-const DB_DATE_FORMAT = 'YYYY-M-DD';
+const DB_DATE_FORMAT = 'YYYY-M-D';
 const DB_TIME_FORMAT = 'HH:mm';
 const DB_DATETIME_FORMAT = 'YYYY-M-D HH:mm';
 
