@@ -131,7 +131,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.loganandroid"
+        applicationId 'com.logan.mobilefrontend'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

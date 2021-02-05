@@ -7,17 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:850674143860:android:cbda9005c4b74d88a0b721",
+        "mobilesdk_app_id": "1:850674143860:android:f4cd40f7a5b4cc47a0b721",
         "android_client_info": {
-          "package_name": "com.loganandroid"
+          "package_name": "com.logan.mobilefrontend"
         }
       },
       "oauth_client": [
         {
-          "client_id": "850674143860-08mgv746qubebp877d5r5jf7es25lth1.apps.googleusercontent.com",
+          "client_id": "850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.loganandroid",
+            "package_name": "com.logan.mobilefrontend",
             "certificate_hash": "6a4801493c9fbfad9fab90a9cdbc13ec46f05a79"
           }
         },
@@ -42,7 +42,7 @@
               "client_id": "850674143860-mqhkuritdvkmiq53h9963rjmn5gamsgb.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "host.exp.exponent"
+                "bundle_id": "com.logan.mobilefrontend"
               }
             }
           ]
