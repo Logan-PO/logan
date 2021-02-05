@@ -7,7 +7,7 @@ import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/stor
 import PropTypes from 'prop-types';
 import { typographyStyles } from '../shared/typography';
 
-const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
+const ANDROID_CLIENT_ID = '850674143860-3sg0du8iqknfanigev1kl65c35isb1s2.apps.googleusercontent.com';
 const IOS_CLIENT_ID = '850674143860-mqhkuritdvkmiq53h9963rjmn5gamsgb.apps.googleusercontent.com';
 const WEB_CLIENT_ID = '850674143860-fjg7l5bmbs7o6v7lp35a4nfqs4guc6o5.apps.googleusercontent.com';
 const DEVICE = Platform.OS === 'ios' ? 'ios' : 'android';
