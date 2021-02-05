@@ -197,7 +197,12 @@ export class OverviewScheduleList extends React.Component {
                 }
 
                 contents.push(
-                    <ListSubheader key={sortKey} classes={{ root: styles.subheader }} items={items} colors={colors} />
+                    <ListSubheader
+                        key={sortKey}
+                        classes={{ root: styles.subheader, breadcrumbs: styles.breadcrumbs, chevron: styles.chevron }}
+                        items={items}
+                        colors={colors}
+                    />
                 );
             }
 

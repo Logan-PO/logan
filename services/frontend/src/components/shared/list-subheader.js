@@ -14,7 +14,7 @@ const ListSubheader = ({ items = [], colors = [], isBig = false, classes = {}, s
             sections={items}
             colors={colors}
             separator={color => (
-                <Typography color={color} className={styles.chevron}>
+                <Typography color={color} className={clsx(styles.chevron, classes.chevron)}>
                     <ChevronRightIcon style={{ color: 'inherit', fontSize: '1.2rem' }} />
                 </Typography>
             )}
@@ -30,6 +30,7 @@ ListSubheader.propTypes = {
     classes: PropTypes.exact({
         root: PropTypes.string,
         breadcrumbs: PropTypes.string,
+        chevron: PropTypes.string,
         divider: PropTypes.string,
     }),
     showHorizontalDivider: PropTypes.bool,
