@@ -88,9 +88,7 @@ class Home extends React.Component {
                 <Typography style={{ marginBottom: 30 }} variant="h3" color="white">
                     Logan
                 </Typography>
-                <View>
-                    <MobileLoginButton mode="contained" color="white" />
-                </View>
+                <MobileLoginButton mode="contained" color="white" />
                 <View style={{ flex: 1 }} />
                 <NavigationButton
                     mode="text"

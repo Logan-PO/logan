@@ -1,4 +1,4 @@
-package com.loganandroid.generated;
+package com.logan.mobilefrontend.generated;
 
 import java.util.Arrays;
 import java.util.List;

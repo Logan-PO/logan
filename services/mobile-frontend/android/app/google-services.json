@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "850674143860",
+    "project_id": "logan-289521",
+    "storage_bucket": "logan-289521.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:850674143860:android:db819fa89aaa240ca0b721",
+        "android_client_info": {
+          "package_name": "com.logan.mobilefrontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "850674143860-3sg0du8iqknfanigev1kl65c35isb1s2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.logan.mobilefrontend",
+            "certificate_hash": "4668d1a6e16d6e91c944891684339696a15ea565"
+          }
+        },
+        {
+          "client_id": "850674143860-fjg7l5bmbs7o6v7lp35a4nfqs4guc6o5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFs9SNrDMbUOh7BCZXyUd0ta8MWIfuSGI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "850674143860-fjg7l5bmbs7o6v7lp35a4nfqs4guc6o5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "850674143860-mqhkuritdvkmiq53h9963rjmn5gamsgb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.logan.mobilefrontend"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

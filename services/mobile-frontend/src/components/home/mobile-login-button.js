@@ -1,17 +1,16 @@
 import React from 'react';
 import { Platform, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
-import * as Google from 'expo-google-app-auth';
+import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import { connect } from 'react-redux';
 import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
 import PropTypes from 'prop-types';
 import { typographyStyles } from '../shared/typography';
 
-const ANDROID_CLIENT_ID = '850674143860-73rdeqg9n24do0on8ghbklcpgjft1c7v.apps.googleusercontent.com';
+const ANDROID_CLIENT_ID = '850674143860-3sg0du8iqknfanigev1kl65c35isb1s2.apps.googleusercontent.com';
 const IOS_CLIENT_ID = '850674143860-mqhkuritdvkmiq53h9963rjmn5gamsgb.apps.googleusercontent.com';
-const CLIENT_ID = Platform.OS === 'ios' ? IOS_CLIENT_ID : ANDROID_CLIENT_ID;
+const WEB_CLIENT_ID = '850674143860-fjg7l5bmbs7o6v7lp35a4nfqs4guc6o5.apps.googleusercontent.com';
 const DEVICE = Platform.OS === 'ios' ? 'ios' : 'android';
-const config = { clientId: CLIENT_ID };
 
 class MobileLoginButton extends React.Component {
     constructor(props) {
@@ -20,6 +19,12 @@ class MobileLoginButton extends React.Component {
         this.signIn = this.signIn.bind(this);
         this.signOut = this.signOut.bind(this);
 
+        GoogleSignin.configure({
+            iosClientId: IOS_CLIENT_ID,
+            androidClientId: ANDROID_CLIENT_ID,
+            webClientId: WEB_CLIENT_ID,
+        });
+
         this.state = {
             isLoggingIn: false,
         };
@@ -27,11 +32,25 @@ class MobileLoginButton extends React.Component {
 
     async signIn() {
         this.setState({ isLoggingIn: true });
-        const { type, idToken } = await Google.logInAsync(config);
-        if (type === 'success') {
+
+        try {
+            await GoogleSignin.hasPlayServices();
+            const { idToken } = await GoogleSignin.signIn();
             await this.props.verifyIdToken({ idToken: idToken, clientType: DEVICE });
+        } catch (error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                console.log('Google Sign-in cancelled by user');
+                this.setState({ isLoggingIn: false });
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                console.log('Google Sign-in already in progress');
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                console.log('Play services not available');
+                this.setState({ isLoggingIn: false });
+            } else {
+                this.setState({ isLoggingIn: false });
+                throw error;
+            }
         }
-        this.setState({ isLoggingIn: false });
     }
 
     async signOut() {
@@ -56,15 +75,12 @@ class MobileLoginButton extends React.Component {
                 return <ActivityIndicator animating={true} color="white" size="large" />;
             } else {
                 return (
-                    <Button
-                        labelStyle={typographyStyles.button}
-                        style={this.props.style}
-                        color={this.props.color}
-                        mode={this.props.mode}
+                    <GoogleSigninButton
+                        style={{ width: 192, height: 48 }}
+                        size={GoogleSigninButton.Size.Wide}
+                        color={GoogleSigninButton.Color.Light}
                         onPress={this.signIn}
-                    >
-                        Login with Google
-                    </Button>
+                    />
                 );
             }
         }

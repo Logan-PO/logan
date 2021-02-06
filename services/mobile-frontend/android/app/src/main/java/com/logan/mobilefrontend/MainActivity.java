@@ -1,4 +1,4 @@
-package com.loganandroid;
+package com.logan.mobilefrontend;
 
 import android.os.Bundle;
 

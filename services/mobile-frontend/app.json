@@ -1,13 +1,13 @@
 {
-  "name": "mobile-frontend",
-  "displayName": "mobile-frontend",
+  "name": "Logan",
+  "displayName": "Logan",
   "expo": {
-    "name": "mobile-frontend",
-    "slug": "mobile-frontend",
+    "name": "com.loganandroid",
+    "slug": "com.loganandroid",
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
-    ],
-    "icon": "ios-icon.png"
-  }
+    ]
+  },
+  "icon": "ios-icon.png"
 }
