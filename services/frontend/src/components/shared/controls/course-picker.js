@@ -29,8 +29,9 @@ class CoursePicker extends React.Component {
         );
 
         for (const term of terms.filter(term => term.courses.length)) {
+            console.log(term);
             items.push(
-                <ListSubheader key={term.tid} className={styles.menuTitle}>
+                <ListSubheader key={term.tid} className={styles.menuTitle} style={{ textDecorationLine: 'underline' }}>
                     {term.title}
                 </ListSubheader>
             );
