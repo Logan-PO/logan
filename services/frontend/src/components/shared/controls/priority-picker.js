@@ -35,35 +35,37 @@ class PriorityPicker extends React.Component {
         const marks = _.entries(priorities).map(([label, [value]]) => ({ value, label }));
 
         return (
-            <InputGroup
-                className="priority-group"
-                label="Priority"
-                icon={PriorityIcon}
-                content={
-                    <Slider
-                        className="priority-slider"
-                        style={{ width: '400px' }}
-                        track={false}
-                        name="priority"
-                        classes={{
-                            root: 'root',
-                            track: 'track',
-                            rail: 'track',
-                            thumb: 'thumb',
-                            mark: 'mark',
-                            markLabel: 'mark-label',
-                            markLabelActive: 'active',
-                        }}
-                        min={-2}
-                        max={2}
-                        step={1}
-                        value={_.get(this.props, 'value', 0)}
-                        onChange={this._internalChange}
-                        marks={marks}
-                        ThumbComponent={CustomThumb}
-                    />
-                }
-            />
+            <div className="priority-picker-container">
+                <InputGroup
+                    className="priority-group"
+                    label="Priority"
+                    icon={PriorityIcon}
+                    content={
+                        <Slider
+                            className="priority-slider"
+                            style={{ width: '400px' }}
+                            track={false}
+                            name="priority"
+                            classes={{
+                                root: 'root',
+                                track: 'track',
+                                rail: 'track',
+                                thumb: 'thumb',
+                                mark: 'mark',
+                                markLabel: 'mark-label',
+                                markLabelActive: 'active',
+                            }}
+                            min={-2}
+                            max={2}
+                            step={1}
+                            value={_.get(this.props, 'value', 0)}
+                            onChange={this._internalChange}
+                            marks={marks}
+                            ThumbComponent={CustomThumb}
+                        />
+                    }
+                />
+            </div>
         );
     }
 }
