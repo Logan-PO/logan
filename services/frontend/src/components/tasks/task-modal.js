@@ -94,6 +94,8 @@ class TaskModal extends React.Component {
 
     handleChange(prop, e) {
         const task = this.state.task;
+        console.log(_.get(_.get(this.state.task, 'aid'), 'dueDate'));
+        console.log(_.get(this.state.task, 'aid'));
 
         if (prop === 'dueDate' || prop === 'tags') {
             task[prop] = e;
@@ -189,7 +191,7 @@ class TaskModal extends React.Component {
                         )}
                         <DueDatePicker
                             entityId={_.get(this.state.task, 'tid')}
-                            value={_.get(this.state.task, 'dueDate')}
+                            value={isSubtask ? _.get(relatedAssignment, 'dueDate') : _.get(this.state.task, 'dueDate')}
                             onChange={this.handleChange.bind(this, 'dueDate')}
                         />
                         <TagEditor
