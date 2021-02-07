@@ -94,8 +94,6 @@ class TaskModal extends React.Component {
 
     handleChange(prop, e) {
         const task = this.state.task;
-        console.log(_.get(_.get(this.state.task, 'aid'), 'dueDate'));
-        console.log(_.get(this.state.task, 'aid'));
 
         if (prop === 'dueDate' || prop === 'tags') {
             task[prop] = e;
