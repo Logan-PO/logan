@@ -40,7 +40,7 @@ const TextButton = ({ classes = {}, style, IconComponent, children, color = 'pri
                 ...style,
             }}
             disableRipple
-            {...rest}
+            {..._.omit(rest, 'dispatch')}
         >
             {IconComponent && (
                 <IconComponent

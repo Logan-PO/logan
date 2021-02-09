@@ -96,7 +96,12 @@ class ActionButton extends React.Component {
         }
 
         return (
-            <ButtonBase style={buttonStyle} className={`${buttonClass} ${className}`} ref={this.buttonRef} {...rest}>
+            <ButtonBase
+                style={buttonStyle}
+                className={`${buttonClass} ${className}`}
+                ref={this.buttonRef}
+                {..._.omit(rest, 'dispatch')}
+            >
                 <Typography style={typographyStyle} variant={typographyVariant}>
                     {children}
                 </Typography>
