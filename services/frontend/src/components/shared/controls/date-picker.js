@@ -119,7 +119,11 @@ class DatePicker extends React.Component {
             currentDays.push(this._generateDay(runner, isToday, isCurrentMonth, isSelected));
 
             if (runner.day() === 6) {
-                weeks.push(<div className={styles.calendarWeek}>{currentDays}</div>);
+                weeks.push(
+                    <div key={runner.format()} className={styles.calendarWeek}>
+                        {currentDays}
+                    </div>
+                );
                 currentDays = [];
             }
 
@@ -138,7 +142,7 @@ class DatePicker extends React.Component {
         });
 
         return (
-            <ButtonBase className={className} onClick={() => this._selectDay(date)}>
+            <ButtonBase key={date.format()} className={className} onClick={() => this._selectDay(date)}>
                 <Typography variant="body2">{date.date()}</Typography>
             </ButtonBase>
         );
