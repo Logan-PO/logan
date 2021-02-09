@@ -105,7 +105,7 @@ class DueDatePicker extends React.Component {
 
     render() {
         const lastDueDate = _.get(this.state, 'lastDueDate');
-        const dateValue = lastDueDate ? dayjs(lastDueDate) : null;
+        const dateValue = dayjs(lastDueDate);
 
         const theme = getCurrentTheme();
         const body2Height = theme.typography.body2.fontSize;
