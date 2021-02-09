@@ -57,7 +57,8 @@ class TaskModal extends React.Component {
     }
 
     componentWillOpen() {
-        const newTitle = this.props.aid ? 'New subtask' : 'New task';
+        const relatedAssignment = this.props.aid ? this.props.getAssignment(this.props.aid) : undefined;
+        const newTitle = relatedAssignment ? 'New subtask' : 'New task';
 
         this.setState({
             fakeId: Math.random().toString(),
@@ -67,7 +68,7 @@ class TaskModal extends React.Component {
             task: {
                 aid: this.props.aid,
                 title: newTitle,
-                dueDate: dayjs().format(DB_DATE_FORMAT),
+                dueDate: this.props.aid ? _.get(relatedAssignment, 'dueDate') : dayjs().format(DB_DATE_FORMAT),
                 priority: 0,
                 tags: [],
             },
@@ -111,7 +112,6 @@ class TaskModal extends React.Component {
     render() {
         const isSubtask = !!this.props.aid;
         const relatedAssignment = isSubtask ? this.props.getAssignment(this.props.aid) : undefined;
-
         const cid = relatedAssignment ? relatedAssignment.cid : this.state.task.cid;
         const course = this.props.getCourse(cid);
 
@@ -189,7 +189,7 @@ class TaskModal extends React.Component {
                         )}
                         <DueDatePicker
                             entityId={_.get(this.state.task, 'tid')}
-                            value={isSubtask ? _.get(relatedAssignment, 'dueDate') : _.get(this.state.task, 'dueDate')}
+                            value={_.get(this.state.task, 'dueDate')}
                             onChange={this.handleChange.bind(this, 'dueDate')}
                         />
                         <TagEditor
