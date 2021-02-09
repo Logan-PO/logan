@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popover from '@material-ui/core/Popover';
+import Tooltip from '@material-ui/core/Tooltip';
 import * as muiColors from '@material-ui/core/colors';
 import Typography from '../typography';
 import styles from './color-picker.module.scss';
@@ -123,13 +124,13 @@ class ColorPicker extends React.Component {
                         const className = `${styles.swatch} ${isSelected ? styles.selected : ''}`;
 
                         return (
-                            <div
-                                key={color}
-                                title={name}
-                                className={className}
-                                style={{ background: color }}
-                                onClick={isSelected ? undefined : this.selectColor.bind(this, color)}
-                            />
+                            <Tooltip key={color} title={name}>
+                                <div
+                                    className={className}
+                                    style={{ background: color }}
+                                    onClick={isSelected ? undefined : this.selectColor.bind(this, color)}
+                                />
+                            </Tooltip>
                         );
                     })}
                 </div>
