@@ -76,7 +76,10 @@ class ColorPicker extends React.Component {
 
     _updateBackdropSizeIfNecessary() {
         if (this.groupRef.current) {
-            if (this.state.backdropSize.width !== this.groupRef.current.offsetWidth) {
+            if (
+                this.state.backdropSize.width !== this.groupRef.current.offsetWidth ||
+                this.state.backdropSize.height !== this.groupRef.current.offsetHeight
+            ) {
                 this.setState({
                     backdropSize: {
                         width: this.groupRef.current.offsetWidth,
