@@ -7,7 +7,7 @@ import styles from './list-header.module.scss';
 
 const ListHeader = ({ title, detail, isBig = false, color = 'textPrimary', disableDivider, className, ...rest }) => {
     return (
-        <ListSubheader color={color} classes={{ root: clsx(styles.listHeader, className) }} disableGutters {...rest}>
+        <ListSubheader classes={{ root: clsx(styles.listHeader, className) }} disableGutters {...rest}>
             <Typography color={color} className={styles.title} variant={isBig ? 'h1' : 'h2'}>
                 {title}
             </Typography>

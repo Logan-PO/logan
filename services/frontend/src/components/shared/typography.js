@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Typography as MuiTypography } from '@material-ui/core';
 import { headingsFontFamily } from '../../globals/theme';
 
+const BUILTIN_COLORS = ['initial', 'inherit', 'primary', 'secondary', 'textPrimary', 'textSecondary', 'error'];
+
 const variants = {
     title: {
         fontFamily: headingsFontFamily,
@@ -51,21 +53,27 @@ const variants = {
     },
 };
 
-const Typography = ({ useHeaderFont = false, children, style, variant, ...props }) => {
+const Typography = ({ useHeaderFont = false, children, color, style, variant, ...rest }) => {
     const variantStyle = (variant && variants[variant]) || {};
     const customStyle = { display: 'flex', alignItems: 'center', userSelect: 'none', ...variantStyle, ...style };
     const muiVariant = variant && variants[variant] ? undefined : variant;
 
     if (useHeaderFont) customStyle.fontFamily = headingsFontFamily;
 
+    if (color && !BUILTIN_COLORS.includes(color)) {
+        customStyle.color = customStyle.color || color;
+        color = undefined;
+    }
+
     return (
-        <MuiTypography variant={muiVariant} style={customStyle} {...props}>
+        <MuiTypography color={color} variant={muiVariant} style={customStyle} {...rest}>
             {children}
         </MuiTypography>
     );
 };
 
 Typography.propTypes = {
+    color: PropTypes.string,
     useHeaderFont: PropTypes.bool,
     style: PropTypes.object,
     children: PropTypes.node,

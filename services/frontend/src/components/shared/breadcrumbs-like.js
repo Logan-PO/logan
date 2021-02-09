@@ -26,7 +26,7 @@ const BreadcrumbsLike = ({ variant = 'body1', colors = [], sections = [], classe
         }
 
         children.push(
-            <Typography className={classes.section} variant={variant} color={colors[i]} style={{ color: colors[i] }}>
+            <Typography className={classes.section} variant={variant} color={colors[i]}>
                 {sections[i]}
             </Typography>
         );
