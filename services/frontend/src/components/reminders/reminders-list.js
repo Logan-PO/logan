@@ -58,7 +58,7 @@ class RemindersList extends React.Component {
                                 classes={{ root: classes.addButton }}
                                 IconComponent={AddIcon}
                                 size="large"
-                                onClick={this.setReminderModalState.bind(this, 'create', true)}
+                                onClick={this.setReminderModalState.bind(this, 'create', true, undefined)}
                             >
                                 Add reminder
                             </TextButton>
@@ -69,7 +69,7 @@ class RemindersList extends React.Component {
                     open={this.state.reminderModalOpen}
                     mode={this.state.reminderModalMode}
                     rid={this.state.reminderToEdit}
-                    onClose={this.setReminderModalState.bind(this, 'create', false)}
+                    onClose={this.setReminderModalState.bind(this, 'create', false, undefined)}
                     entityType={this.props.entityType}
                     eid={this.props.eid}
                 />
