@@ -11,9 +11,10 @@ const BreadcrumbsLike = ({ variant = 'body1', colors = [], sections = [], classe
         if (i > 0) {
             children.push(
                 separator ? (
-                    separator(colors[i], sections[i])
+                    separator(colors[i], sections[i], i)
                 ) : (
                     <Typography
+                        key={`s${i}`}
                         className={classes.separator}
                         variant={variant}
                         color={colors[i]}
@@ -26,7 +27,7 @@ const BreadcrumbsLike = ({ variant = 'body1', colors = [], sections = [], classe
         }
 
         children.push(
-            <Typography className={classes.section} variant={variant} color={colors[i]}>
+            <Typography key={i} className={classes.section} variant={variant} color={colors[i]}>
                 {sections[i]}
             </Typography>
         );
@@ -48,7 +49,7 @@ BreadcrumbsLike.propTypes = {
     variant: PropTypes.string,
     colors: PropTypes.array,
     sections: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.node, PropTypes.string])),
-    separator: PropTypes.func, // (colors[i], sections[i]) -> separator element
+    separator: PropTypes.func, // (colors[i], sections[i], i) -> separator element
 };
 
 export default BreadcrumbsLike;

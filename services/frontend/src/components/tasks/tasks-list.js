@@ -142,7 +142,9 @@ class TasksList extends React.Component {
                     }
                 }
 
-                contents.push(<ListSubheader classes={{ root: styles.subheader }} items={items} colors={colors} />);
+                contents.push(
+                    <ListSubheader key={sortKey} classes={{ root: styles.subheader }} items={items} colors={colors} />
+                );
             }
 
             contents.push(
