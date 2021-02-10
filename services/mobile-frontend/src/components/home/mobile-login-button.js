@@ -9,8 +9,9 @@ import { typographyStyles } from '../shared/typography';
 
 const ANDROID_CLIENT_ID = '850674143860-3sg0du8iqknfanigev1kl65c35isb1s2.apps.googleusercontent.com';
 const IOS_CLIENT_ID = '850674143860-mqhkuritdvkmiq53h9963rjmn5gamsgb.apps.googleusercontent.com';
-const WEB_CLIENT_ID = '850674143860-fjg7l5bmbs7o6v7lp35a4nfqs4guc6o5.apps.googleusercontent.com';
 const DEVICE = Platform.OS === 'ios' ? 'ios' : 'android';
+const WEB_CLIENT_ID = '850674143860-fjg7l5bmbs7o6v7lp35a4nfqs4guc6o5.apps.googleusercontent.com';
+const CLIENT_ID = DEVICE === 'ios' ? IOS_CLIENT_ID : WEB_CLIENT_ID; //IOS wants its id to be the webID ?
 
 class MobileLoginButton extends React.Component {
     constructor(props) {
@@ -20,9 +21,8 @@ class MobileLoginButton extends React.Component {
         this.signOut = this.signOut.bind(this);
 
         GoogleSignin.configure({
-            iosClientId: IOS_CLIENT_ID,
             androidClientId: ANDROID_CLIENT_ID,
-            webClientId: WEB_CLIENT_ID,
+            webClientId: CLIENT_ID,
         });
 
         this.state = {

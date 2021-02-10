@@ -6,12 +6,13 @@ const auth = require('../../utils/auth');
 const requestValidator = require('../../utils/request-validator');
 
 async function verifyIdToken(idToken, clientType = 'web') {
-    const { clientId } = await auth.getClientCreds(clientType);
+    const { clientId: webClientId } = await auth.getClientCreds('web');
+    const { clientId: reqClientId } = await auth.getClientCreds(clientType);
 
-    const client = new OAuth2Client(clientId);
+    const client = new OAuth2Client(webClientId);
     const ticket = await client.verifyIdToken({
         idToken,
-        audience: clientId,
+        audience: reqClientId,
     });
 
     const { name, email } = ticket.getPayload();
