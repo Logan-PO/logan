@@ -13,7 +13,6 @@ const DEVICE = Platform.OS === 'ios' ? 'ios' : 'android';
 const WEB_CLIENT_ID = '850674143860-fjg7l5bmbs7o6v7lp35a4nfqs4guc6o5.apps.googleusercontent.com';
 const CLIENT_ID = DEVICE === 'ios' ? IOS_CLIENT_ID : WEB_CLIENT_ID; //IOS wants its id to be the webID ?
 
-
 class MobileLoginButton extends React.Component {
     constructor(props) {
         super(props);

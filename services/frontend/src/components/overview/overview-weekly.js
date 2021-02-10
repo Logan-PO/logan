@@ -178,7 +178,7 @@ class OverviewWeekly extends React.Component {
                             event: CalendarEvent,
                         }}
                         step={60} //how much is one slot worth (in min)
-                        timeslots={1}//How many time slots one cell is worth
+                        timeslots={1} //How many time slots one cell is worth
                         formats={{
                             dateFormat: date => {
                                 const day = dateUtils.dayjs(date);
