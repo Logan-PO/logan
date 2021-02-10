@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -19,7 +20,7 @@ const Fab = ({ children, onClick, style, ...rest }) => {
     }
 
     return (
-        <ButtonBase style={{ ...defaultStyle, ...style }} onClick={onClick} {...rest}>
+        <ButtonBase style={{ ...defaultStyle, ...style }} onClick={onClick} {..._.omit(rest, 'dispatch')}>
             {children}
         </ButtonBase>
     );

@@ -13,8 +13,8 @@ const ListSubheader = ({ items = [], colors = [], isBig = false, classes = {}, s
             variant={isBig ? 'list-heading-big' : 'list-heading'}
             sections={items}
             colors={colors}
-            separator={color => (
-                <Typography color={color} className={clsx(styles.chevron, classes.chevron)}>
+            separator={(color, sectionContent, index) => (
+                <Typography key={`s${index}`} color={color} className={clsx(styles.chevron, classes.chevron)}>
                     <ChevronRightIcon style={{ color: 'inherit', fontSize: '1.2rem' }} />
                 </Typography>
             )}
