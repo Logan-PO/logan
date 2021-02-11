@@ -65,6 +65,7 @@ export class OverviewScheduleList extends React.Component {
             );
         }
 
+        const now = dayjs();
         let runner = dayjs();
         let end = dayjs().add(7, 'days');
 
@@ -72,6 +73,15 @@ export class OverviewScheduleList extends React.Component {
             const sections = sectionsForDate(runner);
             const assignments = filterByDate(allAssignments, runner);
             const tasks = _.reject(filterByDate(allTasks, runner), 'complete');
+
+            // Remove any of today's sections that already occurred
+            if (runner.isSame(now, 'day')) {
+                for (let i = 0; i < sections.length; i++) {
+                    if (dateUtils.toTime(sections[i].endTime).isBefore(now)) {
+                        sections.splice(i--, 1);
+                    }
+                }
+            }
 
             if (!_.isEmpty(sections) || !_.isEmpty(assignments) || !_.isEmpty(tasks)) {
                 groups.push([runner, { sections, assignments, tasks }]);
