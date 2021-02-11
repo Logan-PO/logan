@@ -7,6 +7,7 @@ import { dateUtils } from '@logan/core';
 import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
+import { displayNameForCourse } from '@logan/fe-shared/utils/scheduling-utils';
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import ListHeader from '../shared/list-header';
@@ -149,12 +150,10 @@ export class OverviewScheduleList extends React.Component {
                     let subheader;
 
                     if (course) {
-                        const courseName = course.nickname && course.nickname !== '' ? course.nickname : course.title;
-
                         subheader = (
                             <ListSubheader
                                 classes={{ root: styles.subheader }}
-                                items={[courseName]}
+                                items={[displayNameForCourse(course)]}
                                 colors={[course.color]}
                             />
                         );
@@ -196,7 +195,7 @@ export class OverviewScheduleList extends React.Component {
                     const course = this.props.scheduleSelectors.baseSelectors.courses.selectById(cid);
 
                     if (course) {
-                        items.push(course.title);
+                        items.push(displayNameForCourse(course));
                         colors.push(course.color);
                     }
                 }
