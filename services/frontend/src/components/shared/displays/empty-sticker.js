@@ -11,6 +11,8 @@ class EmptySticker extends React.Component {
                 justify="center"
                 alignContent="center"
                 style={{
+                    padding: '3rem',
+                    textAlign: 'center',
                     width: '100%',
                     height: '100%',
                     color: colors.grey[500],

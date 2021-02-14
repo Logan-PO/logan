@@ -1,5 +1,10 @@
 import { dateUtils } from '@logan/core';
 
+export function displayNameForCourse(course) {
+    const nicknameValid = course.nickname && course.nickname.trim().length > 0;
+    return nicknameValid ? course.nickname : course.title;
+}
+
 export function appropriateTextColor(backgroundHex) {
     backgroundHex = backgroundHex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, (m, r, g, b) => r + r + g + g + b + b);
 

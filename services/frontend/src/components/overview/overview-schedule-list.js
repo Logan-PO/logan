@@ -7,10 +7,13 @@ import { dateUtils } from '@logan/core';
 import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { fetchTasks, getTasksSelectors } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
+import { displayNameForCourse } from '@logan/fe-shared/utils/scheduling-utils';
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import ListHeader from '../shared/list-header';
 import ListSubheader from '../shared/list-subheader';
+import { EmptySticker } from '../shared/displays';
+import Typography from '../shared/typography';
 import OverviewSectionCell from './overview-section-cell';
 import styles from './overview-schedule-list.module.scss';
 
@@ -63,6 +66,7 @@ export class OverviewScheduleList extends React.Component {
             );
         }
 
+        const now = dayjs();
         let runner = dayjs();
         let end = dayjs().add(7, 'days');
 
@@ -71,8 +75,19 @@ export class OverviewScheduleList extends React.Component {
             const assignments = filterByDate(allAssignments, runner);
             const tasks = _.reject(filterByDate(allTasks, runner), 'complete');
 
+            // Remove any of today's sections that already occurred
+            if (runner.isSame(now, 'day')) {
+                for (let i = 0; i < sections.length; i++) {
+                    if (dateUtils.toTime(sections[i].endTime).isBefore(now)) {
+                        sections.splice(i--, 1);
+                    }
+                }
+            }
+
             if (!_.isEmpty(sections) || !_.isEmpty(assignments) || !_.isEmpty(tasks)) {
                 groups.push([runner, { sections, assignments, tasks }]);
+            } else {
+                groups.push([runner, {}]);
             }
 
             runner = runner.add(1, 'day');
@@ -135,12 +150,10 @@ export class OverviewScheduleList extends React.Component {
                     let subheader;
 
                     if (course) {
-                        const courseName = course.nickname && course.nickname !== '' ? course.nickname : course.title;
-
                         subheader = (
                             <ListSubheader
                                 classes={{ root: styles.subheader }}
-                                items={[courseName]}
+                                items={[displayNameForCourse(course)]}
                                 colors={[course.color]}
                             />
                         );
@@ -182,7 +195,7 @@ export class OverviewScheduleList extends React.Component {
                     const course = this.props.scheduleSelectors.baseSelectors.courses.selectById(cid);
 
                     if (course) {
-                        items.push(course.title);
+                        items.push(displayNameForCourse(course));
                         colors.push(course.color);
                     }
                 }
@@ -226,23 +239,45 @@ export class OverviewScheduleList extends React.Component {
     render() {
         const groups = this.getRelevantData();
 
+        if (!groups.length) {
+            return (
+                <EmptySticker message="If you have classes, assignments, or tasks in the next 7 days they'll show up here. Enjoy your free week!" />
+            );
+        }
+
         return (
             <div className="scrollable-list">
                 <div className={`scroll-view ${styles.overviewList}`}>
                     <List className={styles.listContent}>
                         {groups.map(([date, { sections, assignments, tasks }]) => {
                             const isToday = dateUtils.humanReadableDate(date) === 'Today';
+                            let sectionDetail;
+
+                            if (!isToday) {
+                                sectionDetail = `${dateUtils
+                                    .toDate(date)
+                                    .diff(dateUtils.dayjs().startOf('day'), 'day')}D`;
+                            }
 
                             return (
                                 <div className={styles.section} key={date.format()}>
                                     <ListHeader
                                         title={dateUtils.humanReadableDate(date)}
+                                        detail={sectionDetail}
                                         className={styles.header}
                                         isBig={isToday}
                                     />
-                                    {this._scheduleOverview(sections)}
-                                    {this._assignmentsOverview(assignments)}
-                                    {this._tasksOverview(tasks)}
+                                    {!sections && !assignments && !tasks ? (
+                                        <div className={`${styles.cell} ${styles.dummy}`}>
+                                            <Typography color="textSecondary">Nothing planned</Typography>
+                                        </div>
+                                    ) : (
+                                        <React.Fragment>
+                                            {this._scheduleOverview(sections)}
+                                            {this._assignmentsOverview(assignments)}
+                                            {this._tasksOverview(tasks)}
+                                        </React.Fragment>
+                                    )}
                                 </div>
                             );
                         })}

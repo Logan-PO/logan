@@ -13,9 +13,12 @@
 
   .list-container {
     height: 100%;
+    width: 30%;
+    min-width: 400px;
   }
 
   .calendar-container {
+    flex-grow: 1;
     padding: 0 24px;
     height: 100%;
   }
