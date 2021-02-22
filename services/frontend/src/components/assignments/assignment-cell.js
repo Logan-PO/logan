@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { IconButton, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from '@logan/fe-shared/store/assignments';
+import { noProp } from '@logan/fe-shared/utils/misc';
 import Typography from '../shared/typography';
 import styles from './assignment-cell.module.scss';
 
@@ -57,7 +58,7 @@ class AssignmentCell extends React.Component {
                         <div className="actions">
                             {this.props.onDelete && (
                                 <Tooltip title="Delete">
-                                    <IconButton size="small" className={styles.action} onClick={this.deleted}>
+                                    <IconButton size="small" className={styles.action} onClick={noProp(this.deleted)}>
                                         <DeleteIcon fontSize="small" color="error" />
                                     </IconButton>
                                 </Tooltip>

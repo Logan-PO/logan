@@ -87,10 +87,11 @@ class TaskModal extends React.Component {
     async createTask() {
         this.setState({ isCreating: true });
         const id = setTimeout(() => this.setState({ showLoader: true }), 500);
-        await this.props.createTask(this.state.task);
+        const result = await this.props.createTask(this.state.task);
+        const newTask = result.payload;
         clearTimeout(id);
         this.setState({ showLoader: false, isCreating: false });
-        this.props.onClose();
+        this.props.onClose({ newTask });
     }
 
     handleChange(prop, e) {

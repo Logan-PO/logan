@@ -11,6 +11,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AddIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Editor from '@logan/fe-shared/components/editor';
+import { noProp } from '@logan/fe-shared/utils/misc';
 import {
     getScheduleSelectors,
     updateTerm,
@@ -34,13 +35,6 @@ const {
     dayjs,
     constants: { DB_DATE_FORMAT },
 } = dateUtils;
-
-function noProp(fn) {
-    return (event, ...otherProps) => {
-        event.stopPropagation();
-        fn(event, ...otherProps);
-    };
-}
 
 class TermEditor extends Editor {
     constructor(props) {

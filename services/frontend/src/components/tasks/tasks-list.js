@@ -60,17 +60,19 @@ class TasksList extends React.Component {
 
     didDeleteTask(task) {
         this.props.deleteTask(task);
-        // TODO: Select next task
-        this.setState(() => ({ selectedTid: undefined }));
-        this.props.onTaskSelected(undefined);
+        this.didSelectTask(undefined);
     }
 
     openCreateModal() {
         this.setState({ newTaskModalOpen: true });
     }
 
-    closeCreateModal() {
+    closeCreateModal({ newTask }) {
         this.setState({ newTaskModalOpen: false });
+
+        if (newTask && newTask.tid) {
+            this.didSelectTask(newTask.tid);
+        }
     }
 
     toggleCompletedTasks(e) {
