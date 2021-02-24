@@ -125,7 +125,7 @@ class TaskCell extends React.Component {
                     {(task.tags || []).length > 0 && (
                         <div className={styles.tagsDisplay}>
                             {task.tags.map((tag, index) => (
-                                <Chip className={styles.tag} size="small" key={index} label={tag} />
+                                <Chip className={styles.tag} color="secondary" size="small" key={index} label={tag} />
                             ))}
                         </div>
                     )}
