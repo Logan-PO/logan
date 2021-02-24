@@ -1,43 +1,189 @@
+import _ from 'lodash';
 import React from 'react';
+import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { Chip } from '@material-ui/core';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import TagIcon from '@material-ui/icons/LocalOffer';
 import AddIcon from '@material-ui/icons/AddCircleOutline';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '../typography';
 import { getCurrentTheme } from '../../../globals/theme';
 import classes from './tag-editor.module.scss';
 import InputGroup from './input-group';
 import TextButton from './text-button';
 
-// eslint-disable-next-line react/prop-types
-const CustomChip = ({ style, ...rest }) => (
-    <Chip
-        className={classes.chip}
-        variant="outlined"
-        size="small"
-        style={{ margin: '0 4px 6px 0', ...style }}
-        {...rest}
-    />
-);
+class Tag extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.updateEditContent = this.updateEditContent.bind(this);
+        this.handleKeyDown = this.handleKeyDown.bind(this);
+
+        this.actionsRef = React.createRef();
+        this.inputRef = React.createRef();
+
+        this.state = {
+            editing: this.props.creating,
+            minWidth: 0,
+        };
+    }
+
+    componentDidMount() {
+        if (this.props.creating) {
+            this.inputRef.current.focus();
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.actionsRef.current) this._updateSizeIfNecessary();
+
+        if (!prevState.editing && this.state.editing) {
+            this.inputRef.current.focus();
+        }
+    }
+
+    handleKeyDown(e) {
+        if (e.keyCode === 13) {
+            this.enterPressed();
+        } else if (e.keyCode === 27) {
+            this.cancelLabel();
+        }
+    }
+
+    enterPressed() {
+        if (_.isEmpty(this.state.editContent)) return;
+
+        if (this.props.creating) {
+            this.props.onCreate(this.state.editContent);
+        } else if (this.state.editing) {
+            this.props.onEdit(this.state.editContent);
+        }
+
+        this.setState({ editing: false });
+    }
+
+    cancelLabel() {
+        if (this.props.creating) this.props.onCancel();
+
+        this.setState(
+            {
+                editing: false,
+                editContent: '',
+            },
+            () => this.inputRef.current.blur()
+        );
+    }
+
+    beginEditing() {
+        this.setState(
+            {
+                editing: true,
+                editContent: this.props.text,
+            },
+            () => this.inputRef.current.focus()
+        );
+    }
+
+    updateEditContent(e) {
+        this.setState({ editContent: e.target.value });
+    }
+
+    _updateSizeIfNecessary() {
+        const minWidth = this.actionsRef.current.offsetWidth;
+
+        if (this.state.minWidth !== minWidth) {
+            this.setState({ minWidth });
+        }
+    }
+
+    render() {
+        const { text, onDelete } = this.props;
+        const { editing, editContent } = this.state;
+
+        const theme = getCurrentTheme();
+
+        return (
+            <div
+                className={clsx(classes.tag, editing && classes.editing)}
+                style={{
+                    '--background-color': theme.palette.secondary.main,
+                    color: theme.palette.secondary.contrastText,
+                }}
+            >
+                <Typography className={classes.text} variant="body2">
+                    {editing ? (_.isEmpty(editContent) ? 'New tag…' : editContent) : text}
+                </Typography>
+
+                <input
+                    ref={this.inputRef}
+                    type="text"
+                    placeholder="New tag…"
+                    className={classes.tagInput}
+                    value={this.state.editContent || ''}
+                    onChange={this.updateEditContent}
+                    onKeyDown={this.handleKeyDown}
+                    style={theme.typography.body2}
+                />
+
+                {!editing && (
+                    <div className={classes.actionsContainer} style={{ minWidth: this.state.minWidth }}>
+                        <div className={classes.actions} ref={this.actionsRef}>
+                            <ButtonBase onClick={this.beginEditing.bind(this)}>
+                                <EditIcon style={{ fontSize: '1rem' }} />
+                            </ButtonBase>
+                            <ButtonBase onClick={onDelete}>
+                                <DeleteIcon style={{ fontSize: '1rem' }} />
+                            </ButtonBase>
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    }
+}
+
+Tag.propTypes = {
+    text: PropTypes.string,
+    creating: PropTypes.bool,
+    onCreate: PropTypes.func,
+    onCancel: PropTypes.func,
+    onEdit: PropTypes.func,
+    onDelete: PropTypes.func,
+};
 
 class TagEditor extends React.Component {
     constructor(props) {
         super(props);
 
-        this.openLabel = this.openLabel.bind(this);
-        this.cancelLabel = this.cancelLabel.bind(this);
+        this.beginNew = this.beginNew.bind(this);
+        this.cancelNew = this.cancelNew.bind(this);
         this.createLabel = this.createLabel.bind(this);
-        this.updateLabel = this.updateLabel.bind(this);
-        this.hoverNew = this.hoverNew.bind(this);
-        this.unhoverNew = this.unhoverNew.bind(this);
-
-        this.labelRef = React.createRef();
+        this.labelEdited = this.labelEdited.bind(this);
+        this.labelDeleted = this.labelDeleted.bind(this);
 
         this.state = {
-            focused: false,
-            newLabelText: '',
-            hovered: false,
+            isCreatingNew: false,
         };
+    }
+
+    beginNew() {
+        this.setState({ isCreatingNew: true });
+    }
+
+    cancelNew() {
+        this.setState({ isCreatingNew: false });
+    }
+
+    createLabel(newLabel) {
+        this.props.onChange([...this.props.tags, newLabel]);
+        this.setState({ isCreatingNew: false });
+    }
+
+    labelEdited(index, updatedContent) {
+        const newTags = [...this.props.tags];
+        newTags[index] = updatedContent;
+        this.props.onChange(newTags);
     }
 
     labelDeleted(tagIndex) {
@@ -46,85 +192,7 @@ class TagEditor extends React.Component {
         this.props.onChange(tmp);
     }
 
-    openLabel() {
-        this.setState(
-            {
-                focused: true,
-            },
-            () => this.labelRef.current.focus()
-        );
-    }
-
-    cancelLabel() {
-        this.setState({
-            focused: false,
-            newLabelText: '',
-        });
-    }
-
-    createLabel() {
-        this.props.onChange([...this.props.tags, this.state.newLabelText]);
-
-        this.setState({
-            focused: false,
-            newLabelText: '',
-        });
-    }
-
-    updateLabel(e) {
-        this.setState({ newLabelText: e.target.value });
-    }
-
-    estimateWidth(sampleText) {
-        if (!this.labelRef.current) return 0;
-        // eslint-disable-next-line no-undef
-        const canvas = this.estimateWidth.canvas || (this.estimateWidth.canvas = document.createElement('canvas'));
-        const context = canvas.getContext('2d');
-        // eslint-disable-next-line no-undef
-        context.font = window.getComputedStyle(this.labelRef.current).font;
-        const metrics = context.measureText(sampleText || this.state.newLabelText);
-        return metrics.width + 4;
-    }
-
-    handleKeyUp(e) {
-        if (e.keyCode === 13) {
-            this.createLabel();
-        } else if (e.keyCode === 27) {
-            this.cancelLabel();
-        }
-    }
-
-    hoverNew() {
-        this.setState({ hovered: true });
-    }
-
-    unhoverNew() {
-        this.setState({ hovered: false });
-    }
-
     render() {
-        const theme = getCurrentTheme();
-
-        let currentLabel = (
-            <React.Fragment>
-                <input
-                    ref={this.labelRef}
-                    type="text"
-                    placeholder="New tag…"
-                    className={classes.tagInput}
-                    value={this.state.newLabelText}
-                    onChange={this.updateLabel}
-                    onKeyUp={this.handleKeyUp.bind(this)}
-                    style={{
-                        display: 'inline',
-                        width: this.estimateWidth(),
-                        minWidth: this.estimateWidth('New tag…'),
-                        ...theme.typography.body2,
-                    }}
-                />
-            </React.Fragment>
-        );
-
         return (
             <InputGroup
                 label="Tags"
@@ -132,30 +200,25 @@ class TagEditor extends React.Component {
                 content={
                     <div className={classes.tagEditor}>
                         {this.props.tags.map((tag, index) => (
-                            <CustomChip
+                            <Tag
                                 disabled={this.props.disabled}
                                 key={index}
-                                label={<Typography variant="body2">{tag}</Typography>}
+                                text={tag}
+                                onEdit={this.labelEdited.bind(this, index)}
                                 onDelete={this.labelDeleted.bind(this, index)}
                             />
                         ))}
-                        {!this.state.focused ? (
+                        {!this.state.isCreatingNew ? (
                             <TextButton
                                 size="large"
                                 classes={{ root: classes.addButton }}
                                 IconComponent={AddIcon}
-                                onClick={this.openLabel}
+                                onClick={this.beginNew}
                             >
                                 Add tag
                             </TextButton>
                         ) : (
-                            <CustomChip
-                                key="new"
-                                label={currentLabel}
-                                onDelete={this.cancelLabel}
-                                onMouseOver={this.hoverNew}
-                                onMouseOut={this.unhoverNew}
-                            />
+                            <Tag key="new" creating onCreate={this.createLabel} onCancel={this.cancelNew} />
                         )}
                     </div>
                 }

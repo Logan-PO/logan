@@ -1,3 +1,97 @@
+$height: 1em;
+$v-padding: 12px;
+$h-padding: 10px;
+
+.tag {
+    --background-color: orange;
+    background: var(--background-color);
+    position: relative;
+    display: flex;
+    height: calc(#{$height} + #{$v-padding});
+    align-items: center;
+    border-radius: calc((#{$height} / 2) + #{$v-padding});
+    padding: #{$v-padding} #{$h-padding};
+    margin-bottom: 5px;
+    margin-right: 4px;
+
+    .text {
+        display: inline-block;
+        line-height: 1em !important;
+    }
+
+    &.editing .text {
+        opacity: 0;
+    }
+
+    .actions-container {
+        border-radius: inherit;
+        position: absolute;
+        min-width: 100%;
+        right: 0;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .actions {
+        position: absolute;
+        right: 0;
+        display: flex;
+        white-space: nowrap;
+        align-self: center;
+        align-items: stretch;
+        height: 100%;
+        margin: 0;
+        background: var(--background-color);
+        box-shadow: inset 0 0 0 100px rgba(255, 255, 255, 0.2);
+        transform: translateX(100%);
+        transition: 0.2s !important;
+        border-radius: inherit;
+        overflow: hidden;
+
+        & > * {
+            font-size: 1rem !important;
+            padding: 0 6px;
+
+            &:first-child {
+                padding-left: $h-padding;
+            }
+
+            &:last-child {
+                padding-right: $h-padding;
+            }
+        }
+    }
+
+    &:hover {
+        .actions {
+            transform: translateX(0%);
+        }
+    }
+
+    .tag-input {
+        position: absolute;
+        display: none;
+        appearance: none;
+        border: none;
+        outline: none;
+        height: $height;
+        background: none;
+        max-width: 100%;
+        min-width: 1rem;
+        color: inherit;
+        margin: 0 -2px;
+
+        &::placeholder {
+            color: inherit;
+            opacity: 0.5;
+        }
+    }
+
+    &.editing .tag-input {
+        display: flex;
+    }
+}
+
 .tag-editor {
     display: flex;
     flex-wrap: wrap;
@@ -7,22 +101,12 @@
         margin-bottom: 4px;
 
         &:not(:first-child) {
-            margin-left: 2px;
+            margin-left: 4px;
         }
     }
 
     .chip {
         border-color: black !important;
         user-select: none;
-    }
-
-    .tag-input {
-        appearance: none;
-        border: none;
-        outline: none;
-        margin: -2px;
-        height: calc(1rem + 2px);
-        background: none;
-        min-width: 1rem;
     }
 }
