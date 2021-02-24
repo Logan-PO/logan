@@ -19,6 +19,8 @@ class AssignmentsPage extends React.Component {
     }
 
     didSelectAssignment(aid) {
+        console.log(aid);
+        console.trace();
         this.setState({ selectedAid: aid });
     }
 

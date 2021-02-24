@@ -11,6 +11,7 @@ import { dateUtils } from '@logan/core';
 import { getTasksSelectors, updateTask, updateTaskLocal, setShouldGoToTask } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import { noProp } from '@logan/fe-shared/utils/misc';
 import { colorForValue } from '../shared/displays/priority-constants';
 import PriorityDisplay from '../shared/displays/priority-display';
 import Checkbox from '../shared/controls/checkbox';
@@ -111,7 +112,7 @@ class TaskCell extends React.Component {
                     className={styles.checkbox}
                     cid={_.get(this.state.task, 'cid')}
                     checked={_.get(this.state, 'task.complete', false)}
-                    onChange={this.toggleCompletion}
+                    onChange={noProp(this.toggleCompletion)}
                 />
                 <div className={styles.taskContent}>
                     <Typography>{task.title}</Typography>
@@ -134,7 +135,11 @@ class TaskCell extends React.Component {
                             <PriorityDisplay priority={task.priority} className={styles.priorityDisplay} />
                             <div className="actions">
                                 {shouldShowMoveToToday && (
-                                    <Tooltip title="Move to today" className={styles.action} onClick={this.moveToToday}>
+                                    <Tooltip
+                                        title="Move to today"
+                                        className={styles.action}
+                                        onClick={noProp(this.moveToToday)}
+                                    >
                                         <IconButton size="small">
                                             <TodayIcon fontSize="small" />
                                         </IconButton>
@@ -142,7 +147,11 @@ class TaskCell extends React.Component {
                                 )}
                                 {this.props.onDelete && (
                                     <Tooltip title="Delete">
-                                        <IconButton size="small" className={styles.action} onClick={this.deleted}>
+                                        <IconButton
+                                            size="small"
+                                            className={styles.action}
+                                            onClick={noProp(this.deleted)}
+                                        >
                                             <DeleteIcon fontSize="small" color="error" />
                                         </IconButton>
                                     </Tooltip>

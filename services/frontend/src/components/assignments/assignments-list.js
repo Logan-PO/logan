@@ -76,17 +76,19 @@ class AssignmentsList extends React.Component {
 
     didDeleteAssignment(assignment) {
         this.props.deleteAssignment(assignment);
-        // TODO: Select next assignment
-        this.setState(() => ({ selectedAid: undefined }));
-        this.props.onAssignmentSelected(undefined);
+        this.didSelectAssignment(undefined);
     }
 
     openNewAssignmentModal() {
         this.setState({ newAssignmentModalOpen: true });
     }
 
-    closeNewAssignmentModal() {
+    closeNewAssignmentModal({ newAssignment }) {
         this.setState({ newAssignmentModalOpen: false });
+
+        if (newAssignment && newAssignment.aid) {
+            this.didSelectAssignment(newAssignment.aid);
+        }
     }
 
     _shouldShowAssignment(assignment) {

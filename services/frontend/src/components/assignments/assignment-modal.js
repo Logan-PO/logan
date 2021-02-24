@@ -74,10 +74,11 @@ class AssignmentModal extends React.Component {
     async createAssignment() {
         this.setState({ isCreating: true });
         const id = setTimeout(() => this.setState({ showLoader: true }), 500);
-        await this.props.createAssignment(this.state.assignment);
+        const result = await this.props.createAssignment(this.state.assignment);
+        const newAssignment = result.payload;
         clearTimeout(id);
         this.setState({ showLoader: false, isCreating: false });
-        this.props.onClose();
+        this.props.onClose({ newAssignment });
     }
 
     handleChange(prop, e) {
