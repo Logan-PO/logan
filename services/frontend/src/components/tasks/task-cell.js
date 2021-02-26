@@ -112,7 +112,7 @@ class TaskCell extends React.Component {
                     className={styles.checkbox}
                     cid={_.get(this.state.task, 'cid')}
                     checked={_.get(this.state, 'task.complete', false)}
-                    onChange={noProp(this.toggleCompletion)}
+                    onChange={this.toggleCompletion}
                 />
                 <div className={styles.taskContent}>
                     <Typography>{task.title}</Typography>
