@@ -33,7 +33,21 @@ function compareDates(d1, d2, format, granularity = 'day') {
     else return 1;
 }
 
-function humanReadableDate(date, forSentence = false) {
+/**
+ * @typedef {Object} ReadableDateOptions
+ * @property {boolean} [forSentence] Format for use in a sentence, default is false
+ * @property {boolean} [includeWeekday] Include weekday in the date formatting, default is false
+ */
+
+/**
+ * Returns a date formatted in a human readable way, relative to the current date
+ * @param date
+ * @param {ReadableDateOptions} options
+ * @return {string}
+ */
+function humanReadableDate(date, options = {}) {
+    const { forSentence = false, includeWeekday = false } = options;
+
     date = dayjs(date);
     if (date.isToday()) return forSentence ? 'today' : 'Today';
     else if (date.isTomorrow()) return forSentence ? 'tomorrow' : 'Tomorrow';
@@ -42,9 +56,9 @@ function humanReadableDate(date, forSentence = false) {
         const now = dayjs();
         if (date.year() === now.year()) {
             if (date.week() === now.week()) return date.format('dddd');
-            else return date.format('MMMM Do');
+            else return date.format(includeWeekday ? 'dddd, MMMM Do' : 'MMMM Do');
         } else {
-            return date.format('MMMM Do, YYYY');
+            return date.format(includeWeekday ? 'dddd, MMMM Do, YYYY' : 'MMMM Do, YYYY');
         }
     }
 }
@@ -63,10 +77,18 @@ function dueDateIsDate(dueDate) {
     return toDate(dueDate).isValid();
 }
 
-function readableDueDate(dueDate, forSentence = false) {
+/**
+ * Returns a due date formatted in a human readable way, relative to the current date
+ * @param dueDate
+ * @param {ReadableDateOptions} options
+ * @return {string}
+ */
+function readableDueDate(dueDate, options = {}) {
+    const { forSentence = false } = options;
+
     if (dueDate === 'asap') return forSentence ? 'asap' : 'ASAP';
     else if (dueDate === 'eventually') return forSentence ? 'eventually' : 'Eventually';
-    else return humanReadableDate(dayjs(dueDate), forSentence);
+    else return humanReadableDate(dayjs(dueDate), options);
 }
 
 // Constants

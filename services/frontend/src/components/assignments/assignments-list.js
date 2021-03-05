@@ -108,7 +108,7 @@ class AssignmentsList extends React.Component {
         const isToday = dateUtils.formatAsDate() === dueDate;
 
         const dateObject = dateUtils.toDate(dueDate);
-        sectionTitle = dateUtils.humanReadableDate(dateObject);
+        sectionTitle = dateUtils.humanReadableDate(dateObject, { includeWeekday: true });
 
         if (!this.state.showingPastAssignments && !isToday) {
             sectionDetail = `${dateObject.diff(dateUtils.dayjs().startOf('day'), 'day')}D`;

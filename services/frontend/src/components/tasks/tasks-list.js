@@ -89,7 +89,7 @@ class TasksList extends React.Component {
 
         if (isDate) {
             const dateObject = dateUtils.toDate(dueDate);
-            sectionTitle = dateUtils.readableDueDate(dateObject, false);
+            sectionTitle = dateUtils.readableDueDate(dateObject, { includeWeekday: true });
 
             if (!isToday) {
                 sectionDetail = `${dateObject.diff(dateUtils.dayjs().startOf('day'), 'day')}D`;

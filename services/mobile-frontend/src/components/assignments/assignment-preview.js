@@ -20,7 +20,7 @@ const AssignmentPreview = ({ assignment, ...rest }) => (
                     {assignment.cid && <CourseLabel variant="caption" cid={assignment.cid} />}
                     <Typography variant="body2">{assignment.title}</Typography>
                     <Typography variant="body2" color="secondary">
-                        Due {dateUtils.readableDueDate(assignment.dueDate, true)}
+                        Due {dateUtils.readableDueDate(assignment.dueDate, { forSentence: true })}
                     </Typography>
                 </View>
             </View>
