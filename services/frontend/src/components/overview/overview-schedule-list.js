@@ -262,7 +262,7 @@ export class OverviewScheduleList extends React.Component {
                             return (
                                 <div className={styles.section} key={date.format()}>
                                     <ListHeader
-                                        title={dateUtils.humanReadableDate(date)}
+                                        title={dateUtils.humanReadableDate(date, { includeWeekday: true })}
                                         detail={sectionDetail}
                                         className={styles.header}
                                         isBig={isToday}

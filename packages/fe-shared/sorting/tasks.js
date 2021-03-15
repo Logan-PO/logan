@@ -53,7 +53,7 @@ function makeSectionsComplete(tasks) {
     );
 
     const formattedEntries = sortedEntries.map(([date, tasks]) => {
-        const completion = dateUtils.humanReadableDate(dateUtils.toDate(date), true);
+        const completion = dateUtils.humanReadableDate(dateUtils.toDate(date), { forSentence: true });
         return [`Completed ${completion}`, tasks];
     });
 
