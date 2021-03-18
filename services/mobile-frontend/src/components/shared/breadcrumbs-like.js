@@ -51,9 +51,9 @@ const BreadcrumbsLike = ({ variant = 'body', colors = [], sections = [], styles 
 BreadcrumbsLike.propTypes = {
     variant: PropTypes.string,
     styles: PropTypes.exact({
-        root: PropTypes.string,
-        separator: PropTypes.string,
-        section: PropTypes.string,
+        root: PropTypes.object,
+        separator: PropTypes.object,
+        section: PropTypes.object,
     }),
     colors: PropTypes.array,
     sections: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.node, PropTypes.string])),
