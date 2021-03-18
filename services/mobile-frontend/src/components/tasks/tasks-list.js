@@ -102,7 +102,7 @@ class TasksList extends React.Component {
                     )}
                     renderSectionHeader={({ section: { title } }) => {
                         const formattedTitle = dateUtils.dueDateIsDate(title)
-                            ? dateUtils.readableDueDate(title)
+                            ? dateUtils.readableDueDate(title, { includeWeekday: true })
                             : title;
 
                         const isToday = formattedTitle === 'Today';
