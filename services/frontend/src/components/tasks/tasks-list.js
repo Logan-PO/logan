@@ -112,7 +112,7 @@ class TasksList extends React.Component {
 
         for (const {
             meta: { cid, aid },
-            tasks: tids,
+            tids,
         } of groups) {
             const sortKey = `${cid || ''} ${aid || ''}`;
 

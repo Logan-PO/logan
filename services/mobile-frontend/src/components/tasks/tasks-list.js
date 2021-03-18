@@ -119,10 +119,10 @@ class TasksList extends React.Component {
                             type: 'subheader',
                             ...group.meta,
                         },
-                        ...group.tasks,
+                        ...group.tids,
                     ];
                 } else {
-                    return group.tasks;
+                    return group.tids;
                 }
             }),
         }));

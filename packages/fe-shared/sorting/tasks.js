@@ -87,8 +87,6 @@ export function getSections(tasks, showCompleted, getAssignment) {
         tasks.sort(sortWithinSection);
     }
 
-    console.log('Sections: ', sections);
-
     return _.entries(
         _.mapValues(sections, tasks => {
             const groups = _.groupBy(tasks, task => {
@@ -104,7 +102,7 @@ export function getSections(tasks, showCompleted, getAssignment) {
 
                 return {
                     meta: { cid, aid },
-                    tasks: _.map(tasks, 'tid'),
+                    tids: _.map(tasks, 'tid'),
                 };
             });
         })
