@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { Text, Colors } from 'react-native-paper';
 
 const headingBase = {
-    fontFamily: 'Poppins_500Medium',
+    fontFamily: 'Poppins500',
 };
 
 const bodyBase = {
-    fontFamily: 'Rubik_400Regular',
+    fontFamily: 'Rubik400',
 };
 
 export const typographyStyles = {
@@ -44,7 +44,7 @@ export const typographyStyles = {
     },
     subtitle2: {
         ...bodyBase,
-        fontFamily: 'Rubik_500Medium',
+        fontFamily: 'Rubik500',
         fontWeight: '500',
         fontSize: 14,
     },
@@ -59,7 +59,7 @@ export const typographyStyles = {
     },
     button: {
         ...bodyBase,
-        fontFamily: 'Rubik_500Medium',
+        fontFamily: 'Rubik500',
         fontSize: 14,
         fontWeight: '500',
         textTransform: 'uppercase',

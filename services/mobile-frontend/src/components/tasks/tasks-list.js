@@ -105,8 +105,11 @@ class TasksList extends React.Component {
                             ? dateUtils.readableDueDate(title)
                             : title;
 
+                        const isToday = formattedTitle === 'Today';
+                        const variant = isToday ? ListHeader.VARIANTS.LIST_BIG : ListHeader.VARIANTS.LIST_NORMAL;
+
                         return (
-                            <ListHeader style={{ backgroundColor: 'white' }} key={title}>
+                            <ListHeader variant={variant} key={title}>
                                 {formattedTitle}
                             </ListHeader>
                         );
