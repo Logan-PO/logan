@@ -77,15 +77,36 @@ export function sortWithinSection(a, b) {
     return compareStrings(a.tid, b.tid);
 }
 
-export function getSections(tasks, showCompleted) {
+export function getSections(tasks, showCompleted, getAssignment) {
     const sorted = [...tasks];
     sorted.sort(initialQuickSort.bind(this, showCompleted));
 
-    const sections = makeSections(showCompleted, tasks);
+    let sections = makeSections(showCompleted, tasks);
 
     for (const tasks of _.values(sections)) {
         tasks.sort(sortWithinSection);
     }
 
-    return _.entries(_.mapValues(sections, tasks => _.map(tasks, 'tid')));
+    console.log('Sections: ', sections);
+
+    return _.entries(
+        _.mapValues(sections, tasks => {
+            const groups = _.groupBy(tasks, task => {
+                const assignment = task.aid ? getAssignment(task.aid) : undefined;
+                return `${(assignment ? assignment.cid : task.cid) || ''} ${task.aid || ''}`;
+            });
+
+            return _.map(_.sortBy(_.entries(groups), '0'), ([sortKey, tasks]) => {
+                let [cid, aid] = sortKey.split(' ');
+
+                if (_.isEmpty(cid.trim())) cid = undefined;
+                if (_.isEmpty(aid.trim())) aid = undefined;
+
+                return {
+                    meta: { cid, aid },
+                    tasks: _.map(tasks, 'tid'),
+                };
+            });
+        })
+    );
 }

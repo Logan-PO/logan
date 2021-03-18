@@ -9,7 +9,6 @@ import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
 import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
 import { dateUtils } from '@logan/core';
 import PriorityDisplay from '../shared/displays/priority-display';
-import CourseLabel from '../shared/displays/course-label';
 import Typography from '../shared/typography';
 import ListItem from '../shared/list-item';
 import TagsDisplay from '../shared/tags/tags-display';
@@ -134,17 +133,6 @@ class TaskCell extends React.Component {
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Checkbox.Android status={checkboxStatus} onPress={this.check} color={course && course.color} />
                         <View style={{ flexDirection: 'column', marginLeft: 8 }}>
-                            {(course || relatedAssignment) && (
-                                <View style={{ flexDirection: 'row', marginBottom: 2 }}>
-                                    {course && <CourseLabel cid={course.cid} />}
-                                    {relatedAssignment && (
-                                        <Typography variant="body2" color="secondary">
-                                            {course && relatedAssignment && ' / '}
-                                            {relatedAssignment.title}
-                                        </Typography>
-                                    )}
-                                </View>
-                            )}
                             <View style={{ marginRight: marginSize }}>
                                 <Typography variant="body">{this.state.task.title}</Typography>
                             </View>

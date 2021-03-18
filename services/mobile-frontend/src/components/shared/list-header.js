@@ -4,12 +4,14 @@ import { StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { List } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { typographyStyles } from './typography';
 
 const VARIANTS = {
     DEFAULT: 'DEFAULT',
     LIST_BIG: 'LIST_BIG',
     LIST_NORMAL: 'LIST_NORMAL',
     LIST_SUBHEAD: 'LIST_SUBHEAD',
+    LIST_SECHEAD: 'LIST_SECHEAD',
 };
 
 const variantStyles = {
@@ -48,6 +50,16 @@ const variantStyles = {
             paddingVertical: 0,
             fontFamily: 'Poppins600',
             fontSize: 18,
+        },
+    },
+    [VARIANTS.LIST_SECHEAD]: {
+        outer: {
+            paddingTop: 4,
+        },
+        inner: {
+            ...typographyStyles.body,
+            paddingVertical: 0,
+            fontFamily: 'Rubik500',
         },
     },
 };
