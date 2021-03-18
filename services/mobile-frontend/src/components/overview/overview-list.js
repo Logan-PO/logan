@@ -199,11 +199,16 @@ export class OverviewList extends React.Component {
                         style={{ height: '100%', backgroundColor: 'white' }}
                         sections={groups}
                         keyExtractor={(item, index) => item + index}
-                        renderSectionHeader={({ section: { title } }) => (
-                            <ListHeader variant={ListHeader.VARIANTS.LIST_NORMAL} key={title}>
-                                {title}
-                            </ListHeader>
-                        )}
+                        renderSectionHeader={({ section: { title } }) => {
+                            const variant =
+                                title === 'Today' ? ListHeader.VARIANTS.LIST_BIG : ListHeader.VARIANTS.LIST_NORMAL;
+
+                            return (
+                                <ListHeader variant={variant} key={title}>
+                                    {title}
+                                </ListHeader>
+                            );
+                        }}
                         renderItem={({ item }) => this.renderListSection(item)}
                     />
                     <Portal>
