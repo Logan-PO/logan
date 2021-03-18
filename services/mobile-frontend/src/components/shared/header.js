@@ -83,7 +83,10 @@ class Header extends React.Component {
                 ) : (
                     this.props.leftActions
                 )}
-                <Appbar.Content title={this.props.title || this.props.route.name} />
+                <Appbar.Content
+                    title={this.props.title || this.props.route.name}
+                    titleStyle={{ fontFamily: 'Rubik_500Medium' }}
+                />
                 {this.props.rightActionIsSetting ? (
                     <Appbar.Action icon="settings" onPress={this.openSettings} />
                 ) : (
