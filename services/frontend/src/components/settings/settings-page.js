@@ -14,6 +14,7 @@ import UsernameModal from './username-modal';
 import DeleteModal from './delete-modal';
 import LogOutModal from './logout-modal';
 import styles from './settings-page.module.scss';
+import CanvasModal from './canvas-modal';
 
 export class SettingsPage extends React.Component {
     constructor(props) {
@@ -27,7 +28,8 @@ export class SettingsPage extends React.Component {
         this.closeNewDeleteModal = this.closeNewDeleteModal.bind(this);
         this.openNewLogOutModal = this.openNewLogOutModal.bind(this);
         this.closeNewLogOutModal = this.closeNewLogOutModal.bind(this);
-
+        this.openCanvasModal = this.openCanvasModal.bind(this);
+        this.closeCanvasModal = this.closeCanvasModal.bind(this);
         this.state = {
             user: props.user,
             newUsernameModal: false,
@@ -64,6 +66,14 @@ export class SettingsPage extends React.Component {
 
     closeNewLogOutModal() {
         this.setState({ newLogOutModal: false });
+    }
+
+    openCanvasModal() {
+        this.setState({ newCanvasModal: true });
+    }
+
+    closeCanvasModal() {
+        this.setState({ newCanvasModal: false });
     }
 
     handleUserChange(prop, event) {
@@ -124,6 +134,16 @@ export class SettingsPage extends React.Component {
                                 variant="contained"
                                 color="primary"
                                 disableElevation
+                                onClick={this.openCanvasModal}
+                            >
+                                Import Canvas Assignments
+                            </ActionButton>
+                        </Grid>
+                        <Grid item>
+                            <ActionButton
+                                variant="contained"
+                                color="primary"
+                                disableElevation
                                 onClick={this.openNewUsernameModal}
                             >
                                 Edit account
@@ -152,6 +172,7 @@ export class SettingsPage extends React.Component {
                     </Grid>
                     {/* Modals */}
                     <UsernameModal open={this.state.newUsernameModal} onClose={this.closeNewUsernameModal} />
+                    <CanvasModal open={this.state.newCanvasModal} onClose={this.closeCanvasModal} />
                     <LogOutModal open={this.state.newLogOutModal} onClose={this.closeNewLogOutModal} />
                     <DeleteModal open={this.state.newDeleteModal} onClose={this.closeNewDeleteModal} />
                     <ListHeader title="Theme" isBig style={{ paddingTop: 20 }} />
