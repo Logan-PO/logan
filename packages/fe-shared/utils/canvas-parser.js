@@ -1,6 +1,6 @@
 const { spawn } = require('child_process');
 
-async function getCanvasData(accessToken, url) {
+async function getCanvasData(url, accessToken) {
     let out;
     const canvas = spawn('curl', [
         '-G',
@@ -46,3 +46,7 @@ exec(
     }
 );
 */
+
+export default {
+    getCanvasData,
+};
