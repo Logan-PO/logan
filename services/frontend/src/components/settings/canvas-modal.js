@@ -42,6 +42,7 @@ class CanvasModal extends React.Component {
         //TODO: Make an alg to parse out the assignments from the canvas data
         //TODO: For each course get its ID and for each ID get the assignments
         //TODO: check enrollment state from all pulled courses
+        //
     }
 
     async addCanvasAssignments() {
