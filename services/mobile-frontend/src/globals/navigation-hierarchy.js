@@ -22,6 +22,9 @@ import SettingsScreen from '../components/settings/settings-screen';
 import ReminderDisplay from '../components/reminders/reminder-display';
 import NewReminderModal from '../components/reminders/new-reminder-modal';
 import TutorialViewer from '../components/tutorial/tutorial-viewer';
+import EmailForm from '../components/home/email-form';
+import RegForm from '../components/home/reg-form';
+import ForgotPassword from '../components/home/forgot-password';
 import { getCurrentTheme } from './theme';
 
 const RootStack = createStackNavigator();
@@ -100,6 +103,9 @@ class NavigationHierarchy extends React.Component {
                     <React.Fragment>
                         <RootStack.Screen name="Home" component={Home} />
                         <RootStack.Screen name="Signup" component={SignUpForm} />
+                        <RootStack.Screen name="Email Form" component={EmailForm} />
+                        <RootStack.Screen name="Reg Form" component={RegForm} />
+                        <RootStack.Screen name="Forgot Password" component={ForgotPassword} />
                     </React.Fragment>
                 )}
                 <RootStack.Screen name="Tutorial Root" component={TutorialViewer} />

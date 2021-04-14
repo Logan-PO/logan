@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
+import { Button } from 'react-native-paper';
 import api from '@logan/fe-shared/utils/api';
 import { fetchSelf, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
 import { updateUser } from '@logan/fe-shared/store/settings';
@@ -18,6 +19,7 @@ class Home extends React.Component {
         super(props);
 
         this.requestPermissions = this.requestPermissions.bind(this);
+        this.onEmailClick = this.onEmailClick.bind(this);
     }
 
     async componentDidMount() {
@@ -72,6 +74,10 @@ class Home extends React.Component {
         }
     }
 
+    onEmailClick() {
+        this.props.navigation.navigate('Email Form');
+    }
+
     render() {
         return (
             <SafeAreaView
@@ -89,6 +95,9 @@ class Home extends React.Component {
                     Logan
                 </Typography>
                 <MobileLoginButton mode="contained" color="white" />
+                <Button mode="contained" color="white" uppercase={false} onPress={() => this.onEmailClick()}>
+                    Sign in with email
+                </Button>
                 <View style={{ flex: 1 }} />
                 <NavigationButton
                     mode="text"
