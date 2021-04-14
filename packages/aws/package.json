@@ -17,6 +17,7 @@
 	},
 	"dependencies": {
 		"aws-sdk": "^2.753.0",
+		"firebase": "^8.4.1",
 		"lodash": "^4.17.20"
 	}
 }

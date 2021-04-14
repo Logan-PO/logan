@@ -24,7 +24,7 @@ import NewReminderModal from '../components/reminders/new-reminder-modal';
 import TutorialViewer from '../components/tutorial/tutorial-viewer';
 import EmailForm from '../components/home/email-form';
 import RegForm from '../components/home/reg-form';
-import ForgotPassword from '../components/home/forgot-password'
+import ForgotPassword from '../components/home/forgot-password';
 import { getCurrentTheme } from './theme';
 
 const RootStack = createStackNavigator();

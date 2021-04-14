@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
 import Typography from '../shared/typography';
-import { typographyStyles } from '../shared/typography';
 import NavigationButton from '../tutorial/navigation-button';
 import { handleNotificationsPermissions } from '../../globals/permissions';
 import MobileLoginButton from './mobile-login-button';
@@ -76,7 +75,7 @@ class Home extends React.Component {
     }
 
     onEmailClick() {
-      this.props.navigation.navigate("Email Form");
+        this.props.navigation.navigate('Email Form');
     }
 
     render() {
@@ -96,13 +95,7 @@ class Home extends React.Component {
                     Logan
                 </Typography>
                 <MobileLoginButton mode="contained" color="white" />
-                <Button
-                  mode="contained"
-                  color="white"
-                  uppercase={false}
-                  onPress={() =>
-                  this.onEmailClick()}
-                  >
+                <Button mode="contained" color="white" uppercase={false} onPress={() => this.onEmailClick()}>
                     Sign in with email
                 </Button>
                 <View style={{ flex: 1 }} />
