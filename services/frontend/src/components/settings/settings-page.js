@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Grid, colors } from '@material-ui/core';
 import { setLoginStage, updateUser } from '@logan/fe-shared/store/login';
+import { handleClientLoad } from '@logan/fe-shared/utils/google-classroom';
 import { Page } from '../shared';
 import ColorPicker from '../shared/controls/color-picker';
 import ListHeader from '../shared/list-header';
@@ -20,13 +21,13 @@ export class SettingsPage extends React.Component {
         super(props);
 
         this.handleUserChange = this.handleUserChange.bind(this);
-
         this.openNewUsernameModal = this.openNewUsernameModal.bind(this);
         this.closeNewUsernameModal = this.closeNewUsernameModal.bind(this);
         this.openNewDeleteModal = this.openNewDeleteModal.bind(this);
         this.closeNewDeleteModal = this.closeNewDeleteModal.bind(this);
         this.openNewLogOutModal = this.openNewLogOutModal.bind(this);
         this.closeNewLogOutModal = this.closeNewLogOutModal.bind(this);
+        this.handleClientLoad = this.handleClientLoad.bind(this);
 
         this.state = {
             user: props.user,
@@ -41,7 +42,9 @@ export class SettingsPage extends React.Component {
             this.setState({ user: this.props.user });
         }
     }
-
+/*    handleClientLoad() {
+        handleClientLoad();
+    }*/
     openNewUsernameModal() {
         this.setState({ newUsernameModal: true });
     }
@@ -137,6 +140,16 @@ export class SettingsPage extends React.Component {
                                 onClick={this.openNewLogOutModal}
                             >
                                 Log out
+                            </ActionButton>
+                        </Grid>
+                        <Grid item>
+                            <ActionButton
+                                variant="contained"
+                                color="primary"
+                                disableElevation
+                                onClick={handleClientLoad}
+                            >
+                                Google Classroom
                             </ActionButton>
                         </Grid>
                         <Grid item>

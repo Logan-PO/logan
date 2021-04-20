@@ -16,7 +16,8 @@ const DISCOVERY_DOCS = ['https://classroom.googleapis.com/$discovery/rest?versio
 //curl "https://www.googleapis.com/auth/classroom.courses.readonly?access_token=4%2F0AY0e-g66_5W10uNkdIRtDhpGt_eX5JgNmvIN0xYImhlg5UGsmXW1FOdjNZwGb6n99S_QqQ&"
 
 // onClick={() => handleClientLoad()} put in button code on settings page
-const handleClientLoad = () => {
+export const handleClientLoad = () => {
+    console.log("Client Load")
     gapi.load('client:auth2', initClient);
 };
 /**
