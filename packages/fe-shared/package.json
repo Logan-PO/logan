@@ -23,6 +23,8 @@
     "@reduxjs/toolkit": "^1.4.0",
     "axios": "^0.20.0",
     "bluebird": "^3.7.2",
+    "gapi": "^0.0.3",
+    "gapi-client": "^0.0.3",
     "googleapis": "^71.0.0",
     "lodash": "^4.17.20",
     "prop-types": "^15.7.2",

@@ -1,49 +1,53 @@
 //GET https://classroom.googleapis.com/v1/courses
 //Lists all of the courses from a given user
 // Client ID and API key from the Developer Console
-import * as gapi from 'googleapis';
+
+//TODO: This is just a class to hold scripts that will be run on a button press from the settings page
+import * as gapi from 'gapi-client';
 
 var CLIENT_ID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
 var API_KEY = 'AIzaSyDFKoctWHEC-3Dz0r3FhB0BfVkPJ14pFjo';
 var SCOPES = 'https://www.googleapis.com/auth/classroom.courses.readonly';
+var CLIENT_SECRET = 'eX2YVDrVoZx1WSN0P4GlpOk9'; //TODO: DO NOT PUSH THIS TO PUBLIC
+var REDIRECTS = [];
 
 var authorizeButton = document.getElementById('authorize_button');
 var signoutButton = document.getElementById('signout_button');
 /**
  *  On load, called to load the auth2 library and API client library.
  */
-function handleClientLoad() {
-    gapi.load('client:auth2', initClient);
-}
+const oauth2Client = new gapi.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECTS[0]);
+const URL = oauth2Client.generateAuthUrl({
+    scope: SCOPES,
+});
+const {tokens} = await oauth2Client.getToken();
+oauth2Client.setCredentials(tokens);
 
 /**
  *  Initializes the API client library and sets up sign-in state
  *  listeners.
  */
 function initClient() {
-    gapi.client
-        .init({
-            apiKey: API_KEY,
-            clientId: CLIENT_ID,
-            discoveryDocs: DISCOVERY_DOCS,
-            scope: SCOPES,
-        })
-        .then(
-            function () {
-                // Listen for sign-in state changes.
-                gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+    gapi.client.init({
+        apiKey: API_KEY,
+        clientId: CLIENT_ID,
+        discoveryDocs: DISCOVERY_DOCS,
+        scope: SCOPES
+    }).then(function () {
+        // Listen for sign-in state changes.
+        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
 
-                // Handle the initial sign-in state.
-                updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-                authorizeButton.onclick = handleAuthClick;
-                signoutButton.onclick = handleSignoutClick;
-            },
-            function (error) {
-                appendPre(JSON.stringify(error, null, 2));
-            }
-        );
+        // Handle the initial sign-in state.
+        updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+        authorizeButton.onclick = handleAuthClick;
+        signoutButton.onclick = handleSignoutClick;
+    }, function(error) {
+        appendPre(JSON.stringify(error, null, 2));
+    });
 }
-
+function handleClientLoad() {
+    gapi.load('client:auth2', initClient);
+}
 /**
  * Print the names of the first 10 courses the user has access to. If
  * no courses are found an appropriate message is printed.
