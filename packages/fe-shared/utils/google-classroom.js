@@ -4,12 +4,10 @@
 //TODO: This is just a class to hold scripts that will be run on a button press from the settings page
 
 import { gapi, loadAuth2 } from 'gapi-script';
-import { getSecret } from '../../aws/src/secret-utils';
 
 var REACT_APP_GOOGLE_CLASS_CLIENT_ID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
 var REACT_APP_GOOGLE_CLASS_API_KEY = 'AIzaSyDFKoctWHEC-3Dz0r3FhB0BfVkPJ14pFjo';
 var SCOPES = 'https://www.googleapis.com/auth/classroom.courses.readonly';
-//var CLIENT_SECRET = `${getSecret('logan/web-google-creds')} `;
 const DISCOVERY_DOCS = ['https://classroom.googleapis.com/$discovery/rest?version=v1'];
 //const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/classroom/v1/rest'];
 
@@ -72,6 +70,7 @@ function updateSigninStatus(isSignedIn) {
  *  Sign in the user upon button click.
  */
 export function handleAuthClick(event) {
+    console.log(event);
     // auth2.getAuthInstance().signIn();
 }
 
@@ -79,6 +78,7 @@ export function handleAuthClick(event) {
  *  Sign out the user upon button click.
  */
 export function handleSignoutClick(event) {
+    console.log(event);
     gapi.auth2.getAuthInstance().signOut();
 }
 
