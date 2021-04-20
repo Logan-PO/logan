@@ -94,7 +94,7 @@ function appendPre(message) {
  */
 function listCourses() {
     console.log('List');
-    gapi.client.classroom.courses
+    let out = gapi.client.classroom.courses
         .list({
             pageSize: 10,
         })
@@ -111,4 +111,5 @@ function listCourses() {
                 appendPre('No courses found.');
             }
         });
+    console.log(out);
 }
