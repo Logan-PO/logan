@@ -9,10 +9,10 @@ import { getSecret } from '../../aws/src/secret-utils';
 var REACT_APP_GOOGLE_CLASS_CLIENT_ID = '850674143860-haau84mtom7b06uqqhg4ei1jironoah3.apps.googleusercontent.com';
 var REACT_APP_GOOGLE_CLASS_API_KEY = 'AIzaSyDFKoctWHEC-3Dz0r3FhB0BfVkPJ14pFjo';
 var SCOPES = ['https://www.googleapis.com/auth/classroom.courses.readonly'];
-var CLIENT_SECRET = `${getSecret('logan/web-google-creds')} `;
+//var CLIENT_SECRET = `${getSecret('logan/web-google-creds')} `;
 const DISCOVERY_DOCS = ['https://classroom.googleapis.com/$discovery/rest?version=v1'];
 
-var REDIRECTS = '';
+//var REDIRECTS = '';
 //curl "https://www.googleapis.com/auth/classroom.courses.readonly?access_token=4%2F0AY0e-g66_5W10uNkdIRtDhpGt_eX5JgNmvIN0xYImhlg5UGsmXW1FOdjNZwGb6n99S_QqQ&"
 
 // onClick={() => handleClientLoad()} put in button code on settings page
@@ -24,7 +24,7 @@ const handleClientLoad = () => {
  *  listeners.
  */
 const initClient = () => {
-    setIsLoadingGoogleDriveApi(true);
+    //setIsLoadingGoogleDriveApi(true);
     gapi.client
         .init({
             apiKey: REACT_APP_GOOGLE_CLASS_API_KEY,
@@ -52,8 +52,8 @@ const initClient = () => {
 const updateSigninStatus = isSignedIn => {
     if (isSignedIn) {
         // Set the signed in user
-        setSignedInUser(gapi.auth2.getAuthInstance().currentUser.je.Qt);
-        setIsLoadingGoogleDriveApi(false);
+        //setSignedInUser(gapi.auth2.getAuthInstance().currentUser.je.Qt);//TODO Don't care about the user info
+        //setIsLoadingGoogleDriveApi(false);
         // list files if user is authenticated
         listFiles();
     } else {
@@ -66,7 +66,7 @@ const updateSigninStatus = isSignedIn => {
  * List files.
  */
 const listFiles = (searchTerm = null) => {
-    setIsFetchingGoogleDriveFiles(true);
+    //setIsFetchingGoogleDriveFiles(true);
     gapi.client.drive.files
         .list({
             pageSize: 10,
@@ -74,10 +74,11 @@ const listFiles = (searchTerm = null) => {
             q: searchTerm,
         })
         .then(function (response) {
-            setIsFetchingGoogleDriveFiles(false);
-            setListDocumentsVisibility(true);
+            // setIsFetchingGoogleDriveFiles(false);
+            //  setListDocumentsVisibility(true);
             const res = JSON.parse(response.body);
-            setDocuments(res.files);
+            //  setDocuments(res.files);
+            console.log(res);
         });
 };
 
@@ -85,13 +86,15 @@ const listFiles = (searchTerm = null) => {
  *  Sign in the user upon button click.
  */
 const handleAuthClick = event => {
+    console.log(event);
     gapi.auth2.getAuthInstance().signIn();
 };
 
 /**
  *  Sign out the user upon button click.
  */
-const handleSignOutClick = (event) => {
-    setListDocumentsVisibility(false);
+const handleSignOutClick = event => {
+    console.log(event);
+    // setListDocumentsVisibility(false);
     gapi.auth2.getAuthInstance().signOut();
 };
