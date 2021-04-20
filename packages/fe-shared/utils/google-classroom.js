@@ -15,17 +15,19 @@ const DISCOVERY_DOCS = ['https://classroom.googleapis.com/$discovery/rest?versio
 //var REDIRECTS = '';
 //curl "https://www.googleapis.com/auth/classroom.courses.readonly?access_token=4%2F0AY0e-g66_5W10uNkdIRtDhpGt_eX5JgNmvIN0xYImhlg5UGsmXW1FOdjNZwGb6n99S_QqQ&"
 
+var authorizeButton = document.getElementById('authorize_button');
+var signoutButton = document.getElementById('signout_button');
+
 // onClick={() => handleClientLoad()} put in button code on settings page
-export const handleClientLoad = () => {
-    console.log("Client Load")
+export function handleClientLoad() {
     gapi.load('client:auth2', initClient);
-};
+}
+
 /**
  *  Initializes the API client library and sets up sign-in state
  *  listeners.
  */
-const initClient = () => {
-    //setIsLoadingGoogleDriveApi(true);
+function initClient() {
     gapi.client
         .init({
             apiKey: REACT_APP_GOOGLE_CLASS_API_KEY,
@@ -40,62 +42,65 @@ const initClient = () => {
 
                 // Handle the initial sign-in state.
                 updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+                authorizeButton.onclick = handleAuthClick;
+                signoutButton.onclick = handleSignoutClick;
             },
             function (error) {
-                console.log(error);
+                appendPre(JSON.stringify(error, null, 2));
             }
         );
-};
+}
+
 /**
  *  Called when the signed in status changes, to update the UI
  *  appropriately. After a sign-in, the API is called.
  */
-const updateSigninStatus = isSignedIn => {
+function updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
-        // Set the signed in user
-        //setSignedInUser(gapi.auth2.getAuthInstance().currentUser.je.Qt);//TODO Don't care about the user info
-        //setIsLoadingGoogleDriveApi(false);
-        // list files if user is authenticated
-        listFiles();
-    } else {
-        // prompt user to sign in
-        handleAuthClick();
+        listCourses();
     }
-};
-
-/**
- * List files.
- */
-const listFiles = (searchTerm = null) => {
-    //setIsFetchingGoogleDriveFiles(true);
-    gapi.client.drive.files
-        .list({
-            pageSize: 10,
-            fields: 'nextPageToken, files(id, name, mimeType, modifiedTime)',
-            q: searchTerm,
-        })
-        .then(function (response) {
-            // setIsFetchingGoogleDriveFiles(false);
-            //  setListDocumentsVisibility(true);
-            const res = JSON.parse(response.body);
-            //  setDocuments(res.files);
-            console.log(res);
-        });
-};
+}
 
 /**
  *  Sign in the user upon button click.
  */
-const handleAuthClick = event => {
-    console.log(event);
+function handleAuthClick(event) {
     gapi.auth2.getAuthInstance().signIn();
-};
+}
 
 /**
  *  Sign out the user upon button click.
  */
-const handleSignOutClick = event => {
-    console.log(event);
-    // setListDocumentsVisibility(false);
+function handleSignoutClick(event) {
     gapi.auth2.getAuthInstance().signOut();
-};
+}
+
+function appendPre(message) {
+    var pre = document.getElementById('content');
+    var textContent = document.createTextNode(`${message}\n`);
+    pre.appendChild(textContent);
+}
+
+/**
+ * Print the names of the first 10 courses the user has access to. If
+ * no courses are found an appropriate message is printed.
+ */
+function listCourses() {
+    gapi.client.classroom.courses
+        .list({
+            pageSize: 10,
+        })
+        .then(function (response) {
+            var courses = response.result.courses;
+            appendPre('Courses:');
+
+            if (courses.length > 0) {
+                for (let i = 0; i < courses.length; i++) {
+                    var course = courses[i];
+                    appendPre(course.name);
+                }
+            } else {
+                appendPre('No courses found.');
+            }
+        });
+}
