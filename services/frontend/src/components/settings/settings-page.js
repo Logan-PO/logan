@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Grid, colors } from '@material-ui/core';
 import { setLoginStage, updateUser } from '@logan/fe-shared/store/login';
-import { handleClientLoad } from '@logan/fe-shared/utils/google-classroom';
+import { handleClientLoad, handleAuthClick, handleSignoutClick } from '@logan/fe-shared/utils/google-classroom';
 import { Page } from '../shared';
 import ColorPicker from '../shared/controls/color-picker';
 import ListHeader from '../shared/list-header';
@@ -27,7 +27,6 @@ export class SettingsPage extends React.Component {
         this.closeNewDeleteModal = this.closeNewDeleteModal.bind(this);
         this.openNewLogOutModal = this.openNewLogOutModal.bind(this);
         this.closeNewLogOutModal = this.closeNewLogOutModal.bind(this);
-        this.handleClientLoad = this.handleClientLoad.bind(this);
 
         this.state = {
             user: props.user,
@@ -42,9 +41,7 @@ export class SettingsPage extends React.Component {
             this.setState({ user: this.props.user });
         }
     }
-/*    handleClientLoad() {
-        handleClientLoad();
-    }*/
+
     openNewUsernameModal() {
         this.setState({ newUsernameModal: true });
     }
@@ -150,6 +147,28 @@ export class SettingsPage extends React.Component {
                                 onClick={handleClientLoad}
                             >
                                 Google Classroom
+                            </ActionButton>
+                        </Grid>
+                        <Grid item>
+                            <ActionButton
+                                id="authorize_button"
+                                variant="contained"
+                                color="primary"
+                                disableElevation
+                                onClick={handleAuthClick}
+                            >
+                                Auth
+                            </ActionButton>
+                        </Grid>
+                        <Grid item>
+                            <ActionButton
+                                id="signout_button"
+                                variant="contained"
+                                color="primary"
+                                disableElevation
+                                onClick={handleSignoutClick}
+                            >
+                                Signout
                             </ActionButton>
                         </Grid>
                         <Grid item>
