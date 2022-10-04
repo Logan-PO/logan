@@ -2,6 +2,16 @@
 
 A personal organizer designed for college students.
 
+Logan is the capstone project for Lucas Popp, Adam Stewart, Jimmy Zassick, and Prem Rao.
+
+![Terms](./screenshots/Terms.png)
+
+![Assignments overview](./screenshots/Assignments.png)
+
+![New task](./screenshots/Newtask.png)
+
+![Task and assignments](./screenshots/Tasks.png)
+
 ## URLs
 
 Frontend: http://logan-frontend.s3-website-us-west-2.amazonaws.com
