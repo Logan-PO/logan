@@ -4,13 +4,24 @@ A personal organizer designed for college students.
 
 Logan is the capstone project for Lucas Popp, Adam Stewart, Jimmy Zassick, and Prem Rao.
 
+Logan is a planner for students. Students can create "terms", or semesters, associate courses with those terms, create assignments, and divide assignments into tasks.
+
+## Terms and Courses
+
 ![Terms](./screenshots/Terms.png)
 
+The terms page is shown above. Terms are given start and end dates, and courses automatically end when the term ends. Courses are color coded, and contain relevant information (like start and end time). Holidays can also be added to terms, and courses are automatically removed from those days (see [Overview](#overview)).
+
+## Assignments and Tasks
 ![Assignments overview](./screenshots/Assignments.png)
 
 ![New task](./screenshots/Newtask.png)
 
 ![Task and assignments](./screenshots/Tasks.png)
+
+## Overview
+
+![Calendar View](./screenshots/Overview.png)
 
 ## URLs
 
