@@ -6,6 +6,8 @@ Logan is the capstone project for Lucas Popp, Adam Stewart, Jimmy Zassick, and P
 
 Logan is a planner for students. Students can create "terms", or semesters, associate courses with those terms, create assignments, and divide assignments into tasks, all to aide with organization and productivity!
 
+> Talk about structure/pages
+
 ## Terms and Courses
 
 ![Terms](./screenshots/Terms.png)
@@ -13,9 +15,15 @@ Logan is a planner for students. Students can create "terms", or semesters, asso
 The terms page is shown above. Terms are given start and end dates, and associated courses automatically end when the term ends. Courses are color coded, and contain relevant information (like start and end time). Holidays can also be added to terms, and courses are automatically removed from those days (see [Overview](#overview)).
 
 ## Assignments and Tasks
+Assignments are exactly what they sound like: assignments! Students can create assignments, associate them with a course, assign a due date, and create tasks and reminders.
+
 ![Assignments overview](./screenshots/Assignments.png)
 
+Tasks are intended to break up assignments into more manageable pieces. Tasks also have due dates and descriptions, but also have priority levels. While most tasks are associated with assignments, they do not need to be. Creating new tasks is quick and easy, and helps encourage steady progress on an assignment.
+
 ![New task](./screenshots/Newtask.png)
+
+> Put these images side by side?
 
 ![Task and assignments](./screenshots/Tasks.png)
 
