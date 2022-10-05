@@ -19,7 +19,7 @@ Assignments are exactly what they sound like: assignments! Students can create a
 
 ![Assignments overview](./screenshots/Assignments.png)
 
-Tasks are intended to break up assignments into more manageable pieces. Tasks also have due dates and descriptions, but also have priority levels. While most tasks are associated with assignments, they do not need to be. Creating new tasks is quick and easy, and helps encourage steady progress on an assignment.
+Tasks are intended to break up assignments into more manageable pieces. Tasks have due dates and descriptions, but also have priority levels. While most tasks are associated with assignments, they do not need to be. Creating new tasks is quick and easy, and helps encourage steady progress on an assignment.
 
 ![New task](./screenshots/Newtask.png)
 
