@@ -3,10 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dateUtils } from '@logan/core';
-import { TimePicker } from '@material-ui/pickers';
 import InstructorIcon from '@material-ui/icons/Face';
 import LocationIcon from '@material-ui/icons/LocationOn';
-import TimeIcon from '@material-ui/icons/Schedule';
 import WeeklyIcon from '@material-ui/icons/ViewWeek';
 import { getScheduleSelectors, updateSection, updateSectionLocal } from '@logan/fe-shared/store/schedule';
 import Editor from '@logan/fe-shared/components/editor';
@@ -15,6 +13,7 @@ import DowPicker from '../shared/controls/dow-picker';
 import TextInput from '../shared/controls/text-input';
 import BasicDatePicker from '../shared/controls/basic-date-picker';
 import InputGroup from '../shared/controls/input-group';
+import TimePicker from '../shared/controls/time-picker';
 import editorStyles from './page-editor.module.scss';
 
 const {
@@ -87,18 +86,10 @@ class SectionEditor extends Editor {
                             />
                         </div>
                         <div className={editorStyles.column}>
-                            <InputGroup
+                            <TimePicker
                                 label="Start time"
-                                icon={TimeIcon}
-                                content={
-                                    <TimePicker
-                                        variant="inline"
-                                        color="secondary"
-                                        format="h:mma"
-                                        value={startTime}
-                                        onChange={this.handleChange.bind(this, 'startTime')}
-                                    />
-                                }
+                                value={startTime}
+                                onChange={this.handleChange.bind(this, 'startTime')}
                             />
                         </div>
                     </div>
@@ -112,18 +103,10 @@ class SectionEditor extends Editor {
                             />
                         </div>
                         <div className={editorStyles.column}>
-                            <InputGroup
+                            <TimePicker
                                 label="End time"
-                                icon={TimeIcon}
-                                content={
-                                    <TimePicker
-                                        variant="inline"
-                                        color="secondary"
-                                        format="h:mma"
-                                        value={endTime}
-                                        onChange={this.handleChange.bind(this, 'endTime')}
-                                    />
-                                }
+                                value={endTime}
+                                onChange={this.handleChange.bind(this, 'endTime')}
                             />
                         </div>
                     </div>

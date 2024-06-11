@@ -5,10 +5,8 @@ import { connect } from 'react-redux';
 import { dateUtils } from '@logan/core';
 import { createSection, getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { TimePicker } from '@material-ui/pickers';
 import InstructorIcon from '@material-ui/icons/Face';
 import LocationIcon from '@material-ui/icons/LocationOn';
-import TimeIcon from '@material-ui/icons/Schedule';
 import WeeklyIcon from '@material-ui/icons/ViewWeek';
 import Dialog from '../shared/dialog';
 import TextInput from '../shared/controls/text-input';
@@ -16,6 +14,7 @@ import InputGroup from '../shared/controls/input-group';
 import ActionButton from '../shared/controls/action-button';
 import BasicDatePicker from '../shared/controls/basic-date-picker';
 import DowPicker from '../shared/controls/dow-picker';
+import TimePicker from '../shared/controls/time-picker';
 import editorStyles from './page-editor.module.scss';
 
 function dateOrNull(input, format) {
@@ -155,18 +154,10 @@ class SectionModal extends React.Component {
                                 />
                             </div>
                             <div className={editorStyles.column}>
-                                <InputGroup
+                                <TimePicker
                                     label="Start time"
-                                    icon={TimeIcon}
-                                    content={
-                                        <TimePicker
-                                            variant="inline"
-                                            color="secondary"
-                                            format="h:mma"
-                                            value={startTime}
-                                            onChange={this.handleChange.bind(this, 'startTime')}
-                                        />
-                                    }
+                                    value={startTime}
+                                    onChange={this.handleChange.bind(this, 'startTime')}
                                 />
                             </div>
                         </div>
@@ -180,18 +171,10 @@ class SectionModal extends React.Component {
                                 />
                             </div>
                             <div className={editorStyles.column}>
-                                <InputGroup
+                                <TimePicker
                                     label="End time"
-                                    icon={TimeIcon}
-                                    content={
-                                        <TimePicker
-                                            variant="inline"
-                                            color="secondary"
-                                            format="h:mma"
-                                            value={endTime}
-                                            onChange={this.handleChange.bind(this, 'endTime')}
-                                        />
-                                    }
+                                    value={endTime}
+                                    onChange={this.handleChange.bind(this, 'endTime')}
                                 />
                             </div>
                         </div>

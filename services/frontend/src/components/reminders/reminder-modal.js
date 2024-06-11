@@ -9,17 +9,14 @@ import {
     updateReminder,
     updateReminderLocal,
 } from '@logan/fe-shared/store/reminders';
-import {
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    Grid,
-    TextField,
-    DialogActions,
-    Button,
-    CircularProgress,
-} from '@material-ui/core';
-import { DateTimePicker } from '@material-ui/pickers';
+import { Grid, CircularProgress } from '@material-ui/core';
+import MessageIcon from '@material-ui/icons/Message';
+import Dialog from '../shared/dialog';
+import TextInput from '../shared/controls/text-input';
+import InputGroup from '../shared/controls/input-group';
+import ActionButton from '../shared/controls/action-button';
+import TimePicker from '../shared/controls/time-picker';
+import BasicDatePicker from '../shared/controls/basic-date-picker';
 import classes from './reminder-modal.module.scss';
 
 class ReminderModal extends React.Component {
@@ -91,8 +88,12 @@ class ReminderModal extends React.Component {
 
         if (prop === 'message') {
             changes.message = e.target.value;
-        } else if (prop === 'timestamp') {
-            changes.timestamp = dateUtils.formatAsDateTime(e);
+        } else if (prop === 'date') {
+            const time = dateUtils.formatAsTime(dateUtils.toDateTime(this.state.reminder.timestamp));
+            changes.timestamp = `${dateUtils.formatAsDate(e)} ${time}`;
+        } else if (prop === 'time') {
+            const date = dateUtils.formatAsDate(dateUtils.toDateTime(this.state.reminder.timestamp));
+            changes.timestamp = `${date} ${dateUtils.formatAsTime(e)}`;
         }
 
         const updated = _.merge({}, this.state.reminder, changes);
@@ -142,7 +143,7 @@ class ReminderModal extends React.Component {
     }
 
     render() {
-        const title = this.props.mode === 'edit' ? 'Edit Reminder' : 'Create Reminder';
+        const title = this.props.mode === 'edit' ? 'Edit reminder' : 'New reminder';
         const actionName = this.props.mode === 'edit' ? 'Save' : 'Create';
 
         const messageError = _.get(this.state, ['validationErrors', 'message'], false);
@@ -151,61 +152,69 @@ class ReminderModal extends React.Component {
         return (
             <Dialog
                 open={this.props.open}
-                fullWidth
-                maxWidth="sm"
+                onClose={this.props.onClose}
+                title={title}
                 disableBackdropClick={this.state.isCreating}
                 disableEscapeKeyDown
-                onClose={this.props.onClose}
-            >
-                <DialogTitle>{title}</DialogTitle>
-                <DialogContent>
+                content={
                     <Grid container direction="column" spacing={2}>
                         <Grid item xs={12}>
-                            <TextField
-                                autoFocus
-                                label="Message"
-                                fullWidth
-                                error={messageError}
-                                helperText={messageError && 'Message cannot be empty'}
-                                value={_.get(this.state.reminder, 'message', '')}
-                                onChange={this.handleUpdate.bind(this, 'message')}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <DateTimePicker
-                                variant="inline"
-                                label="Send at…"
-                                fullWidth
-                                minutesStep={15}
-                                disablePast
-                                error={timestampError}
-                                helperText={timestampError && 'Must be in the future'}
-                                labelFunc={date => {
-                                    const relative = dateUtils.humanReadableDate(date);
-                                    const time = date.format('h:mm A');
-                                    return `${relative} at ${time}`;
-                                }}
-                                value={_.get(this.state.reminder, 'timestamp')}
-                                onChange={this.handleUpdate.bind(this, 'timestamp')}
-                            />
+                            <Grid item xs={12}>
+                                <InputGroup
+                                    fullWidth
+                                    style={{ marginBottom: 8 }}
+                                    classes={{ accessoryCell: classes.alignTop }}
+                                    icon={MessageIcon}
+                                    label="Message"
+                                    error={messageError}
+                                    helperText={messageError ? "Can't send an empty reminder!" : undefined}
+                                    content={
+                                        <TextInput
+                                            autoFocus
+                                            fullWidth
+                                            multiline
+                                            placeholder="Message content…"
+                                            value={_.get(this.state.reminder, 'message', '')}
+                                            onChange={this.handleUpdate.bind(this, 'message')}
+                                        />
+                                    }
+                                />
+                            </Grid>
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <BasicDatePicker
+                                        inputGroupProps={{
+                                            label: 'Date',
+                                            error: timestampError,
+                                            helperText: timestampError ? 'Must be in the future' : undefined,
+                                        }}
+                                        value={dateUtils.toDateTime(_.get(this.state, 'reminder.timestamp'))}
+                                        onChange={this.handleUpdate.bind(this, 'date')}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TimePicker
+                                        value={dateUtils.toDateTime(_.get(this.state, 'reminder.timestamp'))}
+                                        onChange={this.handleUpdate.bind(this, 'time')}
+                                    />
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={this.props.onClose}>Cancel</Button>
-                    <div className={classes.wrapper}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={this.confirm}
-                            disabled={!_.isEmpty(this.state.validationErrors)}
-                        >
-                            {actionName}
-                        </Button>
-                        {this.state.showLoader && <CircularProgress size={24} className={classes.buttonProgress} />}
-                    </div>
-                </DialogActions>
-            </Dialog>
+                }
+                cancelTitle="Cancel"
+                actions={
+                    <React.Fragment>
+                        {this.state.showLoader ? (
+                            <CircularProgress size={24} className={classes.buttonProgress} />
+                        ) : (
+                            <ActionButton onClick={this.confirm} disabled={!_.isEmpty(this.state.validationErrors)}>
+                                {actionName}
+                            </ActionButton>
+                        )}
+                    </React.Fragment>
+                }
+            />
         );
     }
 }
