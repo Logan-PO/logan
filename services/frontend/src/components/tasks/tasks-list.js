@@ -107,20 +107,14 @@ class TasksList extends React.Component {
         );
     }
 
-    _contentsForSection(tids) {
-        const tasks = tids.map(this.props.getTask);
-
-        const groupings = _.groupBy(tasks, task => {
-            const assignment = task.aid ? this.props.getAssignment(task.aid) : undefined;
-            return `${(assignment ? assignment.cid : task.cid) || ''} ${task.aid || ''}`;
-        });
-
-        const sortedEntries = _.sortBy(_.entries(groupings), '0');
-
+    _contentsForSection(groups) {
         const contents = [];
 
-        for (const [sortKey, tasks] of sortedEntries) {
-            const [cid, aid] = sortKey.split(' ');
+        for (const {
+            meta: { cid, aid },
+            tids,
+        } of groups) {
+            const sortKey = `${cid || ''} ${aid || ''}`;
 
             if (cid || aid) {
                 const items = [];
@@ -150,7 +144,7 @@ class TasksList extends React.Component {
             }
 
             contents.push(
-                ...tasks.map(({ tid }) => (
+                ...tids.map(tid => (
                     <TaskCell
                         key={tid}
                         tid={tid}
@@ -172,16 +166,16 @@ class TasksList extends React.Component {
             task => task.complete === this.state.showingCompletedTasks
         );
 
-        const sections = getSections(tasks, this.state.showingCompletedTasks);
+        const sections = getSections(tasks, this.state.showingCompletedTasks, this.props.getAssignment);
 
         return (
             <div className="scrollable-list">
                 <div className={`scroll-view ${styles.tasksList}`}>
                     <List className={styles.listContent}>
-                        {sections.map(([dueDate, tids]) => (
+                        {sections.map(([dueDate, groups]) => (
                             <div className={styles.section} key={dueDate}>
                                 {this._headerForSection(dueDate)}
-                                {this._contentsForSection(tids)}
+                                {this._contentsForSection(groups)}
                             </div>
                         ))}
                     </List>

@@ -9,7 +9,7 @@ export function getCurrentTheme() {
     return currentTheme;
 }
 
-export function makeTheme(params = {}) {
+export function makeTheme(params = {}, overrides = {}) {
     const { primary = teal, accent = deepOrange, ...rest } = params;
 
     const theme = _.merge(
@@ -23,7 +23,8 @@ export function makeTheme(params = {}) {
                 contrastText: textShouldBeLight(primary[500]) ? 'white' : 'black',
             },
         },
-        rest
+        rest,
+        overrides
     );
 
     currentTheme = theme;
