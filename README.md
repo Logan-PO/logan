@@ -2,6 +2,8 @@
 
 A personal organizer designed for college students.
 
+No longer functional
+
 ## URLs
 
 Frontend: http://logan-frontend.s3-website-us-west-2.amazonaws.com
