@@ -20,7 +20,9 @@ jest.doMock('../../utils/auth', () => {
 });
 
 const { dynamoUtils } = require('packages/aws');
+// eslint-disable-next-line import/order
 const testUtils = require('../../utils/test-utils');
+// eslint-disable-next-line import/order
 const controller = require('./reminders-controller');
 
 const { toDbFormat, fromDbFormat } = controller.__test_only__;

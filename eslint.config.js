@@ -2,19 +2,12 @@ import js from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import eslintPluginJest from 'eslint-plugin-jest';
 import importPlugin from 'eslint-plugin-import';
+import reactPlugin from 'eslint-plugin-react';
 import globals from 'globals';
 
 export default [
     js.configs.recommended,
     eslintPluginPrettierRecommended,
-    {
-        files: ['test/**'],
-        ...eslintPluginJest.configs['flat/recommended'],
-        rules: {
-            ...eslintPluginJest.configs['flat/recommended'].rules,
-            'jest/prefer-expect-assertions': 'off',
-        },
-    },
     {
         plugins: {
             import: importPlugin,
@@ -68,6 +61,72 @@ export default [
                     allow: ['__test_only__', '__meta__'],
                 },
             ],
+        },
+    },
+    {
+        files: ['test/**'],
+        ...eslintPluginJest.configs['flat/recommended'],
+        rules: {
+            ...eslintPluginJest.configs['flat/recommended'].rules,
+            'jest/prefer-expect-assertions': 'off',
+        },
+    },
+    // packages/fe-shared
+    {
+        files: ['packages/fe-shared/**'],
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+            },
+        },
+    },
+    // services/frontend
+    {
+        ...reactPlugin.configs.flat.recommended,
+        ignores: ['public/**', '.cache/**'],
+        languageOptions: {
+            parserOptions: {
+                ecmaFeatures: {
+                    jsx: true,
+                },
+            },
+            globals: {
+                ...globals.browser,
+            },
+        },
+        rules: {
+            'react/jsx-uses-react': 'error',
+            'react/jsx-uses-vars': 'error',
+        },
+        settings: {
+            react: {
+                version: 'detect',
+            },
+        },
+    },
+    // services/mobile-frontend
+    {
+        ...reactPlugin.configs.flat.recommended,
+        files: ['services/mobile-frontend/**'],
+        ignores: ['android/**', 'ios/**'],
+        languageOptions: {
+            parserOptions: {
+                ecmaFeatures: {
+                    jsx: true,
+                },
+            },
+            globals: {
+                ...globals.browser,
+            },
+        },
+        rules: {
+            'react/jsx-uses-react': 'error',
+            'react/jsx-uses-vars': 'error',
+        },
+        settings: {
+            react: {
+                version: 'detect',
+            },
         },
     },
 ];

@@ -17,7 +17,9 @@ jest.doMock('packages/aws', () => {
 });
 
 const { dynamoUtils } = require('packages/aws');
+// eslint-disable-next-line import/order
 const testUtils = require('../../utils/test-utils');
+// eslint-disable-next-line import/order
 const controllers = require('./index');
 
 const formatting = _.mapValues(controllers, controller => _.pick(controller, '__test_only__'));

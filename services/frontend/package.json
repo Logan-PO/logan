@@ -45,8 +45,5 @@
   },
   "bugs": {
     "url": "https://github.com/beasterbro/logan/issues"
-  },
-  "devDependencies": {
-    "eslint-plugin-react": "^7.37.4"
   }
 }
