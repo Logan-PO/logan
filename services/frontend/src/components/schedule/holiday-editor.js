@@ -2,14 +2,14 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dateUtils } from 'packages/core';
 import { Grid } from '@material-ui/core';
-import { getScheduleSelectors, updateHoliday, updateHolidayLocal } from 'packages/fe-shared/store/schedule';
 import Editor from 'packages/fe-shared/components/editor';
 import TextInput from '../shared/controls/text-input';
 import BasicDatePicker from '../shared/controls/basic-date-picker';
 import '../shared/editor.scss';
 import editorStyles from './page-editor.module.scss';
+import { getScheduleSelectors, updateHoliday, updateHolidayLocal } from 'packages/fe-shared/store/schedule';
+import { dateUtils } from 'packages/core';
 
 const {
     dayjs,

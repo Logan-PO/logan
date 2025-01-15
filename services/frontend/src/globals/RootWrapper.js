@@ -3,8 +3,8 @@ import { Provider as StoreProvider } from 'react-redux';
 import { CssBaseline } from '@material-ui/core';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DayJsUtils from '@date-io/dayjs';
-import store from 'packages/fe-shared/store';
 import DynamicThemeProvider from './dynamic-theme-provider';
+import store from 'packages/fe-shared/store';
 
 function wrapper({ element }) {
     return (

@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { Button, Dialog, Paragraph, Portal } from 'react-native-paper';
-import { getRemindersSelectors, deleteReminder } from 'packages/fe-shared/store/reminders';
 import ListItem from '../shared/list-item';
 import Typography, { typographyStyles } from '../shared/typography';
 import ListHeader from '../shared/list-header';
 import ReminderCell from './reminder-cell';
+import { getRemindersSelectors, deleteReminder } from 'packages/fe-shared/store/reminders';
 
 class RemindersList extends React.Component {
     constructor(props) {

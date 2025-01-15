@@ -3,9 +3,9 @@ import { Platform, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import { connect } from 'react-redux';
-import { LOGIN_STAGE, setLoginStage, verifyIdToken } from 'packages/fe-shared/store/login';
 import PropTypes from 'prop-types';
 import { typographyStyles } from '../shared/typography';
+import { LOGIN_STAGE, setLoginStage, verifyIdToken } from 'packages/fe-shared/store/login';
 
 const ANDROID_CLIENT_ID = '850674143860-3sg0du8iqknfanigev1kl65c35isb1s2.apps.googleusercontent.com';
 const IOS_CLIENT_ID = '850674143860-mqhkuritdvkmiq53h9963rjmn5gamsgb.apps.googleusercontent.com';

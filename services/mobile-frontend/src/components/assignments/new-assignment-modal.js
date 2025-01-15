@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { createAssignment } from 'packages/fe-shared/store/assignments';
-import Editor from 'packages/fe-shared/components/editor';
 import ViewController from '../shared/view-controller';
 import AssignmentEditor from './assignment-editor';
+import { createAssignment } from 'packages/fe-shared/store/assignments';
+import Editor from 'packages/fe-shared/components/editor';
 
 class NewAssignmentModal extends React.Component {
     constructor(props) {

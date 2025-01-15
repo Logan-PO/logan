@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateUtils } from 'packages/core';
-import SyncComponent from 'packages/fe-shared/components/sync-component';
 import { View, LayoutAnimation, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ListItem from '../list-item';
 import Typography from '../typography';
+import SyncComponent from 'packages/fe-shared/components/sync-component';
+import { dateUtils } from 'packages/core';
 
 class TimePicker extends SyncComponent {
     constructor(props) {

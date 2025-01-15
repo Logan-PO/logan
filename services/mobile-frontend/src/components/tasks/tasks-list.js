@@ -5,15 +5,15 @@ import { connect } from 'react-redux';
 import { SectionList } from 'react-native';
 import { FAB, Portal, Dialog, Paragraph, Button } from 'react-native-paper';
 import SegmentedControl from '@react-native-community/segmented-control';
-import { dateUtils } from 'packages/core';
-import { getTasksSelectors, deleteTask, deleteTaskLocal } from 'packages/fe-shared/store/tasks';
-import { getSections } from 'packages/fe-shared/sorting/tasks';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getCurrentTheme } from '../../globals/theme';
 import TaskCell from '../../components/tasks/task-cell';
 import ViewController from '../shared/view-controller';
 import { typographyStyles } from '../shared/typography';
 import ListHeader from '../shared/list-header';
+import { getSections } from 'packages/fe-shared/sorting/tasks';
+import { getTasksSelectors, deleteTask, deleteTaskLocal } from 'packages/fe-shared/store/tasks';
+import { dateUtils } from 'packages/core';
 
 class TasksList extends React.Component {
     constructor(props) {

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateUtils } from 'packages/core';
 import { Grid, Typography, ButtonGroup, Button } from '@material-ui/core';
 import LeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import RightIcon from '@material-ui/icons/KeyboardArrowRight';
 import TodayIcon from '@material-ui/icons/Adjust';
 import classes from './toolbar.module.scss';
+import { dateUtils } from 'packages/core';
 
 class Toolbar extends React.Component {
     constructor(props) {

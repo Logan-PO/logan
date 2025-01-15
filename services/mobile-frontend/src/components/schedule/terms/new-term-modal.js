@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { dateUtils } from 'packages/core';
-import { createTerm } from 'packages/fe-shared/store/schedule';
-import Editor from 'packages/fe-shared/components/editor';
 import { Appbar } from 'react-native-paper';
 import ViewController from '../../shared/view-controller';
 import TermEditor from './term-editor';
+import { dateUtils } from 'packages/core';
+import { createTerm } from 'packages/fe-shared/store/schedule';
+import Editor from 'packages/fe-shared/components/editor';
 
 class NewTermModal extends React.Component {
     constructor(props) {

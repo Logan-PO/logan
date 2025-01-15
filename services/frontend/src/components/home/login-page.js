@@ -6,14 +6,14 @@ import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
 import { colors } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import api from 'packages/fe-shared/utils/api';
-import { LOGIN_STAGE, setLoginStage, fetchSelf } from 'packages/fe-shared/store/login';
 import Typography from '../shared/typography';
 import { headingsFontFamily } from '../../globals/theme';
 import TextButton from '../shared/controls/text-button';
 import GoogleBtn from './GoogleButton';
 import styles from './home-page.module.scss';
 import loginStyles from './login-page.module.scss';
+import { LOGIN_STAGE, setLoginStage, fetchSelf } from 'packages/fe-shared/store/login';
+import api from 'packages/fe-shared/utils/api';
 
 class LoginPage extends React.Component {
     async componentDidMount() {

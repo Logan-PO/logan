@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { Text, TextInput, Colors } from 'react-native-paper';
+import Typography, { typographyStyles } from '../shared/typography';
+import ListItem from '../shared/list-item';
+import DueDateControl from '../shared/due-date-control';
 import { dateUtils } from 'packages/core';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from 'packages/fe-shared/store/assignments';
 import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
 import Editor from 'packages/fe-shared/components/editor';
-import Typography, { typographyStyles } from '../shared/typography';
-import ListItem from '../shared/list-item';
-import DueDateControl from '../shared/due-date-control';
 
 // A generic assignment editor, to be used for creation or editing in a ViewController
 class AssignmentEditor extends Editor {

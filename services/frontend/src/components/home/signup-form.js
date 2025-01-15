@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { LOGIN_STAGE, setLoginStage, createNewUser } from 'packages/fe-shared/store/login';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '../shared/typography';
 import ActionButton from '../shared/controls/action-button';
@@ -10,6 +9,7 @@ import InputGroup from '../shared/controls/input-group';
 import TextInput from '../shared/controls/text-input';
 import styles from './signup-form.module.scss';
 import GoogleBtn from './GoogleButton';
+import { LOGIN_STAGE, setLoginStage, createNewUser } from 'packages/fe-shared/store/login';
 
 class SignUpForm extends React.Component {
     constructor(props) {

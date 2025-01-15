@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { setShouldGoTo, getScheduleSelectors } from 'packages/fe-shared/store/schedule';
 import { Page } from '../shared';
 import EmptySticker from '../shared/displays/empty-sticker';
 import TermsList from './terms-list';
@@ -13,6 +12,7 @@ import CourseEditor from './course-editor';
 import HolidayEditor from './holiday-editor';
 import SectionEditor from './section-editor';
 import styles from './schedule-page.module.scss';
+import { setShouldGoTo, getScheduleSelectors } from 'packages/fe-shared/store/schedule';
 
 class SchedulePage extends React.Component {
     constructor(props) {

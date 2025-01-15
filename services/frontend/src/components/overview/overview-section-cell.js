@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
-import { getSectionSelectors } from 'packages/fe-shared/store/schedule';
-import { printSectionTimes } from 'packages/fe-shared/utils/scheduling-utils';
 import { CourseLabel } from '../shared/displays';
 import Typography from '../shared/typography';
 import styles from './overview-section-cell.module.scss';
+import { printSectionTimes } from 'packages/fe-shared/utils/scheduling-utils';
+import { getSectionSelectors } from 'packages/fe-shared/store/schedule';
 
 class OverviewSectionCell extends React.Component {
     constructor(props) {

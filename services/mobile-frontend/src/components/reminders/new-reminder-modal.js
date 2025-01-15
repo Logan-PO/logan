@@ -3,13 +3,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
-import { dateUtils } from 'packages/core';
-import Editor from 'packages/fe-shared/components/editor';
 import { Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { createReminder } from 'packages/fe-shared/store/reminders';
 import ViewController from '../shared/view-controller';
 import ReminderEditor from './reminder-editor';
+import { createReminder } from 'packages/fe-shared/store/reminders';
+import Editor from 'packages/fe-shared/components/editor';
+import { dateUtils } from 'packages/core';
 
 class NewReminderModal extends React.Component {
     constructor(props) {

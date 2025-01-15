@@ -2,10 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dateUtils } from 'packages/core';
-import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from 'packages/fe-shared/store/tasks';
-import { getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
-import Editor from 'packages/fe-shared/components/editor';
 import '../shared/editor.scss';
 import { CoursePicker, DueDatePicker, PriorityPicker, Checkbox, TagEditor } from '../shared/controls';
 import RemindersList from '../reminders/reminders-list';
@@ -13,6 +9,10 @@ import './task-editor.scss';
 import TextInput from '../shared/controls/text-input';
 import InputGroup from '../shared/controls/input-group';
 import AssignmentPreview from './assignment-preview';
+import Editor from 'packages/fe-shared/components/editor';
+import { getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
+import { getTasksSelectors, updateTaskLocal, updateTask, deleteTask } from 'packages/fe-shared/store/tasks';
+import { dateUtils } from 'packages/core';
 
 const {
     dayjs,

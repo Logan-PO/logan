@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
-import { getTermSelectors, deleteTerm } from 'packages/fe-shared/store/schedule';
 import { Button, Dialog, FAB, Paragraph, Portal } from 'react-native-paper';
 import ViewController from '../../shared/view-controller';
 import { typographyStyles } from '../../shared/typography';
 import TermCell from './term-cell';
+import { getTermSelectors, deleteTerm } from 'packages/fe-shared/store/schedule';
 
 class TermsList extends React.Component {
     constructor(props) {

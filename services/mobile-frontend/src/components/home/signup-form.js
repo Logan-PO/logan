@@ -1,12 +1,12 @@
 import React from 'react';
 import _ from 'lodash';
-import { createNewUser, LOGIN_STAGE, setLoginStage } from 'packages/fe-shared/store/login';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 import { TextInput, Button, Card } from 'react-native-paper';
 import Typography from '../shared/typography';
+import { createNewUser, LOGIN_STAGE, setLoginStage } from 'packages/fe-shared/store/login';
 
 class SignUpForm extends React.Component {
     constructor(props) {

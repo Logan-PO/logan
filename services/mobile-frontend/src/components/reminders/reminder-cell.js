@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateUtils } from 'packages/core';
 import { View } from 'react-native';
 import { Colors } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Typography from '../shared/typography';
 import ListItem from '../shared/list-item';
+import { dateUtils } from 'packages/core';
 
 class ReminderCell extends React.Component {
     constructor(props) {

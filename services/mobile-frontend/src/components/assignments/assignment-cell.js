@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { Colors } from 'react-native-paper';
-import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from 'packages/fe-shared/store/assignments';
-import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
-import { dateUtils } from 'packages/core';
 import CourseLabel from '../shared/displays/course-label';
 import Typography from '../shared/typography';
 import ListItem from '../shared/list-item';
+import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from 'packages/fe-shared/store/assignments';
+import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
+import { dateUtils } from 'packages/core';
 
 class AssignmentCell extends React.Component {
     constructor(props) {

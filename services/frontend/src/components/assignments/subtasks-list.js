@@ -2,8 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dateUtils } from 'packages/core';
-import { getTasksSelectors, createTask, deleteTask } from 'packages/fe-shared/store/tasks';
 import AddIcon from '@material-ui/icons/AddCircleOutline';
 import TasksIcon from 'mdi-material-ui/CheckboxMarkedCircleOutline';
 import TaskModal from '../tasks/task-modal';
@@ -12,6 +10,8 @@ import TextButton from '../shared/controls/text-button';
 import '../shared/list.scss';
 import SubtaskCell from './subtask-cell';
 import styles from './subtasks-list.module.scss';
+import { getTasksSelectors, createTask, deleteTask } from 'packages/fe-shared/store/tasks';
+import { dateUtils } from 'packages/core';
 
 const {
     dayjs,

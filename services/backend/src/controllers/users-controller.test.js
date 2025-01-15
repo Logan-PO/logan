@@ -32,10 +32,9 @@ const basicUser2 = {
     accentColor: 'blue',
 };
 
-// eslint-disable-next-line import/order
+const usersController = require('./users-controller');
 const { dynamoUtils } = require('packages/aws');
 // Load users-controller.js after mocking everything
-const usersController = require('./users-controller');
 
 beforeEach(() => {
     jest.clearAllMocks();

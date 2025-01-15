@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getScheduleSelectors, updateSection, updateSectionLocal } from 'packages/fe-shared/store/schedule';
-import { dateUtils } from 'packages/core';
-import Editor from 'packages/fe-shared/components/editor';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
@@ -13,6 +10,9 @@ import TimePicker from '../../shared/pickers/time-picker';
 import NumberPicker from '../../shared/pickers/number-picker';
 import DowPicker from '../../shared/pickers/dow-picker';
 import ListHeader from '../../shared/list-header';
+import Editor from 'packages/fe-shared/components/editor';
+import { dateUtils } from 'packages/core';
+import { getScheduleSelectors, updateSection, updateSectionLocal } from 'packages/fe-shared/store/schedule';
 
 class SectionEditor extends Editor {
     constructor(props) {

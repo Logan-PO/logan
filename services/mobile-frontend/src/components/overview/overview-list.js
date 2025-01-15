@@ -2,10 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dateUtils } from 'packages/core';
-import { fetchAssignments, getAssignmentsSelectors, deleteAssignment } from 'packages/fe-shared/store/assignments';
-import { fetchTasks, getTasksSelectors, deleteTask } from 'packages/fe-shared/store/tasks';
-import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
 import { View, SectionList } from 'react-native';
 import { Button, Colors, Dialog, FAB, Paragraph, Portal } from 'react-native-paper';
 import AssignmentCell from '../assignments/assignment-cell';
@@ -14,6 +10,10 @@ import ViewController from '../shared/view-controller';
 import { typographyStyles } from '../shared/typography';
 import ListHeader from '../shared/list-header';
 import OverviewSectionCell from './overview-section-cell';
+import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
+import { fetchTasks, getTasksSelectors, deleteTask } from 'packages/fe-shared/store/tasks';
+import { fetchAssignments, getAssignmentsSelectors, deleteAssignment } from 'packages/fe-shared/store/assignments';
+import { dateUtils } from 'packages/core';
 
 const {
     dayjs,

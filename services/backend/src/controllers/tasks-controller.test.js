@@ -37,9 +37,9 @@ const basicTask2 = {
     complete: false,
 };
 
-const { dynamoUtils } = require('packages/aws');
 const testUtils = require('../../utils/test-utils');
 const tasksController = require('./tasks-controller');
+const { dynamoUtils } = require('packages/aws');
 
 const { toDbFormat } = tasksController.__test_only__;
 

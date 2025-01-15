@@ -2,13 +2,13 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getSectionSelectors } from 'packages/fe-shared/store/schedule';
 import { View, LayoutAnimation } from 'react-native';
-import SyncComponent from 'packages/fe-shared/components/sync-component';
 import CourseLabel from '../shared/displays/course-label';
 import ListItem from '../shared/list-item';
 import Typography from '../shared/typography';
 import { printSectionTimes } from './scheduling-utils';
+import SyncComponent from 'packages/fe-shared/components/sync-component';
+import { getSectionSelectors } from 'packages/fe-shared/store/schedule';
 
 class OverviewSectionCell extends SyncComponent {
     constructor(props) {

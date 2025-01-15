@@ -2,10 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dateUtils } from 'packages/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import { createAssignment } from 'packages/fe-shared/store/assignments';
 import Dialog from '../shared/dialog';
 import CoursePicker from '../shared/controls/course-picker';
 import ActionButton from '../shared/controls/action-button';
@@ -14,6 +12,8 @@ import TextInput from '../shared/controls/text-input';
 import BasicDatePicker from '../shared/controls/basic-date-picker';
 import TagEditor from '../shared/controls/tag-editor';
 import styles from './assignment-modal.module.scss';
+import { createAssignment } from 'packages/fe-shared/store/assignments';
+import { dateUtils } from 'packages/core';
 
 const {
     dayjs,

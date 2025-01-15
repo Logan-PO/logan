@@ -2,14 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { navigate } from 'gatsby';
 import PropTypes from 'prop-types';
-import { dateUtils } from 'packages/core';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import IconButton from '@material-ui/core/IconButton';
-import { getAssignmentsSelectors, setShouldGoToAssignment } from 'packages/fe-shared/store/assignments';
 import InputGroup from '../shared/controls/input-group';
 import Typography from '../shared/typography';
 import classes from './assignment-preview.module.scss';
+import { getAssignmentsSelectors, setShouldGoToAssignment } from 'packages/fe-shared/store/assignments';
+import { dateUtils } from 'packages/core';
 
 class AssignmentPreview extends React.Component {
     openAssignment() {

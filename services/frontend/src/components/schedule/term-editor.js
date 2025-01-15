@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dateUtils } from 'packages/core';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -30,6 +29,7 @@ import editorStyles from './page-editor.module.scss';
 import listStyles from './page-list.module.scss';
 import CourseModal from './course-modal';
 import HolidayModal from './holiday-modal';
+import { dateUtils } from 'packages/core';
 
 const {
     dayjs,

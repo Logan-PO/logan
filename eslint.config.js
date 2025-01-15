@@ -34,6 +34,17 @@ export default [
                 ...eslintPluginJest.environments.globals.globals,
             },
         },
+        settings: {
+            'import/internal-regex': '^(packages|services)/.+',
+            'import/resolver': {
+                alias: {
+                    map: [
+                        ['packages', './packages'],
+                        ['services', './services'],
+                    ],
+                },
+            },
+        },
         rules: {
             'import/no-unresolved': 'error',
             'import/no-extraneous-dependencies': 'error',

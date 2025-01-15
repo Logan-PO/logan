@@ -2,8 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dateUtils } from 'packages/core';
-import { createSection, getScheduleSelectors } from 'packages/fe-shared/store/schedule';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { TimePicker } from '@material-ui/pickers';
 import InstructorIcon from '@material-ui/icons/Face';
@@ -17,6 +15,8 @@ import ActionButton from '../shared/controls/action-button';
 import BasicDatePicker from '../shared/controls/basic-date-picker';
 import DowPicker from '../shared/controls/dow-picker';
 import editorStyles from './page-editor.module.scss';
+import { createSection, getScheduleSelectors } from 'packages/fe-shared/store/schedule';
+import { dateUtils } from 'packages/core';
 
 function dateOrNull(input, format) {
     return input ? dateUtils.dayjs(input, format) : dateUtils.dayjs();

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
-import Editor from 'packages/fe-shared/components/editor';
 import ViewController from '../../shared/view-controller';
 import HolidayEditor from './holiday-editor';
+import Editor from 'packages/fe-shared/components/editor';
 
 class HolidayDisplay extends React.Component {
     constructor(props) {

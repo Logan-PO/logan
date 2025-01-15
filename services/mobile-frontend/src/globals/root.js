@@ -3,9 +3,9 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { NativeModules } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer as NavigationProvider } from '@react-navigation/native';
-import { store } from 'packages/fe-shared';
 import NavigationHierarchy from './navigation-hierarchy';
 import ThemedPaperProvider from './themed-paper-provider';
+import { store } from 'packages/fe-shared';
 
 const { UIManager } = NativeModules;
 UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);

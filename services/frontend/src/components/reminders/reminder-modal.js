@@ -2,13 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dateUtils } from 'packages/core';
-import {
-    getRemindersSelectors,
-    createReminder,
-    updateReminder,
-    updateReminderLocal,
-} from 'packages/fe-shared/store/reminders';
 import {
     Dialog,
     DialogTitle,
@@ -21,6 +14,13 @@ import {
 } from '@material-ui/core';
 import { DateTimePicker } from '@material-ui/pickers';
 import classes from './reminder-modal.module.scss';
+import {
+    getRemindersSelectors,
+    createReminder,
+    updateReminder,
+    updateReminderLocal,
+} from 'packages/fe-shared/store/reminders';
+import { dateUtils } from 'packages/core';
 
 class ReminderModal extends React.Component {
     constructor(props) {

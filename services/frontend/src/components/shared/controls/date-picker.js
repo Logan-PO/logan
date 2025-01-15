@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { dateUtils } from 'packages/core';
 import { ButtonBase, Popover } from '@material-ui/core';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import { getCurrentTheme } from '../../../globals/theme';
 import Typography from '../typography';
 import ActionButton from './action-button';
 import styles from './date-picker.module.scss';
+import { dateUtils } from 'packages/core';
 
 class DatePicker extends React.Component {
     constructor(props) {

@@ -1,10 +1,10 @@
 const _ = require('lodash');
-const { dynamoUtils } = require('packages/aws');
 const { v4: uuid } = require('uuid');
 const { UNAUTHORIZED_ACTIONS, generateBearerToken } = require('../../utils/auth');
 const { makeHandler } = require('../../utils/wrap-handler');
 const requestValidator = require('../../utils/request-validator');
 const { NotFoundError, ValidationError, PermissionDeniedError } = require('../../utils/errors');
+const { dynamoUtils } = require('packages/aws');
 
 function fromDbFormat(db) {
     return {

@@ -7,6 +7,9 @@ import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { PriorityDisplay } from '../shared/displays';
+import { Checkbox } from '../shared/controls';
+import BreadcrumbsLike from '../shared/breadcrumbs-like';
 import { dateUtils } from 'packages/core';
 import {
     getTasksSelectors,
@@ -17,9 +20,6 @@ import {
 } from 'packages/fe-shared/store/tasks';
 import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
 import { getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
-import { PriorityDisplay } from '../shared/displays';
-import { Checkbox } from '../shared/controls';
-import BreadcrumbsLike from '../shared/breadcrumbs-like';
 import '../shared/list.scss';
 import styles from './subtask-cell.module.scss';
 

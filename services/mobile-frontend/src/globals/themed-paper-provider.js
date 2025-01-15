@@ -1,7 +1,6 @@
-import React from 'react';
+import 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Provider as PaperProvider } from 'react-native-paper';
 import * as MaterialColors from 'material-ui-colors';
 import { makeTheme } from './theme';
 

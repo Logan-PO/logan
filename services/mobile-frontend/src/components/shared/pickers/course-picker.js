@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View, ScrollView } from 'react-native';
 import { List } from 'react-native-paper';
-import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ViewController from '../view-controller';
 import ListHeader from '../list-header';
 import ListItem from '../list-item';
 import Typography from '../typography';
+import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
 
 class CoursePicker extends React.Component {
     constructor(props) {

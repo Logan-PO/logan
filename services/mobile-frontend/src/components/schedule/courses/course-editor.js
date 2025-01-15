@@ -2,13 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-    getScheduleSelectors,
-    updateCourse,
-    updateCourseLocal,
-    deleteSection,
-} from 'packages/fe-shared/store/schedule';
-import Editor from 'packages/fe-shared/components/editor';
 import { View } from 'react-native';
 import { Button, Dialog, Paragraph, Portal, TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
@@ -16,6 +9,13 @@ import Typography, { typographyStyles } from '../../shared/typography';
 import ColorPicker, { colors } from '../../shared/pickers/color-picker';
 import SectionCell from '../sections/section-cell';
 import ListHeader from '../../shared/list-header';
+import Editor from 'packages/fe-shared/components/editor';
+import {
+    getScheduleSelectors,
+    updateCourse,
+    updateCourseLocal,
+    deleteSection,
+} from 'packages/fe-shared/store/schedule';
 
 class CourseEditor extends Editor {
     constructor(props) {

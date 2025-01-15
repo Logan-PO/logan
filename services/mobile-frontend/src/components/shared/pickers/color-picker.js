@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import SyncComponent from 'packages/fe-shared/components/sync-component';
 import { View, LayoutAnimation } from 'react-native';
 import { Colors, TouchableRipple } from 'react-native-paper';
 import ListItem from '../list-item';
 import Typography from '../typography';
+import SyncComponent from 'packages/fe-shared/components/sync-component';
 
 function camelCaseToSentenceCase(str) {
     return _.upperFirst(_.camelCase(str).replace(/([A-Z])/g, ' $1'));

@@ -2,17 +2,17 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { setLoginStage, LOGIN_STAGE, updateUser, deleteUser } from 'packages/fe-shared/store/login';
 import { Appbar, Button, Dialog, Paragraph, List, Portal, TextInput, Colors } from 'react-native-paper';
 import { ScrollView, View, ActivityIndicator } from 'react-native';
-import SyncComponent from 'packages/fe-shared/components/sync-component';
-import api from 'packages/fe-shared/utils/api';
 import ViewController from '../shared/view-controller';
 import MobileLoginButton from '../home/mobile-login-button';
 import Typography, { typographyStyles } from '../shared/typography';
 import ListItem from '../shared/list-item';
 import ColorPicker, { nameForColor } from '../shared/pickers/color-picker';
 import { getCurrentTheme } from '../../globals/theme';
+import api from 'packages/fe-shared/utils/api';
+import SyncComponent from 'packages/fe-shared/components/sync-component';
+import { setLoginStage, LOGIN_STAGE, updateUser, deleteUser } from 'packages/fe-shared/store/login';
 
 export class Settings extends SyncComponent {
     constructor(props) {

@@ -31,9 +31,9 @@ const basicAssignment2 = {
     dueDate: '2021-1-31',
 };
 
-const { dynamoUtils } = require('packages/aws');
 const testUtils = require('../../utils/test-utils');
 const assignmentsController = require('./assignments-controller');
+const { dynamoUtils } = require('packages/aws');
 
 const { toDbFormat } = assignmentsController.__test_only__;
 

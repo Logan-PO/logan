@@ -5,14 +5,14 @@ import { connect } from 'react-redux';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
-import * as dateUtils from 'packages/core/src/date-utils';
-import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
-import { getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
 import Toolbar from './toolbar';
 import OverviewScheduleList from './overview-schedule-list';
 import CalendarEvent from './calendar-event';
 import './overview-weekly.scss';
 import styles from './overview-weekly.module.scss';
+import { getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
+import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
+import * as dateUtils from 'packages/core/src/date-utils';
 
 const localizer = momentLocalizer(moment);
 

@@ -3,15 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, FormControl, FormControlLabel, Switch } from '@material-ui/core';
 import _ from 'lodash';
-import { dateUtils } from 'packages/core';
-import {
-    fetchAssignments,
-    getAssignmentsSelectors,
-    deleteAssignment,
-    setShouldGoToAssignment,
-} from 'packages/fe-shared/store/assignments';
-import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
-import { getSections } from 'packages/fe-shared/sorting/assignments';
 import Fab from '../shared/controls/fab';
 import ListHeader from '../shared/list-header';
 import ListSubheader from '../shared/list-subheader';
@@ -19,6 +10,15 @@ import AssignmentModal from './assignment-modal';
 import AssignmentCell from './assignment-cell';
 import '../shared/list.scss';
 import classes from './assignments-list.module.scss';
+import { getSections } from 'packages/fe-shared/sorting/assignments';
+import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
+import {
+    fetchAssignments,
+    getAssignmentsSelectors,
+    deleteAssignment,
+    setShouldGoToAssignment,
+} from 'packages/fe-shared/store/assignments';
+import { dateUtils } from 'packages/core';
 
 class AssignmentsList extends React.Component {
     constructor(props) {

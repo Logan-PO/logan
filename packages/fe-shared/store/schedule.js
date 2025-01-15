@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import { dateUtils } from 'packages/core';
 import Promise from 'bluebird';
 import { createAsyncSlice, wrapAdapter } from '../utils/redux-utils';
 import api from '../utils/api';
+import { dateUtils } from 'packages/core';
 
 function compareStrings(a, b) {
     if (a < b) return -1;

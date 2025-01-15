@@ -3,8 +3,6 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Grid, colors } from '@material-ui/core';
-import { setLoginStage, updateUser } from 'packages/fe-shared/store/login';
-import { handleClientLoad, handleAuthClick, handleSignoutClick } from 'packages/fe-shared/utils/google-classroom';
 import { Page } from '../shared';
 import ColorPicker from '../shared/controls/color-picker';
 import ListHeader from '../shared/list-header';
@@ -15,6 +13,8 @@ import UsernameModal from './username-modal';
 import DeleteModal from './delete-modal';
 import LogOutModal from './logout-modal';
 import styles from './settings-page.module.scss';
+import { handleClientLoad, handleAuthClick, handleSignoutClick } from 'packages/fe-shared/utils/google-classroom';
+import { setLoginStage, updateUser } from 'packages/fe-shared/store/login';
 
 export class SettingsPage extends React.Component {
     constructor(props) {

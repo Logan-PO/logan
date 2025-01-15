@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import { IconButton } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import BreadcrumbsLike from '../shared/breadcrumbs-like';
+import styles from './reminder-cell.module.scss';
 import { dateUtils } from 'packages/core';
 import { getRemindersSelectors, deleteReminder } from 'packages/fe-shared/store/reminders';
-import BreadcrumbsLike from '../shared/breadcrumbs-like';
 import '../shared/list.scss';
-import styles from './reminder-cell.module.scss';
 
 class ReminderCell extends React.Component {
     constructor(props) {

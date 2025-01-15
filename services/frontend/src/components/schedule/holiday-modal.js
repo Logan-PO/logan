@@ -2,8 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dateUtils } from 'packages/core';
-import { createHoliday } from 'packages/fe-shared/store/schedule';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '../shared/dialog';
 import TextInput from '../shared/controls/text-input';
@@ -11,6 +9,8 @@ import InputGroup from '../shared/controls/input-group';
 import BasicDatePicker from '../shared/controls/basic-date-picker';
 import ActionButton from '../shared/controls/action-button';
 import editorStyles from './page-editor.module.scss';
+import { createHoliday } from 'packages/fe-shared/store/schedule';
+import { dateUtils } from 'packages/core';
 
 class HolidayModal extends React.Component {
     constructor(props) {

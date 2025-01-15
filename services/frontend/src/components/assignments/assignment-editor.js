@@ -3,14 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import { dateUtils } from 'packages/core';
-import {
-    deleteAssignment,
-    getAssignmentsSelectors,
-    updateAssignment,
-    updateAssignmentLocal,
-} from 'packages/fe-shared/store/assignments';
-import Editor from 'packages/fe-shared/components/editor';
 import '../shared/editor.scss';
 import RemindersList from '../reminders/reminders-list';
 import CoursePicker from '../shared/controls/course-picker';
@@ -18,6 +10,14 @@ import BasicDatePicker from '../shared/controls/basic-date-picker';
 import InputGroup from '../shared/controls/input-group';
 import TextInput from '../shared/controls/text-input';
 import SubtasksList from './subtasks-list';
+import Editor from 'packages/fe-shared/components/editor';
+import {
+    deleteAssignment,
+    getAssignmentsSelectors,
+    updateAssignment,
+    updateAssignmentLocal,
+} from 'packages/fe-shared/store/assignments';
+import { dateUtils } from 'packages/core';
 import './assignment-editor.scss';
 
 const { DB_DATE_FORMAT } = dateUtils.constants;

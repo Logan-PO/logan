@@ -3,11 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List } from '@material-ui/core';
-import { dateUtils } from 'packages/core';
-import { fetchAssignments, getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
-import { fetchTasks, getTasksSelectors } from 'packages/fe-shared/store/tasks';
-import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
-import { displayNameForCourse } from 'packages/fe-shared/utils/scheduling-utils';
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import ListHeader from '../shared/list-header';
@@ -16,6 +11,11 @@ import { EmptySticker } from '../shared/displays';
 import Typography from '../shared/typography';
 import OverviewSectionCell from './overview-section-cell';
 import styles from './overview-schedule-list.module.scss';
+import { displayNameForCourse } from 'packages/fe-shared/utils/scheduling-utils';
+import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
+import { fetchTasks, getTasksSelectors } from 'packages/fe-shared/store/tasks';
+import { fetchAssignments, getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
+import { dateUtils } from 'packages/core';
 
 const {
     dayjs,

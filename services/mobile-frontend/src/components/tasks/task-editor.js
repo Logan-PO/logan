@@ -4,11 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { Text, TextInput, Checkbox, Colors, Divider } from 'react-native-paper';
-import { dateUtils } from 'packages/core';
-import { getTasksSelectors, updateTask, updateTaskLocal } from 'packages/fe-shared/store/tasks';
-import { getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
-import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
-import Editor from 'packages/fe-shared/components/editor';
 import priorities from '../shared/priority-constants';
 import Typography, { typographyStyles } from '../shared/typography';
 import ListItem from '../shared/list-item';
@@ -16,6 +11,11 @@ import DueDateControl from '../shared/due-date-control';
 import AssignmentPreview from '../assignments/assignment-preview';
 import TagsEditor from '../shared/tags/tags-editor';
 import FakeInputLabel from '../shared/fake-input-label';
+import Editor from 'packages/fe-shared/components/editor';
+import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
+import { getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
+import { getTasksSelectors, updateTask, updateTaskLocal } from 'packages/fe-shared/store/tasks';
+import { dateUtils } from 'packages/core';
 
 const {
     dayjs,

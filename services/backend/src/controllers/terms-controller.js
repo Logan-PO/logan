@@ -1,17 +1,17 @@
 const _ = require('lodash');
-const { dynamoUtils } = require('packages/aws');
-const {
-    dateUtils: {
-        dayjs,
-        constants: { DB_DATE_FORMAT },
-    },
-} = require('packages/core');
 const { v4: uuid } = require('uuid');
 const Promise = require('bluebird');
 const requestValidator = require('../../utils/request-validator');
 const { NotFoundError } = require('../../utils/errors');
 const { makeHandler } = require('../../utils/wrap-handler');
 const coursesController = require('./courses-controller');
+const {
+    dateUtils: {
+        dayjs,
+        constants: { DB_DATE_FORMAT },
+    },
+} = require('packages/core');
+const { dynamoUtils } = require('packages/aws');
 
 function fromDbFormat(db) {
     return {

@@ -2,10 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dateUtils } from 'packages/core';
-import { createTask } from 'packages/fe-shared/store/tasks';
-import { getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
-import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import CourseIcon from '@material-ui/icons/Book';
@@ -16,6 +12,10 @@ import ActionButton from '../shared/controls/action-button';
 import Dialog from '../shared/dialog';
 import Typography from '../shared/typography';
 import styles from './task-modal.module.scss';
+import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
+import { getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
+import { createTask } from 'packages/fe-shared/store/tasks';
+import { dateUtils } from 'packages/core';
 
 const {
     dayjs,

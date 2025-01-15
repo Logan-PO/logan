@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
-import SyncComponent from 'packages/fe-shared/components/sync-component';
-import { dateUtils } from 'packages/core';
 import ListItem from '../../shared/list-item';
 import Typography from '../../shared/typography';
+import SyncComponent from 'packages/fe-shared/components/sync-component';
+import { dateUtils } from 'packages/core';
 
 class TermCell extends SyncComponent {
     constructor(props) {

@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { AppBar, IconButton, Tooltip } from '@material-ui/core';
 import SyncIcon from '@material-ui/icons/Sync';
+import { getCurrentTheme } from '../../globals/theme';
+import styles from './navbar.module.scss';
+import AccountDialog from './account-dialog';
+import Typography from './typography';
 import { dateUtils } from 'packages/core';
 import { fetchSelf } from 'packages/fe-shared/store/login';
 import { beginFetching, finishFetching } from 'packages/fe-shared/store/fetch-status';
@@ -11,10 +15,6 @@ import { fetchTasks } from 'packages/fe-shared/store/tasks';
 import { fetchAssignments } from 'packages/fe-shared/store/assignments';
 import { fetchSchedule } from 'packages/fe-shared/store/schedule';
 import { fetchReminders } from 'packages/fe-shared/store/reminders';
-import { getCurrentTheme } from '../../globals/theme';
-import styles from './navbar.module.scss';
-import AccountDialog from './account-dialog';
-import Typography from './typography';
 
 class Navbar extends React.Component {
     constructor(props) {

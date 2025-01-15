@@ -2,20 +2,20 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dateUtils } from 'packages/core';
 import { TimePicker } from '@material-ui/pickers';
 import InstructorIcon from '@material-ui/icons/Face';
 import LocationIcon from '@material-ui/icons/LocationOn';
 import TimeIcon from '@material-ui/icons/Schedule';
 import WeeklyIcon from '@material-ui/icons/ViewWeek';
-import { getScheduleSelectors, updateSection, updateSectionLocal } from 'packages/fe-shared/store/schedule';
-import Editor from 'packages/fe-shared/components/editor';
 import '../shared/editor.scss';
 import DowPicker from '../shared/controls/dow-picker';
 import TextInput from '../shared/controls/text-input';
 import BasicDatePicker from '../shared/controls/basic-date-picker';
 import InputGroup from '../shared/controls/input-group';
 import editorStyles from './page-editor.module.scss';
+import Editor from 'packages/fe-shared/components/editor';
+import { getScheduleSelectors, updateSection, updateSectionLocal } from 'packages/fe-shared/store/schedule';
+import { dateUtils } from 'packages/core';
 
 const {
     dayjs,

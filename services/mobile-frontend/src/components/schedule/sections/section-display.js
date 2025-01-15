@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
-import Editor from 'packages/fe-shared/components/editor';
 import ViewController from '../../shared/view-controller';
 import SectionEditor from './section-editor';
+import Editor from 'packages/fe-shared/components/editor';
 
 class SectionDisplay extends React.Component {
     constructor(props) {

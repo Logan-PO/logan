@@ -5,10 +5,10 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { IconButton, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from 'packages/fe-shared/store/assignments';
-import { noProp } from 'packages/fe-shared/utils/misc';
 import Typography from '../shared/typography';
 import styles from './assignment-cell.module.scss';
+import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from 'packages/fe-shared/store/assignments';
+import { noProp } from 'packages/fe-shared/utils/misc';
 
 class AssignmentCell extends React.Component {
     constructor(props) {

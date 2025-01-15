@@ -2,11 +2,11 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { updateUser } from 'packages/fe-shared/store/settings';
-import { setLoginStage, fetchSelf } from 'packages/fe-shared/store/login';
 import { View } from 'react-native';
 import { Button, Dialog } from 'react-native-paper';
 import { TextInput } from 'react-native-paper';
+import { setLoginStage, fetchSelf } from 'packages/fe-shared/store/login';
+import { updateUser } from 'packages/fe-shared/store/settings';
 
 class UsernameModal extends React.Component {
     constructor(props) {

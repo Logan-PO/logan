@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import { FAB } from 'react-native-paper';
-import Editor from 'packages/fe-shared/components/editor';
 import ViewController from '../shared/view-controller';
 import RemindersList from '../reminders/reminders-list';
 import TaskEditor from './task-editor';
+import Editor from 'packages/fe-shared/components/editor';
 
 class TaskDetails extends React.Component {
     constructor(props) {

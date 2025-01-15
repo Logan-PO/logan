@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, IconButton, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { dateUtils } from 'packages/core';
-import { getScheduleSelectors, createTerm, deleteTerm } from 'packages/fe-shared/store/schedule';
 import ListHeader from '../shared/list-header';
 import Typography from '../shared/typography';
 import ListSubheader from '../shared/list-subheader';
@@ -13,6 +11,8 @@ import Fab from '../shared/controls/fab';
 import '../shared/list.scss';
 import TermModal from './term-modal';
 import styles from './page-list.module.scss';
+import { getScheduleSelectors, createTerm, deleteTerm } from 'packages/fe-shared/store/schedule';
+import { dateUtils } from 'packages/core';
 
 class TermsList extends React.Component {
     constructor(props) {

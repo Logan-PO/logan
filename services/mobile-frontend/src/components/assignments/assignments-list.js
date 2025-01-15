@@ -4,9 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { SectionList } from 'react-native';
 import { FAB, Portal, Dialog, Paragraph, Button } from 'react-native-paper';
-import { getAssignmentsSelectors, deleteAssignment, deleteAssignmentLocal } from 'packages/fe-shared/store/assignments';
-import { getSections } from 'packages/fe-shared/sorting/assignments';
-import { dateUtils } from 'packages/core';
 import SegmentedControl from '@react-native-community/segmented-control';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AssignmentCell from '../../components/assignments/assignment-cell';
@@ -14,6 +11,9 @@ import ViewController from '../shared/view-controller';
 import { typographyStyles } from '../shared/typography';
 import ListHeader from '../shared/list-header';
 import { getCurrentTheme } from '../../globals/theme';
+import { dateUtils } from 'packages/core';
+import { getSections } from 'packages/fe-shared/sorting/assignments';
+import { getAssignmentsSelectors, deleteAssignment, deleteAssignmentLocal } from 'packages/fe-shared/store/assignments';
 
 class AssignmentsList extends React.Component {
     constructor(props) {

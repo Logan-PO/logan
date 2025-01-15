@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { createCourse } from 'packages/fe-shared/store/schedule';
-import Editor from 'packages/fe-shared/components/editor';
 import { Appbar } from 'react-native-paper';
 import ViewController from '../../shared/view-controller';
 import CourseEditor from './course-editor';
+import Editor from 'packages/fe-shared/components/editor';
+import { createCourse } from 'packages/fe-shared/store/schedule';
 
 class NewCourseModal extends React.Component {
     constructor(props) {

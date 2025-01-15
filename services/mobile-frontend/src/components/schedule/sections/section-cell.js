@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
-import { dateUtils } from 'packages/core';
 import ListItem from '../../shared/list-item';
 import Typography from '../../shared/typography';
+import { dateUtils } from 'packages/core';
 
 class SectionCell extends React.Component {
     constructor(props) {

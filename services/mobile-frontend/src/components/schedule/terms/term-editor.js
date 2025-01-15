@@ -2,9 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getScheduleSelectors, updateTerm, updateTermLocal, deleteCourse } from 'packages/fe-shared/store/schedule';
-import { dateUtils } from 'packages/core';
-import Editor from 'packages/fe-shared/components/editor';
 import { View } from 'react-native';
 import { Button, Dialog, Paragraph, Portal, TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
@@ -13,6 +10,9 @@ import DueDateControl from '../../shared/due-date-control';
 import CourseCell from '../courses/course-cell';
 import HolidayCell from '../holidays/holiday-cell';
 import ListHeader from '../../shared/list-header';
+import Editor from 'packages/fe-shared/components/editor';
+import { dateUtils } from 'packages/core';
+import { getScheduleSelectors, updateTerm, updateTermLocal, deleteCourse } from 'packages/fe-shared/store/schedule';
 
 class TermEditor extends Editor {
     constructor(props) {

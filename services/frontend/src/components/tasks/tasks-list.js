@@ -3,11 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, FormControl, FormControlLabel, Switch } from '@material-ui/core';
-import { dateUtils } from 'packages/core';
-import { getTasksSelectors, deleteTask, setShouldGoToTask } from 'packages/fe-shared/store/tasks';
-import { setShouldGoToAssignment, getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
-import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
-import { getSections } from 'packages/fe-shared/sorting/tasks';
 import Fab from '../shared/controls/fab';
 import ListHeader from '../shared/list-header';
 import '../shared/list.scss';
@@ -15,6 +10,11 @@ import ListSubheader from '../shared/list-subheader';
 import TaskCell from './task-cell';
 import styles from './tasks-list.module.scss';
 import TaskModal from './task-modal';
+import { getSections } from 'packages/fe-shared/sorting/tasks';
+import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
+import { setShouldGoToAssignment, getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
+import { getTasksSelectors, deleteTask, setShouldGoToTask } from 'packages/fe-shared/store/tasks';
+import { dateUtils } from 'packages/core';
 
 class TasksList extends React.Component {
     constructor(props) {

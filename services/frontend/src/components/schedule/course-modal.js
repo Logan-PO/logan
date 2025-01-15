@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createCourse } from 'packages/fe-shared/store/schedule';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '../shared/dialog';
 import TextInput from '../shared/controls/text-input';
@@ -10,6 +9,7 @@ import InputGroup from '../shared/controls/input-group';
 import ColorPicker, { allValidColors } from '../shared/controls/color-picker';
 import ActionButton from '../shared/controls/action-button';
 import editorStyles from './page-editor.module.scss';
+import { createCourse } from 'packages/fe-shared/store/schedule';
 
 class CourseModal extends React.Component {
     constructor(props) {

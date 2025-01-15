@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
-import { setLoginStage } from 'packages/fe-shared/store/login';
-
 import Settings from './settings';
+import { setLoginStage } from 'packages/fe-shared/store/login';
 
 const Stack = createStackNavigator();
 

@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchTasks } from 'packages/fe-shared/store/tasks';
 import { Page } from '../shared';
 import EmptySticker from '../shared/displays/empty-sticker';
 import TasksList from './tasks-list';
 import TaskEditor from './task-editor';
 import styles from './tasks-page.module.scss';
+import { fetchTasks } from 'packages/fe-shared/store/tasks';
 
 class TasksPage extends React.Component {
     constructor(props) {

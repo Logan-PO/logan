@@ -7,8 +7,6 @@ import { navigate } from 'gatsby';
 import { colors } from '@material-ui/core';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import api from 'packages/fe-shared/utils/api';
-import { LOGIN_STAGE, setLoginStage, fetchSelf } from 'packages/fe-shared/store/login';
 import Typography, { variants } from '../shared/typography';
 import ActionButton from '../shared/controls/action-button';
 import { headingsFontFamily } from '../../globals/theme';
@@ -16,6 +14,8 @@ import TextButton from '../shared/controls/text-button';
 import GoogleBtn from './GoogleButton';
 import SignUpForm from './signup-form';
 import styles from './home-page.module.scss';
+import { LOGIN_STAGE, setLoginStage, fetchSelf } from 'packages/fe-shared/store/login';
+import api from 'packages/fe-shared/utils/api';
 
 class HomePage extends React.Component {
     constructor(props) {

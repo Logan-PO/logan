@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateUtils } from 'packages/core';
 import { View, LayoutAnimation } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import SegmentedControl from '@react-native-community/segmented-control';
 import { getCurrentTheme } from '../../../globals/theme';
+import { dateUtils } from 'packages/core';
 
 class DueDatePicker extends React.Component {
     constructor(props) {

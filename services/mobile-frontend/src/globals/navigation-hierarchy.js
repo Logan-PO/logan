@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { LOGIN_STAGE } from 'packages/fe-shared/store/login';
 import TasksScreen from '../components/tasks/tasks-screen';
 import AssignmentsScreen from '../components/assignments/assignments-screen';
 import ScheduleStack from '../components/schedule/schedule-stack';
@@ -23,6 +22,7 @@ import ReminderDisplay from '../components/reminders/reminder-display';
 import NewReminderModal from '../components/reminders/new-reminder-modal';
 import TutorialViewer from '../components/tutorial/tutorial-viewer';
 import { getCurrentTheme } from './theme';
+import { LOGIN_STAGE } from 'packages/fe-shared/store/login';
 
 const RootStack = createStackNavigator();
 const BottomTabs = createMaterialBottomTabNavigator();

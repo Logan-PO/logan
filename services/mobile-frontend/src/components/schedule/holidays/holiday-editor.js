@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getScheduleSelectors, updateHoliday, updateHolidayLocal } from 'packages/fe-shared/store/schedule';
-import { dateUtils } from 'packages/core';
-import Editor from 'packages/fe-shared/components/editor';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';
 import { typographyStyles } from '../../shared/typography';
 import DueDateControl from '../../shared/due-date-control';
+import Editor from 'packages/fe-shared/components/editor';
+import { dateUtils } from 'packages/core';
+import { getScheduleSelectors, updateHoliday, updateHolidayLocal } from 'packages/fe-shared/store/schedule';
 
 class HolidayEditor extends Editor {
     constructor(props) {

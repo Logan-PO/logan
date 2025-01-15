@@ -4,15 +4,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { Checkbox, Colors } from 'react-native-paper';
-import { getTasksSelectors, updateTask, updateTaskLocal } from 'packages/fe-shared/store/tasks';
-import { getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
-import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
-import { dateUtils } from 'packages/core';
 import PriorityDisplay from '../shared/displays/priority-display';
 import CourseLabel from '../shared/displays/course-label';
 import Typography from '../shared/typography';
 import ListItem from '../shared/list-item';
 import TagsDisplay from '../shared/tags/tags-display';
+import { dateUtils } from 'packages/core';
+import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
+import { getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
+import { getTasksSelectors, updateTask, updateTaskLocal } from 'packages/fe-shared/store/tasks';
 
 class TaskCell extends React.Component {
     constructor(props) {

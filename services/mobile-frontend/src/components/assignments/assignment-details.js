@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
-import Editor from 'packages/fe-shared/components/editor';
 import { FAB } from 'react-native-paper';
 import ViewController from '../shared/view-controller';
 import RemindersList from '../reminders/reminders-list';
 import ListHeader from '../shared/list-header';
 import AssignmentEditor from './assignment-editor';
 import SubtasksList from './subtasks-list';
+import Editor from 'packages/fe-shared/components/editor';
 
 class AssignmentDetails extends React.Component {
     constructor(props) {

@@ -1,12 +1,12 @@
 const _ = require('lodash');
-const { dynamoUtils } = require('packages/aws');
-const {
-    dateUtils: { dayjs, constants: dateConstants },
-} = require('packages/core');
 const { v4: uuid } = require('uuid');
 const { makeHandler } = require('../../utils/wrap-handler');
 const requestValidator = require('../../utils/request-validator');
 const { NotFoundError } = require('../../utils/errors');
+const {
+    dateUtils: { dayjs, constants: dateConstants },
+} = require('packages/core');
+const { dynamoUtils } = require('packages/aws');
 
 /**
  * @typedef {object} DbSection

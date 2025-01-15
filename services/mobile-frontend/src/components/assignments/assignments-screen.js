@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchAssignments, getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
 import { createStackNavigator } from '@react-navigation/stack';
 import CoursePicker from '../shared/pickers/course-picker';
 import PriorityPicker from '../shared/pickers/priority-picker';
 import AssignmentList from './assignments-list';
 import AssignmentDetails from './assignment-details';
+import { fetchAssignments, getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
 
 const Stack = createStackNavigator();
 

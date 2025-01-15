@@ -1,7 +1,7 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import { dateUtils } from 'packages/core';
 import { createAsyncSlice, wrapAdapter } from '../utils/redux-utils';
 import api from '../utils/api';
+import { dateUtils } from 'packages/core';
 
 export function compareAssignments(assignment1, assignment2) {
     const dueDateComparison = compareDueDates(assignment1.dueDate, assignment2.dueDate);

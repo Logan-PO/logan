@@ -23,17 +23,14 @@
   },
   "homepage": "https://github.com/beasterbro/logan#readme",
   "workspaces": [
-    "packages/aws",
-    "packages/core",
-    "packages/fe-shared",
-    "services/backend",
-    "services/frontend",
-    "services/mobile-frontend"
+    "packages/*",
+    "services/*"
   ],
   "devDependencies": {
     "@eslint/js": "^9.18.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
+    "eslint-import-resolver-alias": "^1.1.2",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-prettier": "^5.2.2",

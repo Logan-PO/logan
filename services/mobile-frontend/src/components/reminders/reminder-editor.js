@@ -2,15 +2,15 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dateUtils } from 'packages/core';
-import { getRemindersSelectors } from 'packages/fe-shared/store/reminders';
-import Editor from 'packages/fe-shared/components/editor';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import ListItem from '../shared/list-item';
 import DueDateControl from '../shared/due-date-control';
 import TimePicker from '../shared/pickers/time-picker';
 import Typography from '../shared/typography';
+import Editor from 'packages/fe-shared/components/editor';
+import { getRemindersSelectors } from 'packages/fe-shared/store/reminders';
+import { dateUtils } from 'packages/core';
 
 class ReminderEditor extends Editor {
     constructor(props) {

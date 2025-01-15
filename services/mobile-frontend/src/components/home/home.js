@@ -2,9 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
-import api from 'packages/fe-shared/utils/api';
-import { fetchSelf, LOGIN_STAGE, setLoginStage } from 'packages/fe-shared/store/login';
-import { updateUser } from 'packages/fe-shared/store/settings';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StatusBar } from 'expo-status-bar';
@@ -12,6 +9,9 @@ import Typography from '../shared/typography';
 import NavigationButton from '../tutorial/navigation-button';
 import { handleNotificationsPermissions } from '../../globals/permissions';
 import MobileLoginButton from './mobile-login-button';
+import { updateUser } from 'packages/fe-shared/store/settings';
+import { fetchSelf, LOGIN_STAGE, setLoginStage } from 'packages/fe-shared/store/login';
+import api from 'packages/fe-shared/utils/api';
 
 class Home extends React.Component {
     constructor(props) {

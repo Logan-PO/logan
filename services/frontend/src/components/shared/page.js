@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
 import { Helmet } from 'react-helmet';
-import api from 'packages/fe-shared/utils/api';
-import { setLoginStage, LOGIN_STAGE, fetchSelf } from 'packages/fe-shared/store/login';
 import { getCurrentTheme } from '../../globals/theme';
 import styles from './page.module.scss';
 import { Navbar, Sidebar } from '.';
+import { setLoginStage, LOGIN_STAGE, fetchSelf } from 'packages/fe-shared/store/login';
+import api from 'packages/fe-shared/utils/api';
 
 class Page extends React.Component {
     constructor(props) {
