@@ -20,7 +20,7 @@ for (const [tableName, key] of Object.entries(tableKeyMap)) {
     });
 }
 
-export default {
+module.exports = {
     tables,
     basePort: 8000,
 };
