@@ -1,11 +1,7 @@
-name: lint-and-test
+name: lint-and-test-node
 
 on:
-  pull_request:
-    paths:
-      - 'packages/**'
-      - 'services/**'
-      - '.github/workflows/lint-and-test.yml'
+  workflow_call:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
