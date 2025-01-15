@@ -22,7 +22,7 @@ export default [
         },
         ignores: ['**/node_modules/**'],
         languageOptions: {
-            ecmaVersion: 2018,
+            ecmaVersion: 2024,
             sourceType: 'module',
             parserOptions: {
                 ecmaFeatures: {

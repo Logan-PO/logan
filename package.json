@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "rebootstrap": "bash scripts/fix-node-modules.sh",
-    "test": "jest -c jest.config.js",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest -c jest.config.js",
     "lint": "eslint . -c eslint.config.js",
     "lint-fix": "eslint . -c eslint.config.js --fix",
     "deploy:backend": "./scripts/deploy-backend.sh",
@@ -23,11 +23,16 @@
   },
   "homepage": "https://github.com/beasterbro/logan#readme",
   "workspaces": [
-    "packages/*",
-    "services/*"
+    "packages/aws",
+    "packages/core",
+    "packages/fe-shared",
+    "services/backend",
+    "services/frontend",
+    "services/mobile-frontend"
   ],
   "devDependencies": {
     "@eslint/js": "^9.18.0",
+    "@jest/globals": "^29.7.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-import-resolver-alias": "^1.1.2",
@@ -35,8 +40,8 @@
     "eslint-plugin-jest": "^28.11.0",
     "eslint-plugin-prettier": "^5.2.2",
     "globals": "^15.14.0",
-    "jest": "^24.7.1",
-    "jest-dynalite": "^3.0.0",
+    "jest": "^29.7.0",
+    "jest-dynalite": "^3.6.1",
     "prettier": "^3.4.2"
   }
 }

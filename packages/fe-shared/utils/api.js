@@ -21,7 +21,7 @@ let bearer;
 function determineMobile() {
     try {
         isMobile = !localStorage;
-    } catch (e) {
+    } catch {
         isMobile = true;
     }
 }
@@ -47,7 +47,7 @@ async function searchForLocalBackend() {
             client.defaults.baseURL = LOCAL_URL;
         }
         // eslint-disable-next-line no-empty
-    } catch (e) {}
+    } catch {}
 }
 
 /* ---- PERSISTENT STORAGE ---- */
@@ -58,7 +58,7 @@ async function getFromPersistentStorage(key) {
     } else {
         try {
             if (typeof document === 'undefined' || typeof window === 'undefined') return undefined;
-        } catch (e) {
+        } catch {
             return undefined;
         }
 

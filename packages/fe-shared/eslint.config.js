@@ -1,11 +1,13 @@
+import globals from 'globals';
 import rootConfig from '../../eslint.config';
 
 export default [
     rootConfig,
     {
-        globals: {
-            document: 'readable',
-            localStorage: 'writable',
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+            },
         },
     },
 ];
