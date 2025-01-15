@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { dateUtils } from '@logan/core';
 import { compareDueDates } from '../store/tasks';
+import { dateUtils } from 'packages/core';
 
 export function initialQuickSort(showComplete, a, b) {
     if (showComplete) {

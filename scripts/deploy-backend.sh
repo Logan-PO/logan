@@ -1,6 +1,5 @@
 # Clean and bootstrap backend
 npm run clean-all
-npm run bootstrap:backend
 
 # Copy private packages to backend node_modules
 node services/backend/scripts/copy-dependencies.js

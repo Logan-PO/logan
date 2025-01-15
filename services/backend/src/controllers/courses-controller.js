@@ -1,5 +1,4 @@
 const _ = require('lodash');
-const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const Promise = require('bluebird');
 const requestValidator = require('../../utils/request-validator');
@@ -7,6 +6,7 @@ const { NotFoundError, ValidationError } = require('../../utils/errors');
 const { makeHandler } = require('../../utils/wrap-handler');
 const assignmentsController = require('./assignments-controller');
 const tasksController = require('./tasks-controller');
+const { dynamoUtils } = require('packages/aws');
 
 function fromDbFormat(db) {
     return {

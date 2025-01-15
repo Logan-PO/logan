@@ -6,12 +6,12 @@ if (path.basename(cwd) !== 'logan') throw new Error('Please run this script from
 
 const dependencies = JSON.parse(
     execSync(
-        'node_modules/.bin/lerna la --scope @logan/backend --include-dependencies --json --loglevel silent'
+        'node_modules/.bin/lerna la --scope packages/backend --include-dependencies --json --loglevel silent'
     ).toString()
 );
 
 for (const dependency of dependencies) {
-    if (dependency.name === '@logan/backend') continue;
+    if (dependency.name === 'packages/backend') continue;
     const relative = path.relative(cwd, dependency.location);
     execSync(`rsync -avq ${relative} ${path.resolve('services/backend/node_modules', dependency.name, '..')}`);
 }

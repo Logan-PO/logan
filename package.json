@@ -3,16 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
+  "type": "module",
   "scripts": {
-    "bootstrap": "lerna bootstrap --hoist && npm run bootstrap:mobile",
-    "bootstrap:web": "lerna bootstrap --scope @logan/web-frontend --hoist --include-dependencies",
-    "bootstrap:mobile": "lerna bootstrap --scope @logan/mobile-frontend --include-dependencies",
-    "bootstrap:backend": "lerna bootstrap --scope @logan/backend --include-dependencies -- --production --no-optional",
-    "clean-all": "lerna clean --yes",
     "rebootstrap": "bash scripts/fix-node-modules.sh",
     "test": "jest -c jest.config.js",
-    "lint": "eslint . --quiet -c .eslintrc.js",
-    "lint-fix": "eslint . -c .eslintrc.js --fix",
+    "lint": "eslint . --quiet",
+    "lint-fix": "eslint . --quiet --fix",
     "deploy:backend": "./scripts/deploy-backend.sh",
     "deploy:frontend": "./scripts/deploy-frontend.sh"
   },
@@ -26,15 +22,27 @@
     "url": "https://github.com/beasterbro/logan/issues"
   },
   "homepage": "https://github.com/beasterbro/logan#readme",
+  "workspaces": [
+    "packages/aws",
+    "packages/core",
+    "packages/fe-shared",
+    "services/backend",
+    "services/frontend",
+    "services/mobile-frontend"
+  ],
   "devDependencies": {
-    "eslint": "^7.8.1",
-    "eslint-config-prettier": "^6.11.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-jest": "^24.0.0",
-    "eslint-plugin-prettier": "^3.1.4",
-    "jest": "^24.7.1",
-    "jest-dynalite": "^3.0.0",
-    "lerna": "^3.22.1",
-    "prettier": "^2.1.1"
+    "@eslint/js": "^9.18.0",
+    "@jest/globals": "^29.7.0",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jest": "^28.11.0",
+    "eslint-plugin-prettier": "^5.2.2",
+    "eslint-plugin-react": "^7.37.4",
+    "globals": "^15.14.0",
+    "jest": "^29.7.0",
+    "jest-dynalite": "^3.6.1",
+    "prettier": "^3.4.2"
   }
 }

@@ -7,9 +7,9 @@ jest.doMock('../../utils/auth', () => {
     return mocked;
 });
 
-// Mock @logan/aws
-jest.doMock('@logan/aws', () => {
-    const mocked = jest.requireActual('@logan/aws');
+// Mock packages/aws
+jest.doMock('packages/aws', () => {
+    const mocked = jest.requireActual('packages/aws');
     mocked.secretUtils.getSecret = async () => ({ web: 'mock-secret' });
     return mocked;
 });
@@ -32,10 +32,9 @@ const basicUser2 = {
     accentColor: 'blue',
 };
 
-// eslint-disable-next-line import/order
-const { dynamoUtils } = require('@logan/aws');
-// Load users-controller.js after mocking everything
 const usersController = require('./users-controller');
+const { dynamoUtils } = require('packages/aws');
+// Load users-controller.js after mocking everything
 
 beforeEach(() => {
     jest.clearAllMocks();

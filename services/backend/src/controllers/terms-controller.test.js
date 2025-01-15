@@ -1,7 +1,8 @@
 const { v4: uuid } = require('uuid');
+const termsController = require('./terms-controller');
 const {
     dateUtils: { dayjs },
-} = require('@logan/core');
+} = require('packages/core');
 
 const basicUser = { uid: uuid() };
 
@@ -13,8 +14,6 @@ const basicTerm = {
     endDate: dayjs().add(20, 'days'),
 };
 
-// eslint-disable-next-line import/newline-after-import
-const termsController = require('./terms-controller');
 const { toDbFormat, fromDbFormat } = termsController.__test_only__;
 
 beforeEach(() => {

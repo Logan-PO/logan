@@ -1,5 +1,5 @@
-# Bootstrap and build
-npm run bootstrap
+# build
+npm run clean-all
 cd services/frontend
 npm run build
 

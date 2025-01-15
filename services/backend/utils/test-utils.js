@@ -1,6 +1,6 @@
 const _ = require('lodash');
-const { dynamoUtils } = require('@logan/aws');
 const Promise = require('bluebird');
+const { dynamoUtils } = require('packages/aws');
 
 const tableKeyMap = dynamoUtils.PKEYS;
 

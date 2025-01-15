@@ -1,7 +1,7 @@
 const path = require('path');
 
 const extraNodeModules = {
-    '@logan': path.resolve(__dirname, '../../packages'),
+    'packages/': path.resolve(__dirname, '../../packages/'),
 };
 
 const watchFolders = [path.resolve(__dirname, '../../packages')];

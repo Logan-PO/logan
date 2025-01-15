@@ -2,7 +2,7 @@ const _ = require('lodash');
 const { v4: uuid } = require('uuid');
 const {
     dateUtils: { dayjs },
-} = require('@logan/core');
+} = require('packages/core');
 
 jest.doMock('../../utils/auth', () => {
     const mocked = jest.requireActual('../../utils/auth');
@@ -10,14 +10,16 @@ jest.doMock('../../utils/auth', () => {
     return mocked;
 });
 
-jest.doMock('@logan/aws', () => {
-    const mocked = jest.requireActual('@logan/aws');
+jest.doMock('packages/aws', () => {
+    const mocked = jest.requireActual('packages/aws');
     mocked.secretUtils.getSecret = async () => ({ web: 'mock-secret' });
     return mocked;
 });
 
-const { dynamoUtils } = require('@logan/aws');
+const { dynamoUtils } = require('packages/aws');
+// eslint-disable-next-line import/order
 const testUtils = require('../../utils/test-utils');
+// eslint-disable-next-line import/order
 const controllers = require('./index');
 
 const formatting = _.mapValues(controllers, controller => _.pick(controller, '__test_only__'));

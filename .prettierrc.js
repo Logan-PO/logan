@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     tabWidth: 4,
     printWidth: 120,
     useTabs: false,
@@ -7,5 +7,5 @@ module.exports = {
     singleQuote: true,
     trailingComma: 'es5',
     arrowParens: 'avoid',
-    quoteProps: 'as-needed'
+    quoteProps: 'as-needed',
 };

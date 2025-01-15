@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 
 const slice = createSlice({
     name: 'fetchStatus',

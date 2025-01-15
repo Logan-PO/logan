@@ -1,9 +1,9 @@
 const _ = require('lodash');
-const { dynamoUtils } = require('@logan/aws');
 const { OAuth2Client } = require('google-auth-library');
 const { makeHandler } = require('../../utils/wrap-handler');
 const auth = require('../../utils/auth');
 const requestValidator = require('../../utils/request-validator');
+const { dynamoUtils } = require('packages/aws');
 
 async function verifyIdToken(idToken, clientType = 'web') {
     const { clientId: webClientId } = await auth.getClientCreds('web');

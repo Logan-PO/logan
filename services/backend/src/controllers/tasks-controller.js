@@ -1,10 +1,10 @@
 const _ = require('lodash');
-const { dynamoUtils } = require('@logan/aws');
 const { v4: uuid } = require('uuid');
 const { makeHandler } = require('../../utils/wrap-handler');
 const requestValidator = require('../../utils/request-validator');
 const { NotFoundError } = require('../../utils/errors');
 const { remindersForEntity } = require('./reminders-controller');
+const { dynamoUtils } = require('packages/aws');
 
 /**
  * @typedef {object} DbTask

@@ -1,4 +1,4 @@
-const { dateUtils } = require('@logan/core');
+const { dateUtils } = require('packages/core');
 
 function timeToUTC(time) {
     return dateUtils.formatAsTime(dateUtils.toTime(time).utc());

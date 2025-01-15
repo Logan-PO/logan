@@ -1,7 +1,7 @@
 const _ = require('lodash');
-const { secretUtils, dynamoUtils } = require('@logan/aws');
 const jwt = require('jsonwebtoken');
 const { AuthorizationError, PermissionDeniedError } = require('./errors');
+const { secretUtils, dynamoUtils } = require('packages/aws');
 
 const UNAUTHORIZED_ACTIONS = {
     CREATE_USER: 'create_user',

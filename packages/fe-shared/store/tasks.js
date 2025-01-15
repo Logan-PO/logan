@@ -1,7 +1,7 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import { dateUtils } from '@logan/core';
 import { createAsyncSlice, wrapAdapter } from '../utils/redux-utils';
 import api from '../utils/api';
+import { dateUtils } from 'packages/core';
 
 const { dayjs } = dateUtils;
 

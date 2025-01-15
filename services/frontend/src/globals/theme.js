@@ -1,5 +1,5 @@
-import { createMuiTheme } from '@material-ui/core/styles';
-import { colors } from '@material-ui/core';
+import { createMuiTheme } from '@mui/styles';
+import { colors } from '@mui/material';
 
 export const defaultFontFamily = ['Rubik', '-apple-system', 'BlinkMacSystemFont', 'Arial', 'sans-serif'];
 export const headingsFontFamily = ['Poppins', ...defaultFontFamily];
