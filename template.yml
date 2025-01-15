@@ -7,13 +7,13 @@ Globals:
     Timeout: 21
 
 Resources:
+
   SendRemindersFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: SendReminders
       Handler: services/backend/src/reminders-agent.sendReminders
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ScheduleTrigger:
           Type: Schedule
@@ -21,6 +21,7 @@ Resources:
             Description: Send reminders every 15 minutes
             Name: SendRemindersTrigger
             Schedule: cron(0/15 * * * ? *)
+
   ApiGateway:
     Type: AWS::Serverless::Api
     Properties:
@@ -32,13 +33,13 @@ Resources:
         AllowMethods: "'GET, POST, PUT, DELETE'"
       EndpointConfiguration:
         Type: EDGE
+
   PingFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: Ping
       Handler: services/backend/src/controllers/ping.ping
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -47,13 +48,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   VerifyTokenFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: VerifyIdToken
       Handler: services/backend/src/controllers/verify-id-token.verifyIdTokenHandler
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -62,13 +63,13 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
+
   GetAssignmentFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetAssignment
       Handler: services/backend/src/controllers/assignments-controller.getAssignment
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -77,13 +78,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   GetAssignmentsFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetAssignments
       Handler: services/backend/src/controllers/assignments-controller.getAssignments
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -92,13 +93,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   CreateAssignmentFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: CreateAssignment
       Handler: services/backend/src/controllers/assignments-controller.createAssignment
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -107,13 +108,13 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
+
   UpdateAssignmentFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: UpdateAssignment
       Handler: services/backend/src/controllers/assignments-controller.updateAssignment
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -122,13 +123,13 @@ Resources:
             Method: put
             RestApiId:
               Ref: ApiGateway
+
   DeleteAssignmentFn:
     Type: AWS::Serverless::Function
     Properties:
       Handler: services/backend/src/controllers/assignments-controller.deleteAssignment
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteAssignment
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -137,13 +138,13 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+
   GetTaskFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetTask
       Handler: services/backend/src/controllers/tasks-controller.getTask
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -152,13 +153,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   GetTasksFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetTasks
       Handler: services/backend/src/controllers/tasks-controller.getTasks
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -167,13 +168,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   CreateTaskFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: CreateTask
       Handler: services/backend/src/controllers/tasks-controller.createTask
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -182,13 +183,13 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
+
   UpdateTaskFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: UpdateTask
       Handler: services/backend/src/controllers/tasks-controller.updateTask
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -197,13 +198,13 @@ Resources:
             Method: put
             RestApiId:
               Ref: ApiGateway
+
   DeleteTaskFn:
     Type: AWS::Serverless::Function
     Properties:
       Handler: services/backend/src/controllers/tasks-controller.deleteTask
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteTask
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -212,13 +213,13 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+
   GetCourseFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetCourse
       Handler: services/backend/src/controllers/courses-controller.getCourse
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -227,13 +228,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   GetCoursesFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetCourses
       Handler: services/backend/src/controllers/courses-controller.getCourses
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -242,13 +243,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   CreateCourseFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: CreateCourse
       Handler: services/backend/src/controllers/courses-controller.createCourse
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -257,13 +258,13 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
+
   UpdateCourseFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: UpdateCourse
       Handler: services/backend/src/controllers/courses-controller.updateCourse
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -272,13 +273,13 @@ Resources:
             Method: put
             RestApiId:
               Ref: ApiGateway
+
   DeleteCourseFn:
     Type: AWS::Serverless::Function
     Properties:
       Handler: services/backend/src/controllers/courses-controller.deleteCourse
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteCourse
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -287,13 +288,13 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+
   GetUserFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetUser
       Handler: services/backend/src/controllers/users-controller.getUser
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -302,13 +303,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   CreateUserFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: CreateUser
       Handler: services/backend/src/controllers/users-controller.createUser
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -317,13 +318,13 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
+
   UpdateUserFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: UpdateUser
       Handler: services/backend/src/controllers/users-controller.updateUser
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -332,13 +333,13 @@ Resources:
             Method: put
             RestApiId:
               Ref: ApiGateway
+
   DeleteUserFn:
     Type: AWS::Serverless::Function
     Properties:
       Handler: services/backend/src/controllers/users-controller.deleteUser
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteUser
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -347,13 +348,13 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+
   GetHolidayFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetHoliday
       Handler: services/backend/src/controllers/holidays-controller.getHoliday
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -362,13 +363,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   GetHolidaysFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetHolidays
       Handler: services/backend/src/controllers/holidays-controller.getHolidays
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -377,13 +378,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   CreateHolidayFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: CreateHoliday
       Handler: services/backend/src/controllers/holidays-controller.createHoliday
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -392,13 +393,13 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
+
   UpdateHolidayFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: UpdateHoliday
       Handler: services/backend/src/controllers/holidays-controller.updateHoliday
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -407,13 +408,13 @@ Resources:
             Method: put
             RestApiId:
               Ref: ApiGateway
+
   DeleteHolidayFn:
     Type: AWS::Serverless::Function
     Properties:
       Handler: services/backend/src/controllers/holidays-controller.deleteHoliday
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteHoliday
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -422,13 +423,13 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+
   GetTermFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetTerm
       Handler: services/backend/src/controllers/terms-controller.getTerm
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -437,13 +438,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   GetTermsFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetTerms
       Handler: services/backend/src/controllers/terms-controller.getTerms
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -452,13 +453,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   CreateTermFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: CreateTerm
       Handler: services/backend/src/controllers/terms-controller.createTerm
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -467,13 +468,13 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
+
   UpdateTermFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: UpdateTerm
       Handler: services/backend/src/controllers/terms-controller.updateTerm
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -482,13 +483,13 @@ Resources:
             Method: put
             RestApiId:
               Ref: ApiGateway
+
   DeleteTermFn:
     Type: AWS::Serverless::Function
     Properties:
       Handler: services/backend/src/controllers/terms-controller.deleteTerm
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteTerm
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -497,13 +498,13 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+
   GetRemindersFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetReminders
       Handler: services/backend/src/controllers/reminders-controller.getReminders
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -512,13 +513,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   CreateReminderFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: CreateReminder
       Handler: services/backend/src/controllers/reminders-controller.createReminder
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -527,13 +528,13 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
+
   UpdateReminderFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: UpdateReminder
       Handler: services/backend/src/controllers/reminders-controller.updateReminder
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -542,13 +543,13 @@ Resources:
             Method: put
             RestApiId:
               Ref: ApiGateway
+
   DeleteReminderFn:
     Type: AWS::Serverless::Function
     Properties:
       Handler: services/backend/src/controllers/reminders-controller.deleteReminder
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteReminder
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -557,13 +558,13 @@ Resources:
             Method: delete
             RestApiId:
               Ref: ApiGateway
+
   GetSectionFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetSection
       Handler: services/backend/src/controllers/sections-controller.getSection
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -572,13 +573,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   GetSectionsFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: GetSections
       Handler: services/backend/src/controllers/sections-controller.getSections
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -587,13 +588,13 @@ Resources:
             Method: get
             RestApiId:
               Ref: ApiGateway
+
   CreateSectionFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: CreateSection
       Handler: services/backend/src/controllers/sections-controller.createSection
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -602,13 +603,13 @@ Resources:
             Method: post
             RestApiId:
               Ref: ApiGateway
+
   UpdateSectionFn:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: UpdateSection
       Handler: services/backend/src/controllers/sections-controller.updateSection
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -617,13 +618,13 @@ Resources:
             Method: put
             RestApiId:
               Ref: ApiGateway
+
   DeleteSectionFn:
     Type: AWS::Serverless::Function
     Properties:
       Handler: services/backend/src/controllers/sections-controller.deleteSection
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteSection
-      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
