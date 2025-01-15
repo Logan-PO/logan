@@ -4,6 +4,16 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
+    inputs:
+      deploy-frontend:
+        description: Deploy frontend
+        type: boolean
+        required: true
+      deploy-backend:
+        description: Deploy frontend
+        type: boolean
+        required: true
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -21,13 +31,14 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      deploy-frontend: ${{ steps.changed-paths.outputs.frontend == 'true' }}
-      deploy-backend: ${{ steps.changed-paths.outputs.backend == 'true' }}
+      deploy-frontend: ${{ inputs.deploy-frontend || steps.changed-paths.outputs.frontend == 'true' }}
+      deploy-backend: ${{ inputs.deploy-backend || steps.changed-paths.outputs.backend == 'true' }}
     steps:
       -
         uses: actions/checkout@v4
       -
         name: Determine changed paths
+        if: ${{ github.event_name == 'push' }}
         uses: dorny/paths-filter@v3
         id: changed-paths
         with:
