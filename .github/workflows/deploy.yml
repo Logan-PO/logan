@@ -5,50 +5,97 @@ on:
     branches:
       - master
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  GHA_WORKER_ROLE: arn:aws:iam::970547354432:role/gha-worker
+
 jobs:
-  cancel-previous:
+
+  setup:
     runs-on: ubuntu-latest
+    outputs:
+      deploy-frontend: ${{ steps.changed-paths.outputs.frontend == 'true' }}
+      deploy-backend: ${{ steps.changed-paths.outputs.backend == 'true' }}
     steps:
-      - name: Cancel Workflow Action
-        uses: styfle/cancel-workflow-action@0.6.0
+      -
+        uses: actions/checkout@v4
+      -
+        name: Determine changed paths
+        uses: dorny/paths-filter@v3
+        id: changed-paths
         with:
-          access_token: ${{ github.token }}
-  deploy-fe:
+          filters: |
+            frontend:
+              - 'services/frontend/**'
+              - 'packages/fe-shared/**'
+              - 'scripts/deploy-frontend.sh'
+              - '.github/workflows/deploy.yml'
+            backend:
+              - 'services/backend/**'
+              - 'packages/aws/**'
+              - 'packages/core/**'
+              - 'scripts/deploy-backend.sh'
+              - 'scripts/copy-be-dependencies.sh'
+              - '.github/workflows/deploy.yml'
+
+  deploy-frontend:
+    needs: setup
+    if: needs.setup.outputs.deploy-frontend
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-      - name: Install Dependencies & Bootstrap
+      -
+        uses: actions/checkout@v4
+      -
+        name: Install Dependencies & Bootstrap
         run: |
           npm ci
           npm run bootstrap:web
-      - name: Build
+      -
+        name: npm build
         run: npm run build
         working-directory: ./services/frontend
-      - name: Configure the AWS CLI
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.EB_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.EB_ACCESS_KEY_SECRET }}
-          aws configure set default.region us-west-2
-      - name: Upload to S3
+      -
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.GHA_WORKER_ROLE }}
+          role-session-name: ${{ github.run_id }}
+          aws-region: us-west-2
+      -
+        name: Upload to S3
         run: |
           aws s3 sync public s3://logan-frontend/ --delete --acl public-read
         working-directory: ./services/frontend
-  deploy-be:
+  
+  deploy-backend:
+    needs: setup
+    if: needs.setup.outputs.deploy-backend
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v2
-      - name: Install Lerna & Bootstrap
+      -
+        uses: actions/checkout@v4
+      -
+        name: Install Lerna & Bootstrap
         run: |
           npm ci
           npm run bootstrap:backend
-      - name: Configure the AWS CLI
-        run: |
-          aws configure set aws_access_key_id ${{ secrets.EB_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.EB_ACCESS_KEY_SECRET }}
-          aws configure set default.region us-west-2
-      - name: Build
+      -
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.GHA_WORKER_ROLE }}
+          role-session-name: ${{ github.run_id }}
+          aws-region: us-west-2
+      -
+        name: sam build
         run: sam build
-      - name: Deploy
+      -
+        name: sam deploy
         run: sam deploy
