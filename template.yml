@@ -3,7 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 
 Globals:
   Function:
-    Runtime: nodejs12.x
+    Runtime: nodejs20.x
     Timeout: 21
 
 Resources:
@@ -13,7 +13,7 @@ Resources:
       FunctionName: SendReminders
       Handler: services/backend/src/reminders-agent.sendReminders
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ScheduleTrigger:
           Type: Schedule
@@ -38,7 +38,7 @@ Resources:
       FunctionName: Ping
       Handler: services/backend/src/controllers/ping.ping
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -53,7 +53,7 @@ Resources:
       FunctionName: VerifyIdToken
       Handler: services/backend/src/controllers/verify-id-token.verifyIdTokenHandler
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -68,7 +68,7 @@ Resources:
       FunctionName: GetAssignment
       Handler: services/backend/src/controllers/assignments-controller.getAssignment
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -83,7 +83,7 @@ Resources:
       FunctionName: GetAssignments
       Handler: services/backend/src/controllers/assignments-controller.getAssignments
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -98,7 +98,7 @@ Resources:
       FunctionName: CreateAssignment
       Handler: services/backend/src/controllers/assignments-controller.createAssignment
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -113,7 +113,7 @@ Resources:
       FunctionName: UpdateAssignment
       Handler: services/backend/src/controllers/assignments-controller.updateAssignment
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -128,7 +128,7 @@ Resources:
       Handler: services/backend/src/controllers/assignments-controller.deleteAssignment
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteAssignment
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -143,7 +143,7 @@ Resources:
       FunctionName: GetTask
       Handler: services/backend/src/controllers/tasks-controller.getTask
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -158,7 +158,7 @@ Resources:
       FunctionName: GetTasks
       Handler: services/backend/src/controllers/tasks-controller.getTasks
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -173,7 +173,7 @@ Resources:
       FunctionName: CreateTask
       Handler: services/backend/src/controllers/tasks-controller.createTask
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -188,7 +188,7 @@ Resources:
       FunctionName: UpdateTask
       Handler: services/backend/src/controllers/tasks-controller.updateTask
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -203,7 +203,7 @@ Resources:
       Handler: services/backend/src/controllers/tasks-controller.deleteTask
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteTask
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -218,7 +218,7 @@ Resources:
       FunctionName: GetCourse
       Handler: services/backend/src/controllers/courses-controller.getCourse
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -233,7 +233,7 @@ Resources:
       FunctionName: GetCourses
       Handler: services/backend/src/controllers/courses-controller.getCourses
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -248,7 +248,7 @@ Resources:
       FunctionName: CreateCourse
       Handler: services/backend/src/controllers/courses-controller.createCourse
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -263,7 +263,7 @@ Resources:
       FunctionName: UpdateCourse
       Handler: services/backend/src/controllers/courses-controller.updateCourse
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -278,7 +278,7 @@ Resources:
       Handler: services/backend/src/controllers/courses-controller.deleteCourse
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteCourse
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -293,7 +293,7 @@ Resources:
       FunctionName: GetUser
       Handler: services/backend/src/controllers/users-controller.getUser
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -308,7 +308,7 @@ Resources:
       FunctionName: CreateUser
       Handler: services/backend/src/controllers/users-controller.createUser
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -323,7 +323,7 @@ Resources:
       FunctionName: UpdateUser
       Handler: services/backend/src/controllers/users-controller.updateUser
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -338,7 +338,7 @@ Resources:
       Handler: services/backend/src/controllers/users-controller.deleteUser
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteUser
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -353,7 +353,7 @@ Resources:
       FunctionName: GetHoliday
       Handler: services/backend/src/controllers/holidays-controller.getHoliday
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -368,7 +368,7 @@ Resources:
       FunctionName: GetHolidays
       Handler: services/backend/src/controllers/holidays-controller.getHolidays
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -383,7 +383,7 @@ Resources:
       FunctionName: CreateHoliday
       Handler: services/backend/src/controllers/holidays-controller.createHoliday
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -398,7 +398,7 @@ Resources:
       FunctionName: UpdateHoliday
       Handler: services/backend/src/controllers/holidays-controller.updateHoliday
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -413,7 +413,7 @@ Resources:
       Handler: services/backend/src/controllers/holidays-controller.deleteHoliday
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteHoliday
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -428,7 +428,7 @@ Resources:
       FunctionName: GetTerm
       Handler: services/backend/src/controllers/terms-controller.getTerm
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -443,7 +443,7 @@ Resources:
       FunctionName: GetTerms
       Handler: services/backend/src/controllers/terms-controller.getTerms
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -458,7 +458,7 @@ Resources:
       FunctionName: CreateTerm
       Handler: services/backend/src/controllers/terms-controller.createTerm
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -473,7 +473,7 @@ Resources:
       FunctionName: UpdateTerm
       Handler: services/backend/src/controllers/terms-controller.updateTerm
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -488,7 +488,7 @@ Resources:
       Handler: services/backend/src/controllers/terms-controller.deleteTerm
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteTerm
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -503,7 +503,7 @@ Resources:
       FunctionName: GetReminders
       Handler: services/backend/src/controllers/reminders-controller.getReminders
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -518,7 +518,7 @@ Resources:
       FunctionName: CreateReminder
       Handler: services/backend/src/controllers/reminders-controller.createReminder
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -533,7 +533,7 @@ Resources:
       FunctionName: UpdateReminder
       Handler: services/backend/src/controllers/reminders-controller.updateReminder
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -548,7 +548,7 @@ Resources:
       Handler: services/backend/src/controllers/reminders-controller.deleteReminder
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteReminder
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -563,7 +563,7 @@ Resources:
       FunctionName: GetSection
       Handler: services/backend/src/controllers/sections-controller.getSection
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -578,7 +578,7 @@ Resources:
       FunctionName: GetSections
       Handler: services/backend/src/controllers/sections-controller.getSections
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -593,7 +593,7 @@ Resources:
       FunctionName: CreateSection
       Handler: services/backend/src/controllers/sections-controller.createSection
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -608,7 +608,7 @@ Resources:
       FunctionName: UpdateSection
       Handler: services/backend/src/controllers/sections-controller.updateSection
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
@@ -623,7 +623,7 @@ Resources:
       Handler: services/backend/src/controllers/sections-controller.deleteSection
       Role: arn:aws:iam::417995070141:role/LoganLambdaRole
       FunctionName: DeleteSection
-      Runtime: nodejs12.x
+      Runtime: nodejs20.x
       Events:
         ApiEvent:
           Type: Api
