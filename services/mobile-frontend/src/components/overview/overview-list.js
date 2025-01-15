@@ -7,7 +7,7 @@ import { fetchAssignments, getAssignmentsSelectors, deleteAssignment } from '@lo
 import { fetchTasks, getTasksSelectors, deleteTask } from '@logan/fe-shared/store/tasks';
 import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
 import { View, SectionList } from 'react-native';
-import { Button, Colors, Dialog, FAB, Paragraph, Portal } from 'react-native-paper';
+import { Button, Dialog, FAB, Paragraph, Portal } from 'react-native-paper';
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import ViewController from '../shared/view-controller';
@@ -126,7 +126,7 @@ export class OverviewList extends React.Component {
     }
 
     secondaryHeader(title) {
-        return <ListHeader style={{ backgroundColor: Colors.blueGrey50, paddingVertical: 6 }}>{title}</ListHeader>;
+        return <ListHeader variant={ListHeader.VARIANTS.LIST_SUBHEAD}>{title}</ListHeader>;
     }
 
     renderListSection({ sections, assignments, tasks }) {
@@ -199,11 +199,16 @@ export class OverviewList extends React.Component {
                         style={{ height: '100%', backgroundColor: 'white' }}
                         sections={groups}
                         keyExtractor={(item, index) => item + index}
-                        renderSectionHeader={({ section: { title } }) => (
-                            <ListHeader style={{ backgroundColor: Colors.blueGrey100 }} key={title}>
-                                {title}
-                            </ListHeader>
-                        )}
+                        renderSectionHeader={({ section: { title } }) => {
+                            const variant =
+                                title === 'Today' ? ListHeader.VARIANTS.LIST_BIG : ListHeader.VARIANTS.LIST_NORMAL;
+
+                            return (
+                                <ListHeader variant={variant} key={title}>
+                                    {title}
+                                </ListHeader>
+                            );
+                        }}
                         renderItem={({ item }) => this.renderListSection(item)}
                     />
                     <Portal>

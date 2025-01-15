@@ -2,52 +2,75 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, Colors } from 'react-native-paper';
 
+const headingBase = {
+    fontFamily: 'Poppins500',
+};
+
+const bodyBase = {
+    fontFamily: 'Rubik400',
+};
+
 export const typographyStyles = {
     h1: {
+        ...headingBase,
         fontWeight: '300',
         fontSize: 96,
     },
     h2: {
+        ...headingBase,
         fontWeight: '300',
         fontSize: 60,
     },
     h3: {
+        ...headingBase,
         fontSize: 48,
     },
     h4: {
+        ...headingBase,
         fontSize: 34,
     },
     h5: {
+        ...headingBase,
         fontSize: 24,
     },
     h6: {
+        ...headingBase,
         fontWeight: '500',
         fontSize: 20,
     },
     subtitle1: {
+        ...bodyBase,
         fontSize: 16,
     },
     subtitle2: {
+        ...bodyBase,
+        fontFamily: 'Rubik500',
         fontWeight: '500',
         fontSize: 14,
     },
     body: {
+        ...bodyBase,
         fontSize: 16,
     },
     body2: {
+        ...bodyBase,
         fontSize: 14,
         letterSpacing: 0,
     },
     button: {
+        ...bodyBase,
+        fontFamily: 'Rubik500',
         fontSize: 14,
         fontWeight: '500',
         textTransform: 'uppercase',
         letterSpacing: 0.5,
     },
     caption: {
+        ...bodyBase,
         fontSize: 12,
     },
     overline: {
+        ...bodyBase,
         fontSize: 10,
         letterSpacing: 0.5,
     },
@@ -73,7 +96,7 @@ const Typography = ({ variant = 'body', color = 'primary', style, children, ...r
     const colorStyle = color ? colorStyles[color] || { color } : colorStyles.primary;
 
     return (
-        <Text {...rest} style={{ ...style, ...variantStyle, ...colorStyle }}>
+        <Text {...rest} style={{ ...variantStyle, ...colorStyle, ...style }}>
             {children}
         </Text>
     );

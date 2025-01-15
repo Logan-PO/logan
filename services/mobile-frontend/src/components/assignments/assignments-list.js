@@ -110,11 +110,20 @@ class AssignmentsList extends React.Component {
                             onDeletePressed={this.openDeleteConfirmation}
                         />
                     )}
-                    renderSectionHeader={({ section: { title } }) => (
-                        <ListHeader style={{ backgroundColor: 'white' }} key={title}>
-                            {title}
-                        </ListHeader>
-                    )}
+                    renderSectionHeader={({ section: { title } }) => {
+                        const formattedTitle = dateUtils.dueDateIsDate(title)
+                            ? dateUtils.readableDueDate(title, { includeWeekday: true })
+                            : title;
+
+                        const isToday = formattedTitle === 'Today';
+                        const variant = isToday ? ListHeader.VARIANTS.LIST_BIG : ListHeader.VARIANTS.LIST_NORMAL;
+
+                        return (
+                            <ListHeader variant={variant} key={title}>
+                                {formattedTitle}
+                            </ListHeader>
+                        );
+                    }}
                 />
                 <FAB
                     icon="plus"
