@@ -1,11 +1,7 @@
-name: lint-and-test
+name: lint-and-test-node
 
 on:
-  pull_request:
-    paths:
-      - 'packages/**'
-      - 'services/**'
-      - '.github/workflows/lint-and-test.yml'
+  workflow_call:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -20,6 +16,10 @@ jobs:
     steps:
       -
         uses: actions/checkout@v2
+      -
+        uses: actions/setup-node@v4
+        with:
+          node-version: 12
       -
         name: Install dependencies & bootstrap
         run: |

@@ -4,6 +4,16 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
+    inputs:
+      deploy-frontend:
+        description: Deploy frontend
+        type: boolean
+        required: true
+      deploy-backend:
+        description: Deploy frontend
+        type: boolean
+        required: true
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -21,13 +31,14 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      deploy-frontend: ${{ steps.changed-paths.outputs.frontend == 'true' }}
-      deploy-backend: ${{ steps.changed-paths.outputs.backend == 'true' }}
+      deploy-frontend: ${{ inputs.deploy-frontend || steps.changed-paths.outputs.frontend == 'true' }}
+      deploy-backend: ${{ inputs.deploy-backend || steps.changed-paths.outputs.backend == 'true' }}
     steps:
       -
         uses: actions/checkout@v4
       -
         name: Determine changed paths
+        if: ${{ github.event_name == 'push' }}
         uses: dorny/paths-filter@v3
         id: changed-paths
         with:
@@ -53,6 +64,17 @@ jobs:
       -
         uses: actions/checkout@v4
       -
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.GHA_WORKER_ROLE }}
+          role-session-name: ${{ github.run_id }}
+          aws-region: us-west-2
+      -
+        uses: actions/setup-node@v4
+        with:
+          node-version: 12
+      -
         name: Install Dependencies & Bootstrap
         run: |
           npm ci
@@ -61,13 +83,6 @@ jobs:
         name: npm build
         run: npm run build
         working-directory: ./services/frontend
-      -
-        name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ env.GHA_WORKER_ROLE }}
-          role-session-name: ${{ github.run_id }}
-          aws-region: us-west-2
       -
         name: Upload to S3
         run: |
@@ -82,17 +97,21 @@ jobs:
       -
         uses: actions/checkout@v4
       -
-        name: Install Lerna & Bootstrap
-        run: |
-          npm ci
-          npm run bootstrap:backend
-      -
         name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.GHA_WORKER_ROLE }}
           role-session-name: ${{ github.run_id }}
           aws-region: us-west-2
+      -
+        uses: actions/setup-node@v4
+        with:
+          node-version: 12
+      -
+        name: Install Lerna & Bootstrap
+        run: |
+          npm ci
+          npm run bootstrap:backend
       -
         name: sam build
         run: sam build
