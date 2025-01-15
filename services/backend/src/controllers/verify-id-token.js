@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { dynamoUtils } = require('@logan/aws');
+const { dynamoUtils } = require('packages/aws');
 const { OAuth2Client } = require('google-auth-library');
 const { makeHandler } = require('../../utils/wrap-handler');
 const auth = require('../../utils/auth');

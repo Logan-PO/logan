@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import { View, LayoutAnimation } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import SegmentedControl from '@react-native-community/segmented-control';

@@ -3,7 +3,7 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { NativeModules } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer as NavigationProvider } from '@react-navigation/native';
-import { store } from '@logan/fe-shared';
+import { store } from 'packages/fe-shared';
 import NavigationHierarchy from './navigation-hierarchy';
 import ThemedPaperProvider from './themed-paper-provider';
 

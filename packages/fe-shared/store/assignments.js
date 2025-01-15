@@ -1,5 +1,5 @@
 import { createEntityAdapter } from '@reduxjs/toolkit';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import { createAsyncSlice, wrapAdapter } from '../utils/redux-utils';
 import api from '../utils/api';
 

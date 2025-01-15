@@ -1,8 +1,8 @@
 const _ = require('lodash');
 
-// Mock @logan/aws
-jest.doMock('@logan/aws', () => {
-    const mocked = jest.requireActual('@logan/aws');
+// Mock packages/aws
+jest.doMock('packages/aws', () => {
+    const mocked = jest.requireActual('packages/aws');
     mocked.secretUtils.getSecret = async () => ({ web: 'mock-secret' });
     return mocked;
 });
@@ -31,7 +31,7 @@ const basicAssignment2 = {
     dueDate: '2021-1-31',
 };
 
-const { dynamoUtils } = require('@logan/aws');
+const { dynamoUtils } = require('packages/aws');
 const testUtils = require('../../utils/test-utils');
 const assignmentsController = require('./assignments-controller');
 

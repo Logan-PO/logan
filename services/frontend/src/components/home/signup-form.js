@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { LOGIN_STAGE, setLoginStage, createNewUser } from '@logan/fe-shared/store/login';
+import { LOGIN_STAGE, setLoginStage, createNewUser } from 'packages/fe-shared/store/login';
 import Dialog from '@material-ui/core/Dialog';
 import Typography from '../shared/typography';
 import ActionButton from '../shared/controls/action-button';

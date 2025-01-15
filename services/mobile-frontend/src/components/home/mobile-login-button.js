@@ -3,7 +3,7 @@ import { Platform, ActivityIndicator } from 'react-native';
 import { Button } from 'react-native-paper';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import { connect } from 'react-redux';
-import { LOGIN_STAGE, setLoginStage, verifyIdToken } from '@logan/fe-shared/store/login';
+import { LOGIN_STAGE, setLoginStage, verifyIdToken } from 'packages/fe-shared/store/login';
 import PropTypes from 'prop-types';
 import { typographyStyles } from '../shared/typography';
 

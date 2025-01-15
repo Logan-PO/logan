@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import { ButtonBase, Popover } from '@material-ui/core';
 import { ChevronLeft, ChevronRight } from '@material-ui/icons';
 import { getCurrentTheme } from '../../../globals/theme';

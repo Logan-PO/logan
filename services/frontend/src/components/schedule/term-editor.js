@@ -3,22 +3,22 @@ import clsx from 'clsx';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AddIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
-import Editor from '@logan/fe-shared/components/editor';
-import { noProp } from '@logan/fe-shared/utils/misc';
+import Editor from 'packages/fe-shared/components/editor';
+import { noProp } from 'packages/fe-shared/utils/misc';
 import {
     getScheduleSelectors,
     updateTerm,
     updateTermLocal,
     deleteCourse,
     deleteHoliday,
-} from '@logan/fe-shared/store/schedule';
+} from 'packages/fe-shared/store/schedule';
 import TextInput from '../shared/controls/text-input';
 import BasicDatePicker from '../shared/controls/basic-date-picker';
 import Typography from '../shared/typography';

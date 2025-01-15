@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateUtils } from '@logan/core';
-import { appropriateTextColor, printSectionTimes } from '@logan/fe-shared/utils/scheduling-utils';
+import { dateUtils } from 'packages/core';
+import { appropriateTextColor, printSectionTimes } from 'packages/fe-shared/utils/scheduling-utils';
 import { Paper, colors } from '@material-ui/core';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import './event.scss';

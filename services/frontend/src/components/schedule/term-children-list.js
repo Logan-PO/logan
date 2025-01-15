@@ -14,7 +14,7 @@ import {
     deleteCourse,
     createHoliday,
     deleteHoliday,
-} from '@logan/fe-shared/store/schedule';
+} from 'packages/fe-shared/store/schedule';
 import '../shared/list.scss';
 import ListHeader from '../shared/list-header';
 import TextButton from '../shared/controls/text-button';

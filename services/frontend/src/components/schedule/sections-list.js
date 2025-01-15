@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { List, Tooltip, IconButton } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { getScheduleSelectors, createSection, deleteSection } from '@logan/fe-shared/store/schedule';
+import { getScheduleSelectors, createSection, deleteSection } from 'packages/fe-shared/store/schedule';
 import TextButton from '../shared/controls/text-button';
 import '../shared/list.scss';
 import ListHeader from '../shared/list-header';

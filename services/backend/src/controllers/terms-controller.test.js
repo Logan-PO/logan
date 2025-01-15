@@ -1,7 +1,7 @@
 const { v4: uuid } = require('uuid');
 const {
     dateUtils: { dayjs },
-} = require('@logan/core');
+} = require('packages/core');
 
 const basicUser = { uid: uuid() };
 

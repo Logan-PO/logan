@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
 const _ = require('lodash');
 const { argv } = require('yargs');
-const { dynamoUtils } = require('@logan/aws');
+const { dynamoUtils } = require('packages/aws');
 const { generateBearerToken } = require('../utils/auth');
 
 async function run() {

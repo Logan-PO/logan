@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { InputBase, Select, ListSubheader, MenuItem } from '@material-ui/core';
 import CourseIcon from '@material-ui/icons/Book';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
+import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
 import InputGroup from './input-group';
 import styles from './course-picker.module.scss';
 

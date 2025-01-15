@@ -1,11 +1,11 @@
 const _ = require('lodash');
-const { dynamoUtils } = require('@logan/aws');
+const { dynamoUtils } = require('packages/aws');
 const {
     dateUtils: {
         dayjs,
         constants: { DB_DATETIME_FORMAT },
     },
-} = require('@logan/core');
+} = require('packages/core');
 const { v4: uuid } = require('uuid');
 const { makeHandler } = require('../../utils/wrap-handler');
 const requestValidator = require('../../utils/request-validator');

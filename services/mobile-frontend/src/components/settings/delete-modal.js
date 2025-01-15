@@ -2,9 +2,9 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { deleteUser } from '@logan/fe-shared/store/settings';
+import { deleteUser } from 'packages/fe-shared/store/settings';
 import { Button, Dialog } from 'react-native-paper';
-import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
+import { LOGIN_STAGE, setLoginStage, fetchSelf } from 'packages/fe-shared/store/login';
 import { View } from 'react-native';
 
 class DeleteModal extends React.Component {

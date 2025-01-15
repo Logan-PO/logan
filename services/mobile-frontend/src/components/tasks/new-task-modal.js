@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
 import { Appbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { createTask } from '@logan/fe-shared/store/tasks';
-import Editor from '@logan/fe-shared/components/editor';
+import { createTask } from 'packages/fe-shared/store/tasks';
+import Editor from 'packages/fe-shared/components/editor';
 import ViewController from '../shared/view-controller';
 import TaskEditor from './task-editor';
 

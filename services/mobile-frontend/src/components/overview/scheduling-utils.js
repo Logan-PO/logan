@@ -1,4 +1,4 @@
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 
 export function appropriateTextColor(backgroundHex) {
     backgroundHex = backgroundHex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, (m, r, g, b) => r + r + g + g + b + b);

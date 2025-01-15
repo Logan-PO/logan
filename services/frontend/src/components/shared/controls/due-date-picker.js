@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import { Button, ButtonBase } from '@material-ui/core';
 import DueDateIcon from '@material-ui/icons/CalendarToday';
 import ChevronDown from '@material-ui/icons/KeyboardArrowDown';

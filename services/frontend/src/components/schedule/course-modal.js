@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { createCourse } from '@logan/fe-shared/store/schedule';
+import { createCourse } from 'packages/fe-shared/store/schedule';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Dialog from '../shared/dialog';
 import TextInput from '../shared/controls/text-input';

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateUtils } from '@logan/core';
-import SyncComponent from '@logan/fe-shared/components/sync-component';
+import { dateUtils } from 'packages/core';
+import SyncComponent from 'packages/fe-shared/components/sync-component';
 import { View, LayoutAnimation, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ListItem from '../list-item';

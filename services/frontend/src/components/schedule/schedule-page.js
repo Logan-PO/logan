@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { setShouldGoTo, getScheduleSelectors } from '@logan/fe-shared/store/schedule';
+import { setShouldGoTo, getScheduleSelectors } from 'packages/fe-shared/store/schedule';
 import { Page } from '../shared';
 import EmptySticker from '../shared/displays/empty-sticker';
 import TermsList from './terms-list';

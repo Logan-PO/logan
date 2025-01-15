@@ -3,8 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Dialog, DialogContent, DialogActions, TextField, Button } from '@material-ui/core';
-import { updateUser } from '@logan/fe-shared/store/settings';
-import { setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
+import { updateUser } from 'packages/fe-shared/store/settings';
+import { setLoginStage, fetchSelf } from 'packages/fe-shared/store/login';
 
 class UsernameModal extends React.Component {
     constructor(props) {

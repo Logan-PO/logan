@@ -5,10 +5,10 @@ const {
         dayjs,
         constants: { DB_DATETIME_FORMAT },
     },
-} = require('@logan/core');
+} = require('packages/core');
 
-jest.doMock('@logan/aws', () => {
-    const mocked = jest.requireActual('@logan/aws');
+jest.doMock('packages/aws', () => {
+    const mocked = jest.requireActual('packages/aws');
     mocked.secretUtils.getSecret = async () => ({ web: 'mock-secret' });
     return mocked;
 });
@@ -19,7 +19,7 @@ jest.doMock('../../utils/auth', () => {
     return mocked;
 });
 
-const { dynamoUtils } = require('@logan/aws');
+const { dynamoUtils } = require('packages/aws');
 const testUtils = require('../../utils/test-utils');
 const controller = require('./reminders-controller');
 

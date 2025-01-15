@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { DefaultTheme } from 'react-native-paper';
 import { teal, deepOrange } from 'material-ui-colors';
-import { textShouldBeLight } from '@logan/fe-shared/utils/colors';
+import { textShouldBeLight } from 'packages/fe-shared/utils/colors';
 
 let currentTheme = DefaultTheme;
 

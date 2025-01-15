@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import CheckIcon from '@material-ui/icons/CheckRounded';
-import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
-import { noProp } from '@logan/fe-shared/utils/misc';
+import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
+import { noProp } from 'packages/fe-shared/utils/misc';
 import styles from './checkbox.module.scss';
 
 class Checkbox extends React.Component {

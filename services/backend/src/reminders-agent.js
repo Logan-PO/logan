@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const { Expo } = require('expo-server-sdk');
-const { dynamoUtils } = require('@logan/aws');
-const { dateUtils } = require('@logan/core');
+const { dynamoUtils } = require('packages/aws');
+const { dateUtils } = require('packages/core');
 
 let expo = new Expo();
 let timeoutId;

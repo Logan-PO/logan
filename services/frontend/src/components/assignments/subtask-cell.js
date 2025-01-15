@@ -7,16 +7,16 @@ import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronRight from '@material-ui/icons/ChevronRight';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import {
     getTasksSelectors,
     updateTask,
     deleteTask,
     updateTaskLocal,
     setShouldGoToTask,
-} from '@logan/fe-shared/store/tasks';
-import { getScheduleSelectors } from '@logan/fe-shared/store/schedule';
-import { getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+} from 'packages/fe-shared/store/tasks';
+import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
+import { getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
 import { PriorityDisplay } from '../shared/displays';
 import { Checkbox } from '../shared/controls';
 import BreadcrumbsLike from '../shared/breadcrumbs-like';

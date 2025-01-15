@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ScrollView } from 'react-native';
-import { getTermSelectors, deleteTerm } from '@logan/fe-shared/store/schedule';
+import { getTermSelectors, deleteTerm } from 'packages/fe-shared/store/schedule';
 import { Button, Dialog, FAB, Paragraph, Portal } from 'react-native-paper';
 import ViewController from '../../shared/view-controller';
 import { typographyStyles } from '../../shared/typography';

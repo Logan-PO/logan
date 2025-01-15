@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { dynamoUtils } = require('@logan/aws');
+const { dynamoUtils } = require('packages/aws');
 const { v4: uuid } = require('uuid');
 const { UNAUTHORIZED_ACTIONS, generateBearerToken } = require('../../utils/auth');
 const { makeHandler } = require('../../utils/wrap-handler');

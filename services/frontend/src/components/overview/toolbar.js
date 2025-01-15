@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import { Grid, Typography, ButtonGroup, Button } from '@material-ui/core';
 import LeftIcon from '@material-ui/icons/KeyboardArrowLeft';
 import RightIcon from '@material-ui/icons/KeyboardArrowRight';

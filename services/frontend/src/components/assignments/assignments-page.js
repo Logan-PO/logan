@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fetchAssignments } from '@logan/fe-shared/store/assignments';
+import { fetchAssignments } from 'packages/fe-shared/store/assignments';
 import { Page } from '../shared';
 import EmptySticker from '../shared/displays/empty-sticker';
 import AssignmentsList from './assignments-list';

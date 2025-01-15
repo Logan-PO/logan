@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { LOGIN_STAGE } from '@logan/fe-shared/store/login';
+import { LOGIN_STAGE } from 'packages/fe-shared/store/login';
 import TasksScreen from '../components/tasks/tasks-screen';
 import AssignmentsScreen from '../components/assignments/assignments-screen';
 import ScheduleStack from '../components/schedule/schedule-stack';

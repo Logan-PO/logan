@@ -2,13 +2,13 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import {
     getRemindersSelectors,
     createReminder,
     updateReminder,
     updateReminderLocal,
-} from '@logan/fe-shared/store/reminders';
+} from 'packages/fe-shared/store/reminders';
 import {
     Dialog,
     DialogTitle,

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, LayoutAnimation } from 'react-native';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import DueDatePicker from './pickers/due-date-picker';
 import ListItem from './list-item';
 import Typography from './typography';

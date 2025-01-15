@@ -1,4 +1,4 @@
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 
 export function displayNameForCourse(course) {
     const nicknameValid = course.nickname && course.nickname.trim().length > 0;

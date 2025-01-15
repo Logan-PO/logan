@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getScheduleSelectors, updateHoliday, updateHolidayLocal } from '@logan/fe-shared/store/schedule';
-import { dateUtils } from '@logan/core';
-import Editor from '@logan/fe-shared/components/editor';
+import { getScheduleSelectors, updateHoliday, updateHolidayLocal } from 'packages/fe-shared/store/schedule';
+import { dateUtils } from 'packages/core';
+import Editor from 'packages/fe-shared/components/editor';
 import { View } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import ListItem from '../../shared/list-item';

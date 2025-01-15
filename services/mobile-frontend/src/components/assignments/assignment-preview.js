@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Colors } from 'react-native-paper';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import CourseLabel from '../shared/displays/course-label';
 import Typography from '../shared/typography';
 import ListItem from '../shared/list-item';

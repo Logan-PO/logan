@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { fetchAssignments, getAssignmentsSelectors } from '@logan/fe-shared/store/assignments';
+import { fetchAssignments, getAssignmentsSelectors } from 'packages/fe-shared/store/assignments';
 import { createStackNavigator } from '@react-navigation/stack';
 import CoursePicker from '../shared/pickers/course-picker';
 import PriorityPicker from '../shared/pickers/priority-picker';

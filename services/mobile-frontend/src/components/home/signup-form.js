@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import { createNewUser, LOGIN_STAGE, setLoginStage } from '@logan/fe-shared/store/login';
+import { createNewUser, LOGIN_STAGE, setLoginStage } from 'packages/fe-shared/store/login';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { SafeAreaView } from 'react-native-safe-area-context';

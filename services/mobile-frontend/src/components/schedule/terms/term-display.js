@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
 import { FAB } from 'react-native-paper';
-import Editor from '@logan/fe-shared/components/editor';
+import Editor from 'packages/fe-shared/components/editor';
 import ViewController from '../../shared/view-controller';
 import TermEditor from './term-editor';
 

@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import {
     deleteAssignment,
     getAssignmentsSelectors,
     updateAssignment,
     updateAssignmentLocal,
-} from '@logan/fe-shared/store/assignments';
-import Editor from '@logan/fe-shared/components/editor';
+} from 'packages/fe-shared/store/assignments';
+import Editor from 'packages/fe-shared/components/editor';
 import '../shared/editor.scss';
 import RemindersList from '../reminders/reminders-list';
 import CoursePicker from '../shared/controls/course-picker';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import DueDateIcon from '@material-ui/icons/CalendarToday';
 import ChevronDown from '@material-ui/icons/KeyboardArrowDown';
 import ChevronUp from '@material-ui/icons/KeyboardArrowUp';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import Typography from '../typography';
 import InputGroup from './input-group';
 import DatePicker from './date-picker';

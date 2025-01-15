@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { List, FormControl, FormControlLabel, Switch } from '@material-ui/core';
 import _ from 'lodash';
-import { dateUtils } from '@logan/core';
+import { dateUtils } from 'packages/core';
 import {
     fetchAssignments,
     getAssignmentsSelectors,
     deleteAssignment,
     setShouldGoToAssignment,
-} from '@logan/fe-shared/store/assignments';
-import { getCourseSelectors } from '@logan/fe-shared/store/schedule';
-import { getSections } from '@logan/fe-shared/sorting/assignments';
+} from 'packages/fe-shared/store/assignments';
+import { getCourseSelectors } from 'packages/fe-shared/store/schedule';
+import { getSections } from 'packages/fe-shared/sorting/assignments';
 import Fab from '../shared/controls/fab';
 import ListHeader from '../shared/list-header';
 import ListSubheader from '../shared/list-subheader';

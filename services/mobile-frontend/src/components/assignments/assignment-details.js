@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView } from 'react-native';
-import Editor from '@logan/fe-shared/components/editor';
+import Editor from 'packages/fe-shared/components/editor';
 import { FAB } from 'react-native-paper';
 import ViewController from '../shared/view-controller';
 import RemindersList from '../reminders/reminders-list';

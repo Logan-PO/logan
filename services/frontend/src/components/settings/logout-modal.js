@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
 import { Dialog, DialogContent, DialogActions, DialogTitle, Button } from '@material-ui/core';
-import { LOGIN_STAGE, setLoginStage, fetchSelf } from '@logan/fe-shared/store/login';
+import { LOGIN_STAGE, setLoginStage, fetchSelf } from 'packages/fe-shared/store/login';
 import styles from './settings-page.module.scss';
 
 class LogOutModal extends React.Component {

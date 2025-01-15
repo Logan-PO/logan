@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import AddIcon from '@material-ui/icons/AddCircleOutline';
 import RemindersIcon from '@material-ui/icons/Notifications';
-import { getRemindersSelectors, setShouldGoToReminder } from '@logan/fe-shared/store/reminders';
+import { getRemindersSelectors, setShouldGoToReminder } from 'packages/fe-shared/store/reminders';
 import InputGroup from '../shared/controls/input-group';
 import TextButton from '../shared/controls/text-button';
 import '../shared/list.scss';

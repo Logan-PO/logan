@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
-import { getTasksSelectors, createTask, deleteTask } from '@logan/fe-shared/store/tasks';
+import { getTasksSelectors, createTask, deleteTask } from 'packages/fe-shared/store/tasks';
 import TaskCell from '../tasks/task-cell';
 import ListItem from '../shared/list-item';
 import Typography from '../shared/typography';

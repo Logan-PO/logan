@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const { secretUtils, dynamoUtils } = require('@logan/aws');
+const { secretUtils, dynamoUtils } = require('packages/aws');
 const jwt = require('jsonwebtoken');
 const { AuthorizationError, PermissionDeniedError } = require('./errors');
 

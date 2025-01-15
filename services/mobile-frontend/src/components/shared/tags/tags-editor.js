@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { View, TextInput } from 'react-native';
 import { Colors } from 'react-native-paper';
-import SyncComponent from '@logan/fe-shared/components/sync-component';
+import SyncComponent from 'packages/fe-shared/components/sync-component';
 import { typographyStyles } from '../typography';
 import Tag from './tag';
 

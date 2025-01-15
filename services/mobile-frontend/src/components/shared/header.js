@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { AppState } from 'react-native';
 import { Appbar } from 'react-native-paper';
-import { dateUtils } from '@logan/core';
-import { beginFetching, finishFetching } from '@logan/fe-shared/store/fetch-status';
-import { fetchTasks } from '@logan/fe-shared/store/tasks';
-import { fetchAssignments } from '@logan/fe-shared/store/assignments';
-import { fetchSchedule } from '@logan/fe-shared/store/schedule';
-import { fetchReminders } from '@logan/fe-shared/store/reminders';
-import { fetchSelf } from '@logan/fe-shared/store/login';
+import { dateUtils } from 'packages/core';
+import { beginFetching, finishFetching } from 'packages/fe-shared/store/fetch-status';
+import { fetchTasks } from 'packages/fe-shared/store/tasks';
+import { fetchAssignments } from 'packages/fe-shared/store/assignments';
+import { fetchSchedule } from 'packages/fe-shared/store/schedule';
+import { fetchReminders } from 'packages/fe-shared/store/reminders';
+import { fetchSelf } from 'packages/fe-shared/store/login';
 
 class Header extends React.Component {
     constructor(props) {
