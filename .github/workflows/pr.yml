@@ -35,7 +35,6 @@ jobs:
               - 'packages/**'
               - 'package.json'
               - 'package-lock.json'
-              - 'lerna.json'
               - '**.js'
 
   lint-and-test-node:

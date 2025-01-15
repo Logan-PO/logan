@@ -109,10 +109,9 @@ jobs:
         with:
           node-version: 12
       -
-        name: Install Lerna & Bootstrap
+        name: Install dependencies
         run: |
           npm ci
-          npm run bootstrap:backend
       -
         name: sam build
         run: sam build
