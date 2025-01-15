@@ -1,5 +1,5 @@
-import reactPlugin from "eslint-plugin-react"
-import rootConfig from "../../eslint.config";
+import reactPlugin from 'eslint-plugin-react';
+import rootConfig from '../../eslint.config';
 
 export default [
     rootConfig,

@@ -2,7 +2,12 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getScheduleSelectors, updateCourse, updateCourseLocal, deleteSection } from 'packages/fe-shared/store/schedule';
+import {
+    getScheduleSelectors,
+    updateCourse,
+    updateCourseLocal,
+    deleteSection,
+} from 'packages/fe-shared/store/schedule';
 import Editor from 'packages/fe-shared/components/editor';
 import { View } from 'react-native';
 import { Button, Dialog, Paragraph, Portal, TextInput } from 'react-native-paper';

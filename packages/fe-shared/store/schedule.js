@@ -191,11 +191,6 @@ export const {
     deleteCourse,
     deleteSection,
 } = asyncActions;
-export const {
-    setShouldGoTo,
-    updateTermLocal,
-    updateHolidayLocal,
-    updateCourseLocal,
-    updateSectionLocal,
-} = slice.actions;
+export const { setShouldGoTo, updateTermLocal, updateHolidayLocal, updateCourseLocal, updateSectionLocal } =
+    slice.actions;
 export default slice.reducer;

@@ -1,4 +1,4 @@
-import rootConfig from "../../eslint.config"
+import rootConfig from '../../eslint.config';
 
 export default [
     rootConfig,

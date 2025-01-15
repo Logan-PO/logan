@@ -7,7 +7,12 @@ import { Grid, Tooltip, IconButton } from '@material-ui/core';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AddIcon from '@material-ui/icons/AddCircleOutline';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { getScheduleSelectors, updateCourse, updateCourseLocal, deleteSection } from 'packages/fe-shared/store/schedule';
+import {
+    getScheduleSelectors,
+    updateCourse,
+    updateCourseLocal,
+    deleteSection,
+} from 'packages/fe-shared/store/schedule';
 import Editor from 'packages/fe-shared/components/editor';
 import ColorPicker from '../shared/controls/color-picker';
 import TextInput from '../shared/controls/text-input';

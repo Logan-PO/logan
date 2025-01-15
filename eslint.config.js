@@ -1,7 +1,7 @@
-import js from "@eslint/js";
+import js from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import eslintPluginJest from "eslint-plugin-jest";
-import importPlugin from "eslint-plugin-import";
+import eslintPluginJest from 'eslint-plugin-jest';
+import importPlugin from 'eslint-plugin-import';
 import globals from 'globals';
 
 export default [
@@ -11,8 +11,8 @@ export default [
         files: ['test/**'],
         ...eslintPluginJest.configs['flat/recommended'],
         rules: {
-          ...eslintPluginJest.configs['flat/recommended'].rules,
-          'jest/prefer-expect-assertions': 'off',
+            ...eslintPluginJest.configs['flat/recommended'].rules,
+            'jest/prefer-expect-assertions': 'off',
         },
     },
     {
@@ -32,7 +32,7 @@ export default [
             globals: {
                 ...globals.node,
                 ...eslintPluginJest.environments.globals.globals,
-            }
+            },
         },
         rules: {
             'import/no-unresolved': 'error',

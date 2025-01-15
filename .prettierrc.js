@@ -7,5 +7,5 @@ export default {
     singleQuote: true,
     trailingComma: 'es5',
     arrowParens: 'avoid',
-    quoteProps: 'as-needed'
+    quoteProps: 'as-needed',
 };

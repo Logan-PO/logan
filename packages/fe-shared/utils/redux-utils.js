@@ -6,7 +6,13 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
  * @returns {function(*=): {selectIds: Function, selectEntities: Function, selectAll: Function, selectTotal: Function, selectById: Function}}
  */
 export function wrapAdapter(adapter) {
-    return state => _.mapValues(adapter.getSelectors(), selector => (...params) => selector(state, ...params));
+    return state =>
+        _.mapValues(
+            adapter.getSelectors(),
+            selector =>
+                (...params) =>
+                    selector(state, ...params)
+        );
 }
 
 /**
