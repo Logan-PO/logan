@@ -5,6 +5,7 @@ on:
     paths:
       - 'packages/**'
       - 'services/**'
+      - '.github/workflows/lint-and-test.yml'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
