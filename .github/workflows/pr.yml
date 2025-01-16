@@ -10,6 +10,7 @@ concurrency:
 permissions:
   contents: write
   pull-requests: read
+  id-token: write
 
 defaults:
   run:
@@ -20,16 +21,22 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
+      infra-changes: ${{ steps.changed-paths.outputs.infra }}
       node-changes: ${{ steps.changed-paths.outputs.node }}
     steps:
       -
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       -
         name: Determine changed paths
         uses: dorny/paths-filter@v3
         id: changed-paths
         with:
           filters: |
+            infra:
+              - '.github/workflows/terraform.yml'
+              - 'infra/**'
             node:
               - '.github/workflows/linting-and-tests.yml'
               - 'services/**'
@@ -70,12 +77,18 @@ jobs:
           npm -w services/frontend \
             run build
 
+  terraform-plan:
+    needs: setup
+    if: ${{ needs.detect-changes.outputs.infra-changes == 'true' }}
+    uses: ./.github/workflows/terraform.yml
+
   pr-ready:
     if: always()
     needs:
       - detect-changes
       - linting-and-tests
       - validate-frontend-build
+      - terraform-plan
     runs-on: ubuntu-latest
     steps:
       -

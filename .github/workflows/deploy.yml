@@ -6,6 +6,10 @@ on:
       - master
   workflow_dispatch:
     inputs:
+      deploy-infra:
+        description: Deploy infra
+        type: boolean
+        required: true
       deploy-frontend:
         description: Deploy frontend
         type: boolean
@@ -31,8 +35,9 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
-      deploy-frontend: ${{ inputs.deploy-frontend || steps.changed-paths.outputs.frontend == 'true' }}
-      deploy-backend: ${{ inputs.deploy-backend || steps.changed-paths.outputs.backend == 'true' }}
+      deploy-infra: ${{ steps.changed-paths.outputs.infra }}
+      deploy-frontend: ${{ steps.changed-paths.outputs.frontend }}
+      deploy-backend: ${{ steps.changed-paths.outputs.backend }}
     steps:
       -
         uses: actions/checkout@v4
@@ -43,6 +48,10 @@ jobs:
         id: changed-paths
         with:
           filters: |
+            infra:
+              - 'infra/**'
+              - '.github/workflows/deploy.yml'
+              - '.github/workflows/terraform.yml'
             frontend:
               - 'services/frontend/**'
               - 'packages/fe-shared/**'
@@ -56,9 +65,17 @@ jobs:
               - 'scripts/copy-be-dependencies.sh'
               - '.github/workflows/deploy.yml'
 
+  deploy-infra:
+    needs: setup
+    if: ${{ inputs.deploy-infra || needs.setup.outputs.deploy-infra == 'true' }}
+    uses: ./.github/workflows/terraform.yml
+    with:
+      apply: true
+    secrets: inherit
+
   deploy-frontend:
     needs: setup
-    if: needs.setup.outputs.deploy-frontend
+    if: ${{ inputs.deploy-frontend || needs.setup.outputs.deploy-frontend == 'true' }}
     runs-on: ubuntu-latest
     steps:
       -
@@ -93,7 +110,7 @@ jobs:
   
   deploy-backend:
     needs: setup
-    if: needs.setup.outputs.deploy-backend
+    if: ${{ inputs.deploy-backend || needs.setup.outputs.deploy-backend == 'true' }}
     runs-on: ubuntu-latest
     steps:
       -
