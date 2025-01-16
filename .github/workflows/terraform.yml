@@ -17,6 +17,7 @@ defaults:
     shell: bash
 
 env:
+  TERRAFORM_VERSION: 1.10.3
   GHA_WORKER_ROLE: arn:aws:iam::970547354432:role/gha-worker
 
 jobs:
@@ -29,7 +30,7 @@ jobs:
       -
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: "1.5.1"
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
       -
         name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -57,7 +58,7 @@ jobs:
       -
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: "1.5.1"
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
       -
         name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
