@@ -7,6 +7,11 @@ on:
         required: false
         type: boolean
         default: false
+    secrets:
+      BOT_APP_ID:
+        required: true
+      BOT_APP_PRIVATE_KEY:
+        required: true
 
 permissions:
   contents: write
@@ -26,7 +31,17 @@ jobs:
 
   plan:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra
     steps:
+      -
+        name: Generate app token
+        id: app-token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.BOT_APP_ID }}
+          private_key: ${{ secrets.BOT_APP_PRIVATE_KEY }}
       -
         uses: actions/checkout@v4
       -
@@ -41,13 +56,36 @@ jobs:
           role-session-name: ${{ github.run_id }}
           aws-region: us-west-2
       -
+        name: terraform fmt
+        run: terraform fmt
+      -
+        name: Detect changes
+        id: detect-changes
+        run: |
+          git add .
+          git status -s
+
+          if [ -n "$(git status -s)" ]; then
+            echo "detected=true" | tee -a "$GITHUB_OUTPUT"
+          else
+            echo "detected=false" | tee -a "$GITHUB_OUTPUT"
+          fi
+      -
+        name: Commit changes if detected
+        if: ${{ steps.detect-changes.outputs.detected == 'true' }}
+        uses: planetscale/ghcommit-action@v0.2.0
+        env:
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+        with:
+          commit_message: terraform fmt
+          repo: ${{ github.repository }}
+          branch: ${{ github.head_ref || github.ref_name }}
+      -
         name: terraform init
         run: terraform init
-        working-directory: infra
       -
         name: terraform plan
         id: plan
-        working-directory: infra
         run: |
           # Wrapping to capture logs and exit status
           (
