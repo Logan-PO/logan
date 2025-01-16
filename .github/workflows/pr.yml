@@ -45,6 +45,7 @@ jobs:
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.node-changes == 'true' }}
     uses: ./.github/workflows/linting-and-tests.yml
+    secrets: inherit
 
   validate-frontend-build:
     needs: detect-changes
