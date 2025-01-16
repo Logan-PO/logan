@@ -60,9 +60,7 @@ resource "aws_iam_role_policy" "worker_policy" {
 }
 
 resource "aws_iam_policy_attachment" "worker_policy_attachment" {
-  name       = "gha-worker-attachment"
-  users      = [aws_iam_user.user.name]
-  roles      = [aws_iam_role.role.name]
-  groups     = [aws_iam_group.group.name]
-  policy_arn = aws_iam_policy.policy.arn
+  name       = "gha-worker-policy-attachment"
+  roles      = [aws_iam_role.worker_role.name]
+  policy_arn = aws_iam_policy.worker_policy.arn
 }
