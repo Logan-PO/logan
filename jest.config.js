@@ -3,5 +3,5 @@ export default {
     moduleNameMapper: {
         '^(packages/.+)': '<rootDir>/$1',
         '^(services/.+)': '<rootDir>/$1',
-    }, 
+    },
 };
