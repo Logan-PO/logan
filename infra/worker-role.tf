@@ -1,8 +1,3 @@
-import {
-  to = aws_iam_role.worker_role
-  id = "gha-worker"
-}
-
 resource "aws_iam_role" "worker_role" {
   name = "gha-worker"
   
