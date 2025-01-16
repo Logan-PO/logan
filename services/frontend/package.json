@@ -25,6 +25,7 @@
     "@react-oauth/google": "^0.12.1",
     "clsx": "^1.1.1",
     "gatsby": "^4.19.0",
+    "gatsby-plugin-alias-imports": "^1.0.5",
     "gatsby-plugin-react-helmet": "^5.14.0",
     "gatsby-plugin-sass": "^5.14.0",
     "globals": "^13.24.0",

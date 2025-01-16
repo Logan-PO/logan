@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Dialog from '@material-ui/core/Dialog';
+import Dialog from '@mui/material/Dialog';
 import Typography from '../shared/typography';
 import ActionButton from '../shared/controls/action-button';
 import InputGroup from '../shared/controls/input-group';

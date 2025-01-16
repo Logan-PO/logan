@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Typography } from '@material-ui/core';
+import { Typography } from '@mui/material';
 import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';
 
 class CourseLabel extends React.Component {

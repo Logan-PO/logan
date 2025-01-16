@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Typography, colors } from '@material-ui/core';
+import { Grid, Typography, colors } from '@mui/material';
 
 class EmptySticker extends React.Component {
     render() {

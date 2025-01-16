@@ -5,5 +5,18 @@
  */
 
 module.exports = {
-    plugins: ['gatsby-plugin-sass', 'gatsby-plugin-react-helmet'],
+    plugins: [
+        'gatsby-plugin-sass',
+        'gatsby-plugin-react-helmet',
+        {
+            resolve: 'gatsby-plugin-alias-imports',
+            options: {
+                alias: {
+                    packages: '../../packages',
+                    services: '../',
+                },
+                extensions: ['js', 'jsx'],
+            },
+        },
+    ],
 };

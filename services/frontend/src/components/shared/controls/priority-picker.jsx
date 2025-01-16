@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Slider } from '@material-ui/core';
-import PriorityIcon from '@material-ui/icons/LabelImportant';
+import { Slider } from '@mui/material';
+import PriorityIcon from '@mui/icons-material/LabelImportant';
 import priorities, { colorForValue } from '../displays/priority-constants';
 import InputGroup from './input-group';
 import './priority-picker.scss';

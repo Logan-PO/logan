@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Popover from '@material-ui/core/Popover';
-import * as muiColors from '@material-ui/core/colors';
+import Popover from '@mui/material/Popover';
+import * as muiColors from '@mui/material/colors';
 import Typography from '../typography';
 import styles from './color-picker.module.scss';
 import InputGroup from './input-group';

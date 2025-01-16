@@ -53,7 +53,7 @@ async function searchForLocalBackend() {
 /* ---- PERSISTENT STORAGE ---- */
 
 async function getFromPersistentStorage(key) {
-    if (isMobile) {
+    if (isMobile && typeof window !== 'undefined') {
         return AsyncStorage.getItem(key);
     } else {
         try {

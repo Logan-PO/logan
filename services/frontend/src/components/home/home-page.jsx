@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
-import { colors } from '@material-ui/core';
-import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import { colors } from '@mui/material';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Typography, { variants } from '../shared/typography';
 import ActionButton from '../shared/controls/action-button';
 import { headingsFontFamily } from '../../globals/theme';
@@ -171,9 +171,13 @@ class HomePage extends React.Component {
 
         function makeScrollToFunction(index) {
             return () => {
+                if (typeof window === "undefined" || typeof document === "undefined") {
+                    console.error('window or document was undefined, cannot make scroll-to function')
+                    return
+                }
+
                 console.log(index);
                 const id = sections[index].id;
-                // eslint-disable-next-line no-undef
                 const element = document.getElementById(id);
                 window.scrollTo({
                     top: element.offsetTop,

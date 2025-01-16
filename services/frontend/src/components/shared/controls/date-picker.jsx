@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
-import { ButtonBase, Popover } from '@material-ui/core';
-import { ChevronLeft, ChevronRight } from '@material-ui/icons';
+import { ButtonBase, Popover } from '@mui/material';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { getCurrentTheme } from '../../../globals/theme';
 import Typography from '../typography';
 import ActionButton from './action-button';

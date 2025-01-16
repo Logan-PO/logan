@@ -1,4 +1,4 @@
-@import '../../globals/global';
+@use '../../globals/global';
 
 .page {
     width: 100vw;
@@ -31,7 +31,7 @@
     background: white;
     border-radius: 10px;
     overflow: hidden;
-    height: calc(100vh - #{$navbar-height} - 20px);
+    height: calc(100vh - #{global.$navbar-height} - 20px);
     flex-grow: 1;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15);
 }

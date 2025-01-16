@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import AddIcon from '@material-ui/icons/AddCircleOutline';
+import AddIcon from '@mui/icons-material/AddCircleOutline';
 import TasksIcon from 'mdi-material-ui/CheckboxMarkedCircleOutline';
 import TaskModal from '../tasks/task-modal';
 import InputGroup from '../shared/controls/input-group';

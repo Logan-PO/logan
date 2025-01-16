@@ -1,17 +1,17 @@
-@import '../../globals/global';
-@import './sidebar.module';
+@use '../../globals/global';
+@use './sidebar.module';
 
 .navbar {
     position: relative;
-    height: $navbar-height;
-    z-index: $sidebar-z-index + 1 !important;
+    height: global.$navbar-height;
+    z-index: sidebar.$sidebar-z-index + 1 !important;
     background: none !important;
 }
 
 .title-container {
     position: absolute;
-    width: calc(100vw - #{$sidebar-width});
-    height: $navbar-height;
+    width: calc(100vw - #{global.$sidebar-width});
+    height: global.$navbar-height;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,7 +27,7 @@
 
 .navbar-text {
     user-select: none;
-    line-height: $navbar-height !important;
+    line-height: global.$navbar-height !important;
 }
 
 .flexible-space {

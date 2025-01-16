@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, InputLabel, Select, MenuItem, InputBase } from '@material-ui/core';
-import DowIcon from '@material-ui/icons/DateRange';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import CheckIcon from '@material-ui/icons/Check';
+import { FormControl, InputLabel, Select, MenuItem, InputBase } from '@mui/material';
+import DowIcon from '@mui/icons-material/DateRange';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import CheckIcon from '@mui/icons-material/Check';
 import Typography from '../typography';
 import InputGroup from './input-group';
 import styles from './course-picker.module.scss';

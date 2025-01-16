@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import '../shared/editor.scss';
 import RemindersList from '../reminders/reminders-list';
 import CoursePicker from '../shared/controls/course-picker';

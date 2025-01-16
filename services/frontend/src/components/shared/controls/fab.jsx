@@ -2,8 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { ButtonBase } from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
+import { ButtonBase } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import { getCurrentTheme } from '../../../globals/theme';
 
 const Fab = ({ children, onClick, style, ...rest }) => {
