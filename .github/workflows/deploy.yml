@@ -24,8 +24,10 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
+  contents: write
   id-token: write
-  contents: read
+  pull-requests: write
+  actions: read
 
 env:
   GHA_WORKER_ROLE: arn:aws:iam::970547354432:role/gha-worker
