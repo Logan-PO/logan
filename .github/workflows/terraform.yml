@@ -124,6 +124,8 @@ jobs:
           message: |
             `terraform plan` ${{ steps.plan.outputs.exit_code == '0' && 'succeeded' || 'failed' }}
 
+            ${{ steps.plan-logs.outputs.plan_summary }}
+
             <details>
               <summary>plan result</summary>
 
@@ -131,8 +133,6 @@ jobs:
               ${{ steps.plan-logs.outputs.logs }}
               ```
             </details>
-
-            ${{ steps.plan-logs.outputs.plan_summary }}
 
   apply:
     needs: plan
