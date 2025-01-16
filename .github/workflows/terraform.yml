@@ -2,6 +2,11 @@ name: terraform
 
 on:
   workflow_call:
+    inputs:
+      apply:
+        required: true
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -39,4 +44,32 @@ jobs:
       -
         name: terraform plan
         run: terraform plan
+        working-directory: infra
+
+  apply:
+    needs: plan
+    if: ${{ inputs.apply == true }}
+    environment: infra-prod
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v4
+      -
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.1"
+      -
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.GHA_WORKER_ROLE }}
+          role-session-name: ${{ github.run_id }}
+          aws-region: us-west-2
+      -
+        name: terraform init
+        run: terraform init
+        working-directory: infra
+      -
+        name: terraform apply
+        run: terraform apply
         working-directory: infra

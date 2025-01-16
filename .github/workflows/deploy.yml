@@ -31,6 +31,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
+      deploy-infra: ${{ steps.changed-paths.outputs.infra }}
       deploy-frontend: ${{ inputs.deploy-frontend || steps.changed-paths.outputs.frontend == 'true' }}
       deploy-backend: ${{ inputs.deploy-backend || steps.changed-paths.outputs.backend == 'true' }}
     steps:
@@ -43,6 +44,8 @@ jobs:
         id: changed-paths
         with:
           filters: |
+            infra:
+              - 'infra/**'
             frontend:
               - 'services/frontend/**'
               - 'packages/fe-shared/**'
@@ -55,6 +58,14 @@ jobs:
               - 'scripts/deploy-backend.sh'
               - 'scripts/copy-be-dependencies.sh'
               - '.github/workflows/deploy.yml'
+
+  deploy-infra:
+    needs: setup
+    if: ${{ needs.setup.outputs.deploy-infra == true }}
+    uses: ./.github/workflows/terraform.yml
+    with:
+      apply: true
+    secrets: inherit
 
   deploy-frontend:
     needs: setup
