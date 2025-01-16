@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, ButtonBase } from '@material-ui/core';
-import DueDateIcon from '@material-ui/icons/CalendarToday';
-import ChevronDown from '@material-ui/icons/KeyboardArrowDown';
-import ChevronUp from '@material-ui/icons/KeyboardArrowUp';
+import { Button, ButtonBase } from '@mui/material';
+import DueDateIcon from '@mui/icons-material/CalendarToday';
+import ChevronDown from '@mui/icons-material/KeyboardArrowDown';
+import ChevronUp from '@mui/icons-material/KeyboardArrowUp';
 import { getCurrentTheme } from '../../../globals/theme';
 import Typography from '../typography';
 import InputGroup from './input-group';

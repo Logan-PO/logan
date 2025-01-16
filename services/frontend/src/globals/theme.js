@@ -1,10 +1,10 @@
-import { createMuiTheme } from '@mui/styles';
+import { createTheme } from '@mui/material';
 import { colors } from '@mui/material';
 
 export const defaultFontFamily = ['Rubik', '-apple-system', 'BlinkMacSystemFont', 'Arial', 'sans-serif'];
 export const headingsFontFamily = ['Poppins', ...defaultFontFamily];
 
-let currentTheme = createMuiTheme();
+let currentTheme = createTheme();
 
 export function getCurrentTheme() {
     return currentTheme;
@@ -13,7 +13,7 @@ export function getCurrentTheme() {
 export function makeTheme(params = {}) {
     const { primary = colors.teal, accent = colors.deepOrange } = params;
 
-    currentTheme = createMuiTheme({
+    currentTheme = createTheme({
         palette: {
             primary: {
                 light: primary[300],

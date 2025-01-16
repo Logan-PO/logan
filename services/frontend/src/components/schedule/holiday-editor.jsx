@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import Editor from 'packages/fe-shared/components/editor';
 import TextInput from '../shared/controls/text-input';
 import BasicDatePicker from '../shared/controls/basic-date-picker';

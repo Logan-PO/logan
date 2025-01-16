@@ -1,10 +1,10 @@
-@import '../../globals/global';
+@use '../../globals/global';
 
 $sidebar-z-index: 20;
 
 .sidebar {
-    padding-top: calc(#{$navbar-height} + 24px);
-    width: $sidebar-width;
+    padding-top: calc(#{global.$navbar-height} + 24px);
+    width: global.$sidebar-width;
     flex-shrink: 0;
     z-index: $sidebar-z-index;
 }
@@ -28,7 +28,7 @@ $sidebar-z-index: 20;
 
 .sidebar-paper {
     background: none !important;
-    width: $sidebar-width;
+    width: global.$sidebar-width;
     border-right: none !important;
 }
 

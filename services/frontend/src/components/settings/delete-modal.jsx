@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { navigate } from 'gatsby';
-import { Dialog, DialogContent, DialogActions, DialogTitle, Button } from '@material-ui/core';
+import { Dialog, DialogContent, DialogActions, DialogTitle, Button } from '@mui/material';
 import styles from './settings-page.module.scss';
 import { deleteUser } from 'packages/fe-shared/store/settings';
 import { LOGIN_STAGE, setLoginStage, fetchSelf } from 'packages/fe-shared/store/login';

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List } from '@material-ui/core';
+import { List } from '@mui/material';
 import AssignmentCell from '../assignments/assignment-cell';
 import TaskCell from '../tasks/task-cell';
 import ListHeader from '../shared/list-header';

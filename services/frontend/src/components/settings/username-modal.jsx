@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Dialog, DialogContent, DialogActions, TextField, Button } from '@material-ui/core';
+import { Dialog, DialogContent, DialogActions, TextField, Button } from '@mui/material';
 import { updateUser } from 'packages/fe-shared/store/settings';
 import { setLoginStage, fetchSelf } from 'packages/fe-shared/store/login';
 

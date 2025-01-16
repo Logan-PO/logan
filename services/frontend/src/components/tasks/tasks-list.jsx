@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, FormControl, FormControlLabel, Switch } from '@material-ui/core';
+import { List, FormControl, FormControlLabel, Switch } from '@mui/material';
 import Fab from '../shared/controls/fab';
 import ListHeader from '../shared/list-header';
 import '../shared/list.scss';
@@ -191,7 +191,7 @@ class TasksList extends React.Component {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    classes={{ root: styles.switch }}
+                                    classes={{ root: styles.switchinput }}
                                     color="default"
                                     checked={this.state.showingCompletedTasks}
                                     onChange={this.toggleCompletedTasks}

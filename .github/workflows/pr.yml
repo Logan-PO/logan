@@ -8,7 +8,8 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
+  pull-requests: read
 
 defaults:
   run:
@@ -16,10 +17,10 @@ defaults:
 
 jobs:
 
-  setup:
+  detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      node-changes: ${{ steps.changed-paths.outputs.node == 'true' }}
+      node-changes: ${{ steps.changed-paths.outputs.node }}
     steps:
       -
         uses: actions/checkout@v4
@@ -30,23 +31,51 @@ jobs:
         with:
           filters: |
             node:
-              - '.github/workflows/lint-and-test-node.yml'
+              - '.github/workflows/linting-and-tests.yml'
               - 'services/**'
               - 'packages/**'
               - 'package.json'
               - 'package-lock.json'
               - '**.js'
+            frontend:
+              - 'packages/**'
+              - 'services/frontend/**'
 
-  lint-and-test-node:
-    needs: setup
-    if: ${{ needs.setup.outputs.node-changes }}
-    uses: ./.github/workflows/lint-and-test-node.yml
+  linting-and-tests:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.node-changes == 'true' }}
+    uses: ./.github/workflows/linting-and-tests.yml
+    secrets: inherit
+
+  validate-frontend-build:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.node-changes == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v4
+      -
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+      -
+        name: Install dependencies
+        run: |
+          npm ci
+      -
+        name: Build frontend
+        run: |
+          npm -w services/frontend \
+            run build
 
   pr-ready:
     if: always()
     needs:
-      - setup
-      - lint-and-test-node
+      - detect-changes
+      - linting-and-tests
+      - validate-frontend-build
     runs-on: ubuntu-latest
     steps:
       -

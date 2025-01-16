@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { InputBase, Select, ListSubheader, MenuItem } from '@material-ui/core';
-import CourseIcon from '@material-ui/icons/Book';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import { InputBase, Select, ListSubheader, MenuItem } from '@mui/material';
+import CourseIcon from '@mui/icons-material/Book';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import InputGroup from './input-group';
 import styles from './course-picker.module.scss';
 import { getScheduleSelectors } from 'packages/fe-shared/store/schedule';

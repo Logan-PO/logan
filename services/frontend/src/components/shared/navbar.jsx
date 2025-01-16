@@ -2,8 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { AppBar, IconButton, Tooltip } from '@material-ui/core';
-import SyncIcon from '@material-ui/icons/Sync';
+import { AppBar, IconButton, Tooltip } from '@mui/material';
+import SyncIcon from '@mui/icons-material/Sync';
 import { getCurrentTheme } from '../../globals/theme';
 import styles from './navbar.module.scss';
 import AccountDialog from './account-dialog';
@@ -30,12 +30,17 @@ class Navbar extends React.Component {
     }
 
     componentDidMount() {
-        window.addEventListener('focus', this.onFocus.bind(this));
+        if (typeof window !== "undefined") {
+            window.addEventListener('focus', this.onFocus.bind(this));
+        }
+
         return this.fetchAll();
     }
 
     componentWillUnmount() {
-        window.removeEventListener('focus', this.onFocus.bind(this));
+        if (typeof window !== "undefined") {
+            window.removeEventListener('focus', this.onFocus.bind(this));
+        }
     }
 
     onFocus() {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography as MuiTypography } from '@material-ui/core';
+import { Typography as MuiTypography } from '@mui/material';
 import { headingsFontFamily } from '../../globals/theme';
 
 const BUILTIN_COLORS = ['initial', 'inherit', 'primary', 'secondary', 'textPrimary', 'textSecondary', 'error'];

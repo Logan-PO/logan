@@ -2,12 +2,12 @@ import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, IconButton, Tooltip } from '@material-ui/core';
-import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@material-ui/lab';
-import CourseIcon from '@material-ui/icons/Book';
-import HolidayIcon from '@material-ui/icons/BeachAccess';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { List, IconButton, Tooltip } from '@mui/material';
+import { SpeedDial, SpeedDialIcon, SpeedDialAction } from '@mui/lab';
+import CourseIcon from '@mui/icons-material/Book';
+import HolidayIcon from '@mui/icons-material/BeachAccess';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
     getScheduleSelectors,
     createCourse,

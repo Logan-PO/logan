@@ -82,8 +82,9 @@ jobs:
           npm ci
       -
         name: npm build
-        run: npm run build
-        working-directory: ./services/frontend
+        run: |
+          npm -w services/frontend \
+            run build
       -
         name: Upload to S3
         run: |

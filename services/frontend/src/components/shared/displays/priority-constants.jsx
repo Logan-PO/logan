@@ -1,4 +1,4 @@
-import { colors } from '@material-ui/core';
+import { colors } from '@mui/material';
 
 const priorities = {
     'Very high': [2, colors.deepOrange[500]],
