@@ -52,7 +52,7 @@ jobs:
           # Wrapping to capture logs and exit status
           (
             set +e
-            terraform plan;
+            terraform plan -no-color;
             echo "$?" > "${{ runner.temp }}/plan-status.txt";
           ) 2>&1 | tee "${{ runner.temp }}/plan-output.txt"
 
