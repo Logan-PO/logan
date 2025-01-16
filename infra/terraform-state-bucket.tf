@@ -5,7 +5,6 @@ import {
 
 resource "aws_s3_bucket" "terraform_state_bucket" {
   bucket = "logan-terraform-state-prod"
-  region = "us-west-2"
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state_bucket_encryption" {
