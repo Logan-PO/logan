@@ -3,8 +3,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { IconButton, Tooltip } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+const IconButton = require('@mui/material/IconButton');
+const Tooltip= require('@mui/material/Tooltip');
+const DeleteIcon = require('@mui/icons-material/Delete')
 import Typography from '../shared/typography';
 import styles from './assignment-cell.module.scss';
 import { getAssignmentsSelectors, updateAssignment, updateAssignmentLocal } from 'packages/fe-shared/store/assignments';
