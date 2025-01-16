@@ -111,6 +111,9 @@ jobs:
             echo 'EOF';
           } | tee -a "$GITHUB_OUTPUT"
           echo "::${stopToken}::"
+          
+          PLAN_SUMMARY=$(cat "${{ runner.temp }}/plan-output.txt" | sed -nE 's/Plan: (.+)\./\1/p')
+          echo "plan_summary=$PLAN_SUMMARY" | tee -a "$GITHUB_OUTPUT"
       -
         name: Comment plan result
         uses: marocchino/sticky-pull-request-comment@v2
@@ -129,6 +132,7 @@ jobs:
               ```
             </details>
 
+            ${{ steps.plan-logs.outputs.plan_summary }}
 
   apply:
     needs: plan
