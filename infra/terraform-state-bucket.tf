@@ -1,6 +1,6 @@
 import {
     to = aws_s3_bucket.terraform_state_bucket
-    id = "arn:aws:s3:::logan-terraform-state-prod"
+    id = "logan-terraform-state-prod"
 }
 
 resource "aws_s3_bucket" "terraform_state_bucket" {
