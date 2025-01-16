@@ -2,8 +2,8 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { colors } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { colors } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 import { makeTheme } from './theme';
 
 const DynamicThemeProvider = ({ primary, accent, children, ...rest }) => {

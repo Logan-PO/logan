@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Grid, Typography, ButtonGroup, Button } from '@material-ui/core';
-import LeftIcon from '@material-ui/icons/KeyboardArrowLeft';
-import RightIcon from '@material-ui/icons/KeyboardArrowRight';
-import TodayIcon from '@material-ui/icons/Adjust';
+import { Grid, Typography, ButtonGroup, Button } from '@mui/material';
+import LeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import RightIcon from '@mui/icons-material/KeyboardArrowRight';
+import TodayIcon from '@mui/icons-material/Adjust';
 import classes from './toolbar.module.scss';
 import { dateUtils } from 'packages/core';
 

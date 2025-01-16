@@ -3,12 +3,12 @@ import clsx from 'clsx';
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import AddIcon from '@material-ui/icons/AddCircleOutline';
-import DeleteIcon from '@material-ui/icons/Delete';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import AddIcon from '@mui/icons-material/AddCircleOutline';
+import DeleteIcon from '@mui/icons-material/Delete';
 import Editor from 'packages/fe-shared/components/editor';
 import { noProp } from 'packages/fe-shared/utils/misc';
 import {

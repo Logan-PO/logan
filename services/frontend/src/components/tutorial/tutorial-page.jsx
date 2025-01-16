@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'gatsby';
-import { Container, Typography, Grid } from '@material-ui/core';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { Container, Typography, Grid } from '@mui/material';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import image1 from './images/navigation.png';
 import image2 from './images/schedule.png';
 import image3 from './images/assignments.png';

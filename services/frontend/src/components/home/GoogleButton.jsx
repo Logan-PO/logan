@@ -1,8 +1,8 @@
 import React from 'react';
-import { GoogleLogin, GoogleLogout } from 'react-google-login';
+import { GoogleLogin, GoogleLogout } from '@react-oauth/google';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import CircularProgress from '@mui/material/CircularProgress';
 import styles from './GoogleButton.module.scss';
 import api from 'packages/fe-shared/utils/api';
 import { verifyIdToken, LOGIN_STAGE, setLoginStage } from 'packages/fe-shared/store/login';

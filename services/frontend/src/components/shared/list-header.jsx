@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import ListSubheader from '@material-ui/core/ListSubheader';
+import ListSubheader from '@mui/material/ListSubheader';
 import Typography from './typography';
 import styles from './list-header.module.scss';
 

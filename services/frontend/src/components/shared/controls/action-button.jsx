@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import ButtonBase from '@material-ui/core/ButtonBase';
+import ButtonBase from '@mui/material/ButtonBase';
 import { getCurrentTheme } from '../../../globals/theme';
 import Typography from '../typography';
 import styles from './action-button.module.scss';

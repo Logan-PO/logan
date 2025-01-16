@@ -11,8 +11,8 @@ import {
     DialogActions,
     Button,
     CircularProgress,
-} from '@material-ui/core';
-import { DateTimePicker } from '@material-ui/pickers';
+} from '@mui/material';
+import { DateTimePicker } from '@mui/x-date-pickers';
 import classes from './reminder-modal.module.scss';
 import {
     getRemindersSelectors,

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DueDateIcon from '@material-ui/icons/CalendarToday';
-import ChevronDown from '@material-ui/icons/KeyboardArrowDown';
-import ChevronUp from '@material-ui/icons/KeyboardArrowUp';
+const DueDateIcon = require('@mui/icons-material/CalendarToday')
+const ChevronDown = require('@mui/icons-material/KeyboardArrowDown')
+const ChevronUp = require('@mui/icons-material/KeyboardArrowUp')
 import Typography from '../typography';
 import InputGroup from './input-group';
 import DatePicker from './date-picker';
@@ -31,7 +31,7 @@ class BasicDatePicker extends React.Component {
 
         return (
             <InputGroup
-                icon={hideIcon ? undefined : inputGroupProps.icon || DueDateIcon}
+                icon={hideIcon ? undefined : inputGroupProps.icon || DueDateIcon("CalendarToday")}
                 label={inputGroupProps.label || 'Due Date'}
                 content={
                     <DatePicker

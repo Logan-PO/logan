@@ -1,4 +1,4 @@
-@import '../../globals/global';
+@use '../../globals/global';
 
 .settings-page {
     background: white;
@@ -34,10 +34,6 @@
     padding-left: 5%;
 }
 
-.delete {
-    padding-left: 5%;
-}
-
 .logout {
     padding-left: 5%;
     padding-bottom: 2%;
@@ -47,4 +43,3 @@
     justify-content: center;
     display: flex;
 }
-

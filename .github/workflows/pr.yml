@@ -19,11 +19,11 @@ defaults:
 
 jobs:
 
-  setup:
+  detect-changes:
     runs-on: ubuntu-latest
     outputs:
       infra-changes: ${{ steps.changed-paths.outputs.infra }}
-      node-changes: ${{ steps.changed-paths.outputs.node == 'true' }}
+      node-changes: ${{ steps.changed-paths.outputs.node }}
     steps:
       -
         uses: actions/checkout@v4
@@ -39,29 +39,57 @@ jobs:
               - '.github/workflows/terraform.yml'
               - 'infra/**'
             node:
-              - '.github/workflows/lint-and-test-node.yml'
+              - '.github/workflows/linting-and-tests.yml'
               - 'services/**'
               - 'packages/**'
               - 'package.json'
               - 'package-lock.json'
               - '**.js'
+            frontend:
+              - 'packages/**'
+              - 'services/frontend/**'
 
-  terraform-plan:
-    needs: setup
-    if: ${{ needs.setup.outputs.infra-changes == 'true' }}
-    uses: ./.github/workflows/terraform.yml
+  linting-and-tests:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.node-changes == 'true' }}
+    uses: ./.github/workflows/linting-and-tests.yml
     secrets: inherit
 
-  lint-and-test-node:
-    needs: setup
-    if: ${{ needs.setup.outputs.node-changes }}
-    uses: ./.github/workflows/lint-and-test-node.yml
+  validate-frontend-build:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.node-changes == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v4
+      -
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+      -
+        name: Install dependencies
+        run: |
+          npm ci
+      -
+        name: Build frontend
+        run: |
+          npm -w services/frontend \
+            run build
+
+  terraform-plan:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.infra-changes == 'true' }}
+    uses: ./.github/workflows/terraform.yml
+    secrets: inherit
 
   pr-ready:
     if: always()
     needs:
-      - setup
-      - lint-and-test-node
+      - detect-changes
+      - linting-and-tests
+      - validate-frontend-build
       - terraform-plan
     runs-on: ubuntu-latest
     steps:

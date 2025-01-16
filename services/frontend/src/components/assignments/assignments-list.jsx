@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { List, FormControl, FormControlLabel, Switch } from '@material-ui/core';
+import { List, FormControl, FormControlLabel, Switch } from '@mui/material';
 import _ from 'lodash';
 import Fab from '../shared/controls/fab';
 import ListHeader from '../shared/list-header';
@@ -187,7 +187,7 @@ class AssignmentsList extends React.Component {
                         <FormControlLabel
                             control={
                                 <Switch
-                                    classes={{ root: classes.switch }}
+                                    classes={{ root: classes.switchinput }}
                                     color="default"
                                     checked={this.state.showingPastAssignments}
                                     onChange={this.togglePastAssignments}

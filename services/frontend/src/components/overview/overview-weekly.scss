@@ -1,5 +1,5 @@
-@import '~react-big-calendar/lib/sass/styles';
-@import '~react-big-calendar/lib/sass/variables';
+@use '~react-big-calendar/lib/sass/styles';
+@use '~react-big-calendar/lib/sass/variables';
 
 .rbc-calendar, .rbc-calendar * {
     box-sizing: border-box !important;
@@ -36,7 +36,7 @@
     }
 
     .rbc-allday-cell {
-        border-left: solid 1px $border-color;
+        border-left: solid 1px variables.$border-color;
     }
 }
 
