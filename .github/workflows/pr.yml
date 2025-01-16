@@ -9,6 +9,7 @@ concurrency:
 
 permissions:
   contents: read
+  id-token: write
 
 defaults:
   run:
@@ -19,6 +20,7 @@ jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
+      infra-changes: ${{ steps.changed-paths.outputs.infra }}
       node-changes: ${{ steps.changed-paths.outputs.node == 'true' }}
     steps:
       -
@@ -29,6 +31,9 @@ jobs:
         id: changed-paths
         with:
           filters: |
+            infra:
+              - '.github/workflows/terraform.yml'
+              - 'infra/**'
             node:
               - '.github/workflows/lint-and-test-node.yml'
               - 'services/**'
@@ -36,6 +41,11 @@ jobs:
               - 'package.json'
               - 'package-lock.json'
               - '**.js'
+
+  terraform-plan:
+    needs: setup
+    if: ${{ needs.setup.outputs.infra-changes == 'true' }}
+    uses: ./.github/workflows/terraform.yml
 
   lint-and-test-node:
     needs: setup
@@ -47,6 +57,7 @@ jobs:
     needs:
       - setup
       - lint-and-test-node
+      - terraform-plan
     runs-on: ubuntu-latest
     steps:
       -

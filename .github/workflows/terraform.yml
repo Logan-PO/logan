@@ -1,0 +1,75 @@
+name: terraform
+
+on:
+  workflow_call:
+    inputs:
+      apply:
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  GHA_WORKER_ROLE: arn:aws:iam::970547354432:role/gha-worker
+
+jobs:
+
+  plan:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v4
+      -
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.1"
+      -
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.GHA_WORKER_ROLE }}
+          role-session-name: ${{ github.run_id }}
+          aws-region: us-west-2
+      -
+        name: terraform init
+        run: terraform init
+        working-directory: infra
+      -
+        name: terraform plan
+        run: terraform plan
+        working-directory: infra
+
+  apply:
+    needs: plan
+    if: ${{ inputs.apply == true }}
+    environment: infra-prod
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v4
+      -
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.1"
+      -
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.GHA_WORKER_ROLE }}
+          role-session-name: ${{ github.run_id }}
+          aws-region: us-west-2
+      -
+        name: terraform init
+        run: terraform init
+        working-directory: infra
+      -
+        name: terraform apply
+        run: terraform apply
+        working-directory: infra
