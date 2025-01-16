@@ -43,8 +43,9 @@ jobs:
         working-directory: infra
       -
         name: terraform plan
-        run: terraform plan
         working-directory: infra
+        run: terraform plan \
+          -refresh-only
 
   apply:
     needs: plan
