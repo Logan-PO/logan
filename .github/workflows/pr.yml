@@ -9,8 +9,9 @@ concurrency:
 
 permissions:
   contents: write
-  pull-requests: read
   id-token: write
+  pull-requests: write
+  actions: read
 
 defaults:
   run:
@@ -81,6 +82,7 @@ jobs:
     needs: detect-changes
     if: ${{ needs.detect-changes.outputs.infra-changes == 'true' }}
     uses: ./.github/workflows/terraform.yml
+    secrets: inherit
 
   pr-ready:
     if: always()
