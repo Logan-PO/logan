@@ -1,5 +1,12 @@
+import {
+  to = aws_iam_role.worker_role
+  id = "gha-worker"
+}
+
 resource "aws_iam_role" "worker_role" {
   name = "gha-worker"
+  
+  description = "Worker role for assumption via GitHub OIDC"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
