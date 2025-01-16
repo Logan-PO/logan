@@ -78,7 +78,7 @@ jobs:
             run build
 
   terraform-plan:
-    needs: setup
+    needs: detect-changes
     if: ${{ needs.detect-changes.outputs.infra-changes == 'true' }}
     uses: ./.github/workflows/terraform.yml
 
