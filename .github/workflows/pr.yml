@@ -50,6 +50,7 @@ jobs:
     needs: setup
     if: ${{ needs.setup.outputs.infra-changes == 'true' }}
     uses: ./.github/workflows/terraform.yml
+    secrets: inherit
 
   lint-and-test-node:
     needs: setup
