@@ -6,7 +6,7 @@ on:
       apply:
         required: false
         type: boolean
-        default: true
+        default: false
 
 permissions:
   contents: read
