@@ -9,7 +9,6 @@ terraform {
   }
     
   backend "s3" {
-    role_arn       = "arn:aws:iam::970547354432:role/gha-worker"
     bucket         = "logan-terraform-state-prod"
     key            = "prod/terraform.tfstate"
     region         = "us-west-2"
