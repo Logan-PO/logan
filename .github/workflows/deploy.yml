@@ -15,7 +15,7 @@ on:
         type: boolean
         required: true
       deploy-backend:
-        description: Deploy frontend
+        description: Deploy backend
         type: boolean
         required: true
 
