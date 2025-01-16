@@ -6,6 +6,10 @@ on:
       - master
   workflow_dispatch:
     inputs:
+      deploy-infra:
+        description: Deploy infra
+        type: boolean
+        required: true
       deploy-frontend:
         description: Deploy frontend
         type: boolean
@@ -61,7 +65,7 @@ jobs:
 
   deploy-infra:
     needs: setup
-    if: ${{ needs.setup.outputs.deploy-infra == true }}
+    if: ${{ inputs.deploy-infra || needs.setup.outputs.deploy-infra == 'true' }}
     uses: ./.github/workflows/terraform.yml
     with:
       apply: true
