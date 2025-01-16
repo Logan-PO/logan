@@ -1,0 +1,55 @@
+name: linting-and-tests
+
+on:
+  workflow_call:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+
+  lint-and-test:
+    runs-on: ubuntu-latest
+    env:
+      CI: true
+    steps:
+      -
+        uses: actions/checkout@v4
+      -
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: package-lock.json
+      -
+        name: Install dependencies
+        run: |
+          npm ci
+      -
+        name: lint-fix
+        run: npm run lint-fix
+      -
+        name: Detect changes
+        id: detect-changes
+        run: |
+          git add .
+          git status -s
+
+          if [ -n "$(git status -s)" ]; then
+            echo "detected=true" | tee -a "$GITHUB_OUTPUT"
+          else
+            echo "detected=false" | tee -a "$GITHUB_OUTPUT"
+          fi
+      -
+        name: Commit changes if detected
+        if: steps.detect-changes.outputs.detected == 'true'
+        run: |
+          git checkout ${{ github.head_ref }}
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "generate changes"
+          git push "$GITHUB_HEAD_REF"
+      -
+        name: Run tests
+        run: npm run test
