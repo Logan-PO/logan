@@ -71,5 +71,7 @@ jobs:
         working-directory: infra
       -
         name: terraform apply
-        run: terraform apply
         working-directory: infra
+        run: |
+          terraform apply \
+            -auto-approve
