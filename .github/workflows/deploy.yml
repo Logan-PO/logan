@@ -135,7 +135,7 @@ jobs:
           npm ci
       -
         name: sam build
-        run: sam build
+        run: sam build --debug
       -
         name: sam deploy
         run: sam deploy
