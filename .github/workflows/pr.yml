@@ -8,8 +8,10 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
+  pull-requests: write
+  actions: read
 
 defaults:
   run:

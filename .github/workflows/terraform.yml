@@ -9,8 +9,10 @@ on:
         default: false
 
 permissions:
-  contents: read
+  contents: write
   id-token: write
+  pull-requests: write
+  actions: read
 
 defaults:
   run:
@@ -44,8 +46,51 @@ jobs:
         working-directory: infra
       -
         name: terraform plan
-        run: terraform plan
+        id: plan
         working-directory: infra
+        run: |
+          # Wrapping to capture logs and exit status
+          (
+            set +e
+            terraform plan;
+            echo "$?" > "${{ runner.temp }}/plan-status.txt";
+          ) 2>&1 | tee "${{ runner.temp }}/plan-output.txt"
+
+          exit_code=$(cat "${{ runner.temp }}/plan-status.txt")
+          echo "exit_code=$exit_code" | tee -a "$GITHUB_OUTPUT"
+          
+          exit "$exit_code"
+      -
+        name: Capture plan logs
+        id: plan-logs
+        if: ${{ !cancelled() }}
+        run: |
+          stopToken=$(date '+%s')
+          echo "::stop-commands::${stopToken}"
+          {
+            echo 'logs<<EOF';
+            cat "${{ runner.temp }}/plan-output.txt";
+            echo 'EOF';
+          } | tee -a "$GITHUB_OUTPUT"
+          echo "::${stopToken}::"
+      -
+        name: Comment plan result
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: ${{ !cancelled() }}
+        with:
+          recreate: true
+          header: terraform-plan
+          message: |
+            `terraform plan` ${{ steps.plan.outputs.exit_code == '0' && 'succeeded' || 'failed' }}
+
+            <details>
+              <summary>plan result</summary>
+
+              ```
+              ${{ steps.plan-logs.outputs.logs }}
+              ```
+            </details>
+
 
   apply:
     needs: plan
