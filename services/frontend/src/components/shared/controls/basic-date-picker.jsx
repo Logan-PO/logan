@@ -31,7 +31,7 @@ class BasicDatePicker extends React.Component {
 
         return (
             <InputGroup
-                icon={hideIcon ? undefined : inputGroupProps.icon || DueDateIcon}
+                icon={hideIcon ? undefined : inputGroupProps.icon || DueDateIcon("CalendarToday")}
                 label={inputGroupProps.label || 'Due Date'}
                 content={
                     <DatePicker

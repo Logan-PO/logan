@@ -113,7 +113,7 @@ class DueDatePicker extends React.Component {
         return (
             <InputGroup
                 label="Due Date"
-                icon={DueDateIcon}
+                icon={DueDateIcon("CalendarToday")}
                 content={
                     <div className={styles.selectables}>
                         <DatePicker
